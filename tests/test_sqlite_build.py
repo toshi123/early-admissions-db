@@ -44,6 +44,13 @@ def prepare_unified_fixture(
         Path("validation/reports/gpa_requirement_raw_value_audit_v0_1.csv"),
         Path("docs/academic_field_search_design_v0_1.md"),
         Path("docs/academic_field_mapping_freeze_v0_1.md"),
+        Path("docs/english_requirement_search_design_v0_1.md"),
+        Path("schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"),
+        Path("schema/english_requirement/english_requirement_crosswalk_v0_1.csv"),
+        Path("docs/prefecture_search_design_v0_1.md"),
+        Path("schema/sqlite/admission_search_prefecture_schema_v0_1.sql"),
+        Path("schema/prefecture/prefecture_taxonomy_v0_1.csv"),
+        Path("schema/prefecture/prefecture_crosswalk_v0_1.csv"),
     ):
         destination = root / relative
         destination.parent.mkdir(parents=True, exist_ok=True)

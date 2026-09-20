@@ -6,11 +6,6 @@ __pycache__/
 
 # generated artifacts
 data/derived/*
-!data/derived/site/
-data/derived/site/*
-!data/derived/site/v0_1/
-data/derived/site/v0_1/*
-!data/derived/site/v0_1/build_manifest.json
 data/canonical/unified/*.csv
 
 # site dependencies/build

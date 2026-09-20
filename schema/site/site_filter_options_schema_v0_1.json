@@ -11,7 +11,7 @@
     "selection_categories", "exclusive_enrollment_statuses",
     "school_recommendation_required", "academic_record_required",
     "common_test_required", "research_requirement_required",
-    "research_activity_level_status", "selection_method_values"
+    "research_activity_level_status", "english_requirement_statuses", "prefecture_memberships", "selection_method_values"
   ],
   "properties": {
     "site_data_schema_version": {"const": "0.1"},
@@ -28,6 +28,8 @@
     "common_test_required": {"$ref": "#/$defs/options"},
     "research_requirement_required": {"$ref": "#/$defs/options"},
     "research_activity_level_status": {"$ref": "#/$defs/options"},
+    "english_requirement_statuses": {"$ref": "#/$defs/options"},
+    "prefecture_memberships": {"type":"array","minItems":47,"maxItems":47,"items":{"type":"object","additionalProperties":false,"required":["value","display_label","region","display_order","unfiltered_count"],"properties":{"value":{"type":"string"},"display_label":{"type":"string"},"region":{"type":"string"},"display_order":{"type":"integer"},"unfiltered_count":{"type":"integer","minimum":0}}}},
     "academic_field_groups": {
       "type": "array",
       "items": {

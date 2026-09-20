@@ -128,6 +128,7 @@ def build_parser() -> argparse.ArgumentParser:
     _add_multi_value_argument(
         parser, "--prefecture", dest="prefecture", help_text="Exact prefecture."
     )
+    _add_multi_value_argument(parser,"--prefecture-membership",dest="prefecture_membership",help_text="Derived exact-crosswalk prefecture membership.")
     _add_multi_value_argument(
         parser,
         "--academic-field",
@@ -232,6 +233,7 @@ def criteria_from_args(
         university=_values(args, "university"),
         institution_type=_values(args, "institution_type"),
         prefecture=_values(args, "prefecture"),
+        prefecture_membership=_values(args, "prefecture_membership"),
         academic_field=_values(args, "academic_field"),
         academic_field_group=_values(args, "academic_field_group"),
         academic_field_mapping_status=_values(

@@ -251,6 +251,28 @@ CREATE TABLE build_metadata (
             length(academic_field_crosswalk_sha256) = 64 AND
             academic_field_crosswalk_sha256 NOT GLOB '*[^0-9a-f]*'
         ),
+    english_requirement_parser_contract_version TEXT NOT NULL
+        CHECK (english_requirement_parser_contract_version = '0.1'),
+    english_requirement_schema_sql_sha256 TEXT NOT NULL
+        CHECK (length(english_requirement_schema_sql_sha256) = 64),
+    english_requirement_crosswalk_sha256 TEXT NOT NULL
+        CHECK (length(english_requirement_crosswalk_sha256) = 64),
+    english_requirement_required_rows INTEGER NOT NULL CHECK (english_requirement_required_rows >= 0),
+    english_requirement_not_required_rows INTEGER NOT NULL CHECK (english_requirement_not_required_rows >= 0),
+    english_requirement_review_required_rows INTEGER NOT NULL CHECK (english_requirement_review_required_rows >= 0),
+    english_requirement_unknown_rows INTEGER NOT NULL CHECK (english_requirement_unknown_rows >= 0),
+    english_requirement_not_applicable_rows INTEGER NOT NULL CHECK (english_requirement_not_applicable_rows >= 0),
+    english_requirement_unmapped_rows INTEGER NOT NULL CHECK (english_requirement_unmapped_rows >= 0),
+    prefecture_mapping_contract_version TEXT NOT NULL CHECK(prefecture_mapping_contract_version='0.1'),
+    prefecture_taxonomy_version TEXT NOT NULL CHECK(prefecture_taxonomy_version='0.1'),
+    prefecture_schema_sql_sha256 TEXT NOT NULL CHECK(length(prefecture_schema_sql_sha256)=64),
+    prefecture_taxonomy_sha256 TEXT NOT NULL CHECK(length(prefecture_taxonomy_sha256)=64),
+    prefecture_crosswalk_sha256 TEXT NOT NULL CHECK(length(prefecture_crosswalk_sha256)=64),
+    prefecture_parent_rows INTEGER NOT NULL CHECK(prefecture_parent_rows>=0),
+    prefecture_membership_rows INTEGER NOT NULL CHECK(prefecture_membership_rows>=0),
+    prefecture_single_rows INTEGER NOT NULL CHECK(prefecture_single_rows>=0),
+    prefecture_multi_rows INTEGER NOT NULL CHECK(prefecture_multi_rows>=0),
+    prefecture_unmapped_rows INTEGER NOT NULL CHECK(prefecture_unmapped_rows>=0),
     admissions_rows INTEGER NOT NULL CHECK (admissions_rows >= 0),
     coverage_rows INTEGER NOT NULL CHECK (coverage_rows >= 0),
     research_requirements_rows INTEGER NOT NULL

@@ -14,6 +14,8 @@ from .academic_field import (
     GENERATED_MAPPING_STATUSES,
 )
 from .gpa_search import GPA_PARSER_CONTRACT_VERSION
+from .english_requirement import ENGLISH_REQUIREMENT_CONTRACT_VERSION
+from .prefecture_search import PREFECTURE_MAPPING_CONTRACT_VERSION, PREFECTURE_TAXONOMY_VERSION
 
 
 SEARCH_CONTRACT_VERSION = "0.1"
@@ -108,6 +110,7 @@ class SearchCriteria:
     university: tuple[str, ...] = ()
     institution_type: tuple[str, ...] = ()
     prefecture: tuple[str, ...] = ()
+    prefecture_membership: tuple[str, ...] = ()
     academic_field: tuple[str, ...] = ()
     academic_field_group: tuple[str, ...] = ()
     academic_field_mapping_status: tuple[str, ...] = ()
@@ -125,6 +128,7 @@ class SearchCriteria:
     selection_essay: tuple[str, ...] = ()
     selection_written_exam: tuple[str, ...] = ()
     selection_common_test: tuple[str, ...] = ()
+    english_requirement_status: tuple[str, ...] = ()
     gpa_tenths: int | None = None
     gpa_mode: str = "all"
 
@@ -148,6 +152,8 @@ class SearchCriteria:
         for field_name in (
             "academic_field_group",
             "academic_field_mapping_status",
+            "english_requirement_status",
+            "prefecture_membership",
         ):
             values = getattr(self, field_name)
             if not isinstance(values, tuple):
@@ -239,7 +245,9 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         """
         SELECT database_schema_version, gpa_parser_contract_version,
                academic_field_mapping_contract_version,
-               academic_field_taxonomy_version
+               academic_field_taxonomy_version,
+               english_requirement_parser_contract_version
+               ,prefecture_mapping_contract_version, prefecture_taxonomy_version
         FROM build_metadata
         """
     ).fetchall()
@@ -258,6 +266,10 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         raise StructuredSearchError(
             "Academic-field mapping contract version is incompatible."
         )
+    if rows[0]["english_requirement_parser_contract_version"] != ENGLISH_REQUIREMENT_CONTRACT_VERSION:
+        raise StructuredSearchError("English-requirement contract version is incompatible.")
+    if rows[0]["prefecture_mapping_contract_version"] != PREFECTURE_MAPPING_CONTRACT_VERSION or rows[0]["prefecture_taxonomy_version"] != PREFECTURE_TAXONOMY_VERSION:
+        raise StructuredSearchError("Prefecture membership contract is incompatible.")
     if (
         rows[0]["academic_field_taxonomy_version"]
         != ACADEMIC_FIELD_TAXONOMY_VERSION
@@ -270,19 +282,16 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
 def _validate_academic_filter_values(
     connection: sqlite3.Connection, criteria: SearchCriteria
 ) -> None:
-    if not criteria.academic_field_group:
-        return
-    approved = {
-        row[0]
-        for row in connection.execute(
-            "SELECT group_code FROM academic_field_taxonomy"
-        )
-    }
-    invalid = set(criteria.academic_field_group).difference(approved)
-    if invalid:
-        raise StructuredSearchError(
-            "Unknown academic-field group: " + ", ".join(sorted(invalid))
-        )
+    if criteria.academic_field_group:
+        approved = {row[0] for row in connection.execute("SELECT group_code FROM academic_field_taxonomy")}
+        invalid = set(criteria.academic_field_group).difference(approved)
+        if invalid:
+            raise StructuredSearchError("Unknown academic-field group: " + ", ".join(sorted(invalid)))
+    if criteria.prefecture_membership:
+        approved_prefectures={row[0] for row in connection.execute("SELECT prefecture_label FROM prefecture_taxonomy")}
+        invalid_prefectures=set(criteria.prefecture_membership).difference(approved_prefectures)
+        if invalid_prefectures:
+            raise StructuredSearchError("Unknown prefecture membership: " + ", ".join(sorted(invalid_prefectures)))
 
 
 def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
@@ -295,6 +304,7 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
             JOIN admission_search_gpa AS g USING (admission_rowid)
             LEFT JOIN admission_search_gpa_safe AS gs USING (admission_rowid)
             JOIN admission_search_academic_fields AS af USING (admission_rowid)
+            JOIN admission_search_english_requirement AS er USING (admission_rowid)
             CROSS JOIN (SELECT ? AS student_gpa_tenths) AS q
         """
         parameters.append(criteria.gpa_tenths)
@@ -304,6 +314,7 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
             JOIN admission_search_gpa AS g USING (admission_rowid)
             LEFT JOIN admission_search_gpa_safe AS gs USING (admission_rowid)
             JOIN admission_search_academic_fields AS af USING (admission_rowid)
+            JOIN admission_search_english_requirement AS er USING (admission_rowid)
         """
 
     for field_name in MULTI_VALUE_FIELDS:
@@ -332,6 +343,18 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
     if criteria.stem_flag is not None:
         predicates.append("a.stem_flag = ?")
         parameters.append(int(criteria.stem_flag))
+    english_values = _deduplicate(criteria.english_requirement_status)
+    if english_values:
+        if set(english_values).difference({"required", "not_required"}):
+            raise StructuredSearchError("English requirement filter accepts only safe exact statuses.")
+        placeholders = ", ".join("?" for _ in english_values)
+        predicates.append(f"er.requirement_status IN ({placeholders}) AND er.search_disposition = 'safe_exact'")
+        parameters.extend(english_values)
+    prefecture_values = _deduplicate(criteria.prefecture_membership)
+    if prefecture_values:
+        placeholders = ", ".join("?" for _ in prefecture_values)
+        predicates.append("EXISTS (SELECT 1 FROM admission_search_prefecture_memberships pm WHERE pm.admission_rowid=a.admission_rowid AND pm.prefecture_label IN (" + placeholders + "))")
+        parameters.extend(prefecture_values)
 
     if criteria.gpa_tenths is not None:
         if criteria.gpa_mode == "safe":

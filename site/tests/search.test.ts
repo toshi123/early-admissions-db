@@ -5,7 +5,7 @@ import type { SearchRow } from "../src/types";
 function row(update: Partial<SearchRow> = {}): SearchRow {
   return {
     source_dataset: "fixture", source_version: "1", record_id: "A", institution_type: "国立", university: "大学A",
-    prefecture: "東京都", faculty_school: "工学部", department: null, selection_category: "総合型選抜", selection_name: "選抜A",
+    prefecture: "東京都", prefecture_raw:"東京都", prefecture_mapping_status:"single", prefecture_memberships:["東京都"], faculty_school: "工学部", department: null, selection_category: "総合型選抜", selection_name: "選抜A",
     slot_type: null, capacity: "2", academic_field: "工学", stem_flag: true, academic_field_mapping_status: "single",
     academic_field_groups: ["engineering"], exclusive_enrollment_status: "専願", school_recommendation_required: "No",
     academic_record_required: "Yes", common_test_required: "No", research_requirement_required: "Unknown",
@@ -13,6 +13,7 @@ function row(update: Partial<SearchRow> = {}): SearchRow {
     selection_essay: null, selection_written_exam: "No", selection_common_test: "No", gpa_requirement: "3.8以上",
     gpa_parse_status: "parsed_safe", gpa_search_disposition: "safe_numeric", gpa_min_tenths: 38, gpa_min_inclusive: true,
     gpa_max_tenths: null, gpa_max_inclusive: null, gpa_source_value_status: "current", application_start: null, application_end: null,
+    english_requirement: "英検準1級以上", english_requirement_status: "required", english_requirement_parse_status: "exact_crosswalk", english_requirement_search_disposition: "safe_exact",
     fallback_previous_year: false, information_year: 2027, publication_status: null, detail_path: "details.json", ...update,
   };
 }
@@ -41,5 +42,18 @@ describe("frozen frontend search semantics", () => {
   it("distinguishes safe threshold boundaries", () => {
     expect(gpaStatus(row(), 37)).toBe("safe no match");
     expect(gpaStatus(row(), 38)).toBe("safe match");
+  });
+
+  it("filters English requirements only by safe derived status", () => {
+    const request = emptyRequest(); request.english_requirement_status = ["required"];
+    const unsafe = row({record_id:"B", english_requirement_status:"review_required", english_requirement_search_disposition:"review_required"});
+    expect(searchRows([row(), unsafe], request).rows.map(item=>item.record_id)).toEqual(["A"]);
+  });
+  it("uses derived prefecture membership without changing raw exact semantics",()=>{
+    const composite=row({record_id:"B",prefecture:"東京都・埼玉県",prefecture_raw:"東京都・埼玉県",prefecture_mapping_status:"multi",prefecture_memberships:["東京都","埼玉県"]});
+    const derived=emptyRequest();derived.prefecture_membership=["東京都"];
+    expect(searchRows([row(),composite],derived).rows.map(x=>x.record_id)).toEqual(["A","B"]);
+    const raw=emptyRequest();raw.prefecture=["東京都"];
+    expect(searchRows([row(),composite],raw).rows.map(x=>x.record_id)).toEqual(["A"]);
   });
 });

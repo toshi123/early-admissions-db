@@ -25,7 +25,7 @@ from .structured_search import search_database
 
 
 SITE_DATA_SCHEMA_VERSION = "0.1"
-SITE_DATA_BUILDER_VERSION = "0.1.0"
+SITE_DATA_BUILDER_VERSION = "0.3.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
 DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_1")
@@ -67,6 +67,7 @@ SEARCH_ADMISSION_FIELDS = (
     "selection_written_exam",
     "selection_common_test",
     "gpa_requirement",
+    "english_requirement",
     "application_start",
     "application_end",
     "fallback_previous_year",
@@ -210,6 +211,13 @@ class SiteDataBuildPipeline:
             academic = {row["admission_rowid"]: dict(row) for row in connection.execute(
                 "SELECT * FROM admission_search_academic_fields ORDER BY admission_rowid"
             )}
+            english = {row["admission_rowid"]: dict(row) for row in connection.execute(
+                "SELECT * FROM admission_search_english_requirement ORDER BY admission_rowid"
+            )}
+            prefecture = {row["admission_rowid"]: dict(row) for row in connection.execute("SELECT * FROM admission_search_prefectures ORDER BY admission_rowid")}
+            prefecture_memberships: dict[int, list[str]] = defaultdict(list)
+            for row in connection.execute("SELECT admission_rowid,prefecture_label FROM admission_search_prefecture_memberships ORDER BY admission_rowid,membership_order"):
+                prefecture_memberships[row["admission_rowid"]].append(row["prefecture_label"])
             groups: dict[int, list[dict[str, Any]]] = defaultdict(list)
             for row in connection.execute(
                 "SELECT * FROM admission_search_academic_field_groups "
@@ -228,7 +236,7 @@ class SiteDataBuildPipeline:
                 "SELECT * FROM academic_field_taxonomy ORDER BY display_order"
             )]
             search_rows_raw, details = self._project(
-                admissions, gpa, academic, groups, children
+                admissions, gpa, academic, english, prefecture, prefecture_memberships, groups, children
             )
             build_id = self._build_id(before_hash, metadata)
             search_count = _shard_count(
@@ -350,6 +358,9 @@ class SiteDataBuildPipeline:
             "gpa_parser_contract_version": manifest["gpa_search"]["parser_contract_version"],
             "academic_field_mapping_contract_version": manifest["academic_field_search"]["mapping_contract_version"],
             "academic_field_taxonomy_version": manifest["academic_field_search"]["taxonomy_version"],
+            "english_requirement_parser_contract_version": manifest["english_requirement_search"]["parser_contract_version"],
+            "prefecture_mapping_contract_version": manifest["prefecture_search"]["mapping_contract_version"],
+            "prefecture_taxonomy_version": manifest["prefecture_search"]["taxonomy_version"],
         }
         mismatches = {key: (metadata.get(key), value) for key, value in expected.items() if metadata.get(key) != value}
         if mismatches:
@@ -360,6 +371,9 @@ class SiteDataBuildPipeline:
         admissions: Sequence[Mapping[str, Any]],
         gpa: Mapping[int, Mapping[str, Any]],
         academic: Mapping[int, Mapping[str, Any]],
+        english: Mapping[int, Mapping[str, Any]],
+        prefecture: Mapping[int, Mapping[str, Any]],
+        prefecture_memberships: Mapping[int, list[str]],
         groups: Mapping[int, list[dict[str, Any]]],
         children: Mapping[tuple[str, str, str], list[dict[str, Any]]],
     ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -368,10 +382,12 @@ class SiteDataBuildPipeline:
         for source in admissions:
             admission = dict(source)
             rowid = admission["admission_rowid"]
-            if rowid not in gpa or rowid not in academic:
+            if rowid not in gpa or rowid not in academic or rowid not in english or rowid not in prefecture:
                 raise SiteDataBuildError(f"Missing derived parent for admission_rowid={rowid}")
             gpa_row = dict(gpa[rowid])
             academic_row = dict(academic[rowid])
+            english_row = dict(english[rowid])
+            prefecture_row = dict(prefecture[rowid])
             group_rows = [dict(row) for row in groups.get(rowid, [])]
             key = (admission["source_dataset"], admission["source_version"], admission["record_id"])
             search = {field: admission[field] for field in SEARCH_ADMISSION_FIELDS}
@@ -399,6 +415,12 @@ class SiteDataBuildPipeline:
                         else None
                     ),
                     "gpa_source_value_status": gpa_row["source_value_status"],
+                    "english_requirement_status": english_row["requirement_status"],
+                    "english_requirement_parse_status": english_row["parse_status"],
+                    "english_requirement_search_disposition": english_row["search_disposition"],
+                    "prefecture_raw": admission["prefecture"],
+                    "prefecture_mapping_status": prefecture_row["mapping_status"],
+                    "prefecture_memberships": list(prefecture_memberships.get(rowid, [])),
                     "detail_path": "",
                 }
             )
@@ -427,6 +449,7 @@ class SiteDataBuildPipeline:
                         **academic_row,
                         "groups": group_rows,
                     },
+                    "english_requirement_derived": english_row,
                     "research_requirements": [dict(row) for row in children.get(key, [])],
                 }
             )
@@ -440,6 +463,9 @@ class SiteDataBuildPipeline:
             "gpa_parser_contract_version": metadata["gpa_parser_contract_version"],
             "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
             "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
+            "english_requirement_parser_contract_version": metadata["english_requirement_parser_contract_version"],
+            "prefecture_mapping_contract_version": metadata["prefecture_mapping_contract_version"],
+            "prefecture_taxonomy_version": metadata["prefecture_taxonomy_version"],
         }
         return hashlib.sha256(_json_bytes(identity)).hexdigest()[:20]
 
@@ -472,6 +498,14 @@ class SiteDataBuildPipeline:
                 "FROM admission_search_academic_fields GROUP BY mapping_status ORDER BY mapping_status"
             )
         ]
+        payload["english_requirement_statuses"] = [
+            {"value": row["value"], "display_label": "必要" if row["value"] == "required" else "必要なし", "unfiltered_count": row["rows"]}
+            for row in connection.execute(
+                "SELECT requirement_status AS value, COUNT(*) AS rows FROM admission_search_english_requirement WHERE search_disposition='safe_exact' GROUP BY requirement_status ORDER BY requirement_status"
+            )
+        ]
+        membership_counts={row["prefecture_label"]:row["rows"] for row in connection.execute("SELECT prefecture_label,COUNT(*) rows FROM admission_search_prefecture_memberships GROUP BY prefecture_label")}
+        payload["prefecture_memberships"]=[{"value":row["prefecture_label"],"display_label":row["prefecture_label"],"region":row["region"],"display_order":row["display_order"],"unfiltered_count":membership_counts.get(row["prefecture_label"],0)} for row in connection.execute("SELECT prefecture_label,region,display_order FROM prefecture_taxonomy ORDER BY display_order")]
         group_counts = {row["group_code"]: row["rows"] for row in connection.execute(
             "SELECT group_code, COUNT(*) AS rows FROM admission_search_academic_field_groups GROUP BY group_code"
         )}
@@ -609,6 +643,8 @@ class SiteDataBuildPipeline:
                 raise SiteDataBuildError("GPA raw equality failed.")
             if search["academic_field"] != detail["academic_field_derived"]["raw_value"]:
                 raise SiteDataBuildError("Academic-field raw equality failed.")
+            if search["prefecture_raw"] != detail["admission"]["prefecture"]:
+                raise SiteDataBuildError("Prefecture raw equality failed.")
         projected_children = [child for detail in details for child in detail["research_requirements"]]
         source_child_multiset = Counter(_json_bytes(dict(row)) for row in all_children)
         projected_child_multiset = Counter(_json_bytes(dict(row)) for row in projected_children)
@@ -706,6 +742,8 @@ class SiteDataBuildPipeline:
         source_counts = Counter(row["source_dataset"] for row in search_rows_data)
         gpa_counts = Counter(row["gpa_search_disposition"] for row in search_rows_data)
         mapping_counts = Counter(row["academic_field_mapping_status"] for row in search_rows_data)
+        prefecture_mapping_counts = Counter(row["prefecture_mapping_status"] for row in search_rows_data)
+        prefecture_membership_counts = Counter(label for row in search_rows_data for label in row["prefecture_memberships"])
         group_counts = Counter(code for row in search_rows_data for code in row["academic_field_groups"])
         child_factual_counts = Counter(
             _json_bytes({key: value for key, value in row.items() if key != "research_rowid"})
@@ -735,6 +773,11 @@ class SiteDataBuildPipeline:
                 "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
                 "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
                 "academic_field_crosswalk_sha256": metadata["academic_field_crosswalk_sha256"],
+                "english_requirement_parser_contract_version": metadata["english_requirement_parser_contract_version"],
+                "english_requirement_crosswalk_sha256": metadata["english_requirement_crosswalk_sha256"],
+                "prefecture_mapping_contract_version": metadata["prefecture_mapping_contract_version"],
+                "prefecture_taxonomy_version": metadata["prefecture_taxonomy_version"],
+                "prefecture_crosswalk_sha256": metadata["prefecture_crosswalk_sha256"],
             },
             "sharding": {
                 "algorithm": "sha256(logical-key JSON) modulo next-power-of-two(data-bytes/target-bytes)",
@@ -755,6 +798,8 @@ class SiteDataBuildPipeline:
                 "gpa_dispositions": dict(sorted(gpa_counts.items())),
                 "academic_field_mapping_statuses": dict(sorted(mapping_counts.items())),
                 "academic_field_group_memberships": dict(sorted(group_counts.items())),
+                "prefecture_mapping_statuses": dict(sorted(prefecture_mapping_counts.items())),
+                "prefecture_memberships": dict(sorted(prefecture_membership_counts.items())),
             },
             "size_report": dict(size_report),
             "validation": dict(validation),

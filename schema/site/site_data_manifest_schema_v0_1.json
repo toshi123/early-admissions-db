@@ -13,7 +13,7 @@
     "build_timestamp_utc": {"type": "string"},
     "build_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
     "publication": {"type": "object", "required": ["status", "atomic_directory_replacement"]},
-    "input": {"type": "object", "required": ["sqlite_path", "sqlite_sha256", "sqlite_size_bytes", "sqlite_build_manifest_path", "sqlite_build_manifest_sha256", "sqlite_schema_version", "sqlite_builder_version", "unified_contract_version", "source_versions", "input_csv_sha256", "gpa_parser_contract_version", "academic_field_mapping_contract_version", "academic_field_taxonomy_version", "academic_field_crosswalk_sha256"]},
+    "input": {"type": "object", "required": ["sqlite_path", "sqlite_sha256", "sqlite_size_bytes", "sqlite_build_manifest_path", "sqlite_build_manifest_sha256", "sqlite_schema_version", "sqlite_builder_version", "unified_contract_version", "source_versions", "input_csv_sha256", "gpa_parser_contract_version", "academic_field_mapping_contract_version", "academic_field_taxonomy_version", "academic_field_crosswalk_sha256", "english_requirement_parser_contract_version", "english_requirement_crosswalk_sha256", "prefecture_mapping_contract_version", "prefecture_taxonomy_version", "prefecture_crosswalk_sha256"]},
     "sharding": {"type": "object", "required": ["algorithm", "search_target_bytes", "detail_target_bytes", "search_shards", "detail_shards"]},
     "outputs": {
       "type": "object", "additionalProperties": false, "required": ["artifacts"],

@@ -36,6 +36,20 @@ from .gpa_search import (
     GPACrosswalk,
     GPAParser,
 )
+from .english_requirement import (
+    ENGLISH_REQUIREMENT_CONTRACT_VERSION,
+    ENGLISH_REQUIREMENT_CROSSWALK_PATH,
+    ENGLISH_REQUIREMENT_DESIGN_PATH,
+    ENGLISH_REQUIREMENT_SCHEMA_PATH,
+    EnglishRequirementCrosswalk,
+)
+from .prefecture_search import (
+    PREFECTURE_CROSSWALK_PATH, PREFECTURE_CROSSWALK_SHA256,
+    PREFECTURE_DESIGN_PATH, PREFECTURE_MAPPING_CONTRACT_VERSION,
+    PREFECTURE_SCHEMA_PATH, PREFECTURE_TAXONOMY_PATH,
+    PREFECTURE_TAXONOMY_SHA256, PREFECTURE_TAXONOMY_VERSION,
+    PrefectureCrosswalk, PrefectureTaxonomy,
+)
 
 
 DEFAULT_OUTPUT_DIR = Path("data/derived/sqlite")
@@ -45,7 +59,7 @@ UNIFIED_MANIFEST = UNIFIED_DIR / "build_manifest.json"
 SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql")
 SQLITE_DESIGN = Path("docs/sqlite_design_v0_1.md")
 DATABASE_SCHEMA_VERSION = "0.1"
-BUILDER_VERSION = "0.3.0"
+BUILDER_VERSION = "0.5.0"
 GPA_REGRESSION_TENTHS = (30, 35, 38, 40, 45)
 
 TABLE_ORDER = ("master", "coverage", "research_requirements")
@@ -157,6 +171,13 @@ class SQLiteBuildPipeline:
         self.academic_field_freeze_path = self.repo_root / ACADEMIC_FIELD_FREEZE_PATH
         self.academic_field_taxonomy_path = self.repo_root / ACADEMIC_FIELD_TAXONOMY_PATH
         self.academic_field_crosswalk_path = self.repo_root / ACADEMIC_FIELD_CROSSWALK_PATH
+        self.english_requirement_schema_path = self.repo_root / ENGLISH_REQUIREMENT_SCHEMA_PATH
+        self.english_requirement_design_path = self.repo_root / ENGLISH_REQUIREMENT_DESIGN_PATH
+        self.english_requirement_crosswalk_path = self.repo_root / ENGLISH_REQUIREMENT_CROSSWALK_PATH
+        self.prefecture_schema_path = self.repo_root / PREFECTURE_SCHEMA_PATH
+        self.prefecture_design_path = self.repo_root / PREFECTURE_DESIGN_PATH
+        self.prefecture_taxonomy_path = self.repo_root / PREFECTURE_TAXONOMY_PATH
+        self.prefecture_crosswalk_path = self.repo_root / PREFECTURE_CROSSWALK_PATH
 
     def build(self) -> SQLiteBuildResult:
         """Run all gates and replace published files only after complete success."""
@@ -194,6 +215,18 @@ class SQLiteBuildPipeline:
         academic_field_crosswalk = AcademicFieldCrosswalk.load(
             self.academic_field_crosswalk_path, academic_field_taxonomy
         )
+        english_requirement_schema_raw = self.english_requirement_schema_path.read_bytes()
+        english_requirement_schema_sha = hashlib.sha256(english_requirement_schema_raw).hexdigest()
+        english_requirement_crosswalk_sha = sha256_file(self.english_requirement_crosswalk_path)
+        english_requirement_crosswalk = EnglishRequirementCrosswalk.load(self.english_requirement_crosswalk_path)
+        prefecture_schema_raw = self.prefecture_schema_path.read_bytes()
+        prefecture_schema_sha = hashlib.sha256(prefecture_schema_raw).hexdigest()
+        prefecture_taxonomy_sha = sha256_file(self.prefecture_taxonomy_path)
+        prefecture_crosswalk_sha = sha256_file(self.prefecture_crosswalk_path)
+        if prefecture_taxonomy_sha != PREFECTURE_TAXONOMY_SHA256 or prefecture_crosswalk_sha != PREFECTURE_CROSSWALK_SHA256:
+            raise SQLiteBuildError("Prefecture taxonomy/crosswalk differs from frozen v0.1.")
+        prefecture_taxonomy = PrefectureTaxonomy.load(self.prefecture_taxonomy_path)
+        prefecture_crosswalk = PrefectureCrosswalk.load(self.prefecture_crosswalk_path, prefecture_taxonomy)
         design_metadata = file_metadata(self.design_path, self.repo_root)
         schema_metadata = file_metadata(self.schema_path, self.repo_root)
         gpa_design_metadata = file_metadata(self.gpa_design_path, self.repo_root)
@@ -214,6 +247,13 @@ class SQLiteBuildPipeline:
         academic_field_crosswalk_metadata = file_metadata(
             self.academic_field_crosswalk_path, self.repo_root
         )
+        english_requirement_schema_metadata = file_metadata(self.english_requirement_schema_path, self.repo_root)
+        english_requirement_design_metadata = file_metadata(self.english_requirement_design_path, self.repo_root)
+        english_requirement_crosswalk_metadata = file_metadata(self.english_requirement_crosswalk_path, self.repo_root)
+        prefecture_schema_metadata = file_metadata(self.prefecture_schema_path, self.repo_root)
+        prefecture_design_metadata = file_metadata(self.prefecture_design_path, self.repo_root)
+        prefecture_taxonomy_metadata = file_metadata(self.prefecture_taxonomy_path, self.repo_root)
+        prefecture_crosswalk_metadata = file_metadata(self.prefecture_crosswalk_path, self.repo_root)
         source_versions = self._source_versions(unified_manifest)
         self.output_dir.parent.mkdir(parents=True, exist_ok=True)
 
@@ -234,6 +274,8 @@ class SQLiteBuildPipeline:
                 )
                 connection.executescript(gpa_schema_raw.decode("utf-8"))
                 connection.executescript(academic_field_schema_raw.decode("utf-8"))
+                connection.executescript(english_requirement_schema_raw.decode("utf-8"))
+                connection.executescript(prefecture_schema_raw.decode("utf-8"))
                 self._assert_schema_columns(connection, inputs)
                 self._load_base_tables(connection, inputs)
                 gpa_build = self._load_gpa_layer(connection, gpa_crosswalk)
@@ -242,6 +284,10 @@ class SQLiteBuildPipeline:
                     academic_field_taxonomy,
                     academic_field_crosswalk,
                 )
+                english_requirement_build = self._load_english_requirement_layer(
+                    connection, english_requirement_crosswalk
+                )
+                prefecture_build = self._load_prefecture_layer(connection, prefecture_taxonomy, prefecture_crosswalk)
                 built_at = utc_timestamp()
                 self._insert_build_metadata(
                     connection,
@@ -256,6 +302,13 @@ class SQLiteBuildPipeline:
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
                     academic_field_build=academic_field_build,
+                    english_requirement_schema_sha=english_requirement_schema_sha,
+                    english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
+                    english_requirement_build=english_requirement_build,
+                    prefecture_schema_sha=prefecture_schema_sha,
+                    prefecture_taxonomy_sha=prefecture_taxonomy_sha,
+                    prefecture_crosswalk_sha=prefecture_crosswalk_sha,
+                    prefecture_build=prefecture_build,
                     capabilities=capabilities,
                     built_at=built_at,
                     source_versions=source_versions,
@@ -277,6 +330,13 @@ class SQLiteBuildPipeline:
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
                     academic_field_build=academic_field_build,
+                    english_requirement_schema_sha=english_requirement_schema_sha,
+                    english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
+                    english_requirement_build=english_requirement_build,
+                    prefecture_schema_sha=prefecture_schema_sha,
+                    prefecture_taxonomy_sha=prefecture_taxonomy_sha,
+                    prefecture_crosswalk_sha=prefecture_crosswalk_sha,
+                    prefecture_build=prefecture_build,
                     capabilities=capabilities,
                     built_at=built_at,
                     source_versions=source_versions,
@@ -306,6 +366,13 @@ class SQLiteBuildPipeline:
                     academic_field_freeze_sha=academic_field_freeze_metadata["sha256"],
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
+                    english_requirement_schema_sha=english_requirement_schema_sha,
+                    english_requirement_design_sha=english_requirement_design_metadata["sha256"],
+                    english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
+                    prefecture_schema_sha=prefecture_schema_sha,
+                    prefecture_design_sha=prefecture_design_metadata["sha256"],
+                    prefecture_taxonomy_sha=prefecture_taxonomy_sha,
+                    prefecture_crosswalk_sha=prefecture_crosswalk_sha,
                 )
                 validation["inputs_unchanged_during_build"] = True
                 connection.commit()
@@ -339,6 +406,15 @@ class SQLiteBuildPipeline:
                 academic_field_taxonomy_metadata=academic_field_taxonomy_metadata,
                 academic_field_crosswalk_metadata=academic_field_crosswalk_metadata,
                 academic_field_build=academic_field_build,
+                english_requirement_schema_metadata=english_requirement_schema_metadata,
+                english_requirement_design_metadata=english_requirement_design_metadata,
+                english_requirement_crosswalk_metadata=english_requirement_crosswalk_metadata,
+                english_requirement_build=english_requirement_build,
+                prefecture_schema_metadata=prefecture_schema_metadata,
+                prefecture_design_metadata=prefecture_design_metadata,
+                prefecture_taxonomy_metadata=prefecture_taxonomy_metadata,
+                prefecture_crosswalk_metadata=prefecture_crosswalk_metadata,
+                prefecture_build=prefecture_build,
                 capabilities=capabilities,
                 built_at=built_at,
                 row_counts=row_counts,
@@ -477,6 +553,13 @@ class SQLiteBuildPipeline:
         academic_field_freeze_sha: str,
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
+        english_requirement_schema_sha: str,
+        english_requirement_design_sha: str,
+        english_requirement_crosswalk_sha: str,
+        prefecture_schema_sha: str,
+        prefecture_design_sha: str,
+        prefecture_taxonomy_sha: str,
+        prefecture_crosswalk_sha: str,
     ) -> None:
         for table in TABLE_ORDER:
             if sha256_file(inputs[table].path) != inputs[table].sha256:
@@ -495,6 +578,13 @@ class SQLiteBuildPipeline:
             (self.academic_field_freeze_path, academic_field_freeze_sha),
             (self.academic_field_taxonomy_path, academic_field_taxonomy_sha),
             (self.academic_field_crosswalk_path, academic_field_crosswalk_sha),
+            (self.english_requirement_schema_path, english_requirement_schema_sha),
+            (self.english_requirement_design_path, english_requirement_design_sha),
+            (self.english_requirement_crosswalk_path, english_requirement_crosswalk_sha),
+            (self.prefecture_schema_path, prefecture_schema_sha),
+            (self.prefecture_design_path, prefecture_design_sha),
+            (self.prefecture_taxonomy_path, prefecture_taxonomy_sha),
+            (self.prefecture_crosswalk_path, prefecture_crosswalk_sha),
         )
         for path, expected in checks:
             if sha256_file(path) != expected:
@@ -820,6 +910,58 @@ class SQLiteBuildPipeline:
                 )
 
     @staticmethod
+    def _load_english_requirement_layer(
+        connection: sqlite3.Connection,
+        crosswalk: EnglishRequirementCrosswalk,
+    ) -> dict[str, Any]:
+        counts: Counter[str] = Counter()
+        values: list[tuple[object, ...]] = []
+        for row in connection.execute(
+            "SELECT admission_rowid, english_requirement FROM admissions ORDER BY admission_rowid"
+        ):
+            result = crosswalk.classify(row["english_requirement"])
+            counts[result.requirement_status] += 1
+            values.append(result.sqlite_values(row["admission_rowid"]))
+        connection.executemany(
+            """
+            INSERT INTO admission_search_english_requirement (
+                admission_rowid, raw_value, requirement_status, parse_status,
+                search_disposition, parser_contract_version, review_note
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            values,
+        )
+        return {
+            "parser_contract_version": ENGLISH_REQUIREMENT_CONTRACT_VERSION,
+            "crosswalk_distinct_raw_values": len(crosswalk),
+            "classification_counts": {
+                status: counts.get(status, 0)
+                for status in (
+                    "required", "not_required", "review_required", "unknown",
+                    "not_applicable", "unmapped"
+                )
+            },
+            "raw_mismatch_rows": 0,
+        }
+
+    @staticmethod
+    def _load_prefecture_layer(connection: sqlite3.Connection, taxonomy: PrefectureTaxonomy, crosswalk: PrefectureCrosswalk) -> dict[str, Any]:
+        connection.executemany(
+            "INSERT INTO prefecture_taxonomy VALUES (?, ?, ?, ?, ?)",
+            ((x.code,x.label,x.region,x.display_order,PREFECTURE_TAXONOMY_VERSION) for x in taxonomy),
+        )
+        parents=[]; children=[]; counts:Counter[str]=Counter(); memberships:Counter[str]=Counter()
+        for row in connection.execute("SELECT admission_rowid,prefecture FROM admissions ORDER BY admission_rowid"):
+            mapping=crosswalk.lookup(row["prefecture"]); counts[mapping.mapping_status]+=1
+            parents.append((row["admission_rowid"],mapping.raw_value,mapping.mapping_status,PREFECTURE_MAPPING_CONTRACT_VERSION,mapping.review_note))
+            for order,code in enumerate(mapping.codes,1):
+                label=taxonomy.by_code[code].label; memberships[label]+=1
+                children.append((row["admission_rowid"],code,label,order,"exact_crosswalk"))
+        connection.executemany("INSERT INTO admission_search_prefectures VALUES (?, ?, ?, ?, ?)",parents)
+        connection.executemany("INSERT INTO admission_search_prefecture_memberships VALUES (?, ?, ?, ?, ?)",children)
+        return {"mapping_contract_version":PREFECTURE_MAPPING_CONTRACT_VERSION,"taxonomy_version":PREFECTURE_TAXONOMY_VERSION,"crosswalk_distinct_raw_values":len(crosswalk),"parent_rows":len(parents),"membership_rows":len(children),"classification_counts":{s:counts.get(s,0) for s in ("single","multi","review_required","unmapped","not_applicable")},"membership_counts":dict(sorted(memberships.items())),"raw_mismatch_rows":0}
+
+    @staticmethod
     def _insert_build_metadata(
         connection: sqlite3.Connection,
         *,
@@ -834,6 +976,13 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        english_requirement_schema_sha: str,
+        english_requirement_crosswalk_sha: str,
+        english_requirement_build: Mapping[str, Any],
+        prefecture_schema_sha: str,
+        prefecture_taxonomy_sha: str,
+        prefecture_crosswalk_sha: str,
+        prefecture_build: Mapping[str, Any],
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
@@ -861,6 +1010,25 @@ class SQLiteBuildPipeline:
             academic_field_schema_sha,
             academic_field_taxonomy_sha,
             academic_field_crosswalk_sha,
+            ENGLISH_REQUIREMENT_CONTRACT_VERSION,
+            english_requirement_schema_sha,
+            english_requirement_crosswalk_sha,
+            english_requirement_build["classification_counts"]["required"],
+            english_requirement_build["classification_counts"]["not_required"],
+            english_requirement_build["classification_counts"]["review_required"],
+            english_requirement_build["classification_counts"]["unknown"],
+            english_requirement_build["classification_counts"]["not_applicable"],
+            english_requirement_build["classification_counts"]["unmapped"],
+            PREFECTURE_MAPPING_CONTRACT_VERSION,
+            PREFECTURE_TAXONOMY_VERSION,
+            prefecture_schema_sha,
+            prefecture_taxonomy_sha,
+            prefecture_crosswalk_sha,
+            prefecture_build["parent_rows"],
+            prefecture_build["membership_rows"],
+            prefecture_build["classification_counts"]["single"],
+            prefecture_build["classification_counts"]["multi"],
+            prefecture_build["classification_counts"]["unmapped"],
             inputs["master"].rows,
             inputs["coverage"].rows,
             inputs["research_requirements"].rows,
@@ -892,6 +1060,25 @@ class SQLiteBuildPipeline:
                 academic_field_schema_sql_sha256,
                 academic_field_taxonomy_sha256,
                 academic_field_crosswalk_sha256,
+                english_requirement_parser_contract_version,
+                english_requirement_schema_sql_sha256,
+                english_requirement_crosswalk_sha256,
+                english_requirement_required_rows,
+                english_requirement_not_required_rows,
+                english_requirement_review_required_rows,
+                english_requirement_unknown_rows,
+                english_requirement_not_applicable_rows,
+                english_requirement_unmapped_rows,
+                prefecture_mapping_contract_version,
+                prefecture_taxonomy_version,
+                prefecture_schema_sql_sha256,
+                prefecture_taxonomy_sha256,
+                prefecture_crosswalk_sha256,
+                prefecture_parent_rows,
+                prefecture_membership_rows,
+                prefecture_single_rows,
+                prefecture_multi_rows,
+                prefecture_unmapped_rows,
                 admissions_rows, coverage_rows, research_requirements_rows,
                 gpa_safe_numeric_rows, gpa_conditional_numeric_rows,
                 gpa_do_not_numeric_rows, gpa_strict_match_3_8_rows,
@@ -901,7 +1088,7 @@ class SQLiteBuildPipeline:
                 academic_field_unmapped_rows,
                 academic_field_not_applicable_rows,
                 academic_field_raw_mismatch_rows
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             values,
         )
@@ -921,6 +1108,13 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        english_requirement_schema_sha: str,
+        english_requirement_crosswalk_sha: str,
+        english_requirement_build: Mapping[str, Any],
+        prefecture_schema_sha: str,
+        prefecture_taxonomy_sha: str,
+        prefecture_crosswalk_sha: str,
+        prefecture_build: Mapping[str, Any],
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
@@ -938,6 +1132,10 @@ class SQLiteBuildPipeline:
         academic_field = self._validate_academic_field_layer(
             connection, counts["admissions"], academic_field_build
         )
+        english_requirement = self._validate_english_requirement_layer(
+            connection, counts["admissions"], english_requirement_build
+        )
+        prefecture = self._validate_prefecture_layer(connection, counts["admissions"], prefecture_build)
         pragmas = self._validate_pragmas(connection)
         metadata = self._validate_metadata(
             connection,
@@ -952,6 +1150,13 @@ class SQLiteBuildPipeline:
             academic_field_taxonomy_sha=academic_field_taxonomy_sha,
             academic_field_crosswalk_sha=academic_field_crosswalk_sha,
             academic_field_build=academic_field_build,
+            english_requirement_schema_sha=english_requirement_schema_sha,
+            english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
+            english_requirement_build=english_requirement_build,
+            prefecture_schema_sha=prefecture_schema_sha,
+            prefecture_taxonomy_sha=prefecture_taxonomy_sha,
+            prefecture_crosswalk_sha=prefecture_crosswalk_sha,
+            prefecture_build=prefecture_build,
             capabilities=capabilities,
             built_at=built_at,
             source_versions=source_versions,
@@ -969,6 +1174,8 @@ class SQLiteBuildPipeline:
             "views": views,
             "gpa_search": gpa,
             "academic_field_search": academic_field,
+            "english_requirement_search": english_requirement,
+            "prefecture_search": prefecture,
             "pragmas": pragmas,
             "build_metadata": metadata,
             "fts": fts,
@@ -1603,6 +1810,42 @@ class SQLiteBuildPipeline:
         }
 
     @staticmethod
+    def _validate_english_requirement_layer(
+        connection: sqlite3.Connection,
+        admissions_rows: int,
+        build: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        parent_rows = connection.execute(
+            "SELECT COUNT(*) FROM admission_search_english_requirement"
+        ).fetchone()[0]
+        raw_mismatch = connection.execute(
+            """
+            SELECT COUNT(*) FROM admissions AS a
+            JOIN admission_search_english_requirement AS e USING (admission_rowid)
+            WHERE a.english_requirement IS NOT e.raw_value
+            """
+        ).fetchone()[0]
+        statuses = dict(connection.execute(
+            "SELECT requirement_status, COUNT(*) FROM admission_search_english_requirement GROUP BY requirement_status"
+        ).fetchall())
+        if parent_rows != admissions_rows or raw_mismatch or statuses.get("unmapped", 0):
+            raise SQLiteBuildError("English requirement derived layer validation failed.")
+        expected = build["classification_counts"]
+        if any(statuses.get(key, 0) != value for key, value in expected.items()):
+            raise SQLiteBuildError("English requirement classification counts changed.")
+        return {"status": "passed", "parent_rows": parent_rows, "raw_mismatch_rows": raw_mismatch, "classification_counts": expected}
+
+    @staticmethod
+    def _validate_prefecture_layer(connection: sqlite3.Connection, admissions_rows: int, build: Mapping[str, Any]) -> dict[str, Any]:
+        parent=connection.execute("SELECT COUNT(*) FROM admission_search_prefectures").fetchone()[0]
+        child=connection.execute("SELECT COUNT(*) FROM admission_search_prefecture_memberships").fetchone()[0]
+        mismatch=connection.execute("SELECT COUNT(*) FROM admissions a JOIN admission_search_prefectures p USING(admission_rowid) WHERE a.prefecture IS NOT p.raw_value").fetchone()[0]
+        cardinality=connection.execute("""SELECT COUNT(*) FROM admission_search_prefectures p LEFT JOIN (SELECT admission_rowid,COUNT(*) n FROM admission_search_prefecture_memberships GROUP BY admission_rowid)c USING(admission_rowid) WHERE (p.mapping_status='single' AND COALESCE(c.n,0)<>1) OR (p.mapping_status='multi' AND COALESCE(c.n,0)<2) OR (p.mapping_status IN ('review_required','unmapped','not_applicable') AND COALESCE(c.n,0)<>0)""").fetchone()[0]
+        statuses=dict(connection.execute("SELECT mapping_status,COUNT(*) FROM admission_search_prefectures GROUP BY mapping_status"))
+        if parent!=admissions_rows or child!=build["membership_rows"] or mismatch or cardinality or statuses.get("unmapped",0): raise SQLiteBuildError("Prefecture derived layer validation failed.")
+        return {"status":"passed","parent_rows":parent,"membership_rows":child,"raw_mismatch_rows":mismatch,"cardinality_failures":cardinality,"classification_counts":build["classification_counts"],"membership_counts":build["membership_counts"]}
+
+    @staticmethod
     def _validate_pragmas(connection: sqlite3.Connection) -> dict[str, Any]:
         foreign_key_rows = [tuple(row) for row in connection.execute("PRAGMA foreign_key_check")]
         quick_check = [row[0] for row in connection.execute("PRAGMA quick_check")]
@@ -1631,6 +1874,13 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        english_requirement_schema_sha: str,
+        english_requirement_crosswalk_sha: str,
+        english_requirement_build: Mapping[str, Any],
+        prefecture_schema_sha: str,
+        prefecture_taxonomy_sha: str,
+        prefecture_crosswalk_sha: str,
+        prefecture_build: Mapping[str, Any],
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
@@ -1666,6 +1916,25 @@ class SQLiteBuildPipeline:
             "academic_field_schema_sql_sha256": academic_field_schema_sha,
             "academic_field_taxonomy_sha256": academic_field_taxonomy_sha,
             "academic_field_crosswalk_sha256": academic_field_crosswalk_sha,
+            "english_requirement_parser_contract_version": ENGLISH_REQUIREMENT_CONTRACT_VERSION,
+            "english_requirement_schema_sql_sha256": english_requirement_schema_sha,
+            "english_requirement_crosswalk_sha256": english_requirement_crosswalk_sha,
+            "english_requirement_required_rows": english_requirement_build["classification_counts"]["required"],
+            "english_requirement_not_required_rows": english_requirement_build["classification_counts"]["not_required"],
+            "english_requirement_review_required_rows": english_requirement_build["classification_counts"]["review_required"],
+            "english_requirement_unknown_rows": english_requirement_build["classification_counts"]["unknown"],
+            "english_requirement_not_applicable_rows": english_requirement_build["classification_counts"]["not_applicable"],
+            "english_requirement_unmapped_rows": english_requirement_build["classification_counts"]["unmapped"],
+            "prefecture_mapping_contract_version": PREFECTURE_MAPPING_CONTRACT_VERSION,
+            "prefecture_taxonomy_version": PREFECTURE_TAXONOMY_VERSION,
+            "prefecture_schema_sql_sha256": prefecture_schema_sha,
+            "prefecture_taxonomy_sha256": prefecture_taxonomy_sha,
+            "prefecture_crosswalk_sha256": prefecture_crosswalk_sha,
+            "prefecture_parent_rows": prefecture_build["parent_rows"],
+            "prefecture_membership_rows": prefecture_build["membership_rows"],
+            "prefecture_single_rows": prefecture_build["classification_counts"]["single"],
+            "prefecture_multi_rows": prefecture_build["classification_counts"]["multi"],
+            "prefecture_unmapped_rows": prefecture_build["classification_counts"]["unmapped"],
             "admissions_rows": inputs["master"].rows,
             "coverage_rows": inputs["coverage"].rows,
             "research_requirements_rows": inputs["research_requirements"].rows,
@@ -1875,6 +2144,15 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_metadata: Mapping[str, Any],
         academic_field_crosswalk_metadata: Mapping[str, Any],
         academic_field_build: Mapping[str, Any],
+        english_requirement_schema_metadata: Mapping[str, Any],
+        english_requirement_design_metadata: Mapping[str, Any],
+        english_requirement_crosswalk_metadata: Mapping[str, Any],
+        english_requirement_build: Mapping[str, Any],
+        prefecture_schema_metadata: Mapping[str, Any],
+        prefecture_design_metadata: Mapping[str, Any],
+        prefecture_taxonomy_metadata: Mapping[str, Any],
+        prefecture_crosswalk_metadata: Mapping[str, Any],
+        prefecture_build: Mapping[str, Any],
         capabilities: SQLiteCapabilities,
         built_at: str,
         row_counts: Mapping[str, int],
@@ -1927,6 +2205,13 @@ class SQLiteBuildPipeline:
                 "academic_field_crosswalk": dict(
                     academic_field_crosswalk_metadata
                 ),
+                "english_requirement_search_design": dict(english_requirement_design_metadata),
+                "english_requirement_search_schema": dict(english_requirement_schema_metadata),
+                "english_requirement_crosswalk": dict(english_requirement_crosswalk_metadata),
+                "prefecture_search_design": dict(prefecture_design_metadata),
+                "prefecture_search_schema": dict(prefecture_schema_metadata),
+                "prefecture_taxonomy": dict(prefecture_taxonomy_metadata),
+                "prefecture_crosswalk": dict(prefecture_crosswalk_metadata),
             },
             "output": {
                 "path": portable_manifest_path(self.database_path, self.repo_root),
@@ -1936,6 +2221,8 @@ class SQLiteBuildPipeline:
             "row_counts": dict(row_counts),
             "gpa_search": dict(gpa_build),
             "academic_field_search": dict(academic_field_build),
+            "english_requirement_search": dict(english_requirement_build),
+            "prefecture_search": dict(prefecture_build),
             "validation": dict(validation),
             "publication": {
                 "status": "published_after_all_validations_passed",
@@ -1956,6 +2243,7 @@ class SQLiteBuildPipeline:
         output = manifest["output"]
         gpa = manifest["gpa_search"]
         academic_field = manifest["academic_field_search"]
+        prefecture = manifest["prefecture_search"]
         lines = [
             "# Early Admissions SQLite v0.1 build summary",
             "",
@@ -2000,6 +2288,7 @@ class SQLiteBuildPipeline:
                 f"- FTS validation: {validation['fts']['status']}",
                 "- GPA raw-value equality, fail-closed numeric bounds, and safe view: passed",
                 "- Academic-field raw equality, exact crosswalk, group enum, and cardinality: passed",
+                "- Prefecture raw equality, exact crosswalk, membership FK, and cardinality: passed",
                 "",
                 "## GPA derived search layer",
                 "",
@@ -2034,6 +2323,13 @@ class SQLiteBuildPipeline:
                         "classification_counts"
                     ].items()
                 ),
+                "",
+                "## Prefecture derived membership layer",
+                "",
+                f"- Parent rows: {prefecture['parent_rows']}",
+                f"- Membership rows: {prefecture['membership_rows']}",
+                f"- Frozen crosswalk distinct raw values: {prefecture['crosswalk_distinct_raw_values']}",
+                f"- Mapping counts: `{canonical_json(prefecture['classification_counts'])}`",
                 "",
                 "| Group | Memberships |",
                 "|---|---:|",

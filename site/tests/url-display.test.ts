@@ -5,7 +5,8 @@ import { detailLink, displayValue, gpaLabel, stateClass, triStateLabel } from ".
 import { parseSearchParams, serializeRequest } from "../src/url-state";
 import type { FilterOptions } from "../src/types";
 
-const options = JSON.parse(readFileSync(join(process.cwd(), "public/site-data/assets/bbffbaee7aadbdb0ae43/filter_options.json"), "utf8")) as FilterOptions;
+const manifest = JSON.parse(readFileSync(join(process.cwd(), "public/site-data/build_manifest.json"), "utf8")) as {build_id:string};
+const options = JSON.parse(readFileSync(join(process.cwd(), `public/site-data/assets/${manifest.build_id}/filter_options.json`), "utf8")) as FilterOptions;
 
 describe("URL state and explicit display semantics", () => {
   it("round-trips repeated OR parameters", () => {
@@ -36,5 +37,12 @@ describe("URL state and explicit display semantics", () => {
 
   it("uses the logical key in detail routes", () => {
     expect(detailLink("kokkoritsu", "5.61", "A/B")).toBe("/admissions/kokkoritsu/5.61/A%2FB");
+  });
+  it("round-trips derived prefecture memberships independently of raw prefecture",()=>{
+    const withPrefectures={...options,prefecture_memberships:[{value:"東京都",display_label:"東京都",region:"関東",display_order:13,unfiltered_count:1010},{value:"神奈川県",display_label:"神奈川県",region:"関東",display_order:14,unfiltered_count:684}]};
+    const parsed=parseSearchParams(new URLSearchParams("prefecture_membership=東京都&prefecture_membership=神奈川県"),withPrefectures);
+    expect(parsed.request.prefecture_membership).toEqual(["東京都","神奈川県"]);
+    expect(parsed.request.prefecture).toEqual([]);
+    expect(serializeRequest(parsed.request).getAll("prefecture_membership")).toEqual(["東京都","神奈川県"]);
   });
 });

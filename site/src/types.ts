@@ -24,6 +24,9 @@ export interface SiteManifest {
     gpa_parser_contract_version: string;
     academic_field_mapping_contract_version: string;
     academic_field_taxonomy_version: string;
+    english_requirement_parser_contract_version: string;
+    prefecture_mapping_contract_version: string;
+    prefecture_taxonomy_version: string;
   };
   outputs: { artifacts: ArtifactReceipt[] };
   counts: {
@@ -44,6 +47,9 @@ export interface SearchRow {
   institution_type: string;
   university: string;
   prefecture: Nullable<string>;
+  prefecture_raw: Nullable<string>;
+  prefecture_mapping_status: string;
+  prefecture_memberships: string[];
   faculty_school: Nullable<string>;
   department: Nullable<string>;
   selection_category: Nullable<string>;
@@ -67,6 +73,10 @@ export interface SearchRow {
   selection_written_exam: Nullable<string>;
   selection_common_test: Nullable<string>;
   gpa_requirement: Nullable<string>;
+  english_requirement: Nullable<string>;
+  english_requirement_status: "required" | "not_required" | "review_required" | "unknown" | "not_applicable" | "unmapped";
+  english_requirement_parse_status: "exact_crosswalk" | "missing" | "unmapped";
+  english_requirement_search_disposition: "safe_exact" | "review_required" | "not_searchable";
   gpa_parse_status: string;
   gpa_search_disposition: string;
   gpa_min_tenths: Nullable<number>;
@@ -94,6 +104,7 @@ export interface AcademicGroupOption extends OptionValue {
   description: string;
   display_order: number;
 }
+export interface PrefectureOption extends OptionValue { value:string; region:string; display_order:number; }
 
 export interface FilterOptions {
   site_data_schema_version: "0.1";
@@ -111,6 +122,8 @@ export interface FilterOptions {
   common_test_required: OptionValue[];
   research_requirement_required: OptionValue[];
   research_activity_level_status: OptionValue[];
+  english_requirement_statuses: OptionValue[];
+  prefecture_memberships: PrefectureOption[];
   selection_method_values: Record<string, OptionValue[]>;
 }
 
@@ -121,12 +134,13 @@ export type MultiField =
   | "academic_record_required" | "common_test_required" | "research_requirement_required"
   | "research_activity_level_status" | "selection_interview" | "selection_oral_exam"
   | "selection_presentation" | "selection_essay" | "selection_written_exam"
-  | "selection_common_test";
+  | "selection_common_test" | "english_requirement_status" | "prefecture_membership";
 
 export interface SearchRequest {
   university: string[];
   institution_type: string[];
   prefecture: string[];
+  prefecture_membership: string[];
   academic_field: string[];
   academic_field_group: string[];
   academic_field_mapping_status: string[];
@@ -144,6 +158,7 @@ export interface SearchRequest {
   selection_essay: string[];
   selection_written_exam: string[];
   selection_common_test: string[];
+  english_requirement_status: string[];
   gpa_tenths: number | null;
   gpa_mode: "safe" | "review" | "all";
   page: number;
@@ -170,5 +185,6 @@ export interface DetailRecord {
   admission: Record<string, Scalar>;
   gpa_derived: Record<string, Scalar>;
   academic_field_derived: Record<string, Scalar | Array<Record<string, Scalar>>>;
+  english_requirement_derived: Record<string, Scalar>;
   research_requirements: Array<Record<string, Scalar>>;
 }

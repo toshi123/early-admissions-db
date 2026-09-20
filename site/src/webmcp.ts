@@ -20,7 +20,7 @@ export function registerSearchTools(
       inputSchema: {
         type: "object", additionalProperties: false,
         properties: {
-          prefecture: { type: "array", items: { type: "string" } },
+          prefecture_membership: { type: "array", items: { type: "string" } },
           institution_type: { type: "array", items: { type: "string" } },
           gpa_tenths: { type: ["integer", "null"], minimum: 0, maximum: 50 },
           gpa_mode: { type: "string", enum: ["safe", "review", "all"] },
@@ -30,9 +30,9 @@ export function registerSearchTools(
       execute: async (input: unknown) => {
         if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("object input required");
         const record = input as Record<string, unknown>;
-        const allowed = new Set(["prefecture", "institution_type", "gpa_tenths", "gpa_mode"]);
+        const allowed = new Set(["prefecture_membership", "institution_type", "gpa_tenths", "gpa_mode"]);
         if (Object.keys(record).some((key) => !allowed.has(key))) throw new Error("unsupported field");
-        for (const field of ["prefecture", "institution_type"] as const) {
+        for (const field of ["prefecture_membership", "institution_type"] as const) {
           if (record[field] !== undefined && (!Array.isArray(record[field]) || record[field].some((value) => typeof value !== "string" || !value))) {
             throw new Error(`${field} must be a list of non-empty strings`);
           }

@@ -23,6 +23,8 @@ function allowedValues(options: FilterOptions): Record<MultiField, Set<string>> 
     selection_essay: values(options.selection_method_values.selection_essay),
     selection_written_exam: values(options.selection_method_values.selection_written_exam),
     selection_common_test: values(options.selection_method_values.selection_common_test),
+    english_requirement_status: values(options.english_requirement_statuses ?? []),
+    prefecture_membership: values(options.prefecture_memberships ?? []),
   };
 }
 

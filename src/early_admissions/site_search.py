@@ -42,6 +42,7 @@ class SearchRequest:
     university: tuple[str, ...] = ()
     institution_type: tuple[str, ...] = ()
     prefecture: tuple[str, ...] = ()
+    prefecture_membership: tuple[str, ...] = ()
     academic_field: tuple[str, ...] = ()
     academic_field_group: tuple[str, ...] = ()
     academic_field_mapping_status: tuple[str, ...] = ()
@@ -59,6 +60,7 @@ class SearchRequest:
     selection_essay: tuple[str, ...] = ()
     selection_written_exam: tuple[str, ...] = ()
     selection_common_test: tuple[str, ...] = ()
+    english_requirement_status: tuple[str, ...] = ()
     gpa_tenths: int | None = None
     gpa_mode: str = "all"
 
@@ -69,7 +71,7 @@ class SearchRequest:
             raise SiteSearchError("GPA mode safe/review requires a GPA value.")
         if self.gpa_tenths is not None and not 0 <= self.gpa_tenths <= 50:
             raise SiteSearchError("GPA tenths must be between 0 and 50.")
-        for name in (*MULTI_VALUE_FIELDS, "academic_field_group", "academic_field_mapping_status"):
+        for name in (*MULTI_VALUE_FIELDS, "academic_field_group", "academic_field_mapping_status", "english_requirement_status", "prefecture_membership"):
             values = getattr(self, name)
             if not isinstance(values, tuple) or any(
                 not isinstance(value, str) or value == "" for value in values
@@ -145,6 +147,8 @@ def _matches(row: Mapping[str, Any], request: SearchRequest) -> bool:
         row["academic_field_groups"]
     ):
         return False
+    if request.prefecture_membership and not set(request.prefecture_membership).intersection(row["prefecture_memberships"]):
+        return False
     if (
         request.academic_field_mapping_status
         and row["academic_field_mapping_status"]
@@ -153,6 +157,11 @@ def _matches(row: Mapping[str, Any], request: SearchRequest) -> bool:
         return False
     if request.stem_flag is not None and row["stem_flag"] is not request.stem_flag:
         return False
+    if request.english_requirement_status:
+        if set(request.english_requirement_status).difference({"required", "not_required"}):
+            return False
+        if row["english_requirement_status"] not in request.english_requirement_status or row["english_requirement_search_disposition"] != "safe_exact":
+            return False
     if request.gpa_tenths is not None:
         safe = _safe_match(row, request.gpa_tenths)
         if request.gpa_mode == "safe" and not safe:

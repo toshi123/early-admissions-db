@@ -4,7 +4,7 @@
   "title": "Early Admissions Site detail record v0.1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["site_data_schema_version", "identity", "admission", "gpa_derived", "academic_field_derived", "research_requirements"],
+  "required": ["site_data_schema_version", "identity", "admission", "gpa_derived", "academic_field_derived", "english_requirement_derived", "research_requirements"],
   "properties": {
     "site_data_schema_version": {"const": "0.1"},
     "identity": {"$ref": "#/$defs/identity"},
@@ -34,6 +34,17 @@
         "mapping_status": {"type": "string"}, "mapping_contract_version": {"const": "0.1"},
         "review_note": {"type": ["string", "null"]},
         "groups": {"type": "array", "items": {"$ref": "#/$defs/academic_group"}}
+      }
+    },
+    "english_requirement_derived": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admission_rowid", "raw_value", "requirement_status", "parse_status", "search_disposition", "parser_contract_version", "review_note"],
+      "properties": {
+        "admission_rowid": {"type": "integer"}, "raw_value": {"type": ["string", "null"]},
+        "requirement_status": {"enum": ["required", "not_required", "review_required", "unknown", "not_applicable", "unmapped"]},
+        "parse_status": {"enum": ["exact_crosswalk", "missing", "unmapped"]},
+        "search_disposition": {"enum": ["safe_exact", "review_required", "not_searchable"]},
+        "parser_contract_version": {"const": "0.1"}, "review_note": {"type": ["string", "null"]}
       }
     },
     "research_requirements": {"type": "array", "items": {"$ref": "#/$defs/research"}}

@@ -7,6 +7,8 @@ export const MULTI_FIELDS: MultiField[] = [
   "research_requirement_required", "research_activity_level_status", "selection_interview",
   "selection_oral_exam", "selection_presentation", "selection_essay", "selection_written_exam",
   "selection_common_test",
+  "english_requirement_status",
+  "prefecture_membership",
 ];
 
 export function emptyRequest(): SearchRequest {
@@ -42,6 +44,8 @@ function matches(row: SearchRow, request: SearchRequest): boolean {
     if (!values.length) continue;
     if (field === "academic_field_group") {
       if (!values.some((value) => row.academic_field_groups.includes(value))) return false;
+    } else if (field === "prefecture_membership") {
+      if (!values.some((value) => row.prefecture_memberships.includes(value))) return false;
     } else if (!values.includes(row[field as keyof SearchRow] as string)) return false;
   }
   if (request.stem_flag !== null && row.stem_flag !== request.stem_flag) return false;
