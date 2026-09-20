@@ -95,7 +95,11 @@ export function selectionMethodLabels(row: SearchRow): string[] {
   return METHOD_FIELDS.filter(([field]) => row[field] === "Yes").map(([, label]) => label);
 }
 
-export function compactResultCard(row: SearchRow, showGpaSafeMatch: boolean): string {
+export function compactResultCard(
+  row: SearchRow,
+  showGpaSafeMatch: boolean,
+  showUniversity = true,
+): string {
   const methods = selectionMethodLabels(row);
   const category = row.selection_category
     ? `<span class="selection-category">${displayValue(row.selection_category)}</span>`
@@ -107,5 +111,13 @@ export function compactResultCard(row: SearchRow, showGpaSafeMatch: boolean): st
       : []),
     ...(row.fallback_previous_year ? ['<span class="previous-year">前年度情報</span>'] : []),
   ];
-  return `<article class="result-card" role="listitem"><h2><a href="${detailLink(row.source_dataset, row.source_version, row.record_id)}" data-route>${escapeHtml(row.university)}</a></h2><p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line"><strong>${displayValue(row.selection_name)}</strong>${category}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div></article>`;
+  const detailHref = detailLink(row.source_dataset, row.source_version, row.record_id);
+  const selectionName = displayValue(row.selection_name);
+  const title = showUniversity
+    ? `<h2><a href="${detailHref}" data-route>${escapeHtml(row.university)}</a></h2>`
+    : "";
+  const selection = showUniversity
+    ? `<strong>${selectionName}</strong>${category}`
+    : `<strong><a class="admission-detail-link" href="${detailHref}" data-route>${selectionName}</a></strong>${category}`;
+  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div></article>`;
 }

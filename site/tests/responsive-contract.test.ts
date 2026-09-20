@@ -34,4 +34,10 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".check-grid { grid-template-columns: repeat(2, minmax(0, 1fr))");
     expect(css).toContain(".form-actions .button { width: 100%; }");
   });
+
+  it("keeps university disclosures and nested admissions compact on mobile", () => {
+    expect(css).toContain(".university-disclosure__button { min-height: 52px");
+    expect(css).toContain(".university-disclosure__name { font-size: 1rem; }");
+    expect(css).toContain(".university-admissions { margin: 0 .25rem .75rem 1rem; }");
+  });
 });

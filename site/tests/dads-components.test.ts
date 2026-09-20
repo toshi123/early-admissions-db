@@ -69,4 +69,11 @@ describe("DADS component contracts", () => {
     expect(main).toContain('class="pagination__spacer" aria-hidden="true"');
     expect(main).not.toContain('applied.page <= 1 ? "disabled"');
   });
+
+  it("uses button-based DADS disclosures for university result groups", () => {
+    expect(main).toContain('button[data-university-toggle]');
+    expect(main).toContain('setAttribute("aria-expanded", String(expanded))');
+    expect(css).toContain(".university-disclosure__button:focus-visible");
+    expect(css).toContain('.university-disclosure__button[aria-expanded="true"] .university-disclosure__icon');
+  });
 });

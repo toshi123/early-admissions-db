@@ -7,12 +7,20 @@ import { headerSearchHref, rememberLastSearch } from "./last-search-state";
 import { submitSearchNavigation } from "./navigation";
 import { emptyRequest, searchRows } from "./search";
 import {
-  compactResultCard,
   evaluateSearchDraft,
   liveSearchResult,
   liveSummaryPresentation,
   universitySuggestions,
 } from "./search-ui";
+import {
+  expandedUniversitiesFromHistory,
+  groupAdmissionsByUniversity,
+  paginateUniversityGroups,
+  toggleExpandedUniversity,
+  UNIVERSITY_GROUP_PAGE_SIZE,
+  universityGroupMarkup,
+  universityResultsHistoryState,
+} from "./university-groups";
 import type {
   DetailRecord,
   FilterOptions,
@@ -28,7 +36,6 @@ import {
 } from "./url-state";
 import { registerSearchTools } from "./webmcp";
 
-const PAGE_SIZE = 20;
 const app = document.querySelector<HTMLDivElement>("#app")!;
 let rows: SearchRow[] = [];
 let options: FilterOptions;
@@ -39,6 +46,7 @@ let universityQuery = "";
 let gpaQuery = "";
 let cleanupWebMcp: () => void = () => undefined;
 let floatingLiveCount: FloatingLiveCountController | null = null;
+let expandedUniversities = new Set<string>();
 const groupLabels = new Map<string, string>();
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -286,9 +294,11 @@ function resultsPage(warnings: string[]): void {
   floatingLiveCount = null;
   rememberLastSearch(applied);
   currentResult = searchRows(rows, applied);
-  const pages = Math.max(1, Math.ceil(currentResult.rows.length / PAGE_SIZE));
+  const universityGroups = groupAdmissionsByUniversity(currentResult.rows);
+  const pages = Math.max(1, Math.ceil(universityGroups.length / UNIVERSITY_GROUP_PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
-  const shown = currentResult.rows.slice((applied.page - 1) * PAGE_SIZE, applied.page * PAGE_SIZE);
+  const shown = paginateUniversityGroups(universityGroups, applied.page);
+  const firstGroupIndex = (applied.page - 1) * UNIVERSITY_GROUP_PAGE_SIZE;
   const query = serializeRequest({ ...applied, page: 1 }).toString();
   const previous = applied.page > 1
     ? `<button class="button button--text" data-page="${applied.page - 1}"><span aria-hidden="true">←</span> 前のページ</button>`
@@ -296,7 +306,7 @@ function resultsPage(warnings: string[]): void {
   const next = applied.page < pages
     ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
-  app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results" role="list">${shown.length ? shown.map((row) => compactResultCard(row, applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main>${footer()}`;
 }
 
 const sections: Array<[string, string[]]> = [
@@ -374,14 +384,32 @@ async function route(replace = false): Promise<void> {
     const query = serializeRequest(applied).toString();
     history.replaceState({}, "", `/results${query ? `?${query}` : ""}`);
   }
-  if (path === "/search") searchPage(parsed.warnings);
-  else resultsPage(parsed.warnings);
+  if (path === "/search") {
+    expandedUniversities.clear();
+    searchPage(parsed.warnings);
+  } else {
+    expandedUniversities = replace
+      ? new Set()
+      : expandedUniversitiesFromHistory(history.state);
+    resultsPage(parsed.warnings);
+  }
 }
 
 function rememberCurrentView(): void {
   const prefectureOpen = document.querySelector<HTMLDetailsElement>("#prefecture-details")?.open ?? false;
+  const state = location.pathname === "/results"
+    ? universityResultsHistoryState(history.state, expandedUniversities, window.scrollY, prefectureOpen)
+    : { ...(history.state ?? {}), scrollY: window.scrollY, prefectureOpen };
   history.replaceState(
-    { ...(history.state ?? {}), scrollY: window.scrollY, prefectureOpen },
+    state,
+    "",
+    location.href,
+  );
+}
+
+function persistExpandedUniversities(): void {
+  history.replaceState(
+    { ...(history.state ?? {}), expandedUniversities: [...expandedUniversities] },
     "",
     location.href,
   );
@@ -403,9 +431,23 @@ document.addEventListener("click", (event) => {
     void route();
     return;
   }
+  const universityToggle = target.closest<HTMLButtonElement>("button[data-university-toggle]");
+  if (universityToggle) {
+    const university = universityToggle.dataset.universityToggle;
+    const panelId = universityToggle.getAttribute("aria-controls");
+    const panel = panelId ? document.getElementById(panelId) : null;
+    if (!university || !panel) return;
+    const expanded = toggleExpandedUniversity(expandedUniversities, university);
+    universityToggle.setAttribute("aria-expanded", String(expanded));
+    panel.hidden = !expanded;
+    persistExpandedUniversities();
+    return;
+  }
   const page = target.closest<HTMLButtonElement>("button[data-page]");
   if (page) {
+    rememberCurrentView();
     applied.page = Number(page.dataset.page);
+    expandedUniversities.clear();
     const query = serializeRequest(applied).toString();
     history.pushState({}, "", `/results?${query}`);
     resultsPage([]);
@@ -428,6 +470,7 @@ try {
     applied = { ...emptyRequest(), ...partial, page: 1 } as SearchRequest;
     if (applied.gpa_tenths !== null) applied.gpa_mode = "safe";
     const query = serializeRequest(applied).toString();
+    expandedUniversities.clear();
     history.pushState({}, "", `/results${query ? `?${query}` : ""}`);
     resultsPage([]);
     return {

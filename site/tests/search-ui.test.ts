@@ -88,6 +88,11 @@ describe("compact result cards", () => {
     expect(html).not.toContain("評定条件（原文）");
     expect(html).not.toContain("出願期間");
     expect(html).not.toContain("専願");
+
+    const groupedHtml = compactResultCard(row(), false, false);
+    expect(groupedHtml).not.toContain("東京大学");
+    expect(groupedHtml).toContain('class="admission-detail-link"');
+    expect(groupedHtml).toContain("特別選抜");
   });
 });
 
