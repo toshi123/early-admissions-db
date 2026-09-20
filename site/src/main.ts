@@ -3,6 +3,7 @@ import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
 import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
+import { headerSearchHref, rememberLastSearch } from "./last-search-state";
 import { submitSearchNavigation } from "./navigation";
 import { emptyRequest, searchRows } from "./search";
 import {
@@ -42,7 +43,12 @@ const groupLabels = new Map<string, string>();
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
-const header = () => `<header class="topbar"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav><a href="/search" data-route>検索</a><a href="/about/data" data-route>データについて</a></nav></header>`;
+const header = () => {
+  const path = location.pathname.replace(/\/+$/, "") || "/";
+  const searchCurrent = path === "/search" || path === "/results" || path.startsWith("/admissions/");
+  const aboutCurrent = path === "/about/data";
+  return `<header class="site-header"><div class="site-header__inner"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav aria-label="主要ナビゲーション"><ul class="global-nav"><li><a id="header-search-link" class="global-nav__link" href="${headerSearchHref(path, applied)}" data-route${searchCurrent ? ' aria-current="page"' : ""}>検索</a></li><li><a class="global-nav__link" href="/about/data" data-route${aboutCurrent ? ' aria-current="page"' : ""}>データについて</a></li></ul></nav></div></header>`;
+};
 const footer = () => `<footer>候補の絞り込み用です。出願前に最新の公式資料を必ず確認してください。</footer>`;
 const selected = (field: string, value: string) => (
   (applied[field as keyof SearchRequest] as string[]) ?? []
@@ -55,14 +61,14 @@ function checks(
 ): string {
   return `<div class="check-grid">${items
     .filter((item) => item.value !== null)
-    .map((item) => `<label class="check"><input type="checkbox" name="${field}" value="${escapeHtml(item.value!)}" ${selected(field, item.value!) ? "checked" : ""}> <span>${escapeHtml(labels[item.value!] ?? item.display_label)}</span></label>`)
+    .map((item) => `<label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="${field}" value="${escapeHtml(item.value!)}" ${selected(field, item.value!) ? "checked" : ""}></span><span class="choice__label">${escapeHtml(labels[item.value!] ?? item.display_label)}</span></label>`)
     .join("")}</div>`;
 }
 
 function radios(field: string, choices: Array<[string, string]>): string {
   const current = ((applied[field as keyof SearchRequest] as string[]) ?? [])[0] ?? "";
   return `<div class="radio-row">${choices
-    .map(([value, label]) => `<label><input type="radio" name="${field}" value="${value}" ${current === value ? "checked" : ""}> ${label}</label>`)
+    .map(([value, label]) => `<label class="choice choice--radio"><span class="choice__control"><input type="radio" name="${field}" value="${value}" ${current === value ? "checked" : ""}></span><span class="choice__label">${label}</span></label>`)
     .join("")}</div>`;
 }
 
@@ -91,18 +97,18 @@ function searchForm(): string {
     <header class="form-intro"><h1>条件から入試を探す</h1><p>異なる項目はすべて満たすもの、同じ項目の複数選択はいずれかに一致するものを検索します。</p></header>
     <output id="live-summary" class="live-summary" aria-live="polite"></output>
     <div id="floating-live-summary" class="floating-live-summary" aria-hidden="true"><span id="floating-live-summary-text"></span></div>
-    <fieldset><legend>1. 大学名</legend><label class="input-label" for="university-input">大学名を入力</label><div class="university-combobox"><input id="university-input" type="text" value="${escapeHtml(universityQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="university-suggestions" aria-expanded="false" placeholder="大学名の一部を入力"><div id="university-suggestions" class="suggestions" role="listbox" hidden></div></div><p class="help">表示された候補から1校を選択してください。</p></fieldset>
+    <fieldset><legend>1. 大学名</legend><label class="input-label" for="university-input">大学名を入力</label><div class="university-combobox"><input id="university-input" class="text-input" type="text" value="${escapeHtml(universityQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="university-suggestions" aria-expanded="false" placeholder="大学名の一部を入力"><div id="university-suggestions" class="suggestions" role="listbox" hidden></div></div><p class="help">表示された候補から1校を選択してください。</p></fieldset>
     <fieldset><legend>2. 学問分野</legend><p class="help">複数選択可</p>${checks("academic_field_group", groups)}</fieldset>
     <fieldset><legend>3. 大学種別</legend>${checks("institution_type", institutionTypes)}</fieldset>
     <fieldset><legend>4. 専願・併願</legend>${checks("exclusive_enrollment_status", exclusive, { 不明: "不明・記載確認できず" })}</fieldset>
     <fieldset><legend>5. 共通テスト</legend>${radios("common_test_required", [["", "指定なし"], ["Yes", "あり"], ["No", "なし"]])}</fieldset>
     <fieldset><legend>6. 研究業績</legend>${radios("research_requirement_required", [["", "指定なし"], ["Yes", "必要"], ["No", "必要なし"]])}</fieldset>
     <fieldset><legend>7. 英語資格</legend>${radios("english_requirement_status", [["", "指定なし"], ["required", "必要"], ["not_required", "必要なし"]])}</fieldset>
-    <fieldset><legend>8. 試験内容</legend><p class="help">複数選ぶと、すべて実施する入試に絞ります。</p><div class="check-grid">${methods.map(([field, label]) => `<label class="check"><input type="checkbox" name="${field}" value="Yes" ${selected(field, "Yes") ? "checked" : ""}> <span>${label}</span></label>`).join("")}</div></fieldset>
-    <fieldset><legend>9. 評定</legend><label class="input-label" for="gpa">評定値（0.0〜5.0）</label><input id="gpa" type="text" inputmode="decimal" value="${escapeHtml(gpaQuery)}" placeholder="例：3.8"><p class="help">単純な全体評定の数値条件のみを安全に照合します。</p></fieldset>
-    <fieldset class="prefecture-fieldset"><details id="prefecture-details"><summary>10. 都道府県で絞り込む <span id="prefecture-count" class="selected-count"></span></summary><div class="prefecture-regions">${prefectures}</div><button id="clear-prefectures" type="button">選択をクリア</button></details></fieldset>
+    <fieldset><legend>8. 試験内容</legend><p class="help">複数選ぶと、すべて実施する入試に絞ります。</p><div class="check-grid">${methods.map(([field, label]) => `<label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="${field}" value="Yes" ${selected(field, "Yes") ? "checked" : ""}></span><span class="choice__label">${label}</span></label>`).join("")}</div></fieldset>
+    <fieldset><legend>9. 評定</legend><label class="input-label" for="gpa">評定値（0.0〜5.0）</label><input id="gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(gpaQuery)}" placeholder="例：3.8"><p class="help">単純な全体評定の数値条件のみを安全に照合します。</p></fieldset>
+    <fieldset class="prefecture-fieldset"><details id="prefecture-details" class="disclosure"><summary><svg class="disclosure__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentcolor"/><circle class="disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor"/><path class="disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas"/></svg><span>10. 都道府県で絞り込む <span id="prefecture-count" class="selected-count"></span></span></summary><div class="prefecture-regions">${prefectures}</div><button id="clear-prefectures" class="button button--text" type="button">選択をクリア</button></details></fieldset>
     <div id="form-error" class="notice error" role="alert" hidden></div>
-    <div class="form-actions"><button class="primary" type="submit">この条件で検索</button><button id="clear-form" type="button">条件をクリア</button></div>
+    <div class="form-actions"><button class="button button--primary" type="submit">この条件で検索</button><button id="clear-form" class="button button--outline" type="button">条件をクリア</button></div>
   </form>`;
 }
 
@@ -171,6 +177,9 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   const submit = document.querySelector<HTMLButtonElement>('#search-form button[type="submit"]')!;
   submit.disabled = evaluation.errors.length > 0;
   updatePrefectureCount();
+  const headerLink = document.querySelector<HTMLAnchorElement>("#header-search-link");
+  if (headerLink) headerLink.href = headerSearchHref("/search", evaluation.request);
+  if (evaluation.errors.length === 0) rememberLastSearch(evaluation.request);
   if (syncUrl) {
     const query = serializeSearchFormState(evaluation.request, universityQuery, gpaQuery).toString();
     history.replaceState(history.state ?? {}, "", `/search${query ? `?${query}` : ""}`);
@@ -275,12 +284,19 @@ function summaryText(): string {
 function resultsPage(warnings: string[]): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
+  rememberLastSearch(applied);
   currentResult = searchRows(rows, applied);
   const pages = Math.max(1, Math.ceil(currentResult.rows.length / PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
   const shown = currentResult.rows.slice((applied.page - 1) * PAGE_SIZE, applied.page * PAGE_SIZE);
   const query = serializeRequest({ ...applied, page: 1 }).toString();
-  app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results">${shown.length ? shown.map((row) => compactResultCard(row, applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination"><button data-page="${applied.page - 1}" ${applied.page <= 1 ? "disabled" : ""}>前へ</button><span>${applied.page} / ${pages}</span><button data-page="${applied.page + 1}" ${applied.page >= pages ? "disabled" : ""}>次へ</button></nav>` : ""}</main>${footer()}`;
+  const previous = applied.page > 1
+    ? `<button class="button button--text" data-page="${applied.page - 1}"><span aria-hidden="true">←</span> 前のページ</button>`
+    : '<span class="pagination__spacer" aria-hidden="true"></span>';
+  const next = applied.page < pages
+    ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
+    : '<span class="pagination__spacer" aria-hidden="true"></span>';
+  app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results" role="list">${shown.length ? shown.map((row) => compactResultCard(row, applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main>${footer()}`;
 }
 
 const sections: Array<[string, string[]]> = [
@@ -340,6 +356,7 @@ async function route(replace = false): Promise<void> {
   if (match) { await detailPage(match.slice(1)); return; }
   if (path === "/") {
     history.replaceState({}, "", "/search");
+    applied = emptyRequest();
     universityQuery = "";
     gpaQuery = "";
     searchPage([]);

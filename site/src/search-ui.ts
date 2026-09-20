@@ -107,5 +107,5 @@ export function compactResultCard(row: SearchRow, showGpaSafeMatch: boolean): st
       : []),
     ...(row.fallback_previous_year ? ['<span class="previous-year">前年度情報</span>'] : []),
   ];
-  return `<article class="result-card"><h2><a href="${detailLink(row.source_dataset, row.source_version, row.record_id)}" data-route>${escapeHtml(row.university)}</a></h2><p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line"><strong>${displayValue(row.selection_name)}</strong>${category}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div></article>`;
+  return `<article class="result-card" role="listitem"><h2><a href="${detailLink(row.source_dataset, row.source_version, row.record_id)}" data-route>${escapeHtml(row.university)}</a></h2><p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line"><strong>${displayValue(row.selection_name)}</strong>${category}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div></article>`;
 }
