@@ -55,6 +55,9 @@ class SiteDataBuildTests(unittest.TestCase):
             self.assertIs(kokkoritsu["fallback_previous_year"], False)
             self.assertEqual(kokkoritsu["academic_field_groups"], ["natural_sciences", "engineering", "information"])
             self.assertEqual(kokkoritsu["gpa_min_tenths"], 35)
+            self.assertIn("selection_practical", kokkoritsu)
+            self.assertIn("selection_group_discussion", kokkoritsu)
+            self.assertIn("selection_aptitude_test", kokkoritsu)
             self.assertEqual(manifest["validation"]["search_equivalence"]["queries"], 25)
             self.assertEqual(sha256(database), before)
 

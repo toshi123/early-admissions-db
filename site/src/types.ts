@@ -71,6 +71,9 @@ export interface SearchRow {
   selection_presentation: Nullable<string>;
   selection_essay: Nullable<string>;
   selection_written_exam: Nullable<string>;
+  selection_practical: Nullable<string>;
+  selection_group_discussion: Nullable<string>;
+  selection_aptitude_test: Nullable<string>;
   selection_common_test: Nullable<string>;
   gpa_requirement: Nullable<string>;
   english_requirement: Nullable<string>;

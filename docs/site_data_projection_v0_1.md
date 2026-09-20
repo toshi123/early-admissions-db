@@ -78,7 +78,7 @@ There is exactly one search row per admission logical key. It contains:
 - application fields: exclusive-enrollment status, recommendation, academic
   record, Common Test requirement, research requirement, and research-activity
   level status;
-- six selection-method fields, keeping `common_test_required` and
+- nine selection-method fields, keeping `common_test_required` and
   `selection_common_test` separate;
 - raw GPA plus SQLite-derived parse status, search disposition, lower/upper
   integer-tenths bounds and inclusivity, and source-value status;

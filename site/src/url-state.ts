@@ -1,7 +1,22 @@
 import { emptyRequest, MULTI_FIELDS } from "./search";
 import type { FilterOptions, MultiField, SearchRequest } from "./types";
 
-const PARAMS = new Set<string>([...MULTI_FIELDS, "stem", "gpa", "gpa_mode", "page"]);
+const PARAMS = new Set<string>([
+  ...MULTI_FIELDS,
+  "stem",
+  "gpa",
+  "gpa_mode",
+  "page",
+  "university_query",
+  "gpa_query",
+]);
+
+export interface SearchUrlState {
+  request: SearchRequest;
+  warnings: string[];
+  universityQuery: string;
+  gpaQuery: string;
+}
 
 function allowedValues(options: FilterOptions): Record<MultiField, Set<string>> {
   const values = (items: Array<{ value: string | null }>) => new Set(items.flatMap((item) => item.value === null ? [] : [item.value]));
@@ -28,7 +43,7 @@ function allowedValues(options: FilterOptions): Record<MultiField, Set<string>> 
   };
 }
 
-export function parseSearchParams(params: URLSearchParams, options: FilterOptions): { request: SearchRequest; warnings: string[] } {
+export function parseSearchParams(params: URLSearchParams, options: FilterOptions): SearchUrlState {
   const request = emptyRequest();
   const warnings: string[] = [];
   const allowed = allowedValues(options);
@@ -57,7 +72,11 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
   const page = params.get("page");
   if (page !== null && /^\d+$/.test(page) && Number(page) > 0) request.page = Number(page);
   else if (page !== null) warnings.push("ページ指定を無視しました。");
-  return { request, warnings };
+  const universityQuery = params.get("university_query") ?? request.university[0] ?? "";
+  const gpaQuery = params.get("gpa_query") ?? (
+    request.gpa_tenths === null ? "" : (request.gpa_tenths / 10).toFixed(1)
+  );
+  return { request, warnings, universityQuery, gpaQuery };
 }
 
 export function serializeRequest(request: SearchRequest): URLSearchParams {
@@ -69,5 +88,21 @@ export function serializeRequest(request: SearchRequest): URLSearchParams {
     params.set("gpa_mode", request.gpa_mode);
   }
   if (request.page > 1) params.set("page", String(request.page));
+  return params;
+}
+
+export function serializeSearchFormState(
+  request: SearchRequest,
+  universityQuery: string,
+  gpaQuery: string,
+): URLSearchParams {
+  const params = serializeRequest(request);
+  if (universityQuery && request.university[0] !== universityQuery) {
+    params.set("university_query", universityQuery);
+  }
+  const canonicalGpa = request.gpa_tenths === null
+    ? ""
+    : (request.gpa_tenths / 10).toFixed(1);
+  if (gpaQuery && canonicalGpa !== gpaQuery) params.set("gpa_query", gpaQuery);
   return params;
 }

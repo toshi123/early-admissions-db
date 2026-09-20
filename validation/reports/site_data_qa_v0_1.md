@@ -1,13 +1,13 @@
 # Site-data projection v0.1 QA
 
-- Build ID: `b922e4906c079464eb0f`
+- Build ID: `2f77f8f2b14343d803fd`
 - Input SQLite SHA-256: `8fb343257d75ff3a001679c0c55f60c85fcb7ac7a38893271ee444ce99bd6354`
 - Site-data schema: `0.1`
 - Validation: `passed`
 - Search rows / detail records / child rows: 5921 / 5921 / 437
 - Search shards / detail shards: 16 / 128
-- Search bytes / gzip equivalent: 10670927 / 630698
-- Detail bytes / gzip equivalent: 30744264 / 3793550
+- Search bytes / gzip equivalent: 11219892 / 649882
+- Detail bytes / gzip equivalent: 30744264 / 3793639
 - SQLite-to-Site semantic equivalence: 25 queries, logical-key set and summary equality PASS
 
 ## GPA strict-safe regression

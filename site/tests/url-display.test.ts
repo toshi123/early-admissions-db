@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { detailLink, displayValue, gpaLabel, stateClass, triStateLabel } from "../src/display";
-import { parseSearchParams, serializeRequest } from "../src/url-state";
+import { parseSearchParams, serializeRequest, serializeSearchFormState } from "../src/url-state";
 import type { FilterOptions } from "../src/types";
 
 const manifest = JSON.parse(readFileSync(join(process.cwd(), "public/site-data/build_manifest.json"), "utf8")) as {build_id:string};
@@ -44,5 +44,15 @@ describe("URL state and explicit display semantics", () => {
     expect(parsed.request.prefecture_membership).toEqual(["東京都","神奈川県"]);
     expect(parsed.request.prefecture).toEqual([]);
     expect(serializeRequest(parsed.request).getAll("prefecture_membership")).toEqual(["東京都","神奈川県"]);
+  });
+
+  it("round-trips unselected university and intermediate GPA form drafts", () => {
+    const request = parseSearchParams(new URLSearchParams(), options).request;
+    const params = serializeSearchFormState(request, "東京", "3.");
+    const parsed = parseSearchParams(params, options);
+    expect(parsed.universityQuery).toBe("東京");
+    expect(parsed.gpaQuery).toBe("3.");
+    expect(parsed.request.university).toEqual([]);
+    expect(parsed.request.gpa_tenths).toBeNull();
   });
 });

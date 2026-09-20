@@ -25,7 +25,7 @@ from .structured_search import search_database
 
 
 SITE_DATA_SCHEMA_VERSION = "0.1"
-SITE_DATA_BUILDER_VERSION = "0.3.0"
+SITE_DATA_BUILDER_VERSION = "0.4.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
 DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_1")
@@ -65,6 +65,9 @@ SEARCH_ADMISSION_FIELDS = (
     "selection_presentation",
     "selection_essay",
     "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
     "selection_common_test",
     "gpa_requirement",
     "english_requirement",
