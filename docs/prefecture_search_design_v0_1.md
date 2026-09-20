@@ -17,8 +17,8 @@ The unchanged unified `prefecture` value remains the display and raw exact-searc
 
 ## Frozen inputs
 
-- taxonomy SHA-256: `32da4acd8817550d716c04f9b0fe6ea3b592a98b1d6efb6f57e8edf3ed53320f`
-- crosswalk SHA-256: `295a3fa824844f6e3db2e181e5d1cd6f0a8bc277210831549f94e987bcb674ca`
+- taxonomy SHA-256: `d91fe231cde5698b074a8c86328dd61499aeccac32da2472e36a0e184457f906`
+- crosswalk SHA-256: `46a5c032e2fc79cd2d1cbfbc33b1dac5952e70300b557fd1884558d52153481c`
 - unified master SHA-256: `1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279`
 
 ## URL and compatibility

@@ -12,8 +12,8 @@ PREFECTURE_TAXONOMY_PATH = Path("schema/prefecture/prefecture_taxonomy_v0_1.csv"
 PREFECTURE_CROSSWALK_PATH = Path("schema/prefecture/prefecture_crosswalk_v0_1.csv")
 PREFECTURE_SCHEMA_PATH = Path("schema/sqlite/admission_search_prefecture_schema_v0_1.sql")
 PREFECTURE_DESIGN_PATH = Path("docs/prefecture_search_design_v0_1.md")
-PREFECTURE_TAXONOMY_SHA256 = "32da4acd8817550d716c04f9b0fe6ea3b592a98b1d6efb6f57e8edf3ed53320f"
-PREFECTURE_CROSSWALK_SHA256 = "295a3fa824844f6e3db2e181e5d1cd6f0a8bc277210831549f94e987bcb674ca"
+PREFECTURE_TAXONOMY_SHA256 = "d91fe231cde5698b074a8c86328dd61499aeccac32da2472e36a0e184457f906"
+PREFECTURE_CROSSWALK_SHA256 = "46a5c032e2fc79cd2d1cbfbc33b1dac5952e70300b557fd1884558d52153481c"
 
 @dataclass(frozen=True)
 class Prefecture:
