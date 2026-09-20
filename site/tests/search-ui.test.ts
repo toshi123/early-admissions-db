@@ -5,6 +5,7 @@ import {
   compactResultCard,
   evaluateSearchDraft,
   liveSearchResult,
+  liveSummaryPresentation,
   selectionMethodLabels,
   universitySuggestions,
 } from "../src/search-ui";
@@ -59,6 +60,19 @@ describe("search form live behavior", () => {
     const live = liveSearchResult(rows, draft)!;
     expect(live.summary.total_matched_rows).toBe(1);
     expect(live.rows.map((item) => item.record_id)).toEqual(["A"]);
+    expect(liveSummaryPresentation(live)).toEqual({
+      liveText: "該当 1件・1大学",
+      floatingText: "1件・1大学",
+      invalid: false,
+    });
+  });
+
+  it("does not expose a stale floating count for invalid drafts", () => {
+    expect(liveSummaryPresentation(null)).toEqual({
+      liveText: "入力を確認すると該当件数を表示します",
+      floatingText: "条件を確認してください",
+      invalid: true,
+    });
   });
 });
 

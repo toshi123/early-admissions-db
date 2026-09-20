@@ -9,6 +9,12 @@ export interface SearchDraftEvaluation {
   errors: string[];
 }
 
+export interface LiveSummaryPresentation {
+  liveText: string;
+  floatingText: string;
+  invalid: boolean;
+}
+
 const GPA_PATTERN = /^(?:[0-4](?:\.\d)?|5(?:\.0)?)$/;
 
 export function universitySuggestions(
@@ -59,6 +65,18 @@ export function liveSearchResult(
   evaluation: SearchDraftEvaluation,
 ): SearchResult | null {
   return evaluation.errors.length ? null : searchRows(rows, evaluation.request);
+}
+
+export function liveSummaryPresentation(result: SearchResult | null): LiveSummaryPresentation {
+  if (!result) {
+    return {
+      liveText: "入力を確認すると該当件数を表示します",
+      floatingText: "条件を確認してください",
+      invalid: true,
+    };
+  }
+  const count = `${result.summary.total_matched_rows.toLocaleString("ja-JP")}件・${result.summary.university_count.toLocaleString("ja-JP")}大学`;
+  return { liveText: `該当 ${count}`, floatingText: count, invalid: false };
 }
 
 const METHOD_FIELDS: Array<[keyof SearchRow, string]> = [

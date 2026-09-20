@@ -2,12 +2,14 @@ import "./styles.css";
 import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
+import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
 import { submitSearchNavigation } from "./navigation";
 import { emptyRequest, searchRows } from "./search";
 import {
   compactResultCard,
   evaluateSearchDraft,
   liveSearchResult,
+  liveSummaryPresentation,
   universitySuggestions,
 } from "./search-ui";
 import type {
@@ -35,6 +37,7 @@ let currentResult: SearchResult = searchRows([], applied);
 let universityQuery = "";
 let gpaQuery = "";
 let cleanupWebMcp: () => void = () => undefined;
+let floatingLiveCount: FloatingLiveCountController | null = null;
 const groupLabels = new Map<string, string>();
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -86,6 +89,8 @@ function searchForm(): string {
     .join("");
   return `<form id="search-form" class="search-form" novalidate>
     <header class="form-intro"><h1>条件から入試を探す</h1><p>異なる項目はすべて満たすもの、同じ項目の複数選択はいずれかに一致するものを検索します。</p></header>
+    <output id="live-summary" class="live-summary" aria-live="polite"></output>
+    <div id="floating-live-summary" class="floating-live-summary" aria-hidden="true"><span id="floating-live-summary-text"></span></div>
     <fieldset><legend>1. 大学名</legend><label class="input-label" for="university-input">大学名を入力</label><div class="university-combobox"><input id="university-input" type="text" value="${escapeHtml(universityQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="university-suggestions" aria-expanded="false" placeholder="大学名の一部を入力"><div id="university-suggestions" class="suggestions" role="listbox" hidden></div></div><p class="help">表示された候補から1校を選択してください。</p></fieldset>
     <fieldset><legend>2. 学問分野</legend><p class="help">複数選択可</p>${checks("academic_field_group", groups)}</fieldset>
     <fieldset><legend>3. 大学種別</legend>${checks("institution_type", institutionTypes)}</fieldset>
@@ -97,7 +102,6 @@ function searchForm(): string {
     <fieldset><legend>9. 評定</legend><label class="input-label" for="gpa">評定値（0.0〜5.0）</label><input id="gpa" type="text" inputmode="decimal" value="${escapeHtml(gpaQuery)}" placeholder="例：3.8"><p class="help">単純な全体評定の数値条件のみを安全に照合します。</p></fieldset>
     <fieldset class="prefecture-fieldset"><details id="prefecture-details"><summary>10. 都道府県で絞り込む <span id="prefecture-count" class="selected-count"></span></summary><div class="prefecture-regions">${prefectures}</div><button id="clear-prefectures" type="button">選択をクリア</button></details></fieldset>
     <div id="form-error" class="notice error" role="alert" hidden></div>
-    <output id="live-summary" class="live-summary" aria-live="polite"></output>
     <div class="form-actions"><button class="primary" type="submit">この条件で検索</button><button id="clear-form" type="button">条件をクリア</button></div>
   </form>`;
 }
@@ -160,10 +164,10 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   error.hidden = evaluation.errors.length === 0;
   error.textContent = evaluation.errors.join(" ");
   const result = liveSearchResult(rows, evaluation);
+  const presentation = liveSummaryPresentation(result);
   const live = document.querySelector<HTMLOutputElement>("#live-summary")!;
-  live.textContent = result
-    ? `該当 ${result.summary.total_matched_rows.toLocaleString("ja-JP")}件・${result.summary.university_count.toLocaleString("ja-JP")}大学`
-    : "入力を確認すると該当件数を表示します";
+  live.textContent = presentation.liveText;
+  floatingLiveCount?.update(presentation.floatingText, presentation.invalid);
   const submit = document.querySelector<HTMLButtonElement>('#search-form button[type="submit"]')!;
   submit.disabled = evaluation.errors.length > 0;
   updatePrefectureCount();
@@ -177,6 +181,11 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
 function bindForm(): void {
   const form = document.querySelector<HTMLFormElement>("#search-form")!;
   const university = document.querySelector<HTMLInputElement>("#university-input")!;
+  floatingLiveCount = bindFloatingLiveCount(
+    document.querySelector<HTMLOutputElement>("#live-summary")!,
+    document.querySelector<HTMLElement>("#floating-live-summary")!,
+    document.querySelector<HTMLElement>("#floating-live-summary-text")!,
+  );
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     const evaluation = refreshForm(false);
@@ -234,6 +243,8 @@ function bindForm(): void {
 }
 
 function searchPage(warnings: string[]): void {
+  floatingLiveCount?.disconnect();
+  floatingLiveCount = null;
   app.innerHTML = `${header()}<main id="main" class="page search-page">${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}${searchForm()}</main>${footer()}`;
   bindForm();
 }
@@ -262,6 +273,8 @@ function summaryText(): string {
 }
 
 function resultsPage(warnings: string[]): void {
+  floatingLiveCount?.disconnect();
+  floatingLiveCount = null;
   currentResult = searchRows(rows, applied);
   const pages = Math.max(1, Math.ceil(currentResult.rows.length / PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
@@ -290,6 +303,8 @@ function research(detail: DetailRecord): string {
 }
 
 async function detailPage(parts: string[]): Promise<void> {
+  floatingLiveCount?.disconnect();
+  floatingLiveCount = null;
   const [dataset, version, id] = parts.map(decodeURIComponent);
   const row = rows.find((item) => item.source_dataset === dataset && item.source_version === version && item.record_id === id);
   if (!row) { dataError("指定された入試が見つかりません。"); return; }
@@ -307,10 +322,14 @@ async function detailPage(parts: string[]): Promise<void> {
 }
 
 function aboutPage(): void {
+  floatingLiveCount?.disconnect();
+  floatingLiveCount = null;
   app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定は単純な全体評定の数値条件だけ、英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
+  floatingLiveCount?.disconnect();
+  floatingLiveCount = null;
   app.innerHTML = `${header()}<main id="main" class="page"><section class="error"><h1>データを表示できません</h1><p>${escapeHtml(message)}</p></section></main>${footer()}`;
 }
 
