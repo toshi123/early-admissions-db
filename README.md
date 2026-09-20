@@ -139,3 +139,23 @@ Run the automated tests with:
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests -v
 ```
+
+## Local Early Admissions Search Site
+
+The static TypeScript frontend is under `site/`. It consumes only the validated
+Site-data projection and does not open SQLite in the browser. From that
+directory:
+
+```bash
+npm install
+npm run dev
+npm test
+npm run build
+```
+
+Each command that needs data synchronizes the current projection into ignored
+`site/public/site-data/`; the deployable but ignored build is `site/dist/`.
+Implementation and local QA details are in
+`docs/site_implementation_v0_1.md` and
+`validation/reports/site_frontend_qa_v0_1.md`. The current v0.1 is local-only;
+it has not been saved or deployed to ChatGPT Sites.

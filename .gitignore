@@ -17,6 +17,11 @@ data/canonical/unified/*.csv
 site/node_modules/
 site/.next/
 site/dist/
+site/public/site-data/
+site/coverage/
+site/.vite/
+site/tests/generated/
+site/*.tsbuildinfo
 
 # local/editor
 .vscode/
