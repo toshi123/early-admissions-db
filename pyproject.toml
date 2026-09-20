@@ -16,6 +16,7 @@ early-admissions-build-sqlite = "early_admissions.build_sqlite:main"
 early-admissions-search-gpa = "early_admissions.search_gpa:main"
 early-admissions-search = "early_admissions.search:main"
 early-admissions-search-qa = "early_admissions.search_qa:main"
+early-admissions-build-site-data = "early_admissions.build_site_data:main"
 
 [tool.setuptools]
 package-dir = {"" = "src"}

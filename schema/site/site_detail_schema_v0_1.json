@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:early-admissions:site-detail:0.1",
+  "title": "Early Admissions Site detail record v0.1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["site_data_schema_version", "identity", "admission", "gpa_derived", "academic_field_derived", "research_requirements"],
+  "properties": {
+    "site_data_schema_version": {"const": "0.1"},
+    "identity": {"$ref": "#/$defs/identity"},
+    "admission": {
+      "type": "object",
+      "minProperties": 80,
+      "maxProperties": 80,
+      "required": [
+        "admission_rowid", "source_dataset", "source_version", "record_id", "admission_year", "institution_type", "university", "prefecture", "academic_field", "stem_flag", "faculty_school", "department", "selection_category", "selection_name", "slot_type", "capacity", "school_recommendation_required", "school_nomination_limit", "school_nomination_limit_total", "school_nomination_limit_rule", "exclusive_enrollment_status", "exclusive_enrollment", "exclusive_enrollment_evidence", "exclusive_enrollment_evidence_page", "exclusive_enrollment_evidence_url", "eligibility_graduation", "gpa_requirement", "english_requirement", "subject_prerequisites", "common_test_required", "common_test_usage", "research_activity_level_status", "research_activity_level_raw", "research_requirement_required", "research_activity_detail", "research_requirement_summary", "academic_record_required", "academic_record_type", "academic_record_detail", "documents_summary", "selection_process", "selection_document_review", "selection_interview", "selection_oral_exam", "selection_presentation", "selection_essay", "selection_written_exam", "selection_practical", "selection_group_discussion", "selection_aptitude_test", "selection_common_test", "interview_detail", "oral_exam_subjects", "oral_exam_detail", "presentation_detail", "essay_detail", "written_exam_detail", "selection_method_detail", "application_start", "application_end", "web_registration_period", "first_stage_result_date", "second_stage_start", "second_stage_end", "final_result_date", "source_status", "detail_completeness_status", "detail_completeness_raw", "verification_grade", "verified_on", "source_url", "schedule_url", "guideline_url", "notes", "information_year", "publication_status", "fallback_previous_year", "current_year_release_expected", "previous_year_source_url", "fallback_note"
+      ],
+      "propertyNames": {"enum": [
+        "admission_rowid", "source_dataset", "source_version", "record_id", "admission_year", "institution_type", "university", "prefecture", "academic_field", "stem_flag", "faculty_school", "department", "selection_category", "selection_name", "slot_type", "capacity", "school_recommendation_required", "school_nomination_limit", "school_nomination_limit_total", "school_nomination_limit_rule", "exclusive_enrollment_status", "exclusive_enrollment", "exclusive_enrollment_evidence", "exclusive_enrollment_evidence_page", "exclusive_enrollment_evidence_url", "eligibility_graduation", "gpa_requirement", "english_requirement", "subject_prerequisites", "common_test_required", "common_test_usage", "research_activity_level_status", "research_activity_level_raw", "research_requirement_required", "research_activity_detail", "research_requirement_summary", "academic_record_required", "academic_record_type", "academic_record_detail", "documents_summary", "selection_process", "selection_document_review", "selection_interview", "selection_oral_exam", "selection_presentation", "selection_essay", "selection_written_exam", "selection_practical", "selection_group_discussion", "selection_aptitude_test", "selection_common_test", "interview_detail", "oral_exam_subjects", "oral_exam_detail", "presentation_detail", "essay_detail", "written_exam_detail", "selection_method_detail", "application_start", "application_end", "web_registration_period", "first_stage_result_date", "second_stage_start", "second_stage_end", "final_result_date", "source_status", "detail_completeness_status", "detail_completeness_raw", "verification_grade", "verified_on", "source_url", "schedule_url", "guideline_url", "notes", "information_year", "publication_status", "fallback_previous_year", "current_year_release_expected", "previous_year_source_url", "fallback_note"
+      ]},
+      "additionalProperties": {"type": ["string", "integer", "boolean", "null"]}
+    },
+    "gpa_derived": {
+      "type": "object", "minProperties": 19, "maxProperties": 19,
+      "required": ["admission_rowid", "raw_value", "gpa_min_tenths", "gpa_min", "gpa_min_inclusive", "gpa_max_tenths", "gpa_max", "gpa_max_inclusive", "gpa_scale", "metric_scope", "gpa_condition_type", "parse_status", "search_disposition", "source_value_status", "has_subject_condition", "has_and_condition", "has_or_condition", "has_branch_condition", "parser_contract_version"],
+      "propertyNames": {"enum": ["admission_rowid", "raw_value", "gpa_min_tenths", "gpa_min", "gpa_min_inclusive", "gpa_max_tenths", "gpa_max", "gpa_max_inclusive", "gpa_scale", "metric_scope", "gpa_condition_type", "parse_status", "search_disposition", "source_value_status", "has_subject_condition", "has_and_condition", "has_or_condition", "has_branch_condition", "parser_contract_version"]},
+      "additionalProperties": {"type": ["string", "number", "boolean", "null"]}
+    },
+    "academic_field_derived": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admission_rowid", "raw_value", "mapping_status", "mapping_contract_version", "review_note", "groups"],
+      "properties": {
+        "admission_rowid": {"type": "integer"}, "raw_value": {"type": ["string", "null"]},
+        "mapping_status": {"type": "string"}, "mapping_contract_version": {"const": "0.1"},
+        "review_note": {"type": ["string", "null"]},
+        "groups": {"type": "array", "items": {"$ref": "#/$defs/academic_group"}}
+      }
+    },
+    "research_requirements": {"type": "array", "items": {"$ref": "#/$defs/research"}}
+  },
+  "$defs": {
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_dataset", "source_version", "record_id"],
+      "properties": {"source_dataset": {"type": "string"}, "source_version": {"type": "string"}, "record_id": {"type": "string"}}
+    },
+    "academic_group": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admission_rowid", "group_code", "group_order", "mapping_basis"],
+      "properties": {"admission_rowid": {"type": "integer"}, "group_code": {"type": "string"}, "group_order": {"type": "integer"}, "mapping_basis": {"type": "string"}}
+    },
+    "research": {
+      "type": "object", "minProperties": 16, "maxProperties": 16,
+      "required": ["research_rowid", "source_dataset", "source_version", "admission_id", "university", "faculty_school", "department", "selection_name", "requirement_code", "program_or_competition", "required_level", "requirement_detail", "alternative_allowed", "evidence_required", "source_url", "verified_on"],
+      "propertyNames": {"enum": ["research_rowid", "source_dataset", "source_version", "admission_id", "university", "faculty_school", "department", "selection_name", "requirement_code", "program_or_competition", "required_level", "requirement_detail", "alternative_allowed", "evidence_required", "source_url", "verified_on"]},
+      "additionalProperties": {"type": ["string", "integer", "null"]}
+    }
+  }
+}
