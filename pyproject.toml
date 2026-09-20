@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "early-admissions-db"
+version = "0.1.0"
+description = "Validation and reproducible unified builds for the 2027 Early Admissions Database"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.18"]
+
+[project.scripts]
+early-admissions-validate = "early_admissions.validate:main"
+early-admissions-build-unified = "early_admissions.build_unified:main"
+early-admissions-build-sqlite = "early_admissions.build_sqlite:main"
+early-admissions-search-gpa = "early_admissions.search_gpa:main"
+early-admissions-search = "early_admissions.search:main"
+early-admissions-search-qa = "early_admissions.search_qa:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

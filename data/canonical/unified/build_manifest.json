@@ -1,0 +1,422 @@
+{
+  "artifact": "early_admissions_unified",
+  "contract_version": "0.1",
+  "excluded_artifacts": [
+    "SQLite",
+    "JSON search index",
+    "Excel",
+    "Site"
+  ],
+  "inputs": {
+    "canonical_tables": {
+      "kokkoritsu": {
+        "coverage": {
+          "columns": 10,
+          "path": "data/canonical/kokkoritsu/coverage.csv",
+          "rows": 187,
+          "sha256": "a8db0a6d56ce92d80c1a8a4cb832fd0144de02727bdfe2bdf4b4b466cedeab07",
+          "size_bytes": 94624
+        },
+        "master": {
+          "columns": 75,
+          "path": "data/canonical/kokkoritsu/master.csv",
+          "rows": 3668,
+          "sha256": "61b50442f6fa9dad6a9483b702d5d463f37c0b338c6c3154a31a33e8cb0dd2ff",
+          "size_bytes": 6005511
+        },
+        "research_requirements": {
+          "columns": 13,
+          "path": "data/canonical/kokkoritsu/research_requirements.csv",
+          "rows": 239,
+          "sha256": "9eb98576862a44fbd4535938bc70938a34faeafb051e41125ed055ee60be214f",
+          "size_bytes": 93314
+        }
+      },
+      "shidai": {
+        "coverage": {
+          "columns": 10,
+          "path": "data/canonical/shidai/coverage.csv",
+          "rows": 72,
+          "sha256": "9e73c1cc2fea2830419d5ab7682d97baa7f6c5d191440fa06042714466c4bdbd",
+          "size_bytes": 49400
+        },
+        "master": {
+          "columns": 75,
+          "path": "data/canonical/shidai/master.csv",
+          "rows": 2253,
+          "sha256": "bb40f2db7687f28475ac01b8118daf4565ef80de63f11dfda8e1ac322cd3294d",
+          "size_bytes": 4695215
+        },
+        "research_requirements": {
+          "columns": 13,
+          "path": "data/canonical/shidai/research_requirements.csv",
+          "rows": 198,
+          "sha256": "bb617567d26549a2798d29949afeff7cd0478c47f0fff46078a67dee938ebeaa",
+          "size_bytes": 109290
+        }
+      }
+    },
+    "contract": {
+      "docs/unified_data_contract.md": {
+        "path": "docs/unified_data_contract.md",
+        "sha256": "a627ed5e5992f768795c6ff4776fb3ea1318883ceb467fbd61803e5980d66cde",
+        "size_bytes": 12780
+      },
+      "docs/unified_field_mapping_v0_1.md": {
+        "path": "docs/unified_field_mapping_v0_1.md",
+        "sha256": "9d562a1718b1d65c034180a8f7615b785c3e3e72a89c045474f7ea2d3dde9cab",
+        "size_bytes": 15450
+      },
+      "schema/unified/early_admissions_unified_schema_v0_1.json": {
+        "path": "schema/unified/early_admissions_unified_schema_v0_1.json",
+        "sha256": "6e5a39c182fdf18fe12e8b19117ac3abb9e2b5d66a3477d0a1e0c195c193f154",
+        "size_bytes": 23953
+      }
+    },
+    "source_schemas": {
+      "kokkoritsu": {
+        "path": "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_61.json",
+        "sha256": "9fc21dafbd1844b850e548aef9d3cc75b20b4739b09adc1cfe238c5e1315c509",
+        "size_bytes": 9110,
+        "version": "5.61"
+      },
+      "shidai": {
+        "path": "schema/shidai/shidai_early_admissions_schema_v0_97.json",
+        "sha256": "6cf6d3b423d1c9e845c5feb3d8268e6205c9e4189471bcc9e436d31cb8c0a264",
+        "size_bytes": 14569,
+        "version": "0.97"
+      }
+    }
+  },
+  "manifest_version": "1",
+  "outputs": {
+    "coverage": {
+      "columns": 12,
+      "path": "data/canonical/unified/coverage.csv",
+      "rows": 259,
+      "sha256": "b10ca3381afb0f3e8740ed2d14ddf086233151d4c6eba6e946344b12638913fb",
+      "size_bytes": 147685
+    },
+    "master": {
+      "columns": 79,
+      "path": "data/canonical/unified/master.csv",
+      "rows": 5921,
+      "sha256": "1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279",
+      "size_bytes": 10874313
+    },
+    "research_requirements": {
+      "columns": 15,
+      "path": "data/canonical/unified/research_requirements.csv",
+      "rows": 437,
+      "sha256": "ba105cca34c03fee34fb7d04ce1d0818caa386d0832e7999bf9ec9bf9f135919",
+      "size_bytes": 208432
+    }
+  },
+  "schema_id": "urn:early-admissions:unified-schema:0.1",
+  "serialization": {
+    "csv_bom": false,
+    "csv_encoding": "UTF-8",
+    "csv_line_endings": "LF",
+    "null_csv": "empty cell",
+    "row_order": "kokkoritsu source order, then shidai source order"
+  },
+  "source_versions": {
+    "kokkoritsu": "5.61",
+    "shidai": "0.97"
+  },
+  "validation": {
+    "canonical_sources_unchanged_during_build": true,
+    "determinism": {
+      "builds_compared": 2,
+      "byte_identical": true,
+      "sha256": {
+        "coverage": "b10ca3381afb0f3e8740ed2d14ddf086233151d4c6eba6e946344b12638913fb",
+        "master": "1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279",
+        "research_requirements": "ba105cca34c03fee34fb7d04ce1d0818caa386d0832e7999bf9ec9bf9f135919"
+      },
+      "status": "passed"
+    },
+    "source_canonical": {
+      "by_code": {
+        "COMMON_TEST_FIELDS_DIFFER": {
+          "by_dataset": {
+            "kokkoritsu": 108
+          },
+          "count": 108,
+          "representative_record_ids": [
+            "OCHA-2027-AO-BIO",
+            "OCHA-2027-AO-CHEM",
+            "OCHA-2027-AO-CULTINFO",
+            "OCHA-2027-AO-HENV",
+            "OCHA-2027-AO-HOME"
+          ],
+          "severity": "informational"
+        },
+        "COVERAGE_ZERO_MASTER_ROWS": {
+          "by_dataset": {
+            "kokkoritsu": 8,
+            "shidai": 2
+          },
+          "count": 10,
+          "representative_record_ids": [
+            "国立:政策研究大学院大学",
+            "国立:総合研究大学院大学",
+            "国立:北陸先端科学技術大学院大学",
+            "国立:奈良先端科学技術大学院大学",
+            "公立:東京都立産業技術大学院大学"
+          ],
+          "severity": "informational"
+        },
+        "DATE_RAW_PARTIAL": {
+          "by_dataset": {
+            "kokkoritsu": 1194,
+            "shidai": 1754
+          },
+          "count": 2948,
+          "representative_record_ids": [
+            "HU-2027-F1-01",
+            "HU-2027-F1-02",
+            "HU-2027-F1-03",
+            "HU-2027-F1-04",
+            "HU-2027-F1-05"
+          ],
+          "severity": "informational"
+        },
+        "DATE_RAW_UNPARSED": {
+          "by_dataset": {
+            "kokkoritsu": 15,
+            "shidai": 3
+          },
+          "count": 18,
+          "representative_record_ids": [
+            "ST-2027-C-01",
+            "ST-2027-C-02",
+            "ST-2027-C-03",
+            "ST-2027-C-04",
+            "ST-2027-C-05"
+          ],
+          "severity": "informational"
+        },
+        "DETAIL_COMPLETENESS_UNMAPPED": {
+          "by_dataset": {
+            "kokkoritsu": 318
+          },
+          "count": 318,
+          "representative_record_ids": [
+            "NWU-2027-PICASO-01",
+            "NWU-2027-PICASO-02",
+            "NWU-2027-PICASO-03",
+            "NWU-2027-PICASO-04",
+            "NWU-2027-PICASO-05"
+          ],
+          "severity": "warning"
+        },
+        "PROVENANCE_URL_MISSING": {
+          "by_dataset": {
+            "kokkoritsu": 19
+          },
+          "count": 19,
+          "representative_record_ids": [
+            "TMU-2027-AO-01",
+            "TMU-2027-AO-02",
+            "TMU-2027-AO-03",
+            "TMU-2027-AO-04",
+            "TMU-2027-AO-05"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+          "by_dataset": {
+            "kokkoritsu": 281
+          },
+          "count": 281,
+          "representative_record_ids": [
+            "HUE-2027-AO-SELF-01",
+            "HUE-2027-AO-SELF-02",
+            "HUE-2027-AO-SELF-03",
+            "AKITA-2027-AO1-EDU-REGCULT",
+            "YAM-2027-REC1-HSS-GLOBAL"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_DENORMALIZED_FIELD_MISMATCH": {
+          "by_dataset": {
+            "kokkoritsu": 8
+          },
+          "count": 8,
+          "representative_record_ids": [
+            "OU-2027-C-06"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_EXACT_DUPLICATE": {
+          "by_dataset": {
+            "shidai": 4
+          },
+          "count": 4,
+          "representative_record_ids": [
+            "MU-2027-AO1-DS",
+            "MU-2027-AO1-SUS",
+            "MU-2027-AO1-MATH",
+            "MU-2027-AO1-ARCH"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_NOT_REQUIRED_WITH_CHILD": {
+          "by_dataset": {
+            "kokkoritsu": 16,
+            "shidai": 36
+          },
+          "count": 52,
+          "representative_record_ids": [
+            "FUKU-2027-AO-ENG-GEN",
+            "FUKU-2027-AO-ENG-W",
+            "HIT-2027-REC-COM",
+            "HIT-2027-REC-ECON",
+            "HIT-2027-REC-LAW"
+          ],
+          "severity": "informational"
+        },
+        "RESEARCH_REQUIRED_WITHOUT_CHILD": {
+          "by_dataset": {
+            "kokkoritsu": 39,
+            "shidai": 12
+          },
+          "count": 51,
+          "representative_record_ids": [
+            "NWU-2027-PICASO-01",
+            "NWU-2027-PICASO-02",
+            "NWU-2027-PICASO-03",
+            "NWU-2027-PICASO-04",
+            "NWU-2027-PICASO-05"
+          ],
+          "severity": "warning"
+        },
+        "WHITESPACE_PADDING": {
+          "by_dataset": {
+            "kokkoritsu": 5
+          },
+          "count": 5,
+          "representative_record_ids": [
+            "SPU-2027-REC-01",
+            "SPU-2027-REC-04",
+            "SPU-2027-REC-08",
+            "SPU-2027-REC-11",
+            "SPU-2027-REC-14"
+          ],
+          "severity": "warning"
+        }
+      },
+      "by_dataset": {
+        "kokkoritsu": {
+          "by_code": {
+            "COMMON_TEST_FIELDS_DIFFER": 108,
+            "COVERAGE_ZERO_MASTER_ROWS": 8,
+            "DATE_RAW_PARTIAL": 1194,
+            "DATE_RAW_UNPARSED": 15,
+            "DETAIL_COMPLETENESS_UNMAPPED": 318,
+            "PROVENANCE_URL_MISSING": 19,
+            "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
+            "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 8,
+            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 16,
+            "RESEARCH_REQUIRED_WITHOUT_CHILD": 39,
+            "WHITESPACE_PADDING": 5
+          },
+          "by_severity": {
+            "error": 0,
+            "informational": 1341,
+            "warning": 670
+          },
+          "total": 2011
+        },
+        "shidai": {
+          "by_code": {
+            "COVERAGE_ZERO_MASTER_ROWS": 2,
+            "DATE_RAW_PARTIAL": 1754,
+            "DATE_RAW_UNPARSED": 3,
+            "RESEARCH_EXACT_DUPLICATE": 4,
+            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 36,
+            "RESEARCH_REQUIRED_WITHOUT_CHILD": 12
+          },
+          "by_severity": {
+            "error": 0,
+            "informational": 1795,
+            "warning": 16
+          },
+          "total": 1811
+        }
+      },
+      "by_severity": {
+        "error": 0,
+        "informational": 3136,
+        "warning": 686
+      },
+      "status": "passed_with_findings",
+      "total_issues": 3822
+    },
+    "status": "passed",
+    "unified": {
+      "json_schema": {
+        "status": "passed",
+        "validated_rows": {
+          "coverage": 259,
+          "master": 5921,
+          "research_requirements": 437
+        }
+      },
+      "raw_source_values": {
+        "policy": "copy/raw fields and status raw companions preserved exactly",
+        "status": "passed"
+      },
+      "relational": {
+        "coverage_key": "passed",
+        "coverage_master_rows": "passed",
+        "master_primary_key": "passed",
+        "research_requirements_foreign_key": "passed",
+        "status": "passed"
+      },
+      "research_duplicate_preservation": {
+        "output_exact_duplicate_excess_rows": 4,
+        "source_exact_duplicate_excess_rows": 4,
+        "status": "passed"
+      },
+      "row_preservation": {
+        "input_rows": {
+          "coverage": 259,
+          "master": 5921,
+          "research_requirements": 437
+        },
+        "output_rows": {
+          "coverage": 259,
+          "master": 5921,
+          "research_requirements": 437
+        },
+        "status": "passed"
+      },
+      "serialization": {
+        "bom": false,
+        "column_order": "unified_schema",
+        "encoding": "UTF-8",
+        "line_endings": "LF",
+        "status": "passed"
+      },
+      "source_provenance": {
+        "rows_by_table_and_dataset": {
+          "coverage": {
+            "kokkoritsu": 187,
+            "shidai": 72
+          },
+          "master": {
+            "kokkoritsu": 3668,
+            "shidai": 2253
+          },
+          "research_requirements": {
+            "kokkoritsu": 239,
+            "shidai": 198
+          }
+        },
+        "status": "passed"
+      }
+    }
+  }
+}

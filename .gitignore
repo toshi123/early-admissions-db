@@ -6,6 +6,7 @@ __pycache__/
 
 # generated artifacts
 data/derived/
+data/canonical/unified/*.csv
 
 # site dependencies/build
 site/node_modules/
@@ -19,5 +20,4 @@ site/dist/
 data/derived/excel/
 site/node_modules/
 site/.next/
-
 

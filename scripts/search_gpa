@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+SEARCH_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PYTHONPATH="${SEARCH_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}" \
+  exec python3 -m early_admissions.search_gpa --repo-root "${SEARCH_ROOT}" "$@"

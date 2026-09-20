@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+BUILD_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PYTHONPATH="${BUILD_ROOT}/src${PYTHONPATH:+:${PYTHONPATH}}" \
+  exec python3 -m early_admissions.build_unified --repo-root "${BUILD_ROOT}" "$@"

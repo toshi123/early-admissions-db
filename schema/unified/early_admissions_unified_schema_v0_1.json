@@ -1,0 +1,907 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:early-admissions:unified-schema:0.1",
+  "title": "2027 Early Admissions Unified Dataset v0.1",
+  "description": "Proposed loss-aware contract for combining kokkoritsu v5.61 and shidai v0.97 without modifying canonical source data.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract_version",
+    "master",
+    "coverage",
+    "research_requirements"
+  ],
+  "properties": {
+    "contract_version": {
+      "const": "0.1"
+    },
+    "master": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/masterRecord"
+      }
+    },
+    "coverage": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/coverageRecord"
+      }
+    },
+    "research_requirements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/researchRequirementRecord"
+      }
+    }
+  },
+  "x-contract-status": "proposal",
+  "x-source-version-matrix": {
+    "kokkoritsu": "5.61",
+    "shidai": "0.97"
+  },
+  "x-null-semantics": {
+    "null": "Source CSV cell is blank or the field is structurally not applicable.",
+    "explicit_unknown": "Source explicitly records Unknown, unknown, or 不明 in a field whose enum supports it.",
+    "negative": "No or false is an affirmative negative and must not be inferred from null, missing details, or missing child rows."
+  },
+  "x-table-contracts": {
+    "master": {
+      "primary_key": [
+        "source_dataset",
+        "source_version",
+        "record_id"
+      ],
+      "csv_columns": [
+        "source_dataset",
+        "source_version",
+        "record_id",
+        "admission_year",
+        "institution_type",
+        "university",
+        "prefecture",
+        "academic_field",
+        "stem_flag",
+        "faculty_school",
+        "department",
+        "selection_category",
+        "selection_name",
+        "slot_type",
+        "capacity",
+        "school_recommendation_required",
+        "school_nomination_limit",
+        "school_nomination_limit_total",
+        "school_nomination_limit_rule",
+        "exclusive_enrollment_status",
+        "exclusive_enrollment",
+        "exclusive_enrollment_evidence",
+        "exclusive_enrollment_evidence_page",
+        "exclusive_enrollment_evidence_url",
+        "eligibility_graduation",
+        "gpa_requirement",
+        "english_requirement",
+        "subject_prerequisites",
+        "common_test_required",
+        "common_test_usage",
+        "research_activity_level_status",
+        "research_activity_level_raw",
+        "research_requirement_required",
+        "research_activity_detail",
+        "research_requirement_summary",
+        "academic_record_required",
+        "academic_record_type",
+        "academic_record_detail",
+        "documents_summary",
+        "selection_process",
+        "selection_document_review",
+        "selection_interview",
+        "selection_oral_exam",
+        "selection_presentation",
+        "selection_essay",
+        "selection_written_exam",
+        "selection_practical",
+        "selection_group_discussion",
+        "selection_aptitude_test",
+        "selection_common_test",
+        "interview_detail",
+        "oral_exam_subjects",
+        "oral_exam_detail",
+        "presentation_detail",
+        "essay_detail",
+        "written_exam_detail",
+        "selection_method_detail",
+        "application_start",
+        "application_end",
+        "web_registration_period",
+        "first_stage_result_date",
+        "second_stage_start",
+        "second_stage_end",
+        "final_result_date",
+        "source_status",
+        "detail_completeness_status",
+        "detail_completeness_raw",
+        "verification_grade",
+        "verified_on",
+        "source_url",
+        "schedule_url",
+        "guideline_url",
+        "notes",
+        "information_year",
+        "publication_status",
+        "fallback_previous_year",
+        "current_year_release_expected",
+        "previous_year_source_url",
+        "fallback_note"
+      ]
+    },
+    "coverage": {
+      "primary_key": [
+        "source_dataset",
+        "source_version",
+        "institution_type",
+        "university"
+      ],
+      "csv_columns": [
+        "source_dataset",
+        "source_version",
+        "institution_type",
+        "university",
+        "undergraduate_scope",
+        "research_status",
+        "master_rows",
+        "current_year_status",
+        "fallback_status",
+        "checked_on",
+        "official_source_url",
+        "notes"
+      ]
+    },
+    "research_requirements": {
+      "primary_key": null,
+      "foreign_key": {
+        "columns": [
+          "source_dataset",
+          "source_version",
+          "admission_id"
+        ],
+        "references_table": "master",
+        "references_columns": [
+          "source_dataset",
+          "source_version",
+          "record_id"
+        ]
+      },
+      "preserve_source_multiplicity": true,
+      "csv_columns": [
+        "source_dataset",
+        "source_version",
+        "admission_id",
+        "university",
+        "faculty_school",
+        "department",
+        "selection_name",
+        "requirement_code",
+        "program_or_competition",
+        "required_level",
+        "requirement_detail",
+        "alternative_allowed",
+        "evidence_required",
+        "source_url",
+        "verified_on"
+      ]
+    }
+  },
+  "x-cross-record-validation": [
+    {
+      "code": "MASTER_PK_DUPLICATE",
+      "severity": "error",
+      "rule": "Master composite primary key must be unique."
+    },
+    {
+      "code": "SOURCE_INSTITUTION_TYPE_MISMATCH",
+      "severity": "error",
+      "rule": "kokkoritsu rows must be 国立 or 公立; shidai rows must be 私立."
+    },
+    {
+      "code": "RESEARCH_ORPHAN_FK",
+      "severity": "error",
+      "rule": "Every ResearchRequirements foreign key must resolve to Master in the same source dataset and version."
+    },
+    {
+      "code": "COVERAGE_MASTER_ROWS_MISMATCH",
+      "severity": "error",
+      "rule": "Coverage.master_rows must equal the count of matching Master rows in the same source dataset and version."
+    },
+    {
+      "code": "RESEARCH_REQUIRED_WITHOUT_CHILD",
+      "severity": "warning",
+      "rule": "Master research_requirement_required is Yes and no ResearchRequirements child row exists."
+    },
+    {
+      "code": "RESEARCH_NOT_REQUIRED_WITH_CHILD",
+      "severity": "informational",
+      "rule": "Master research_requirement_required is No and one or more ResearchRequirements child rows exist."
+    },
+    {
+      "code": "RESEARCH_EXACT_DUPLICATE",
+      "severity": "warning",
+      "rule": "Two or more ResearchRequirements rows are exactly equal after source_dataset and source_version are added; preserve them in v0.1."
+    },
+    {
+      "code": "COMMON_TEST_FIELDS_DIFFER",
+      "severity": "informational",
+      "rule": "common_test_required and selection_common_test differ; the fields are distinct and no equality rule applies."
+    }
+  ],
+  "x-derived-date-policy": {
+    "base_fields_are_raw": true,
+    "base_fields": [
+      "application_start",
+      "application_end",
+      "web_registration_period",
+      "first_stage_result_date",
+      "second_stage_start",
+      "second_stage_end",
+      "final_result_date",
+      "verified_on",
+      "checked_on"
+    ],
+    "derived_search_fields_are_out_of_scope_for_v0_1": true,
+    "ambiguous_parse_policy": "Do not guess; retain the raw value and use a derived parse status of unparsed or partial."
+  },
+  "$defs": {
+    "nonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "nullableString": {
+      "oneOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "sourceDataset": {
+      "enum": [
+        "kokkoritsu",
+        "shidai"
+      ]
+    },
+    "sourceVersion": {
+      "enum": [
+        "5.61",
+        "0.97"
+      ]
+    },
+    "sourcePairConstraint": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_dataset": {
+                "const": "kokkoritsu"
+              }
+            },
+            "required": [
+              "source_dataset"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_version": {
+                "const": "5.61"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_dataset": {
+                "const": "shidai"
+              }
+            },
+            "required": [
+              "source_dataset"
+            ]
+          },
+          "then": {
+            "properties": {
+              "source_version": {
+                "const": "0.97"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sourceInstitutionConstraint": {
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_dataset": {
+                "const": "kokkoritsu"
+              }
+            },
+            "required": [
+              "source_dataset"
+            ]
+          },
+          "then": {
+            "properties": {
+              "institution_type": {
+                "enum": [
+                  "国立",
+                  "公立"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "source_dataset": {
+                "const": "shidai"
+              }
+            },
+            "required": [
+              "source_dataset"
+            ]
+          },
+          "then": {
+            "properties": {
+              "institution_type": {
+                "const": "私立"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "institutionType": {
+      "enum": [
+        "国立",
+        "公立",
+        "私立"
+      ]
+    },
+    "triState": {
+      "enum": [
+        "Yes",
+        "No",
+        "Unknown",
+        null
+      ]
+    },
+    "commonTestRequired": {
+      "enum": [
+        "Yes",
+        "No",
+        "Unknown",
+        "Conditional",
+        null
+      ]
+    },
+    "exclusiveEnrollmentStatus": {
+      "enum": [
+        "専願",
+        "併願可",
+        "条件付き",
+        "不明"
+      ]
+    },
+    "detailCompletenessStatus": {
+      "enum": [
+        "complete",
+        "partial",
+        "pending",
+        "unknown",
+        "unmapped",
+        null
+      ]
+    },
+    "researchActivityLevelStatus": {
+      "enum": [
+        "required",
+        "relevant",
+        "none",
+        "unknown",
+        "unmapped",
+        null
+      ]
+    },
+    "verificationGrade": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        null
+      ]
+    },
+    "masterRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/sourcePairConstraint"
+        },
+        {
+          "$ref": "#/$defs/sourceInstitutionConstraint"
+        }
+      ],
+      "required": [
+        "source_dataset",
+        "source_version",
+        "record_id",
+        "admission_year",
+        "institution_type",
+        "university",
+        "prefecture",
+        "academic_field",
+        "stem_flag",
+        "faculty_school",
+        "department",
+        "selection_category",
+        "selection_name",
+        "slot_type",
+        "capacity",
+        "school_recommendation_required",
+        "school_nomination_limit",
+        "school_nomination_limit_total",
+        "school_nomination_limit_rule",
+        "exclusive_enrollment_status",
+        "exclusive_enrollment",
+        "exclusive_enrollment_evidence",
+        "exclusive_enrollment_evidence_page",
+        "exclusive_enrollment_evidence_url",
+        "eligibility_graduation",
+        "gpa_requirement",
+        "english_requirement",
+        "subject_prerequisites",
+        "common_test_required",
+        "common_test_usage",
+        "research_activity_level_status",
+        "research_activity_level_raw",
+        "research_requirement_required",
+        "research_activity_detail",
+        "research_requirement_summary",
+        "academic_record_required",
+        "academic_record_type",
+        "academic_record_detail",
+        "documents_summary",
+        "selection_process",
+        "selection_document_review",
+        "selection_interview",
+        "selection_oral_exam",
+        "selection_presentation",
+        "selection_essay",
+        "selection_written_exam",
+        "selection_practical",
+        "selection_group_discussion",
+        "selection_aptitude_test",
+        "selection_common_test",
+        "interview_detail",
+        "oral_exam_subjects",
+        "oral_exam_detail",
+        "presentation_detail",
+        "essay_detail",
+        "written_exam_detail",
+        "selection_method_detail",
+        "application_start",
+        "application_end",
+        "web_registration_period",
+        "first_stage_result_date",
+        "second_stage_start",
+        "second_stage_end",
+        "final_result_date",
+        "source_status",
+        "detail_completeness_status",
+        "detail_completeness_raw",
+        "verification_grade",
+        "verified_on",
+        "source_url",
+        "schedule_url",
+        "guideline_url",
+        "notes",
+        "information_year",
+        "publication_status",
+        "fallback_previous_year",
+        "current_year_release_expected",
+        "previous_year_source_url",
+        "fallback_note"
+      ],
+      "properties": {
+        "source_dataset": {
+          "$ref": "#/$defs/sourceDataset"
+        },
+        "source_version": {
+          "$ref": "#/$defs/sourceVersion"
+        },
+        "record_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "admission_year": {
+          "type": "integer",
+          "const": 2027
+        },
+        "institution_type": {
+          "$ref": "#/$defs/institutionType"
+        },
+        "university": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "prefecture": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "academic_field": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "stem_flag": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "faculty_school": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "department": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_category": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_name": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "slot_type": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "capacity": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "school_recommendation_required": {
+          "$ref": "#/$defs/triState"
+        },
+        "school_nomination_limit": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "school_nomination_limit_total": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "school_nomination_limit_rule": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "exclusive_enrollment_status": {
+          "$ref": "#/$defs/exclusiveEnrollmentStatus"
+        },
+        "exclusive_enrollment": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "exclusive_enrollment_evidence": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "exclusive_enrollment_evidence_page": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "exclusive_enrollment_evidence_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "eligibility_graduation": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "gpa_requirement": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "english_requirement": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "subject_prerequisites": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "common_test_required": {
+          "$ref": "#/$defs/commonTestRequired"
+        },
+        "common_test_usage": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "research_activity_level_status": {
+          "$ref": "#/$defs/researchActivityLevelStatus"
+        },
+        "research_activity_level_raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "research_requirement_required": {
+          "$ref": "#/$defs/triState"
+        },
+        "research_activity_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "research_requirement_summary": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "academic_record_required": {
+          "$ref": "#/$defs/triState"
+        },
+        "academic_record_type": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "academic_record_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "documents_summary": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_process": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_document_review": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_interview": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_oral_exam": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_presentation": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_essay": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_written_exam": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_practical": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_group_discussion": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_aptitude_test": {
+          "$ref": "#/$defs/triState"
+        },
+        "selection_common_test": {
+          "$ref": "#/$defs/triState"
+        },
+        "interview_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "oral_exam_subjects": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "oral_exam_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "presentation_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "essay_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "written_exam_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_method_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "application_start": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "application_end": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "web_registration_period": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "first_stage_result_date": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "second_stage_start": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "second_stage_end": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "final_result_date": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "detail_completeness_status": {
+          "$ref": "#/$defs/detailCompletenessStatus"
+        },
+        "detail_completeness_raw": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "verification_grade": {
+          "$ref": "#/$defs/verificationGrade"
+        },
+        "verified_on": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "source_url": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "schedule_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "guideline_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "information_year": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "publication_status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "fallback_previous_year": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "current_year_release_expected": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "previous_year_source_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "fallback_note": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "coverageRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/sourcePairConstraint"
+        },
+        {
+          "$ref": "#/$defs/sourceInstitutionConstraint"
+        }
+      ],
+      "required": [
+        "source_dataset",
+        "source_version",
+        "institution_type",
+        "university",
+        "undergraduate_scope",
+        "research_status",
+        "master_rows",
+        "current_year_status",
+        "fallback_status",
+        "checked_on",
+        "official_source_url",
+        "notes"
+      ],
+      "properties": {
+        "source_dataset": {
+          "$ref": "#/$defs/sourceDataset"
+        },
+        "source_version": {
+          "$ref": "#/$defs/sourceVersion"
+        },
+        "institution_type": {
+          "$ref": "#/$defs/institutionType"
+        },
+        "university": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "undergraduate_scope": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "research_status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "master_rows": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "current_year_status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "fallback_status": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "checked_on": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "official_source_url": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "notes": {
+          "$ref": "#/$defs/nullableString"
+        }
+      }
+    },
+    "researchRequirementRecord": {
+      "type": "object",
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$ref": "#/$defs/sourcePairConstraint"
+        }
+      ],
+      "required": [
+        "source_dataset",
+        "source_version",
+        "admission_id",
+        "university",
+        "faculty_school",
+        "department",
+        "selection_name",
+        "requirement_code",
+        "program_or_competition",
+        "required_level",
+        "requirement_detail",
+        "alternative_allowed",
+        "evidence_required",
+        "source_url",
+        "verified_on"
+      ],
+      "properties": {
+        "source_dataset": {
+          "$ref": "#/$defs/sourceDataset"
+        },
+        "source_version": {
+          "$ref": "#/$defs/sourceVersion"
+        },
+        "admission_id": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "university": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "faculty_school": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "department": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "selection_name": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "requirement_code": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "program_or_competition": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "required_level": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "requirement_detail": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "alternative_allowed": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "evidence_required": {
+          "$ref": "#/$defs/nullableString"
+        },
+        "source_url": {
+          "$ref": "#/$defs/nonEmptyString"
+        },
+        "verified_on": {
+          "$ref": "#/$defs/nonEmptyString"
+        }
+      }
+    }
+  }
+}
