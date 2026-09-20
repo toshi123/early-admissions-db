@@ -1,0 +1,23 @@
+.DS_Store
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# generated artifacts
+data/derived/
+
+# site dependencies/build
+site/node_modules/
+site/.next/
+site/dist/
+
+# local/editor
+.vscode/
+.idea/
+
+data/derived/excel/
+site/node_modules/
+site/.next/
+
+

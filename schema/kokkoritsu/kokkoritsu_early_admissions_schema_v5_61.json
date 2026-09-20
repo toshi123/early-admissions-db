@@ -1,0 +1,265 @@
+{
+  "version": "5.61",
+  "dataset": "kokkoritsu_early_admissions_2027",
+  "target_admission_year": 2027,
+  "grain": "1 row = one actual application unit / selection slot",
+  "canonical_data": {
+    "master": "kokkoritsu_early_admissions_2027_master_v5_61.csv",
+    "coverage": "kokkoritsu_early_admissions_2027_coverage_v5_61.csv",
+    "research_requirements": "kokkoritsu_early_admissions_2027_research_requirements_v5_61.csv",
+    "schema": "kokkoritsu_early_admissions_schema_v5_61.json",
+    "human_readable_view": "kokkoritsu_early_admissions_2027_working_v5_61.xlsx"
+  },
+  "encoding": {
+    "csv": "UTF-8",
+    "json": "UTF-8"
+  },
+  "primary_key": "record_id",
+  "relationships": {
+    "ResearchRequirements": {
+      "foreign_key": "admission_id",
+      "references": "Master.record_id",
+      "relationship": "many-to-one"
+    }
+  },
+  "fallback_policy": {
+    "rule": "If 2027 official details are not yet published, show 2026 official data as reference only.",
+    "required_fields": [
+      "information_year",
+      "publication_status",
+      "fallback_previous_year",
+      "current_year_release_expected",
+      "previous_year_source_url",
+      "fallback_note"
+    ],
+    "display_rule": "Fallback rows must be visibly labeled '前年参考情報（2027年度は変更可能性あり）' and must never be mixed with confirmed 2027 data without a status label."
+  },
+  "exclusive_enrollment_policy": {
+    "definition": "合格した場合に、その大学・学部・学科へ入学することを出願時点で確約する必要がある入試を「専願」とする。",
+    "first_choice_only_is_not_sufficient": true,
+    "evidence_required": true,
+    "allowed_status": [
+      "専願",
+      "併願可",
+      "条件付き",
+      "不明"
+    ]
+  },
+  "academic_record_policy": {
+    "separate_from_gpa_requirement": true,
+    "required_field": "academic_record_required",
+    "type_field": "academic_record_type",
+    "detail_field": "academic_record_detail",
+    "official_document_name_preferred": true
+  },
+  "source_policy": {
+    "priority": [
+      "current-year official application guidelines",
+      "current-year official admissions webpage",
+      "current-year official schedule/selection outline",
+      "previous-year official application guidelines"
+    ],
+    "third_party_source_may_not_be_used_as_final_confirmation": true
+  },
+  "selection_flags": [
+    "selection_document_review",
+    "selection_interview",
+    "selection_oral_exam",
+    "selection_presentation",
+    "selection_essay",
+    "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
+    "selection_common_test"
+  ],
+  "school_nomination_fields": [
+    "school_nomination_limit",
+    "school_nomination_limit_total",
+    "school_nomination_limit_rule"
+  ],
+  "research_requirement_child_table": "ResearchRequirements",
+  "enum_definitions": {
+    "institution_type": [
+      "国立",
+      "公立",
+      "私立"
+    ],
+    "exclusive_enrollment_status": [
+      "専願",
+      "併願可",
+      "条件付き",
+      "不明"
+    ],
+    "academic_record_required": [
+      "Yes",
+      "No",
+      "Unknown"
+    ],
+    "coverage_research_status": [
+      "Master反映済・追加項目再監査済",
+      "Master反映済・追加項目再監査待ち",
+      "2027公式入口確認済・詳細抽出待ち",
+      "未調査",
+      "対象外"
+    ]
+  },
+  "null_semantics": {
+    "No": "大学公式情報を確認した結果、その項目が存在しないことが確認できた。",
+    "Unknown_or_不明": "大学公式資料を確認したが判断できない、またはまだ十分に確認していない。",
+    "null_or_blank": "そのレコードでは項目が適用されない、または構造上値を持たない。未確認の代用として使用しない。"
+  },
+  "normalization_rules": {
+    "unknown_is_not_no": true,
+    "official_wording_preferred": true,
+    "date_format": "YYYY-MM-DD",
+    "master_column_order_is_fixed": true,
+    "excel_is_derived_view": true,
+    "csv_json_xlsx_generated_from_same_internal_dataset": true
+  },
+  "detail_completeness_gate": {
+    "required_review_items": [
+      "eligibility_graduation",
+      "gpa_requirement",
+      "school_recommendation_required",
+      "school_nomination_limit / school_nomination_limit_total / school_nomination_limit_rule",
+      "exclusive_enrollment_status",
+      "exclusive_enrollment_evidence",
+      "academic_record_required",
+      "documents_summary",
+      "selection methods and flags",
+      "interview/oral exam/presentation/essay/written exam details where applicable",
+      "common_test_required / common_test_usage",
+      "application and result schedule",
+      "information_year / publication_status",
+      "official source URLs"
+    ],
+    "rule": "exclusive_enrollment_status and academic_record_required must be reviewed before a row is treated as fully detailed."
+  },
+  "field_definitions": {
+    "record_id": "募集単位を一意に識別する主キー。",
+    "exclusive_enrollment_status": "専願・併願を検索するための構造化区分。",
+    "exclusive_enrollment": "専願・併願に関する条件の人間可読な要約。",
+    "exclusive_enrollment_evidence": "専願・併願判定の根拠となった大学公式文言。",
+    "exclusive_enrollment_evidence_page": "根拠文言の掲載ページ。PDFの場合は原資料の印刷ページを優先。",
+    "exclusive_enrollment_evidence_url": "専願・併願判定根拠の大学公式URL。",
+    "gpa_requirement": "出願資格として必要な学習成績の状況・評定平均等。",
+    "academic_record_required": "調査書・成績証明書等の成績関係書類の提出要否。",
+    "academic_record_type": "必要となる成績関係書類の大学公式名称。",
+    "academic_record_detail": "成績関係書類についての特殊条件・補足。",
+    "documents_summary": "出願時の主要提出書類を人間が一覧できる要約。"
+  },
+  "master_columns": [
+    "record_id",
+    "admission_year",
+    "institution_type",
+    "university",
+    "prefecture",
+    "academic_field",
+    "stem_flag",
+    "faculty_school",
+    "department",
+    "selection_category",
+    "selection_name",
+    "slot_type",
+    "capacity",
+    "school_recommendation_required",
+    "school_nomination_limit",
+    "school_nomination_limit_total",
+    "school_nomination_limit_rule",
+    "exclusive_enrollment_status",
+    "exclusive_enrollment",
+    "exclusive_enrollment_evidence",
+    "exclusive_enrollment_evidence_page",
+    "exclusive_enrollment_evidence_url",
+    "eligibility_graduation",
+    "gpa_requirement",
+    "english_requirement",
+    "subject_prerequisites",
+    "common_test_required",
+    "common_test_usage",
+    "research_activity_level",
+    "research_requirement_required",
+    "research_activity_detail",
+    "research_requirement_summary",
+    "academic_record_required",
+    "academic_record_type",
+    "academic_record_detail",
+    "documents_summary",
+    "selection_process",
+    "selection_document_review",
+    "selection_interview",
+    "selection_oral_exam",
+    "selection_presentation",
+    "selection_essay",
+    "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
+    "selection_common_test",
+    "interview_detail",
+    "oral_exam_subjects",
+    "oral_exam_detail",
+    "presentation_detail",
+    "essay_detail",
+    "written_exam_detail",
+    "selection_method_detail",
+    "application_start",
+    "application_end",
+    "web_registration_period",
+    "first_stage_result_date",
+    "second_stage_start",
+    "second_stage_end",
+    "final_result_date",
+    "source_status",
+    "detail_completeness",
+    "verification_grade",
+    "verified_on",
+    "source_url",
+    "schedule_url",
+    "guideline_url",
+    "notes",
+    "information_year",
+    "publication_status",
+    "fallback_previous_year",
+    "current_year_release_expected",
+    "previous_year_source_url",
+    "fallback_note"
+  ],
+  "coverage_columns": [
+    "institution_type",
+    "university",
+    "undergraduate_scope",
+    "research_status",
+    "master_rows",
+    "current_year_status",
+    "fallback_status",
+    "checked_on",
+    "official_source_url",
+    "notes"
+  ],
+  "research_requirements_columns": [
+    "admission_id",
+    "university",
+    "faculty_school",
+    "department",
+    "selection_name",
+    "requirement_code",
+    "program_or_competition",
+    "required_level",
+    "requirement_detail",
+    "alternative_allowed",
+    "evidence_required",
+    "source_url",
+    "verified_on"
+  ],
+  "sources": {
+    "national_population": "Japan Association of National Universities membership list, 2026-04-01",
+    "public_population": "MEXT public university list, 2026-04"
+  },
+  "artifact_status": {
+    "canonical_csv_json": "complete",
+    "human_readable_view": "deferred",
+    "note": "v5.61ではCSV/JSONを正本として更新。Excelは確認用派生成果物のため後日生成する。"
+  }
+}
