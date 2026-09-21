@@ -15,5 +15,8 @@
     "typescript": "5.8.3",
     "vite": "6.4.3",
     "vitest": "5.0.1"
+  },
+  "dependencies": {
+    "@protobi/exceljs": "4.4.0-protobi.10"
   }
 }

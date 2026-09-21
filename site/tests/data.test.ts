@@ -2,10 +2,35 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createHash } from "node:crypto";
 import { loadDetail, loadManifest, loadSearchData, resetDataCacheForTests, SiteDataError } from "../src/data";
 import type { SearchRow, SiteManifest } from "../src/types";
+import type { DetailCache } from "../src/data";
+import { candidateDetail, candidateRow } from "./candidate-fixtures";
 
 beforeEach(() => { resetDataCacheForTests(); vi.restoreAllMocks(); });
 
 describe("Site-data protections", () => {
+  it("reuses verified detail shards during export while retaining exact identity checks", async () => {
+    const row = candidateRow({ detail_path: "detail.json" });
+    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.1", details: [candidateDetail(row)] }));
+    const manifest = { build_id: "test", outputs: { artifacts: [{ kind: "detail_shard", path: "detail.json", size_bytes: bytes.byteLength, sha256: createHash("sha256").update(bytes).digest("hex") }] } } as SiteManifest;
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(bytes)));
+    const cache: DetailCache = new Map();
+    await loadDetail(manifest, row, cache); await loadDetail(manifest, row, cache);
+    expect(fetch).toHaveBeenCalledTimes(1);
+    await expect(loadDetail(manifest, { ...row, source_version: "other" }, cache)).rejects.toThrow("見つかりません");
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it("never retains failed integrity checks in the export-scoped detail cache", async () => {
+    const row = candidateRow({ detail_path: "detail.json" });
+    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.1", details: [candidateDetail(row)] }));
+    const manifest = { build_id: "test", outputs: { artifacts: [{ kind: "detail_shard", path: "detail.json", size_bytes: bytes.byteLength, sha256: createHash("sha256").update(bytes).digest("hex") }] } } as SiteManifest;
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response("corrupt")).mockResolvedValueOnce(new Response(bytes)));
+    const cache: DetailCache = new Map();
+    await expect(loadDetail(manifest, row, cache)).rejects.toThrow("整合性");
+    expect(cache.size).toBe(0);
+    expect((await loadDetail(manifest, row, cache)).detail.identity).toEqual(candidateDetail(row).identity);
+  });
+
   it("rejects manifest build-ID mismatch or failed validation", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ artifact: "early_admissions_site_data", site_data_schema_version: "0.1", build_id: "bad", validation: { status: "failed" }, outputs: { artifacts: [] } }))));
     await expect(loadManifest()).rejects.toBeInstanceOf(SiteDataError);

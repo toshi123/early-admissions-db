@@ -16,4 +16,5 @@ await rm(destination, { recursive: true, force: true });
 await mkdir(destination, { recursive: true });
 await cp(resolve(source, "build_manifest.json"), resolve(destination, "build_manifest.json"));
 await cp(resolve(source, "assets"), resolve(destination, "assets"), { recursive: true });
+await cp(resolve(repoRoot, "docs/third_party_notices.md"), resolve(siteRoot, "public/third-party-notices.txt"));
 console.log(`Synced Site-data build ${manifest.build_id}`);

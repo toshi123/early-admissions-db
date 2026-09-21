@@ -94,18 +94,30 @@ export async function loadSearchData() {
   return { manifest, options: optionsResult.value, rows, metrics };
 }
 
+type DetailPayload = { build_id: string; site_data_schema_version: string; details: DetailRecord[] };
+export type DetailCache = Map<string, Promise<DetailPayload>>;
+
 export async function loadDetail(
   manifest: SiteManifest,
   row: SearchRow,
+  cache?: DetailCache,
 ): Promise<{ detail: DetailRecord; loadMs: number }> {
   const receipt = manifest.outputs.artifacts.find((item) => item.kind === "detail_shard" && item.path === row.detail_path);
   if (!receipt) throw new SiteDataError("対応する詳細データが目録にありません。");
   const started = performance.now();
-  const payload = await fetchVerifiedJson<{ build_id: string; site_data_schema_version: string; details: DetailRecord[] }>(receipt);
-  if (payload.value.build_id !== manifest.build_id || payload.value.site_data_schema_version !== "0.1") {
+  const key = `${manifest.build_id}/${receipt.path}`;
+  let pending = cache?.get(key);
+  if (!pending) {
+    pending = fetchVerifiedJson<DetailPayload>(receipt).then(({ value }) => value);
+    cache?.set(key, pending);
+  }
+  let payload: DetailPayload;
+  try { payload = await pending; } catch (error) { cache?.delete(key); throw error; }
+  if (payload.build_id !== manifest.build_id || payload.site_data_schema_version !== "0.1") {
+    cache?.delete(key);
     throw new SiteDataError("詳細データのbuild IDまたはschema versionが一致しません。");
   }
-  const detail = payload.value.details.find((item) =>
+  const detail = payload.details.find((item) =>
     item.identity.source_dataset === row.source_dataset && item.identity.source_version === row.source_version && item.identity.record_id === row.record_id);
   if (!detail) throw new SiteDataError("指定された入試の詳細が見つかりません。");
   return { detail, loadMs: performance.now() - started };

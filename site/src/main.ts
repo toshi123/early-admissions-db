@@ -1,4 +1,7 @@
 import "./styles.css";
+import { CandidateStore, browserCandidateStorage, candidateKey } from "./candidates";
+import { candidateButton } from "./candidate-controls";
+import { CandidateView } from "./candidate-view";
 import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
@@ -48,6 +51,7 @@ let cleanupWebMcp: () => void = () => undefined;
 let floatingLiveCount: FloatingLiveCountController | null = null;
 let expandedUniversities = new Set<string>();
 const groupLabels = new Map<string, string>();
+const candidates = new CandidateView(new CandidateStore(browserCandidateStorage()));
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
 
@@ -55,7 +59,7 @@ const header = () => {
   const path = location.pathname.replace(/\/+$/, "") || "/";
   const searchCurrent = path === "/search" || path === "/results" || path.startsWith("/admissions/");
   const aboutCurrent = path === "/about/data";
-  return `<header class="site-header"><div class="site-header__inner"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav aria-label="主要ナビゲーション"><ul class="global-nav"><li><a id="header-search-link" class="global-nav__link" href="${headerSearchHref(path, applied)}" data-route${searchCurrent ? ' aria-current="page"' : ""}>検索</a></li><li><a class="global-nav__link" href="/about/data" data-route${aboutCurrent ? ' aria-current="page"' : ""}>データについて</a></li></ul></nav></div></header>`;
+  return `<header class="site-header"><div class="site-header__inner"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav aria-label="主要ナビゲーション"><ul class="global-nav"><li><a id="header-search-link" class="global-nav__link" href="${headerSearchHref(path, applied)}" data-route${searchCurrent ? ' aria-current="page"' : ""}>検索</a></li><li><a class="global-nav__link" href="/candidates" data-route${path === "/candidates" ? ' aria-current="page"' : ""}>候補リスト<span id="candidate-count">（${candidates.store.items.length}）</span></a></li><li><a class="global-nav__link" href="/about/data" data-route${aboutCurrent ? ' aria-current="page"' : ""}>データについて</a></li></ul></nav></div></header><p id="candidate-storage-warning" class="storage-notice" role="status"${candidates.store.warning ? "" : " hidden"}>${escapeHtml(candidates.store.warning)}</p>`;
 };
 const footer = () => `<footer>候補の絞り込み用です。出願前に最新の公式資料を必ず確認してください。</footer>`;
 const selected = (field: string, value: string) => (
@@ -307,13 +311,14 @@ function resultsPage(warnings: string[]): void {
     ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
   app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main>${footer()}`;
+  candidates.sync();
 }
 
 const sections: Array<[string, string[]]> = [
   ["基本情報", ["admission_year", "institution_type", "university", "prefecture", "faculty_school", "department", "academic_field", "selection_category", "selection_name", "slot_type", "capacity"]],
+  ["日程", ["application_start", "application_end", "web_registration_period", "first_stage_result_date", "second_stage_start", "second_stage_end", "final_result_date"]],
   ["選考方法", ["selection_process", "selection_method_detail", "selection_document_review", "selection_interview", "interview_detail", "selection_oral_exam", "oral_exam_subjects", "oral_exam_detail", "selection_presentation", "presentation_detail", "selection_essay", "essay_detail", "selection_written_exam", "written_exam_detail", "selection_common_test", "selection_group_discussion", "selection_practical", "selection_aptitude_test", "documents_summary"]],
   ["出願条件", ["eligibility_graduation", "gpa_requirement", "english_requirement", "subject_prerequisites", "school_recommendation_required", "school_nomination_limit", "school_nomination_limit_total", "school_nomination_limit_rule", "exclusive_enrollment_status", "exclusive_enrollment", "common_test_required", "common_test_usage", "academic_record_required", "academic_record_type", "academic_record_detail"]],
-  ["日程", ["application_start", "application_end", "web_registration_period", "first_stage_result_date", "second_stage_start", "second_stage_end", "final_result_date"]],
   ["研究", ["research_requirement_required", "research_requirement_summary", "research_activity_level_status", "research_activity_level_raw", "research_activity_detail"]],
 ];
 const labels: Record<string, string> = {
@@ -341,7 +346,10 @@ async function detailPage(parts: string[]): Promise<void> {
     const assigned = new Set(sections.flatMap(([, fields]) => fields));
     const hidden = new Set(["admission_rowid", "source_url", "guideline_url", "schedule_url", "exclusive_enrollment_evidence_url", "previous_year_source_url"]);
     const remaining = Object.keys(admission).filter((field) => !assigned.has(field) && !hidden.has(field));
-    app.innerHTML = `${header()}<main id="main" class="page detail-page"><p><a href="${history.state?.from ?? "/results"}" data-route>← 検索結果へ戻る</a></p>${admission.fallback_previous_year === true ? '<div class="fallback-warning"><strong>前年度情報を参照しています。</strong> 2027年度の公式資料を確認してください。</div>' : ""}<header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p></header><p class="eligibility-note">このページは出願資格や合格可能性を判定しません。</p>${sections.map(([title, fields]) => `<section class="detail-section"><h2>${title}</h2>${grid(admission, fields)}${title === "研究" ? research(detail) : ""}</section>`).join("")}<section class="detail-section"><h2>その他の記録項目</h2>${grid(admission, remaining)}</section><section class="detail-section"><h2>出典</h2><div class="source-links">${safeExternalLink(admission.guideline_url, "募集要項")}${safeExternalLink(admission.source_url, "公式情報")}${safeExternalLink(admission.schedule_url, "日程")}${safeExternalLink(admission.exclusive_enrollment_evidence_url, "専願根拠")}${safeExternalLink(admission.previous_year_source_url, "前年度資料")}</div><details class="developer-details"><summary>データ識別情報</summary><p>${escapeHtml(dataset)} ／ ${escapeHtml(version)} ／ ${escapeHtml(id)}</p></details></section></main>${footer()}`;
+    app.innerHTML = `${header()}<main id="main" class="page detail-page">
+      ${admission.fallback_previous_year === true ? '<div class="fallback-warning"><strong>前年度情報を参照しています。</strong> 2027年度の公式資料を確認してください。</div>' : ""}
+      <header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p>${candidateButton(row, candidates.store.has(row))}</header>
+      ${sections.map(([title, fields]) => `<section class="detail-section"><h2>${title}</h2>${grid(admission, fields)}${title === "研究" ? research(detail) : ""}</section>`).join("")}<section class="detail-section"><h2>その他の記録項目</h2>${grid(admission, remaining)}</section><section class="detail-section"><h2>出典</h2><div class="source-links">${safeExternalLink(admission.guideline_url, "募集要項")}${safeExternalLink(admission.source_url, "公式情報")}${safeExternalLink(admission.schedule_url, "日程")}${safeExternalLink(admission.exclusive_enrollment_evidence_url, "専願根拠")}${safeExternalLink(admission.previous_year_source_url, "前年度資料")}</div><details class="developer-details"><summary>データ識別情報</summary><p>${escapeHtml(dataset)} ／ ${escapeHtml(version)} ／ ${escapeHtml(id)}</p></details></section></main>${footer()}`;
   } catch (error) {
     dataError(error instanceof SiteDataError ? error.message : "詳細データを読み込めませんでした。");
   }
@@ -350,7 +358,7 @@ async function detailPage(parts: string[]): Promise<void> {
 function aboutPage(): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
-  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定は単純な全体評定の数値条件だけ、英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定は単純な全体評定の数値条件だけ、英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
@@ -361,6 +369,13 @@ function dataError(message: string): void {
 
 async function route(replace = false): Promise<void> {
   const path = location.pathname.replace(/\/+$/, "") || "/";
+  if (path === "/candidates") {
+    floatingLiveCount?.disconnect();
+    floatingLiveCount = null;
+    candidates.expanded = expandedUniversitiesFromHistory({ expandedUniversities: history.state?.candidateExpandedUniversities });
+    app.innerHTML = `${header()}${candidates.page()}${footer()}`;
+    return;
+  }
   if (path === "/about/data") { aboutPage(); return; }
   const match = path.match(/^\/admissions\/([^/]+)\/([^/]+)\/([^/]+)$/);
   if (match) { await detailPage(match.slice(1)); return; }
@@ -423,6 +438,7 @@ function restoreCurrentView(): void {
 
 document.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
+  if (candidates.handleClick(target)) return;
   const link = target.closest<HTMLAnchorElement>("a[data-route]");
   if (link && link.origin === location.origin) {
     event.preventDefault();
@@ -437,10 +453,12 @@ document.addEventListener("click", (event) => {
     const panelId = universityToggle.getAttribute("aria-controls");
     const panel = panelId ? document.getElementById(panelId) : null;
     if (!university || !panel) return;
-    const expanded = toggleExpandedUniversity(expandedUniversities, university);
+    const isCandidates = location.pathname === "/candidates";
+    const expanded = toggleExpandedUniversity(isCandidates ? candidates.expanded : expandedUniversities, university);
     universityToggle.setAttribute("aria-expanded", String(expanded));
     panel.hidden = !expanded;
-    persistExpandedUniversities();
+    if (isCandidates) history.replaceState({ ...(history.state ?? {}), candidateExpandedUniversities: [...candidates.expanded] }, "", location.href);
+    else persistExpandedUniversities();
     return;
   }
   const page = target.closest<HTMLButtonElement>("button[data-page]");
@@ -463,6 +481,8 @@ try {
   rows = loaded.rows;
   options = loaded.options;
   manifest = loaded.manifest;
+  candidates.rows = new Map(rows.map((row) => [candidateKey(row), row]));
+  candidates.manifest = manifest;
   for (const group of options.academic_field_groups) groupLabels.set(group.value, group.display_label);
   await route(true);
   cleanupWebMcp();

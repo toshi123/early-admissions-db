@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { submitSearchNavigation } from "../src/navigation";
 import { emptyRequest } from "../src/search";
 import {
+  applicationConditionLabels,
   compactResultCard,
   evaluateSearchDraft,
   liveSearchResult,
@@ -93,6 +94,38 @@ describe("compact result cards", () => {
     expect(groupedHtml).not.toContain("東京大学");
     expect(groupedHtml).toContain('class="admission-detail-link"');
     expect(groupedHtml).toContain("特別選抜");
+  });
+
+  it.each([
+    ["required", true],
+    ["not_required", false],
+    ["review_required", false],
+    ["unknown", false],
+    ["unmapped", false],
+    ["not_applicable", false],
+  ] as const)("shows the English condition badge only for %s", (status, expected) => {
+    const html = compactResultCard(row({ english_requirement_status: status }), false, false);
+    expect(html.includes("条件：英語資格")).toBe(expected);
+  });
+
+  it.each([
+    ["Yes", true],
+    ["No", false],
+    ["Unknown", false],
+    [null, false],
+  ] as const)("shows the research condition badge only for %s", (status, expected) => {
+    const html = compactResultCard(row({ research_requirement_required: status }), false, false);
+    expect(html.includes("条件：研究業績")).toBe(expected);
+  });
+
+  it("keeps application conditions separate from selection methods in text, semantics, and styling", () => {
+    const fixture = row({ english_requirement_status: "required", research_requirement_required: "Yes" });
+    expect(applicationConditionLabels(fixture)).toEqual(["英語資格", "研究業績"]);
+    const html = compactResultCard(fixture, false, false);
+    expect(html).toContain('class="method-badges" aria-label="選考方法"');
+    expect(html).toContain('class="condition-badges" aria-label="出願条件"');
+    expect(html).toContain('class="condition-badge" aria-label="出願条件 英語資格">条件：英語資格');
+    expect(html).toContain('class="condition-badge" aria-label="出願条件 研究業績">条件：研究業績');
   });
 });
 

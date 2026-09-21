@@ -74,16 +74,23 @@ export function universityGroupMarkup(
   expanded: boolean,
   showGpaSafeMatch: boolean,
 ): string {
+  return universityDisclosureMarkup(group.university, group.admissions.length, globalIndex, expanded,
+    group.admissions.map((row) => compactResultCard(row, showGpaSafeMatch, false)).join(""));
+}
+
+export function universityDisclosureMarkup(
+  name: string, count: number, globalIndex: number, expanded: boolean, content: string,
+): string {
   const buttonId = `university-toggle-${globalIndex}`;
   const panelId = `university-panel-${globalIndex}`;
-  const university = escapeHtml(group.university);
+  const university = escapeHtml(name);
   return `<section class="university-group" role="listitem">
     <h2 class="university-group__heading"><button id="${buttonId}" class="university-disclosure__button" type="button" data-university-toggle="${university}" aria-expanded="${expanded}" aria-controls="${panelId}">
       <svg class="university-disclosure__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentcolor"/><circle class="university-disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor"/><path d="M17 10H7L12 15L17 10Z" fill="Canvas"/></svg>
-      <span class="university-disclosure__name">${university}</span><span class="university-disclosure__count">${group.admissions.length.toLocaleString("ja-JP")}件</span>
+      <span class="university-disclosure__name">${university}</span><span class="university-disclosure__count">${count.toLocaleString("ja-JP")}件</span>
     </button></h2>
     <div id="${panelId}" class="university-admissions" role="region" aria-labelledby="${buttonId}"${expanded ? "" : " hidden"}>
-      <div class="university-admissions__list" role="list">${group.admissions.map((row) => compactResultCard(row, showGpaSafeMatch, false)).join("")}</div>
+      <div class="university-admissions__list" role="list">${content}</div>
     </div>
   </section>`;
 }

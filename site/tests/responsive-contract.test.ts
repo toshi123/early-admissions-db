@@ -5,6 +5,10 @@ import { describe, expect, it } from "vitest";
 const css = readFileSync(join(process.cwd(), "src/styles.css"), "utf8");
 
 describe("responsive search and compact results contract", () => {
+  it("does not force overflow when a 320px viewport reserves a scrollbar gutter", () => {
+    expect(css).toContain("min-width: min(320px, 100%)");
+    expect(css).not.toContain("min-width: 320px;");
+  });
   it("keeps a dedicated mobile layout and touch-sized form actions", () => {
     expect(css).toContain("@media (max-width: 620px)");
     expect(css).toContain(".choice { min-height: 44px");
@@ -39,5 +43,11 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".university-disclosure__button { min-height: 52px");
     expect(css).toContain(".university-disclosure__name { font-size: 1rem; }");
     expect(css).toContain(".university-admissions { margin: 0 .25rem .75rem 1rem; }");
+  });
+
+  it("lets selection-method and application-condition badges wrap independently", () => {
+    expect(css).toContain(".method-badges { display: flex; flex-wrap: wrap;");
+    expect(css).toContain(".condition-badges { display: flex; flex-wrap: wrap;");
+    expect(css).toContain(".condition-badge {");
   });
 });

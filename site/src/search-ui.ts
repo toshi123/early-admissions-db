@@ -1,4 +1,5 @@
 import { detailLink, displayValue, escapeHtml } from "./display";
+import { candidateButton } from "./candidate-controls";
 import { searchRows } from "./search";
 import type { FilterOptions, SearchRequest, SearchResult, SearchRow } from "./types";
 
@@ -95,12 +96,21 @@ export function selectionMethodLabels(row: SearchRow): string[] {
   return METHOD_FIELDS.filter(([field]) => row[field] === "Yes").map(([, label]) => label);
 }
 
+export function applicationConditionLabels(row: SearchRow): string[] {
+  return [
+    ...(row.english_requirement_status === "required" ? ["英語資格"] : []),
+    ...(row.research_requirement_required === "Yes" ? ["研究業績"] : []),
+  ];
+}
+
 export function compactResultCard(
   row: SearchRow,
   showGpaSafeMatch: boolean,
   showUniversity = true,
+  actions?: string,
 ): string {
   const methods = selectionMethodLabels(row);
+  const conditions = applicationConditionLabels(row);
   const category = row.selection_category
     ? `<span class="selection-category">${displayValue(row.selection_category)}</span>`
     : "";
@@ -119,5 +129,9 @@ export function compactResultCard(
   const selection = showUniversity
     ? `<strong>${selectionName}</strong>${category}`
     : `<strong><a class="admission-detail-link" href="${detailHref}" data-route>${selectionName}</a></strong>${category}`;
-  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div></article>`;
+  const conditionBadges = conditions.length
+    ? `<div class="condition-badges" aria-label="出願条件">${conditions.map((condition) => `<span class="condition-badge" aria-label="出願条件 ${escapeHtml(condition)}">条件：${escapeHtml(condition)}</span>`).join("")}</div>`
+    : "";
+  const deadline = row.application_end === null ? "" : `<p class="application-end">出願終了：<span>${escapeHtml(row.application_end)}</span></p>`;
+  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div>${conditionBadges}<div class="admission-row-footer">${deadline}${actions ?? candidateButton(row)}</div></article>`;
 }

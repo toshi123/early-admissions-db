@@ -76,4 +76,19 @@ describe("DADS component contracts", () => {
     expect(css).toContain(".university-disclosure__button:focus-visible");
     expect(css).toContain('.university-disclosure__button[aria-expanded="true"] .university-disclosure__icon');
   });
+
+  it("keeps the detail heading concise without redundant return or general eligibility notices", () => {
+    expect(main).not.toContain("← 検索結果へ戻る");
+    expect(main).not.toContain("このページは出願資格や合格可能性を判定しません");
+    expect(main).toContain('<header class="detail-title">');
+    expect(main).toContain('class="fallback-warning"');
+  });
+
+  it("places raw dates before selection and eligibility without moving the fallback warning", () => {
+    const sectionSource = main.slice(main.indexOf("const sections:"), main.indexOf("const labels:"));
+    const headings = [...sectionSource.matchAll(/\["(基本情報|日程|選考方法|出願条件|研究)"/g)].map((match) => match[1]);
+    expect(headings).toEqual(["基本情報", "日程", "選考方法", "出願条件", "研究"]);
+    expect(main).toContain('class="fallback-warning"');
+    expect(main.indexOf('<h2>その他の記録項目</h2>')).toBeLessThan(main.indexOf('<h2>出典</h2>'));
+  });
 });
