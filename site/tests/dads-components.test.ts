@@ -42,6 +42,14 @@ describe("DADS component contracts", () => {
     expect(css).toContain(".choice input:focus-visible");
   });
 
+  it("uses a native grade requirement checkbox with a dependent disabled input", () => {
+    expect(main).toContain('id="grade-requirement" type="checkbox"');
+    expect(main).toContain('id="overall-gpa"');
+    expect(main).toContain('applied.grade_requirement_status === "required" ? "" : "disabled"');
+    expect(main).toContain("評定を出願条件として求める入試を検索します");
+    expect(main).toContain("全体評定について安全に数値判定できるものだけを絞り込みます");
+  });
+
   it("keeps the university field an exact-selection ARIA combobox", () => {
     expect(main).toContain('role="combobox"');
     expect(main).toContain('aria-autocomplete="list"');

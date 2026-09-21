@@ -46,6 +46,8 @@ Supported structured filters are:
 - `--written-exam` / `--selection-written-exam`
 - `--selection-common-test`
 - `--gpa` with `--gpa-mode`
+- `--grade-requirement`
+- `--overall-gpa`
 
 Every multi-value option may be repeated. Repeated and adjacent values are
 flattened into the same OR set.
@@ -77,6 +79,21 @@ With a GPA input, result labels are:
 requirements are satisfied. `--gpa-mode` without `--gpa` is an error. Without
 GPA input, safely parsed rows are labeled
 `safe numeric rule (GPA not supplied)` rather than as matches.
+
+### Reviewed grade-requirement extension
+
+`--grade-requirement required` selects admissions whose exact-reviewed raw
+wording uses school grades as an application requirement. It includes overall,
+subject-only, qualitative, and reviewed branch conditions. It is independent
+of the legacy strict-safe `--gpa` filter.
+
+`--overall-gpa X.X` is accepted only together with
+`--grade-requirement required`. It compares integer tenths against the new
+reviewed inclusive overall-grade lower bound. Rows with subject-only,
+qualitative, ambiguous, historical, non-binding, or unmapped rules have no
+safe overall floor and do not match this numeric filter. A match means only
+that the reviewed overall-grade lower-bound condition is safely matched; it
+does not mean that all application requirements are satisfied.
 
 ## 4. Output
 
@@ -115,6 +132,11 @@ The summary reports:
 
 ```bash
 ./scripts/search --gpa 3.8 --gpa-mode review --format csv --all-results
+```
+
+```bash
+./scripts/search --grade-requirement required
+./scripts/search --grade-requirement required --overall-gpa 3.8
 ```
 
 ```bash

@@ -232,6 +232,26 @@ CREATE TABLE build_metadata (
             length(gpa_crosswalk_sha256) = 64 AND
             gpa_crosswalk_sha256 NOT GLOB '*[^0-9a-f]*'
         ),
+    grade_requirement_mapping_contract_version TEXT NOT NULL
+        CHECK (grade_requirement_mapping_contract_version = '0.1'),
+    grade_requirement_schema_sql_sha256 TEXT NOT NULL
+        CHECK (
+            length(grade_requirement_schema_sql_sha256) = 64 AND
+            grade_requirement_schema_sql_sha256 NOT GLOB '*[^0-9a-f]*'
+        ),
+    grade_requirement_crosswalk_sha256 TEXT NOT NULL
+        CHECK (
+            length(grade_requirement_crosswalk_sha256) = 64 AND
+            grade_requirement_crosswalk_sha256 NOT GLOB '*[^0-9a-f]*'
+        ),
+    grade_requirement_classification_counts_json TEXT NOT NULL
+        CHECK (grade_requirement_classification_counts_json <> ''),
+    grade_requirement_overall_status_counts_json TEXT NOT NULL
+        CHECK (grade_requirement_overall_status_counts_json <> ''),
+    grade_requirement_numeric_floor_rows INTEGER NOT NULL
+        CHECK (grade_requirement_numeric_floor_rows >= 0),
+    grade_requirement_raw_mismatch_rows INTEGER NOT NULL
+        CHECK (grade_requirement_raw_mismatch_rows = 0),
     academic_field_mapping_contract_version TEXT NOT NULL
         CHECK (academic_field_mapping_contract_version = '0.1'),
     academic_field_taxonomy_version TEXT NOT NULL

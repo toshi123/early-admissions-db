@@ -120,6 +120,11 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 .text-input { width: min(100%, 30rem); height: 3rem; padding: .75rem 1rem; border: 1px solid var(--gray-600); border-radius: 8px; background: #fff; color: var(--gray-900); line-height: 1; }
 @media (hover: hover) { .text-input:hover { border-color: #000; } }
 .text-input[aria-invalid="true"] { border-color: var(--red-800); }
+.text-input:disabled { border-color: var(--gray-300); background: var(--gray-100); color: var(--gray-600); cursor: not-allowed; }
+.nested-filter { margin: 1rem 0 0 2.5rem; padding-left: 1rem; border-left: 3px solid var(--gray-300); }
+.grade-input-row { display: flex; align-items: center; gap: .75rem; }
+.grade-input-row .text-input { width: min(12rem, 70%); }
+@media (max-width: 40rem) { .nested-filter { margin-left: 0; } }
 
 .university-combobox { position: relative; width: min(100%, 30rem); }
 .university-combobox .text-input { width: 100%; }

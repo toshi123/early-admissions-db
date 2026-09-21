@@ -47,6 +47,7 @@ let applied = emptyRequest();
 let currentResult: SearchResult = searchRows([], applied);
 let universityQuery = "";
 let gpaQuery = "";
+let overallGpaQuery = "";
 let cleanupWebMcp: () => void = () => undefined;
 let floatingLiveCount: FloatingLiveCountController | null = null;
 let expandedUniversities = new Set<string>();
@@ -117,7 +118,7 @@ function searchForm(): string {
     <fieldset><legend>6. 研究業績</legend>${radios("research_requirement_required", [["", "指定なし"], ["Yes", "必要"], ["No", "必要なし"]])}</fieldset>
     <fieldset><legend>7. 英語資格</legend>${radios("english_requirement_status", [["", "指定なし"], ["required", "必要"], ["not_required", "必要なし"]])}</fieldset>
     <fieldset><legend>8. 試験内容</legend><p class="help">複数選ぶと、すべて実施する入試に絞ります。</p><div class="check-grid">${methods.map(([field, label]) => `<label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="${field}" value="Yes" ${selected(field, "Yes") ? "checked" : ""}></span><span class="choice__label">${label}</span></label>`).join("")}</div></fieldset>
-    <fieldset><legend>9. 評定</legend><label class="input-label" for="gpa">評定値（0.0〜5.0）</label><input id="gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(gpaQuery)}" placeholder="例：3.8"><p class="help">単純な全体評定の数値条件のみを安全に照合します。</p></fieldset>
+    <fieldset><legend>9. 評定</legend><label class="choice choice--checkbox"><span class="choice__control"><input id="grade-requirement" type="checkbox" name="grade_requirement" value="required" ${applied.grade_requirement_status === "required" ? "checked" : ""}></span><span class="choice__label">評定条件あり</span></label><p class="help">評定を出願条件として求める入試を検索します。</p><div class="nested-filter"><label class="input-label" for="overall-gpa">全体評定でさらに絞り込む（任意）</label><div class="grade-input-row"><input id="overall-gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(overallGpaQuery)}" placeholder="例：3.8" ${applied.grade_requirement_status === "required" ? "" : "disabled"}><span aria-hidden="true">以上</span></div><p class="help">全体評定について安全に数値判定できるものだけを絞り込みます。</p></div>${applied.gpa_tenths !== null ? `<p class="notice">旧形式の評定安全照合 ${(applied.gpa_tenths / 10).toFixed(1)} がこの共有URLに適用されています。</p>` : ""}</fieldset>
     <fieldset class="prefecture-fieldset"><details id="prefecture-details" class="disclosure"><summary><svg class="disclosure__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentcolor"/><circle class="disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor"/><path class="disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas"/></svg><span>10. 都道府県で絞り込む <span id="prefecture-count" class="selected-count"></span></span></summary><div class="prefecture-regions">${prefectures}</div><button id="clear-prefectures" class="button button--text" type="button">選択をクリア</button></details></fieldset>
     <div id="form-error" class="notice error" role="alert" hidden></div>
     <div class="form-actions"><button class="button button--primary" type="submit">この条件で検索</button><button id="clear-form" class="button button--outline" type="button">条件をクリア</button></div>
@@ -127,6 +128,8 @@ function searchForm(): string {
 function readBaseForm(): SearchRequest {
   const form = document.querySelector<HTMLFormElement>("#search-form")!;
   const request = emptyRequest();
+  request.gpa_tenths = applied.gpa_tenths;
+  request.gpa_mode = applied.gpa_mode;
   for (const field of [
     "academic_field_group",
     "institution_type",
@@ -149,6 +152,9 @@ function readBaseForm(): SearchRequest {
     const value = form.querySelector<HTMLInputElement>(`input[name="${field}"]:checked`)?.value ?? "";
     request[field] = value ? [value] : [];
   }
+  request.grade_requirement_status = form.querySelector<HTMLInputElement>(
+    'input[name="grade_requirement"]:checked',
+  )?.value === "required" ? "required" : null;
   return request;
 }
 
@@ -171,13 +177,18 @@ function renderSuggestions(): void {
 
 function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   const input = document.querySelector<HTMLInputElement>("#university-input")!;
-  const gpa = document.querySelector<HTMLInputElement>("#gpa")!;
-  const evaluation = evaluateSearchDraft(readBaseForm(), options, input.value, gpa.value);
+  const overallGpa = document.querySelector<HTMLInputElement>("#overall-gpa")!;
+  const base = readBaseForm();
+  overallGpa.disabled = base.grade_requirement_status !== "required";
+  if (overallGpa.disabled) overallGpa.value = "";
+  const evaluation = evaluateSearchDraft(
+    base, options, input.value, overallGpa.value,
+  );
   applied = evaluation.request;
   universityQuery = evaluation.universityQuery;
-  gpaQuery = evaluation.gpaQuery;
+  overallGpaQuery = evaluation.overallGpaQuery;
   input.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("大学名")) ? "true" : "false");
-  gpa.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("評定")) ? "true" : "false");
+  overallGpa.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("全体評定")) ? "true" : "false");
   const error = document.querySelector<HTMLElement>("#form-error")!;
   error.hidden = evaluation.errors.length === 0;
   error.textContent = evaluation.errors.join(" ");
@@ -193,7 +204,9 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   if (headerLink) headerLink.href = headerSearchHref("/search", evaluation.request);
   if (evaluation.errors.length === 0) rememberLastSearch(evaluation.request);
   if (syncUrl) {
-    const query = serializeSearchFormState(evaluation.request, universityQuery, gpaQuery).toString();
+    const query = serializeSearchFormState(
+      evaluation.request, universityQuery, gpaQuery, overallGpaQuery,
+    ).toString();
     history.replaceState(history.state ?? {}, "", `/search${query ? `?${query}` : ""}`);
   }
   return evaluation;
@@ -250,6 +263,7 @@ function bindForm(): void {
     applied = emptyRequest();
     universityQuery = "";
     gpaQuery = "";
+    overallGpaQuery = "";
     history.replaceState(history.state ?? {}, "", "/search");
     searchPage([]);
   });
@@ -289,6 +303,11 @@ function summaryText(): string {
   const selectedMethods = methods.filter(([field]) => (applied[field] as string[]).length).map(([, label]) => label);
   if (selectedMethods.length) parts.push(`試験：${selectedMethods.join("、")}`);
   if (applied.gpa_tenths !== null) parts.push(`評定：${(applied.gpa_tenths / 10).toFixed(1)}（安全照合）`);
+  if (applied.grade_requirement_status === "required") {
+    parts.push(applied.overall_gpa_tenths === null
+      ? "評定条件：あり"
+      : `評定条件：あり ／ 全体評定：${(applied.overall_gpa_tenths / 10).toFixed(1)}以上`);
+  }
   if (applied.prefecture_membership.length) parts.push(`都道府県：${applied.prefecture_membership.join("、")}`);
   return parts.length ? parts.join(" ／ ") : "条件指定なし";
 }
@@ -358,7 +377,7 @@ async function detailPage(parts: string[]): Promise<void> {
 function aboutPage(): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
-  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定は単純な全体評定の数値条件だけ、英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定条件の有無と、安全に確認できる全体評定の下限を分けて検索します。科目別・分岐等の追加条件は原文で確認してください。英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
@@ -384,6 +403,7 @@ async function route(replace = false): Promise<void> {
     applied = emptyRequest();
     universityQuery = "";
     gpaQuery = "";
+    overallGpaQuery = "";
     searchPage([]);
     return;
   }
@@ -395,6 +415,7 @@ async function route(replace = false): Promise<void> {
   applied = parsed.request;
   universityQuery = parsed.universityQuery;
   gpaQuery = parsed.gpaQuery;
+  overallGpaQuery = parsed.overallGpaQuery;
   if (replace && path === "/results") {
     const query = serializeRequest(applied).toString();
     history.replaceState({}, "", `/results${query ? `?${query}` : ""}`);

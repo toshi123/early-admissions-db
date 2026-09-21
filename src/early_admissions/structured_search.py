@@ -14,6 +14,10 @@ from .academic_field import (
     GENERATED_MAPPING_STATUSES,
 )
 from .gpa_search import GPA_PARSER_CONTRACT_VERSION
+from .grade_requirement import (
+    GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+    GRADE_REQUIREMENT_STATUSES,
+)
 from .english_requirement import ENGLISH_REQUIREMENT_CONTRACT_VERSION
 from .prefecture_search import PREFECTURE_MAPPING_CONTRACT_VERSION, PREFECTURE_TAXONOMY_VERSION
 
@@ -66,6 +70,11 @@ RESULT_COLUMNS: tuple[str, ...] = (
     "gpa_parse_status",
     "gpa_search_disposition",
     "gpa_min_tenths",
+    "grade_requirement_status",
+    "overall_gpa_min_tenths",
+    "overall_gpa_min_inclusive",
+    "overall_gpa_status",
+    "additional_grade_conditions",
     "common_test_required",
     "research_requirement_required",
     "research_activity_level_status",
@@ -131,6 +140,8 @@ class SearchCriteria:
     english_requirement_status: tuple[str, ...] = ()
     gpa_tenths: int | None = None
     gpa_mode: str = "all"
+    grade_requirement_status: str | None = None
+    overall_gpa_tenths: int | None = None
 
     def validate(self) -> None:
         if self.gpa_mode not in GPA_MODES:
@@ -139,6 +150,18 @@ class SearchCriteria:
             raise StructuredSearchError("GPA mode safe/review requires a GPA value.")
         if self.gpa_tenths is not None and not 0 <= self.gpa_tenths <= 50:
             raise StructuredSearchError("GPA tenths must be between 0 and 50.")
+        if (
+            self.grade_requirement_status is not None
+            and self.grade_requirement_status not in GRADE_REQUIREMENT_STATUSES
+        ):
+            raise StructuredSearchError("Unsupported grade requirement status.")
+        if self.overall_gpa_tenths is not None:
+            if not 0 <= self.overall_gpa_tenths <= 50:
+                raise StructuredSearchError("Overall GPA tenths must be between 0 and 50.")
+            if self.grade_requirement_status != "required":
+                raise StructuredSearchError(
+                    "Overall GPA search requires grade_requirement_status='required'."
+                )
         for field_name in MULTI_VALUE_FIELDS:
             values = getattr(self, field_name)
             if not isinstance(values, tuple):
@@ -244,6 +267,7 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
     rows = connection.execute(
         """
         SELECT database_schema_version, gpa_parser_contract_version,
+               grade_requirement_mapping_contract_version,
                academic_field_mapping_contract_version,
                academic_field_taxonomy_version,
                english_requirement_parser_contract_version
@@ -259,6 +283,11 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         raise StructuredSearchError("SQLite database schema version is not 0.1.")
     if rows[0]["gpa_parser_contract_version"] != GPA_PARSER_CONTRACT_VERSION:
         raise StructuredSearchError("GPA parser contract version is incompatible.")
+    if (
+        rows[0]["grade_requirement_mapping_contract_version"]
+        != GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION
+    ):
+        raise StructuredSearchError("Grade-requirement contract version is incompatible.")
     if (
         rows[0]["academic_field_mapping_contract_version"]
         != ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION
@@ -305,6 +334,7 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
             LEFT JOIN admission_search_gpa_safe AS gs USING (admission_rowid)
             JOIN admission_search_academic_fields AS af USING (admission_rowid)
             JOIN admission_search_english_requirement AS er USING (admission_rowid)
+            JOIN admission_search_grade_requirements AS gr USING (admission_rowid)
             CROSS JOIN (SELECT ? AS student_gpa_tenths) AS q
         """
         parameters.append(criteria.gpa_tenths)
@@ -315,6 +345,7 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
             LEFT JOIN admission_search_gpa_safe AS gs USING (admission_rowid)
             JOIN admission_search_academic_fields AS af USING (admission_rowid)
             JOIN admission_search_english_requirement AS er USING (admission_rowid)
+            JOIN admission_search_grade_requirements AS gr USING (admission_rowid)
         """
 
     for field_name in MULTI_VALUE_FIELDS:
@@ -363,6 +394,18 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
             predicates.append(
                 f"({_SAFE_MATCH_SQL} OR g.parse_status = 'conditional_review')"
             )
+    if criteria.grade_requirement_status is not None:
+        predicates.append("gr.grade_requirement_status = ?")
+        parameters.append(criteria.grade_requirement_status)
+    if criteria.overall_gpa_tenths is not None:
+        predicates.append(
+            "gr.parse_status = 'exact_crosswalk' "
+            "AND gr.overall_gpa_min_tenths IS NOT NULL "
+            "AND (? > gr.overall_gpa_min_tenths "
+            "OR (? = gr.overall_gpa_min_tenths "
+            "AND gr.overall_gpa_min_inclusive = 1))"
+        )
+        parameters.extend((criteria.overall_gpa_tenths, criteria.overall_gpa_tenths))
     where_sql = "WHERE " + " AND ".join(predicates) if predicates else ""
     return _CompiledBase(
         from_sql=from_sql,
@@ -442,6 +485,11 @@ def compile_result_query(
             g.parse_status AS gpa_parse_status,
             g.search_disposition AS gpa_search_disposition,
             g.gpa_min_tenths,
+            gr.grade_requirement_status,
+            gr.overall_gpa_min_tenths,
+            gr.overall_gpa_min_inclusive,
+            gr.overall_gpa_status,
+            gr.additional_grade_conditions,
             a.common_test_required,
             a.research_requirement_required,
             a.research_activity_level_status,

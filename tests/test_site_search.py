@@ -38,6 +38,11 @@ def row(**updates: object) -> dict[str, object]:
         "gpa_min_inclusive": True,
         "gpa_max_tenths": None,
         "gpa_max_inclusive": None,
+        "grade_requirement_status": "required",
+        "overall_gpa_min_tenths": 38,
+        "overall_gpa_min_inclusive": True,
+        "overall_gpa_status": "safe_simple_overall",
+        "additional_grade_conditions": False,
     }
     value.update(updates)
     return value
@@ -83,6 +88,33 @@ class SiteSearchUnitTests(unittest.TestCase):
             rows, SearchRequest(selection_essay=("Unknown",)), limit=None
         )
         self.assertEqual([item["record_id"] for item in result.rows], ["UNKNOWN"])
+
+    def test_grade_checkbox_and_overall_floor_are_separate(self) -> None:
+        rows = [
+            row(),
+            row(
+                record_id="SUBJECT",
+                overall_gpa_min_tenths=None,
+                overall_gpa_min_inclusive=None,
+                overall_gpa_status="no_safe_overall_floor",
+                additional_grade_conditions=None,
+            ),
+            row(record_id="NONE", grade_requirement_status="not_required"),
+        ]
+        checkbox = search_rows(
+            rows, SearchRequest(grade_requirement_status="required"), limit=None
+        )
+        numeric = search_rows(
+            rows,
+            SearchRequest(
+                grade_requirement_status="required", overall_gpa_tenths=38
+            ),
+            limit=None,
+        )
+        self.assertEqual(
+            [item["record_id"] for item in checkbox.rows], ["A", "SUBJECT"]
+        )
+        self.assertEqual([item["record_id"] for item in numeric.rows], ["A"])
 
     def test_invalid_gpa_mode_without_value_is_rejected(self) -> None:
         with self.assertRaisesRegex(SiteSearchError, "requires a GPA"):

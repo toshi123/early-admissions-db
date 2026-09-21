@@ -59,6 +59,12 @@ class SiteDataBuildTests(unittest.TestCase):
             self.assertIn("selection_group_discussion", kokkoritsu)
             self.assertIn("selection_aptitude_test", kokkoritsu)
             self.assertEqual(manifest["validation"]["search_equivalence"]["queries"], 25)
+            self.assertEqual(
+                manifest["grade_requirement_search"]["numeric_floor_rows"], 2
+            )
+            self.assertEqual(
+                manifest["grade_requirement_search"]["raw_mismatch_rows"], 0
+            )
             self.assertEqual(sha256(database), before)
 
     def test_exact_duplicate_children_are_preserved(self) -> None:
@@ -185,6 +191,21 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["queries"], 25
+        )
+        self.assertEqual(
+            self.manifest["grade_requirement_search"]["classification_counts"],
+            {
+                "required": 2286,
+                "not_required": 339,
+                "review_required": 1291,
+                "unknown": 1985,
+                "not_applicable": 20,
+                "unmapped": 0,
+            },
+        )
+        self.assertEqual(
+            self.manifest["grade_requirement_search"]["numeric_floor_rows"],
+            1329,
         )
 
 

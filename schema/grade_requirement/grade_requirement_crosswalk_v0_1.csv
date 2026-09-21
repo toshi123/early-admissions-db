@@ -1,0 +1,554 @@
+contract_version,raw_value,grade_requirement_status,overall_gpa_min_tenths,overall_gpa_min_inclusive,overall_gpa_status,additional_grade_conditions,review_note
+0.1,不明,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体の学習成績の状況4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.5以上。,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数値による評定要件なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,評定基準の明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,評定数値基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数値の評定基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の全体の学習成績の状況の基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,評定基準の明示なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績の状況の出願基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,公式出願資格に学習成績の状況による基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の全体の学習成績の状況4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.2以上。,required,32,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,明示的な数値基準なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,なし（募集要項に学習成績の状況による数値基準記載なし）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,学習成績概評B以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,評定基準なし。調査書等は選考資料として30点で評価。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績概評A段階,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,数値による評定要件の一律基準なし（選抜区分Dを除く）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値による評定条件の記載なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,なし（2027年度学生募集要項の出願資格に評定平均等の数値要件なし）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,評定基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況3.0以上。,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況4.3以上。,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数値による評定基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の評定平均値3.5以上。,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,不明（学部・学科別2027詳細要項に基準がある場合は当該要項参照。数値を一律化しない）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体の学習成績の状況は定めない。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値による評定要件の記載なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学および理科の学習成績の状況がそれぞれ4.0以上（経営学部は数学および国語がそれぞれ4.0以上）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,明示的な評定基準なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,出願条件として評定平均値の基準なし。選考では全体の評定平均値×10を50点満点として使用。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,不明（2027年度詳細募集要項PDF本文を再取得後に確認）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,調査書の学習成績概評A段階。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,数値による評定要件なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,高等学校全期間（卒業見込み者は第3学年第1学期まで）の全教科・科目の学習成績の状況の平均値が原則3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,全体の学習成績の状況2.7以上、または同等の学力があると認められた者。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数値基準なし（学科別に『成績優秀な者』等の推薦条件あり）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度募集要項の出願資格に数値基準の記載なし）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の評定平均値 3.7 以上,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,評定数値基準の明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,不明（2027年度学校推薦型学生募集要項は10月上旬公開予定）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,2027年度学生募集要項に学習成績要件あり（具体値は公式Web本文の直接抽出未了）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: unresolved）
+0.1,なし（募集要項の出願資格に評定条件の記載なし）,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績概評A,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,高校の成績による出願基準は公式募集要項で明示されない。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: non_numeric_condition）
+0.1,不明（2027年度の方式別詳細学生募集要項公表後に確認）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,調査書の全体の学習成績の状況3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,公式公開Webページでは数値評定基準を確認できず。2027年度学生募集要項で要再監査。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,公開ページでは数値評定基準を確認できない。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,調査書の全体の評定平均値3.0以上。,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,不明（2027年度学科別推薦基準は公式要項確認済だが、本再監査で数値基準を構造化未了のため推測せず保持）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,数学および理科の学習成績の状況がそれぞれ4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,3.0以上、または所定資格等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.6以上。,required,36,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,宇宙・半導体工学部、工学部、創造工学部、先進工学部、情報変革科学部：数学・英語・理科の3教科、または数学・英語・理科・情報の4教科の評定平均3.3以上。未来変革科学部：数学・英語・理科または国語の3教科、または数学・英語・理科または国語・情報の4教科の評定平均3.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,宇宙・半導体工学部、工学部、創造工学部、先進工学部、情報変革科学部：数学・英語・理科・専門の4教科、または数学・英語・理科・情報・専門の5教科の評定平均3.5以上。未来変革科学部：数学・英語・理科または国語・専門の4教科、または数学・英語・理科または国語・情報・専門の5教科の評定平均3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,評定平均値の条件なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,評定数値基準なし（総合型選抜）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の全体の学習成績の状況4.0以上、又は数学及び理科の学習成績の状況平均4.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,Unknown（2027年度募集要項の数値表を直接抽出できず再監査対象）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体の学習成績の状況3.8以上、または理科の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,Unknown（2027年度学校推薦型詳細募集要項で再確認）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体4.0以上、又は一般選抜合格者と同等以上の学力＋所定英語資格換算50点以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況：普通科・理数科3.2以上、専門教育を主とする学科3.5以上。その他の学科は所定の数学・理科履修状況により3.2/3.5。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,募集要項に学習成績の状況による一律の数値基準なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の全体の学習成績の状況3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の評定平均値4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績概評A段階以上であることが望ましい（必須の出願条件ではない）。,not_required,,,non_binding,,必須の出願条件ではないことが原値に明示されているため評定条件なし。数値下限としても使用しない
+0.1,3.5以上、または3.0以上＋所定資格等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,3.6以上,required,36,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数値による評定要件の明示なし。学業・人物ともに優れていること。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学3.3以上 かつ 外国語3.3以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定数値基準の一律条件なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,3.4以上,required,34,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,Unknown（2027年度公開Webでは数値評定条件を確認できず、入学試験要項本文の直接確認待ち）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,不明（2027年度学生募集要項の出願資格細部を直接抽出未了）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,学習成績概評B段階以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,明示なし（要項確認）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,理系学部は、指定英語資格CEFR A2以上または全体の学習成績の状況3.5以上のいずれかを満たすこと。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,評定平均値の基準なし,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の学習成績概評A段階。IB資格出願者は国際バカロレア総合成績35点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,なし（募集要項に学習成績の状況による一律の数値基準なし）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,不明（2027年度学校推薦型詳細学生募集要項未公表）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,公開Webページでは数値評定基準を確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,数値による評定条件なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度AO入試要項の学部別出願基準に評定平均値条件の記載なし）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度入試要項の卒業生推薦出願資格に数値基準の記載なし）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度入試要項の総合型出願資格に数値基準の記載なし）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（学習成績が優れている者。出願に際し数値要件は定めない）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,第3学年第1学期末（2学期制は前期末）までの全体の学習成績の状況4.3以上、かつ外国語全科目の学習成績の状況4.3以上。,required,43,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,評定平均値の基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の英語・国語・数学の学習成績の状況の平均4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,3.3以上、または所定資格・活動条件等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,不明（2027年度詳細学生募集要項未公表）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体の学習成績の状況3.0以上。普通科は英語・数学・理科、専門学科は英語・数学・理科・専門、総合学科は専門20単位以上なら英語・数学・理科・専門（20単位未満は英語・数学・理科）の平均3.0以上でも可。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: range_or_upper_condition）
+0.1,全体・数学・理科・英語それぞれの学習成績の状況3.0以上。,required,30,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学業成績・競技歴は本学が指定した基準による。公開ページに数値基準の記載なし。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,指定校に個別通知,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,数値基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度入試要項の公募出願資格に数値基準の記載なし）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,日本の評定平均等の数値基準は設定されていない。IB最終試験成績証明書等を審査資料として重視。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（人物・学業ともに優れた者。現行詳細PDFは再監査）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,不明（2027年度詳細学生募集要項を直接取得未了）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.7以上。,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況による出願資格基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,全体の学習成績の状況（調査書）3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値3.5以上（評定平均値を算出できない一部出願資格者を除く）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,全体の評定平均値：工学部3.2以上、情報学部3.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,出願時までの総科目全体の評定平均値3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数学・理科とも3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・外国語（英語）のうち2教科の各学習成績の状況がそれぞれ3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定平均値の条件なし（公募もⅠ・Ⅱ期とも数値基準なし）。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,調査書の学習成績概評B段階以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の数学 3.5以上 かつ 理科 3.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の数学 3.6以上 かつ 理科 3.6以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,3.2以上,required,32,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.8以上、または数学の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,国語の学習成績の状況3.8以上。英語は学習成績の状況4.0以上、または指定英語資格基準のいずれか。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,学校推薦型は評定平均値概ね3.0以上を出願の目安。総合型は数値による評定要件なし。,review_required,,,non_binding,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない。数値は非必須表現のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,学校推薦型：数値による一律の評定基準の明示なし。総合型：数値による評定要件なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値による評定要件の記載なし（2027年度公式要項）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（学習成績・人物ともに優秀であること）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,英検CSE1980相当以上,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,評定平均等の基準なし（IB指定履修科目は成績評価5以上）。,required,,,no_safe_overall_floor,,IB指定履修科目の成績要件を明示。通常の全体評定下限ではないため数値検索には使用しない
+0.1,調査書の学習成績概評A段階。IB資格出願者は国際バカロレア総合成績30点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の数学 3.8以上 かつ 理科 3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,4.3以上,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.5以上、かつ数学・理科・英語それぞれ3.5以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.8以上、かつ農業の学習成績4.0以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況（評定平均値）3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,大学指定（指定校への通知による）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A又はB,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,数値による評定要件の記載なし（2027年度入学者選抜要項）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の全体評定基準なし（学科別に履修・活動要件あり）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の評定基準は2027年度文化・スポーツ型概要で確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,明示的な数値基準なし（人物・学力ともに優秀で学校長が推薦し得る者）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（学科別の資格・活動等要件がある場合は募集要項参照）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（調査書の評定平均と修学状況を評価）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,第3学年第1学期末（2学期制は前期末）までの数学および理科に関するすべての科目の評定平均値3.5以上（評定算出不能者等は例外規定あり）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の全体の学習成績の状況3.0以上。,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績全体の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の英語・国語・数学・理科の学習成績の状況の平均4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,全体の学習成績の状況4.2以上。,required,42,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値 3.5 以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,公開Web上では数値評定条件を確定できず、要項再監査対象。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,公開Web本文では数値評定条件を確定できず、2027年度選抜要項再監査対象。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,出願時までの評定平均値3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,指定校に通知される一定基準以上（非公表）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,数値による評定平均・学習成績の状況の最低基準は2027年度入学者選抜要項に明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準の明示なし。学習成績が優秀であること。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学3.5以上 かつ 外国語3.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,英語・数学・理科に関する科目の評定平均値3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,要項確認,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,通常の評定平均値ではなくIB成績要件による。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,3.3以上、または3.0以上＋所定資格等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,4.1以上,required,41,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,IB資格の学部別成績・科目要件あり（通常の評定平均値による基準ではない）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,IB資格取得（見込み）等の出願資格による。日本の評定平均基準は公開大綱では確認できない。,unknown,,,unknown,,現年度の日本の評定条件を公開資料から確認できないため推測しない
+0.1,Ⅰ期・Ⅱ期とも全体の学習成績の状況（評定平均値）の条件なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,なし（2027年度入学者選抜に関する要項の学校推薦型選抜出願資格に、評定平均・学習成績の状況等の数値要件なし）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,不明（詳細募集要項公表後再監査）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体4.0以上、外国語4.3以上、数学3.5以上,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.0以上、または数検2級1次（計算）/2次（数理）以上・英検CSE1728以上・TOEIC L&R400以上のいずれか1つ以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.2以上、または指定資格・検定（英検CSE1728以上、TOEIC L&R400以上、漢検準2級、日本語検定3級、数検準2級）のうち2つ以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.3以上。毎日農業記録賞高校生部門優秀賞受賞者または日本農業技術検定3級以上合格者は評定基準なし。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.7以上,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.8以上、かつ数学・理科それぞれ4.0以上,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上で入学料全額免除、3.2以上で半額免除。,not_required,,,non_admission_numeric,,評定を出願要件としないことを文面で確認。数値は出願条件以外の用途のため検索不使用（既存監査分類: non_admission_or_inoperative_numeric）
+0.1,全体の学習成績の状況：普通科・理数科3.2以上、専門教育を主とする学科3.5以上。その他の学科は所定条件により3.2/3.5。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,全体の評定平均値3.8以上。加えて、出願条件5(a)ルートでは学科指定科目の評定平均値4.5以上。5(b)～(e)の活動・海外教育経験ルートでも出願可。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の評定平均値4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,国語・数学・理科・英語・地理歴史・公民・情報の各教科3.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,基準なし,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,大学公式ガイドは学習成績の状況等の出願要件があると明記。具体的基準値は詳細入試要項で要確認。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学科固有評定要件なし,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績の状況3.0以上。,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,学習成績の状況3.2以上。PASCAL入試チャレンジプログラム修了者は3.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,学習成績概評B段階以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,指定校に個別通知（公開要項では基準非公表）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,数値による評定要件の明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の評定基準は出願資格として確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,数値の評定基準は確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,数学・理科が特に優秀と学校長が認める者、または全体の学習成績の状況3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学・理科とも3.9以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・外国語（英語）の3教科を合わせた学習成績の状況4.3以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,明示的な数値基準なし（学校長が人物・学力ともに優秀で修学適性があると認め、責任をもって推薦）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,普通科等：数学上位5科目＋指定理科2科目の7科目評定平均3.6以上。工業・理数系学科または総合学科：全体評定平均3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,英語・数学・理科に関する科目の評定平均値4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書における全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績概評A（全体の評定平均値4.3以上）,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績概評がA段階。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書全体の学習成績の状況3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,高等学校最終学年第1学期または前期までの数学の学習成績の状況3.8以上、かつ理科の学習成績の状況3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,2027年度公式公開ページでは数値評定基準の記載なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,3.0以上、または数学・英語の所定資格等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,3.3以上,required,33,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,A段階,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,①全体3.5以上かつ国・数・英・地歴/公民のうち3教科3.8以上＋活動要件、②全体3.5以上＋指定資格、③全体4.0以上かつ4教科中2教科4.5以上、のいずれか,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上、かつ国・数・英・地歴/公民のうち3教科の学習成績の状況3.5以上＋指定資格等,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.6以上 かつ 数学・理科とも3.8以上,required,36,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.7以上 かつ 数学・理科とも3.8以上,required,37,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.8以上、かつ国・数・英・地歴/公民のうち3教科の学習成績の状況3.8以上＋指定資格等,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.3以上,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体4.3以上。,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.3以上,required,33,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.3以上。,required,33,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.5以上、かつ数学・理科・外国語（英語）の3教科を合わせた学習成績の状況3.5以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、または数学と外国語（英語）の学習成績の状況がいずれも4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上。数学・理科・外国語のいずれかの学習成績の状況3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上。毎日農業記録賞高校生部門優秀賞受賞者は評定基準なし。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,全体の学習成績の状況3.8以上、またはこれに相当すると認められる者。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.9以上,required,39,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況4.0以上、かつ理科・外国語（英語）の2教科を合わせた学習成績の状況4.3以上,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上、又は3.8以上4.0未満かつ国語・数学・外国語いずれか4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況：普通科・理数科3.2以上、専門教育を主とする学科3.5以上。その他の学科は数学（I・II・A・B・C）と理科1科目群の履修状況により3.2/3.5。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,全体の評定平均値3.0以上。,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値3.7以上、または数学・理科・情報のいずれか1教科の評定平均値3.7以上が望ましい（出願の必須条件ではない）,not_required,,,non_binding,,評定を出願要件としないことを文面で確認。数値は非必須表現のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,全体の評定平均値3.9以上。理科・国語で履修した全科目を合わせた評定平均値4.1以上。欠席日数合計40日以内。,required,39,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,募集要項の当該学科出願資格に評定基準の明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,外国語（英語）3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,学科所定の評定基準又は自然科学の特記すべき経験,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A段階等、募集要項所定の要件。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評等、募集要項指定要件を満たす女子。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,成績要件なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値による評定要件なし。早期に大学教育を受けるために必要な基礎学力を推薦書・調査書等で評価。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準なし。調査書の学習成績・出欠・課外活動等を10点で評価。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学（数Ⅰ・数Ⅱ・数A・数B）及び理科（物理基礎・物理）のそれぞれの学習成績の状況3.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定平均値の出願基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,評定平均値は不問。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: non_numeric_condition）
+0.1,調査書の全体の学習成績の状況4.2以上,required,42,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況4.3以上,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の数学 4.0以上 かつ 理科 4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の評定平均値に関する出願資格基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,通常の評定平均値による一律基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,適用なし,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: explicit_no_numeric_threshold）
+0.1,2027年度募集要項の当該枠出願要件を満たすこと。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,3.0以上,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,3.8以上（ただし資格・大会実績等の代替要件あり）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,A＋専門領域への強い意欲,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,不明（2027年度入学者選抜要項に数値条件の記載なし。11月公表予定の詳細募集要項で再確認）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,全体3.5以上 かつ 数学・理科とも3.8以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上、かつ国・数・英・地歴/公民のうち3教科の学習成績の状況3.6以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上。,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.8以上、かつ外国語4.0以上または指定英語資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.8以上。英語CEFR A2-3相当,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.9以上 かつ 数学・理科とも3.9以上,required,39,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上、または全体3.8以上かつ数学・理科それぞれ4.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上、または国語・数学・理科・外国語の平均4.2以上（募集要項の条件による）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上、または学業以外の優れた活動歴＋全体3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上＋理科の所定条件,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.5以上。数学の学習成績の状況4.0以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.8以上、かつ国語の学習成績の状況3.5以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.8以上、かつ数学・理科・外国語それぞれ4.0以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.8以上で入学料全額免除、3.0以上で半額免除。,not_required,,,non_admission_numeric,,評定を出願要件としないことを文面で確認。数値は出願条件以外の用途のため検索不使用（既存監査分類: non_admission_or_inoperative_numeric）
+0.1,全体の学習成績の状況4.3以上が望ましい,not_required,,,non_binding,,評定を出願要件としないことを文面で確認。数値は非必須表現のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,全体の学習成績概評A段階,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,全体の評定平均値3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値4.3以上かつ学修成績概評A。,required,43,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,公開ページに基準の記載なし。詳細は高校進路指導部等で確認。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,出願資格として評定基準なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,出願資格の選択肢の一つとして全体4.0以上＋数学・理科履修。必須一律ではない。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,出願資格区分により全体の学習成績の状況4.0以上等。活動実績・資格等による要件区分あり。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,募集枠別の基準あり（公式選抜要項参照）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,募集要項に定める学校推薦要件を満たすこと。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,国・数・理・英・情の5教科のうち少なくとも3教科が各4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,外国語（英語）の学習成績の状況4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,学業成績が優秀な者（数値基準なし）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,学業成績優秀であること（数値基準の明記なし）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績の状況による数値基準なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績の状況の数値基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績・人物ともに特に優れる者（数値基準は要項確認）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A、課外活動、優れた能力・資格、ものづくり等への取組のいずれか,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A又はB、指定英語外部試験の基準を満たす。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A段階（全体4.3以上相当）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,学習成績概評A段階（全体評定平均5.0～4.3）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,学習成績概評B以上＋指定共通テスト,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評B以上＋数学Ⅲ・物理履修,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,対象校に通知,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,専門教育を主とする学科等の出身者で学習成績概評A又はB、入学後に正業に就く意思がある者。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,指定校へ通知,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,数値による評定要件なし。学業成績及び人物が優秀であることを要する。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準なし（高等学校の学業成績が優秀であること）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（2027年度入試要項の出願資格に数値基準の記載なし）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学I・II・A・Bをすべて履修。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,数学の学習成績の状況の平均または理科の所定科目のうち1科目の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,明示的な数値基準なし（学業成績・人物ともに優秀であること）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（調査書を選抜で点数化）,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,明示的な数値基準なし（高等学校の成績が優秀であることを選抜基準とする）。,not_required,,,no_safe_overall_floor,,高等学校成績は選抜基準であり出願条件ではないことが原値に明示されている
+0.1,明示的な数値基準は公式公開ページ上で確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,調査書の全体の学習成績の状況3.0以上,required,30,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況が概ね4.3以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,調査書の全体の評定平均値4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の評定平均値4.3以上。,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績概評がA,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の学習成績概評がA段階,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の数学および理科の学習成績の状況がともに4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の英語・国語・数学の学習成績の状況の平均4.0以上（簿記・財務会計Ⅰの両科目履修者は両科目の成績を数学に代替可）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,高校の成績による出願基準は公式入試ガイド上で確認されない。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: non_numeric_condition）
+0.1,2026年度参考：全体の学習成績の状況4.3以上,unknown,,,historical,,公開情報または現年度条件を確認できない。数値は過年度情報のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,3.3以上、または数学検定準1級等,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,3年次1学期終了時の評定平均値4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,4.0以上 または「国語」「地理歴史」「公民」「外国語」のうち3教科平均4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,4.2以上,required,42,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,4段階評価はGPA換算2.5以上、3段階評価はGPA換算2.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,A又はデータサイエンスへの強い関心・優れた能力,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,A又は専門分野に対する優れた能力,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,A又は舞踊で特に優れた能力・意欲,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,A又は音楽で特に優れた能力・意欲,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,A推薦又はB推薦のいずれかの成績要件を満たすこと（A：全体3.8以上かつ数学・理科・英語各4.3以上、B：全体4.0以上）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,A＋志望言語文化分野で優れた成績・意欲,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,A＋教育科学又は子ども学への強い意欲,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,IB日本語A 4点以上、IB科目全体で5点以上の科目が1つ以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,IB資格の全体成績・科目要件あり。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,IB資格の学科別成績要件あり。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,I型は全体の学習成績の状況4.3以上（II型は募集要項所定要件）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,Unknown,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,Unknown（2027年度公式動的要項本文の評定条件を直接抽出できず、再監査対象）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,Unknown（学校推薦型固有の評定基準は2027年度一般公開資料では確認できない）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,Unknown（指定校ごとの推薦基準は対象校への個別案内で一般非公開）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,①全体3.7以上かつ外国語（英語）3.9以上 または ②全体3.7以上かつ数学3.9以上（数学I・II・A・B・Cを履修/履修中）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,①全体3.9以上 または ②全体3.6以上かつ数学3.9以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,①全体の学習成績の状況4.0以上、または②全体3.8以上かつ数学・理科・情報それぞれ4.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,クラス成績上位5％程度以内、または指定資格要件,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,不明（2027年度詳細学生募集要項未公表）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,不明（2027年度詳細要項の数値基準をこの再監査で構造化せず、推測しない）。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,不明（資格・地域・専門科目要件あり）,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: unknown）
+0.1,保健体育の学習成績の状況4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,全体3.3以上,required,33,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.5以上、かつ国語4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上、かつ国語・地理歴史/公民・外国語3教科平均4.0以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上、かつ理科・数学4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上、かつ英語4.0以上。CEFR B1相当以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.5以上、または全体3.3以上＋指定英語資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上、または全体3.3以上＋指定資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上、または指定2科目以上4.0以上、または指定資格保有のいずれか,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上、国語・数学・英語のいずれか4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上。小論文受験者はさらに国語/地歴/公民/数学/理科/外国語/家庭のいずれか1教科4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上かつ英語3.8以上、または指定英語資格のいずれか,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.5以上＋所定の運動特技実績,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.5以上＋美術で優れた能力,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.5以上＋音楽で優れた能力,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.6以上 かつ 数学・理科とも3.9以上,required,36,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.7以上,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.7以上 かつ 数学・理科・外国語（英語）のうち2教科3.8以上,required,37,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.7以上 かつ 英検CSE1728相当以上,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体3.7以上、かつ数学Ⅰ・Ⅱ・Ⅲ・A・B・Cおよび情報Ⅰの評定平均4.0以上。,required,37,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.7以上。さらに①数学Ⅰ・数学A各4.0以上、または②数学Ⅰ・Ⅱ・A・Bの評定平均3.2以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.8以上、かつ理科4.0以上。英語CEFR A2-3相当,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.8以上かつ国語4.0以上,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.8以上かつ社会科平均3.8以上（社会課題解決活動・社会に関する自主研究成果がない場合は全体3.8以上かつ社会科平均4.3以上）,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体3.8以上＋英語4.3以上又は所定の外部英語資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体3.9以上 かつ 数学・理科とも3.9以上。加えて英検CSE1855相当以上,required,39,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上、かつ外国語/英語1教科と他指定1教科の平均4.2以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上、かつ外国語/英語1教科と理科/数学1教科の平均4.2以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上、または全体3.8以上かつ数学・理科・情報の指定成績基準を満たすこと（公開2027情報では各4.5以上）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上、または学業以外の優れた活動歴＋全体3.5以上。活動歴では研究発表・懸賞論文分野を特に重視。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上、数学4.0以上、物理・生物・化学のうち1科目以上が4.0以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上かつ数学4.3以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.0以上かつ数学Ⅰ・Ⅱ・Ⅲ・A・B・C・情報Ⅰの評定平均4.5以上、または同4.3以上＋所定資格・大会実績。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.0以上＋数学の所定条件,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.2以上、かつ①生物＋他理科1科目4.4以上、②日本生物学オリンピック一次選抜通過、③日本学生科学賞個人受賞、または同等実績のいずれか。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体4.2以上、かつ数学4.5以上,required,42,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体4.3以上、または学業以外の優れた活動歴＋全体4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績4.2以上。,required,42,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況3.0以上、または数学・外国語（英語）の両教科がそれぞれ3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.0以上、または数検2級以上・英検CSE1728以上・TOEIC L&R400以上のいずれか1つ以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.2以上、かつ理科の学習成績の状況3.5以上。,required,32,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ3年間を通して全教科・科目で評定3未満なし。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ国語の学習成績の状況4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ地理歴史・公民の学習成績の状況がそれぞれ4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ外国語の学習成績の状況4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ外国語・国語の学習成績の状況がそれぞれ3.8以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ数学の学習成績の状況3.5以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ数学の学習成績の状況4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ数学・理科の学習成績の状況がそれぞれ4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、かつ芸術（書道）または学校設定科目（書道）の学習成績の状況4.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上、または大学指定英語資格・検定スコア条件を満たすこと。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上、家庭科4.0以上、職業教育に関する所定の単位要件あり,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上、農業・工業・情報の学習成績の状況4.0以上、職業教育に関する所定の単位要件あり,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上。 さらに数学・理科の学習成績の状況がそれぞれ3.8以上。,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.5以上。国語・地歴公民・数学・理科・外国語・情報のいずれかの科目で評定5を含むこと。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上かつ外国語/英語3.8以上、またはCEFR B1以上の英語資格・検定。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況3.5以上が望ましい,not_required,,,non_binding,,評定を出願要件としないことを文面で確認。数値は非必須表現のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,全体の学習成績の状況3.8以上、かつ数学4.0以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.8以上、かつ数学・理科それぞれ4.0以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況3.8以上、かつ英語資格・検定がCEFR A2以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況4.0以上、かつ3年間を通して全教科・科目で評定3未満なし。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上、かつ化学の学習成績の状況4.0以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上、かつ国語・数学または商業・外国語の3教科平均4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況4.0以上、かつ数学・理科の学習成績の状況4.5以上。さらに特筆すべき資質・活動実績等を示すか、全体の学習成績の状況4.5以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上、かつ数学・理科・外国語がそれぞれ4.0以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上、または外国語・国語・地歴公民の平均4.3以上、または外国語・国語・数学の平均4.3以上。加えて所定の外部外国語検定要件あり。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況4.0以上、または英語・国語・地歴公民の平均4.3以上、または英語・国語・数学の平均4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の学習成績の状況4.0以上。物理・化学・生物のうち所定の2科目についても学習成績の状況4.0以上。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.0以上（出願区分により外国語4.3以上等の追加条件あり）。,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,全体の学習成績の状況4.2以上（高等専門学校等は募集要項所定の換算基準2.4以上等）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,全体の学習成績の状況4.3以上,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況4.5以上。,required,45,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況（評定平均値）3.8以上。IBは総合点34点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,全体の学習成績の状況（評定平均値）4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の学習成績の状況：普通科・理数科3.7以上、専門教育を主とする学科4.2以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,全体の学習成績条件の数値指定なし,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: non_numeric_condition）
+0.1,全体の評定平均4.3以上（高校1年～3年1学期/前期、または中等教育学校4年～6年1学期/前期）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全体の評定平均値 3.8 以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値3.4以上。,required,34,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全体の評定平均値3.5以上（対象期間・例外規定あり）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: other_complex_numeric）
+0.1,全体の評定平均値3.8以上かつ外国語4.3以上、または全体3.5以上かつ指定英語資格基準のいずれかを満たすこと。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,全科目の評定平均値3.6以上（第1学年～第3学年前期まで）。,required,36,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,全科目の評定平均値3.6以上（第1学年～第3学年第1学期または前期）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,公開Web上の募集概要では数値評定基準の明示なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,公開要項に数値評定基準なし。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,募集要項所定の出願資格を満たすこと（研究活動要件等あり）,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,募集要項所定の推薦要件を満たすこと。,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,原則として全体の学習成績の状況4.0以上（全国規模以上の顕著な実績を有する場合の別要件あり）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,原則：全体および数学・理科・外国語が各4.0以上。指定校出身者は各3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,受験資格としての評定基準値なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: non_numeric_condition）
+0.1,国内通常課程では数学・理科・英語3教科の全履修科目の学習成績の状況3.8以上。海外教育課程等の代替資格あり。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語、地理歴史または公民の教科の学習成績の状況がいずれも3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,国語の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・地歴/公民・数学・理科・外国語の学習成績の状況が各3.5以上、うち2科目以上4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・外国語/英語・地理歴史・公民のうち3.7以上が2教科以上、または小学校入学年齢以降に日本以外で6か月以上継続滞在。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,国語・外国語/英語・地理歴史・芸術のうち3.7以上が2教科以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・外国語/英語・地理歴史・芸術・数学・情報のうち、学習成績の状況3.7以上の教科が2教科以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・外国語/英語・数学・情報のうち3.7以上が2教科以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・外国語（英語）とも3.3以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・数学・外国語・理科・地理歴史/公民の学習成績の状況平均4.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・数学・外国語・理科・地理歴史/公民の指定計算による学習成績の状況4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・数学・情報・外国語・理科・地理歴史/公民の学習成績の状況平均4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,国語・英語・地理歴史公民のいずれかの評定平均値3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,在学期間（第3学年は1学期まで）を通して全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,基礎となる学校推薦型選抜区分の評定要件に従う,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,外国語4.0以上、または指定英語資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,外国語・理科・数学3教科平均、主要5教科相当平均、全体の学習成績の状況のいずれかが3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,外国語（英語）3.9以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,外国語（英語）・国語・数学・情報のうち、いずれか2つの学習成績の状況4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,外国語（英語）・数学・化学の各評定平均値の平均が3.6以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,外国語（英語）・数学・理科の学習成績の状況が各3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,女子枠は4.0条件の対象外,not_required,,,non_admission_numeric,,評定を出願要件としないことを文面で確認。数値は出願条件以外の用途のため検索不使用（既存監査分類: non_admission_or_inoperative_numeric）
+0.1,学業成績の5段階評価を出願要件としない。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: non_numeric_condition）
+0.1,学科所定の評定基準（例：全体3.8以上・数学4.4以上）又は自然科学の特記すべき経験,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,学科所定の評定基準（例：全体3.8以上・理科又は数学4.2以上）又は自然科学の特記すべき経験,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,学習成績の状況3.3以上。,required,33,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,学習成績の状況4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,学習成績の状況4.3以上,required,43,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,学習成績の状況が一定レベル以上であることが条件。具体的な数値基準は一般公開されていない。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績の状況による出願要件なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績の状況の要件なし。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: explicit_no_numeric_threshold）
+0.1,学習成績の状況：全体3.5以上かつ英語に関する教科3.8以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学習成績の状況：全体3.6以上かつ音楽4.0以上,required,36,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学習成績の状況：全体3.8以上かつ英語4.2以上,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学習成績の状況：全体4.0以上かつ国語に関する教科4.3以上,required,40,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学習成績の状況：美術・デザイン系学科は全体3.5以上、その他は全体3.5以上かつ美術関連4.0以上,required,35,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,学習成績概評A、課外活動でのリーダー経験、特筆すべき成果のいずれか,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A又はB。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評A段階かつ外国語の学習成績の状況4.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,学習成績概評A（特に専門教科の成績が優れていること）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,学習成績概評B以上＋数学4.3以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,学習成績概評B段階以上、かつ国語・外国語の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,専門高校推薦の学科別要件を満たす,unknown,,,unknown,,公開情報または現年度条件を確認できない（既存監査分類: non_numeric_condition）
+0.1,成績概評A、または国・数・理・英・情のうち3教科各4.2以上、または3教科各4.0以上＋高度な情報資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,指定3科目（国語、外国語、数学/地歴/公民/理科/情報から1科目）の評定平均値3.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,指定数学4科目等を履修し評定4.0以上の現役～1浪、または日商簿記2級以上は英語要件B、それ以外はA。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,指定校：学習成績の状況3.8以上。,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,数値による評定要件は2027年度入学者選抜要項では明示なし。特に数学・理科の成績が優秀であることを要求。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の学習成績基準は設定されていない。英語資格または科学オリンピック等の好成績が必要。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の評定基準なし。学業を含む多様な活動成果を出願資格として自己評価できること。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値の評定基準は2027年度総合型選抜の出願資格として確認できず。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: unresolved）
+0.1,数値基準なし。理科又は畜産・食品関連の研究活動と成果発表経験が必須,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準なし。理科又は農林業・環境・食品関連の研究活動と成果発表経験が必須,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準なし（『成績優秀にして大学専門教育に適する者』）。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準なし（『成績優秀にして大学専門教育に適する者』）。2027年度から従来の全体3.5以上の数値要件を削除。,required,,,historical,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし。数値は過年度情報のため検索不使用（既存監査分類: nonbinding_or_historical_numeric）
+0.1,数値基準の明示なし。学習成績が優秀で、学校長から高い評価を得ていること。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値基準の明示なし（高等学校長が学業成績・人物が優秀と推薦できること）,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定基準の明示なし。本学一般入学試験獣医学科に合格する程度の学力を有すると学校長が推薦できること。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,数値評定条件なし（英語要件Aを満たすこと）。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: explicit_no_numeric_threshold）
+0.1,数学3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学4.0以上かつ理科3.8以上、または在学中に数学・理科に関する特筆すべき活動歴があること。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学I・A、物理基礎をすべて履修。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,数学I・II・A・B、物理基礎・物理をすべて履修。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,数学I・II・A・Bをすべて履修し数学の学習成績4.0以上、または物理基礎・物理の各評定平均4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学I・II・III・A・B・Cのうち4科目以上＋物理基礎・物理のうち1科目以上、または理数数学I・II・理数物理を履修。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）
+0.1,数学I・II・III・A・B・Cをすべて履修し評定平均3.6以上、または物理基礎・物理を履修し評定平均3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学と理科の学習成績の状況の平均が4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学に関するすべての科目の評定平均値4.5以上、かつ国語に関するすべての科目4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学の学習成績4.8以上、または数学活動実績・科目等履修・数学/情報オリンピック・IT資格等の代替条件。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学の学習成績の状況4.3以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科の学習成績がともに4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科の学習成績の状況が各4.3以上、または募集要項所定の研究・科学活動・英語資格等の要件のいずれかを満たすこと。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,数学・理科の評定平均値3.5以上等の要件を満たす女子。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・国語・外国語の学習成績の状況の平均4.0以上、かつ数学4.1以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・外国語（英語）のうち2教科3.8以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・外国語（英語）の各評定平均値3.5以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・英語3教科の全履修科目の学習成績の状況3.8以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学・理科・英語3教科の全履修科目の学習成績の状況4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,数学及び理科の各評定平均値4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,日本の高等学校卒業・卒業見込みの者は、英語の評定平均値4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,明示的な最低評定値なし（第1次実施時は評定平均値を評価）。,not_required,,,no_safe_overall_floor,,評定を出願要件としないことを文面で確認（既存監査分類: non_numeric_condition）
+0.1,最終学年第1学期までの調査書全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,物理・化学・数学・外国語の学習成績の状況の平均4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,物理・化学・生物のいずれか1科目の学習成績の状況4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,物理関係科目・その他理科・数学・外国語の学習成績の状況の平均4.0以上、かつ物理関係科目4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,現役の普通科等では、全体・外国語・数学・指定理科2分野の学習成績の状況がいずれも3.8以上。理数科も対応科目が各3.8以上。2026年3月以前卒業者等は2026年1月共通テストの外国語・数学・理科2科目計390/800点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,現役（2026年4月1日～2027年3月31日卒業・卒業見込み）には評定数値基準なし。2025年4月1日～2026年3月31日卒業者は全体の学習成績の状況3.7以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: branch_condition）
+0.1,理科の学習成績の状況4.0以上、かつ物理・化学・生物・地学のうち2科目を履修。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,理科・数学・外国語の学習成績の状況の平均4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,科学賞/ものづくり/ロボットコンテスト/技能五輪等の実績が必須。国内高校ルートでは全体3.8以上かつ数学・物理各4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,第3学年第1学期末（2学期制は前期末）までの外国語（英語）・国語・数学・情報のうち、いずれか2つの学習成績の状況4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,美術・国語・地理歴史・英語の4教科のうち3教科の学習成績の状況の平均3.4以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,芸術及び他のいずれか1教科の学習成績の状況がそれぞれ4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,英語の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,英語または数学の学習成績の状況4.0以上。数学で満たす場合は数学I・A・II・Bの4科目修得,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,英語・数学・物理の学習成績がそれぞれ4.0以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定4.0以上の日本の高校現役～1浪は英語要件B、それ以外はA。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定4.3以上の日本の高校現役～1浪は英語要件B、それ以外は英語要件A。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,評定基準の明示なし。独自に考えたコンピュータプログラムを作成し、その内容を第三者に説明できることが出願条件。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,評定基準の明示なし（出願資格④の対象は先進工学部・建築学部・情報学部）。,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: explicit_no_numeric_threshold）
+0.1,評定平均値3.5以上,required,35,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況3.6以上,required,36,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況3.7以上,required,37,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況3.8以上、かつ外国語4.5以上または所定英語資格,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,調査書の全体の学習成績の状況4.1以上,required,41,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の学習成績の状況（評定平均値）3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の全体の評定平均値3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書の学習成績概評A段階。IB資格出願者は国際バカロレア総合成績36点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の学習成績概評A段階。IB資格出願者は国際バカロレア総合成績38点以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: non_numeric_condition）
+0.1,調査書の英語・数学・理科のうち少なくとも1教科の学習成績の状況4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の英語・数学・理科・情報の学習成績の状況の平均4.0以上,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: subject_specific_condition）
+0.1,調査書の評定平均値4.0以上,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査書全体の学習成績の状況3.8以上、かつ数学・理科・英語の学習成績の状況がいずれも4.3以上。,required,38,1,safe_overall_with_additional_conditions,1,監査済み完全一致。現在年度の全体評定下限を安全に保持（追加評定条件あり）
+0.1,調査書全体の学習成績の状況3.8以上、または指定する英語資格・検定基準を満たし調査書全体3.5以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: or_condition）
+0.1,調査書全体の評定平均値3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,調査票の全体の評定平均3.8以上,required,38,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,資格・教育課程に応じた成績証明書等,review_required,,,ambiguous,,出願要件か選考材料か、または数値以外の要件有無を安全に二値化できない（既存監査分類: non_numeric_condition）
+0.1,農業高校：全体の学習成績の状況4.0以上、かつ6教科（外国語・数学・国語・理科・地理歴史・公民）の学習成績平均4.5以上。農業大学校：4段階評価はGPA換算3.0以上、3段階評価はGPA換算2.4以上。,required,,,no_safe_overall_floor,,評定・学習成績を出願条件として明示。安全な単一の全体評定下限なし（既存監査分類: overall_and_subject_compound）
+0.1,高等学校等の全体の学習成績の状況4.0以上。,required,40,1,safe_simple_overall,0,監査済み完全一致。現在年度の全体評定下限を安全に保持
+0.1,高等学校等在学中に建築に関する設計競技や建築テーマの探究コンクール等へ個人で応募した実績。,not_applicable,,,not_applicable,,評定条件として適用しない表現（既存監査分類: non_numeric_condition）

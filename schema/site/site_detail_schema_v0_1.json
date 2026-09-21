@@ -4,7 +4,7 @@
   "title": "Early Admissions Site detail record v0.1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["site_data_schema_version", "identity", "admission", "gpa_derived", "academic_field_derived", "english_requirement_derived", "research_requirements"],
+  "required": ["site_data_schema_version", "identity", "admission", "gpa_derived", "grade_requirement_derived", "academic_field_derived", "english_requirement_derived", "research_requirements"],
   "properties": {
     "site_data_schema_version": {"const": "0.1"},
     "identity": {"$ref": "#/$defs/identity"},
@@ -25,6 +25,22 @@
       "required": ["admission_rowid", "raw_value", "gpa_min_tenths", "gpa_min", "gpa_min_inclusive", "gpa_max_tenths", "gpa_max", "gpa_max_inclusive", "gpa_scale", "metric_scope", "gpa_condition_type", "parse_status", "search_disposition", "source_value_status", "has_subject_condition", "has_and_condition", "has_or_condition", "has_branch_condition", "parser_contract_version"],
       "propertyNames": {"enum": ["admission_rowid", "raw_value", "gpa_min_tenths", "gpa_min", "gpa_min_inclusive", "gpa_max_tenths", "gpa_max", "gpa_max_inclusive", "gpa_scale", "metric_scope", "gpa_condition_type", "parse_status", "search_disposition", "source_value_status", "has_subject_condition", "has_and_condition", "has_or_condition", "has_branch_condition", "parser_contract_version"]},
       "additionalProperties": {"type": ["string", "number", "boolean", "null"]}
+    },
+    "grade_requirement_derived": {
+      "type": "object", "additionalProperties": false,
+      "required": ["admission_rowid", "raw_value", "grade_requirement_status", "overall_gpa_min_tenths", "overall_gpa_min_inclusive", "overall_gpa_status", "additional_grade_conditions", "parse_status", "mapping_contract_version", "review_note"],
+      "properties": {
+        "admission_rowid": {"type": "integer"},
+        "raw_value": {"type": ["string", "null"]},
+        "grade_requirement_status": {"enum": ["required", "not_required", "review_required", "unknown", "not_applicable", "unmapped"]},
+        "overall_gpa_min_tenths": {"type": ["integer", "null"], "minimum": 0, "maximum": 50},
+        "overall_gpa_min_inclusive": {"type": ["boolean", "null"]},
+        "overall_gpa_status": {"enum": ["safe_simple_overall", "safe_overall_with_additional_conditions", "no_safe_overall_floor", "historical", "non_binding", "non_admission_numeric", "ambiguous", "unknown", "not_applicable", "unmapped"]},
+        "additional_grade_conditions": {"type": ["boolean", "null"]},
+        "parse_status": {"enum": ["exact_crosswalk", "missing", "unmapped"]},
+        "mapping_contract_version": {"const": "0.1"},
+        "review_note": {"type": ["string", "null"]}
+      }
     },
     "academic_field_derived": {
       "type": "object", "additionalProperties": false,

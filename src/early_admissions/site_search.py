@@ -63,6 +63,8 @@ class SearchRequest:
     english_requirement_status: tuple[str, ...] = ()
     gpa_tenths: int | None = None
     gpa_mode: str = "all"
+    grade_requirement_status: str | None = None
+    overall_gpa_tenths: int | None = None
 
     def validate(self) -> None:
         if self.gpa_mode not in GPA_MODES:
@@ -71,6 +73,13 @@ class SearchRequest:
             raise SiteSearchError("GPA mode safe/review requires a GPA value.")
         if self.gpa_tenths is not None and not 0 <= self.gpa_tenths <= 50:
             raise SiteSearchError("GPA tenths must be between 0 and 50.")
+        if self.grade_requirement_status not in {None, "required"}:
+            raise SiteSearchError("Site grade requirement filter only accepts required.")
+        if self.overall_gpa_tenths is not None:
+            if not 0 <= self.overall_gpa_tenths <= 50:
+                raise SiteSearchError("Overall GPA tenths must be between 0 and 50.")
+            if self.grade_requirement_status != "required":
+                raise SiteSearchError("Overall GPA search requires grade requirement.")
         for name in (*MULTI_VALUE_FIELDS, "academic_field_group", "academic_field_mapping_status", "english_requirement_status", "prefecture_membership"):
             values = getattr(self, name)
             if not isinstance(values, tuple) or any(
@@ -168,6 +177,22 @@ def _matches(row: Mapping[str, Any], request: SearchRequest) -> bool:
             return False
         if request.gpa_mode == "review" and not (
             safe or row["gpa_parse_status"] == "conditional_review"
+        ):
+            return False
+    if (
+        request.grade_requirement_status is not None
+        and row["grade_requirement_status"] != request.grade_requirement_status
+    ):
+        return False
+    if request.overall_gpa_tenths is not None:
+        minimum = row["overall_gpa_min_tenths"]
+        if minimum is None:
+            return False
+        if request.overall_gpa_tenths < minimum:
+            return False
+        if (
+            request.overall_gpa_tenths == minimum
+            and row["overall_gpa_min_inclusive"] is not True
         ):
             return False
     return True

@@ -25,7 +25,7 @@ from .structured_search import search_database
 
 
 SITE_DATA_SCHEMA_VERSION = "0.1"
-SITE_DATA_BUILDER_VERSION = "0.4.0"
+SITE_DATA_BUILDER_VERSION = "0.5.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
 DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_1")
@@ -211,6 +211,13 @@ class SiteDataBuildPipeline:
             gpa = {row["admission_rowid"]: dict(row) for row in connection.execute(
                 "SELECT * FROM admission_search_gpa ORDER BY admission_rowid"
             )}
+            grade_requirement = {
+                row["admission_rowid"]: dict(row)
+                for row in connection.execute(
+                    "SELECT * FROM admission_search_grade_requirements "
+                    "ORDER BY admission_rowid"
+                )
+            }
             academic = {row["admission_rowid"]: dict(row) for row in connection.execute(
                 "SELECT * FROM admission_search_academic_fields ORDER BY admission_rowid"
             )}
@@ -239,7 +246,8 @@ class SiteDataBuildPipeline:
                 "SELECT * FROM academic_field_taxonomy ORDER BY display_order"
             )]
             search_rows_raw, details = self._project(
-                admissions, gpa, academic, english, prefecture, prefecture_memberships, groups, children
+                admissions, gpa, grade_requirement, academic, english,
+                prefecture, prefecture_memberships, groups, children
             )
             build_id = self._build_id(before_hash, metadata)
             search_count = _shard_count(
@@ -359,6 +367,9 @@ class SiteDataBuildPipeline:
             "database_schema_version": manifest["database_schema_version"],
             "unified_contract_version": manifest["unified_contract_version"],
             "gpa_parser_contract_version": manifest["gpa_search"]["parser_contract_version"],
+            "grade_requirement_mapping_contract_version": manifest[
+                "grade_requirement_search"
+            ]["mapping_contract_version"],
             "academic_field_mapping_contract_version": manifest["academic_field_search"]["mapping_contract_version"],
             "academic_field_taxonomy_version": manifest["academic_field_search"]["taxonomy_version"],
             "english_requirement_parser_contract_version": manifest["english_requirement_search"]["parser_contract_version"],
@@ -373,6 +384,7 @@ class SiteDataBuildPipeline:
         self,
         admissions: Sequence[Mapping[str, Any]],
         gpa: Mapping[int, Mapping[str, Any]],
+        grade_requirement: Mapping[int, Mapping[str, Any]],
         academic: Mapping[int, Mapping[str, Any]],
         english: Mapping[int, Mapping[str, Any]],
         prefecture: Mapping[int, Mapping[str, Any]],
@@ -385,9 +397,16 @@ class SiteDataBuildPipeline:
         for source in admissions:
             admission = dict(source)
             rowid = admission["admission_rowid"]
-            if rowid not in gpa or rowid not in academic or rowid not in english or rowid not in prefecture:
+            if (
+                rowid not in gpa
+                or rowid not in grade_requirement
+                or rowid not in academic
+                or rowid not in english
+                or rowid not in prefecture
+            ):
                 raise SiteDataBuildError(f"Missing derived parent for admission_rowid={rowid}")
             gpa_row = dict(gpa[rowid])
+            grade_row = dict(grade_requirement[rowid])
             academic_row = dict(academic[rowid])
             english_row = dict(english[rowid])
             prefecture_row = dict(prefecture[rowid])
@@ -418,6 +437,25 @@ class SiteDataBuildPipeline:
                         else None
                     ),
                     "gpa_source_value_status": gpa_row["source_value_status"],
+                    "grade_requirement_status": grade_row["grade_requirement_status"],
+                    "overall_gpa_min_tenths": grade_row["overall_gpa_min_tenths"],
+                    "overall_gpa_min_inclusive": (
+                        _bool_value(
+                            grade_row["overall_gpa_min_inclusive"],
+                            "overall_gpa_min_inclusive",
+                        )
+                        if grade_row["overall_gpa_min_inclusive"] is not None
+                        else None
+                    ),
+                    "overall_gpa_status": grade_row["overall_gpa_status"],
+                    "additional_grade_conditions": (
+                        _bool_value(
+                            grade_row["additional_grade_conditions"],
+                            "additional_grade_conditions",
+                        )
+                        if grade_row["additional_grade_conditions"] is not None
+                        else None
+                    ),
                     "english_requirement_status": english_row["requirement_status"],
                     "english_requirement_parse_status": english_row["parse_status"],
                     "english_requirement_search_disposition": english_row["search_disposition"],
@@ -442,12 +480,16 @@ class SiteDataBuildPipeline:
             ):
                 if gpa_row[field] is not None:
                     gpa_row[field] = _bool_value(gpa_row[field], field)
+            for field in ("overall_gpa_min_inclusive", "additional_grade_conditions"):
+                if grade_row[field] is not None:
+                    grade_row[field] = _bool_value(grade_row[field], field)
             details.append(
                 {
                     "site_data_schema_version": SITE_DATA_SCHEMA_VERSION,
                     "identity": dict(zip(("source_dataset", "source_version", "record_id"), key)),
                     "admission": admission,
                     "gpa_derived": gpa_row,
+                    "grade_requirement_derived": grade_row,
                     "academic_field_derived": {
                         **academic_row,
                         "groups": group_rows,
@@ -464,6 +506,9 @@ class SiteDataBuildPipeline:
             "site_data_schema_version": SITE_DATA_SCHEMA_VERSION,
             "builder_version": SITE_DATA_BUILDER_VERSION,
             "gpa_parser_contract_version": metadata["gpa_parser_contract_version"],
+            "grade_requirement_mapping_contract_version": metadata[
+                "grade_requirement_mapping_contract_version"
+            ],
             "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
             "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
             "english_requirement_parser_contract_version": metadata["english_requirement_parser_contract_version"],
@@ -644,6 +689,8 @@ class SiteDataBuildPipeline:
                     raise SiteDataBuildError(f"Detail raw equality failed for {logical_key(search)} field {field}")
             if search["gpa_requirement"] != detail["gpa_derived"]["raw_value"]:
                 raise SiteDataBuildError("GPA raw equality failed.")
+            if search["gpa_requirement"] != detail["grade_requirement_derived"]["raw_value"]:
+                raise SiteDataBuildError("Grade-requirement raw equality failed.")
             if search["academic_field"] != detail["academic_field_derived"]["raw_value"]:
                 raise SiteDataBuildError("Academic-field raw equality failed.")
             if search["prefecture_raw"] != detail["admission"]["prefecture"]:
@@ -689,6 +736,7 @@ class SiteDataBuildPipeline:
             "raw_and_provenance_equality": "passed",
             "null_boolean_tristate_semantics": "passed",
             "gpa_integer_tenths_preserved": "passed",
+            "grade_requirement_exact_crosswalk_preserved": "passed",
             "academic_field_groups_preserved": "passed",
             "research_duplicate_multiplicity": "passed",
             "detail_routes_complete": "passed",
@@ -726,7 +774,25 @@ class SiteDataBuildPipeline:
         for value in (30, 35, 38, 40, 45):
             result = search_rows(rows, SearchRequest(gpa_tenths=value, gpa_mode="safe"), limit=0)
             gpa_counts[f"{value / 10:.1f}"] = result.summary.total_matched_rows
-        return {"status": "passed", "queries": len(results), "results": results, "gpa_safe_match_counts": gpa_counts, "comparison": "logical-key set and summary equality"}
+        grade_required = search_rows(
+            rows,
+            SearchRequest(grade_requirement_status="required"),
+            limit=0,
+        ).summary.total_matched_rows
+        overall_38 = search_rows(
+            rows,
+            SearchRequest(
+                grade_requirement_status="required", overall_gpa_tenths=38
+            ),
+            limit=0,
+        ).summary.total_matched_rows
+        return {
+            "status": "passed", "queries": len(results), "results": results,
+            "gpa_safe_match_counts": gpa_counts,
+            "grade_requirement_required_rows": grade_required,
+            "overall_gpa_3_8_rows": overall_38,
+            "comparison": "logical-key set and summary equality",
+        }
 
     def _manifest(
         self,
@@ -744,6 +810,10 @@ class SiteDataBuildPipeline:
     ) -> dict[str, Any]:
         source_counts = Counter(row["source_dataset"] for row in search_rows_data)
         gpa_counts = Counter(row["gpa_search_disposition"] for row in search_rows_data)
+        grade_status_counts = Counter(
+            row["grade_requirement_status"] for row in search_rows_data
+        )
+        grade_overall_counts = Counter(row["overall_gpa_status"] for row in search_rows_data)
         mapping_counts = Counter(row["academic_field_mapping_status"] for row in search_rows_data)
         prefecture_mapping_counts = Counter(row["prefecture_mapping_status"] for row in search_rows_data)
         prefecture_membership_counts = Counter(label for row in search_rows_data for label in row["prefecture_memberships"])
@@ -773,6 +843,12 @@ class SiteDataBuildPipeline:
                 "source_versions": json.loads(metadata["source_versions_json"]),
                 "input_csv_sha256": json.loads(metadata["input_csv_sha256_json"]),
                 "gpa_parser_contract_version": metadata["gpa_parser_contract_version"],
+                "grade_requirement_mapping_contract_version": metadata[
+                    "grade_requirement_mapping_contract_version"
+                ],
+                "grade_requirement_crosswalk_sha256": metadata[
+                    "grade_requirement_crosswalk_sha256"
+                ],
                 "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
                 "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
                 "academic_field_crosswalk_sha256": metadata["academic_field_crosswalk_sha256"],
@@ -782,6 +858,9 @@ class SiteDataBuildPipeline:
                 "prefecture_taxonomy_version": metadata["prefecture_taxonomy_version"],
                 "prefecture_crosswalk_sha256": metadata["prefecture_crosswalk_sha256"],
             },
+            "grade_requirement_search": dict(
+                sqlite_manifest["grade_requirement_search"]
+            ),
             "sharding": {
                 "algorithm": "sha256(logical-key JSON) modulo next-power-of-two(data-bytes/target-bytes)",
                 "search_target_bytes": SEARCH_TARGET_BYTES,
@@ -799,6 +878,10 @@ class SiteDataBuildPipeline:
                 "universities": len({row["university"] for row in search_rows_data}),
                 "fallback_rows": sum(row["fallback_previous_year"] is True for row in search_rows_data),
                 "gpa_dispositions": dict(sorted(gpa_counts.items())),
+                "grade_requirement_statuses": dict(sorted(grade_status_counts.items())),
+                "grade_requirement_overall_statuses": dict(
+                    sorted(grade_overall_counts.items())
+                ),
                 "academic_field_mapping_statuses": dict(sorted(mapping_counts.items())),
                 "academic_field_group_memberships": dict(sorted(group_counts.items())),
                 "prefecture_mapping_statuses": dict(sorted(prefecture_mapping_counts.items())),
@@ -850,6 +933,17 @@ class SiteDataBuildPipeline:
             lines.append(f"- GPA {value}: {count}")
         lines.extend(
             [
+                "",
+                "## Grade-requirement regression",
+                "",
+                "- Reviewed requirement-only rows: "
+                f"{qa['grade_requirement_required_rows']}",
+                "- Reviewed overall GPA 3.8 rows: "
+                f"{qa['overall_gpa_3_8_rows']}",
+                "- Requirement statuses: "
+                f"`{json.dumps(counts['grade_requirement_statuses'], ensure_ascii=False, sort_keys=True)}`",
+                "- Overall numeric usability: "
+                f"`{json.dumps(counts['grade_requirement_overall_statuses'], ensure_ascii=False, sort_keys=True)}`",
                 "",
                 "## Academic-field regression",
                 "",

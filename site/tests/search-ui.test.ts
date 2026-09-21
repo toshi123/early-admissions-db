@@ -35,6 +35,9 @@ function row(update: Partial<SearchRow> = {}): SearchRow {
     english_requirement_status: "not_applicable", english_requirement_parse_status: "missing", english_requirement_search_disposition: "not_searchable",
     gpa_parse_status: "parsed_safe", gpa_search_disposition: "safe_numeric", gpa_min_tenths: 38, gpa_min_inclusive: true,
     gpa_max_tenths: null, gpa_max_inclusive: null, gpa_source_value_status: "current", application_start: "9月1日", application_end: "9月5日",
+    grade_requirement_status: "required", overall_gpa_min_tenths: 38,
+    overall_gpa_min_inclusive: true, overall_gpa_status: "safe_simple_overall",
+    additional_grade_conditions: false,
     fallback_previous_year: false, information_year: 2027, publication_status: null, detail_path: "details.json", ...update,
   };
 }
@@ -50,15 +53,17 @@ describe("search form live behavior", () => {
     expect(exact.errors).toEqual([]);
   });
 
-  it("holds an invalid intermediate GPA without running a misleading count", () => {
-    const draft = evaluateSearchDraft(emptyRequest(), options, "", "3.");
-    expect(draft.request.gpa_tenths).toBeNull();
+  it("holds an invalid intermediate overall GPA without running a misleading count", () => {
+    const request = emptyRequest(); request.grade_requirement_status = "required";
+    const draft = evaluateSearchDraft(request, options, "", "3.");
+    expect(draft.request.overall_gpa_tenths).toBeNull();
     expect(liveSearchResult([row()], draft)).toBeNull();
   });
 
   it("uses the same search result for live count and submitted results", () => {
     const rows = [row(), row({ record_id: "B", university: "京都大学" })];
-    const draft = evaluateSearchDraft(emptyRequest(), options, "東京大学", "3.8");
+    const request = emptyRequest(); request.grade_requirement_status = "required";
+    const draft = evaluateSearchDraft(request, options, "東京大学", "3.8");
     const live = liveSearchResult(rows, draft)!;
     expect(live.summary.total_matched_rows).toBe(1);
     expect(live.rows.map((item) => item.record_id)).toEqual(["A"]);
@@ -67,6 +72,23 @@ describe("search form live behavior", () => {
       floatingText: "1件・1大学",
       invalid: false,
     });
+  });
+
+  it("updates live counts for checkbox-only and reviewed numeric grade searches", () => {
+    const rows = [
+      row(),
+      row({
+        record_id: "SUBJECT", overall_gpa_min_tenths: null,
+        overall_gpa_min_inclusive: null, overall_gpa_status: "no_safe_overall_floor",
+        additional_grade_conditions: null,
+      }),
+      row({ record_id: "NONE", grade_requirement_status: "not_required" }),
+    ];
+    const request = emptyRequest(); request.grade_requirement_status = "required";
+    const checkboxDraft = evaluateSearchDraft(request, options, "", "");
+    expect(liveSearchResult(rows, checkboxDraft)?.summary.total_matched_rows).toBe(2);
+    const numericDraft = evaluateSearchDraft(request, options, "", "3.8");
+    expect(liveSearchResult(rows, numericDraft)?.summary.total_matched_rows).toBe(1);
   });
 
   it("does not expose a stale floating count for invalid drafts", () => {
@@ -121,15 +143,23 @@ describe("compact result cards", () => {
 
   it("keeps methods, conditions, and exclusive status distinct within one chip row", () => {
     const fixture = row({ english_requirement_status: "required", research_requirement_required: "Yes" });
-    expect(applicationConditionLabels(fixture)).toEqual(["英語資格", "研究業績"]);
+    expect(applicationConditionLabels(fixture)).toEqual(["評定", "英語資格", "研究業績"]);
     const html = compactResultCard(fixture, false, false);
     expect(html).toContain('class="result-chips" aria-label="選考方法・出願条件・専願併願"');
     expect(html).toContain('class="result-chip method-chip" aria-label="選考方法 面接"');
     expect(html).toContain('class="result-chip condition-chip" aria-label="出願条件 英語資格">条件：英語資格');
+    expect(html).toContain('class="result-chip condition-chip" aria-label="出願条件 評定">評定');
     expect(html).toContain('class="result-chip condition-chip" aria-label="出願条件 研究業績">条件：研究業績');
     expect(html).toContain('class="result-chip exclusive-chip" aria-label="専願・併願 専願">専願');
     expect(html.indexOf("method-chip")).toBeLessThan(html.indexOf("condition-chip"));
     expect(html.indexOf("condition-chip")).toBeLessThan(html.indexOf("exclusive-chip"));
+  });
+
+  it("shows the grade chip only for reviewed required rows", () => {
+    expect(compactResultCard(row(), false, false)).toContain('aria-label="出願条件 評定">評定');
+    for (const status of ["not_required", "review_required", "unknown", "unmapped", "not_applicable"] as const) {
+      expect(compactResultCard(row({ grade_requirement_status: status }), false, false)).not.toContain("出願条件 評定");
+    }
   });
 
   it.each([

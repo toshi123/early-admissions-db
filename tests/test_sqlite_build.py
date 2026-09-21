@@ -38,6 +38,9 @@ def prepare_unified_fixture(
         Path("docs/gpa_search_design_v0_1.md"),
         Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql"),
         Path("schema/sqlite/admission_search_gpa_schema_v0_1.sql"),
+        Path("docs/grade_requirement_search_design_v0_1.md"),
+        Path("schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql"),
+        Path("schema/grade_requirement/grade_requirement_crosswalk_v0_1.csv"),
         Path("schema/sqlite/admission_search_academic_field_schema_v0_1.sql"),
         Path("schema/academic_field/academic_field_taxonomy_v0_1.csv"),
         Path("schema/academic_field/academic_field_crosswalk_v0_1.csv"),
@@ -170,6 +173,12 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
                 )
                 self.assertEqual(
                     connection.execute(
+                        "SELECT COUNT(*) FROM admission_search_grade_requirements"
+                    ).fetchone()[0],
+                    2,
+                )
+                self.assertEqual(
+                    connection.execute(
                         "SELECT COUNT(*) FROM admission_search_gpa_rule_groups"
                     ).fetchone()[0],
                     0,
@@ -199,6 +208,23 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
                     "conditional_numeric": 0,
                     "do_not_numeric": 2,
                 },
+            )
+            self.assertEqual(
+                manifest["grade_requirement_search"]["classification_counts"],
+                {
+                    "required": 0,
+                    "not_required": 0,
+                    "review_required": 0,
+                    "unknown": 2,
+                    "not_applicable": 0,
+                    "unmapped": 0,
+                },
+            )
+            self.assertEqual(
+                manifest["validation"]["grade_requirement_search"][
+                    "raw_mismatch_rows"
+                ],
+                0,
             )
             self.assertEqual(
                 manifest["academic_field_search"]["classification_counts"],
@@ -369,6 +395,24 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
                 ).fetchone()[0]
             self.assertEqual(statuses, [("unmapped", 2)])
             self.assertEqual(child_rows, 0)
+
+    def test_future_grade_expression_is_unmapped_without_numeric_floor(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepare_unified_fixture(
+                root, gpa_requirement="将来追加された未監査表現4.0以上"
+            )
+            result = SQLiteBuildPipeline(root).build()
+            with closing(sqlite3.connect(result.database_path)) as connection:
+                rows = connection.execute(
+                    """
+                    SELECT grade_requirement_status, overall_gpa_min_tenths,
+                           parse_status
+                    FROM admission_search_grade_requirements
+                    ORDER BY admission_rowid
+                    """
+                ).fetchall()
+            self.assertEqual(rows, [("unmapped", None, "unmapped")] * 2)
 
     def test_single_and_review_required_child_cardinality(self) -> None:
         cases = (

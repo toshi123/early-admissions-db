@@ -9,6 +9,9 @@ const PARAMS = new Set<string>([
   "page",
   "university_query",
   "gpa_query",
+  "grade_requirement",
+  "overall_gpa",
+  "overall_gpa_query",
 ]);
 
 export interface SearchUrlState {
@@ -16,6 +19,7 @@ export interface SearchUrlState {
   warnings: string[];
   universityQuery: string;
   gpaQuery: string;
+  overallGpaQuery: string;
 }
 
 function allowedValues(options: FilterOptions): Record<MultiField, Set<string>> {
@@ -69,6 +73,17 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
     else if (mode === "review" || mode === "all") request.gpa_mode = mode;
     else warnings.push("GPA modeをsafeとして扱いました。");
   } else if (mode !== null) warnings.push("GPA値がないためGPA modeを無視しました。");
+  const gradeRequirement = params.get("grade_requirement");
+  if (gradeRequirement === "required") request.grade_requirement_status = "required";
+  else if (gradeRequirement !== null) warnings.push("未対応の評定条件指定を無視しました。");
+  const overallGpa = params.get("overall_gpa");
+  if (overallGpa !== null) {
+    if (request.grade_requirement_status !== "required") {
+      warnings.push("評定条件ありの指定がないため全体評定を無視しました。");
+    } else if (/^(?:[0-4](?:\.\d)?|5(?:\.0)?)$/.test(overallGpa)) {
+      request.overall_gpa_tenths = Math.round(Number(overallGpa) * 10);
+    } else warnings.push("全体評定は0.0〜5.0、小数1桁で指定してください。");
+  }
   const page = params.get("page");
   if (page !== null && /^\d+$/.test(page) && Number(page) > 0) request.page = Number(page);
   else if (page !== null) warnings.push("ページ指定を無視しました。");
@@ -76,7 +91,12 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
   const gpaQuery = params.get("gpa_query") ?? (
     request.gpa_tenths === null ? "" : (request.gpa_tenths / 10).toFixed(1)
   );
-  return { request, warnings, universityQuery, gpaQuery };
+  const overallGpaQuery = params.get("overall_gpa_query") ?? (
+    request.overall_gpa_tenths === null
+      ? ""
+      : (request.overall_gpa_tenths / 10).toFixed(1)
+  );
+  return { request, warnings, universityQuery, gpaQuery, overallGpaQuery };
 }
 
 export function serializeRequest(request: SearchRequest): URLSearchParams {
@@ -87,6 +107,12 @@ export function serializeRequest(request: SearchRequest): URLSearchParams {
     params.set("gpa", (request.gpa_tenths / 10).toFixed(1));
     params.set("gpa_mode", request.gpa_mode);
   }
+  if (request.grade_requirement_status === "required") {
+    params.set("grade_requirement", "required");
+    if (request.overall_gpa_tenths !== null) {
+      params.set("overall_gpa", (request.overall_gpa_tenths / 10).toFixed(1));
+    }
+  }
   if (request.page > 1) params.set("page", String(request.page));
   return params;
 }
@@ -95,6 +121,7 @@ export function serializeSearchFormState(
   request: SearchRequest,
   universityQuery: string,
   gpaQuery: string,
+  overallGpaQuery: string,
 ): URLSearchParams {
   const params = serializeRequest(request);
   if (universityQuery && request.university[0] !== universityQuery) {
@@ -104,5 +131,11 @@ export function serializeSearchFormState(
     ? ""
     : (request.gpa_tenths / 10).toFixed(1);
   if (gpaQuery && canonicalGpa !== gpaQuery) params.set("gpa_query", gpaQuery);
+  const canonicalOverallGpa = request.overall_gpa_tenths === null
+    ? ""
+    : (request.overall_gpa_tenths / 10).toFixed(1);
+  if (overallGpaQuery && canonicalOverallGpa !== overallGpaQuery) {
+    params.set("overall_gpa_query", overallGpaQuery);
+  }
   return params;
 }

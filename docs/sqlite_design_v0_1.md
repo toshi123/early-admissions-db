@@ -464,3 +464,23 @@ create group rows. Unknown non-NULL values are `unmapped`; NULL is
 Build metadata records mapping/taxonomy versions, schema/taxonomy/crosswalk
 SHA-256 values, status counts, group-row count, and raw-mismatch count. These
 artifacts participate in the unchanged-input gate before atomic publication.
+
+## 15. Reviewed grade-requirement extension v0.1
+
+The additive grade-requirement search layer is defined by
+`docs/grade_requirement_search_design_v0_1.md` and
+`schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql`. It does
+not change `admission_search_gpa` or `admission_search_gpa_safe`.
+
+`admission_search_grade_requirements` has exactly one row per admission and
+copies `gpa_requirement` to `raw_value` without rewriting. Requirement
+membership and overall numeric usability are separate columns. Only a frozen
+exact-value crosswalk can emit a numeric overall lower bound; SQL NULL is
+`unknown`, and a future non-NULL raw expression is `unmapped` with no numeric
+bound. The safe view contains only exact-reviewed inclusive overall bounds.
+
+Build metadata and the manifest record the mapping contract version, schema
+and crosswalk SHA-256 values, requirement and overall-status counts, numeric-
+floor count, raw-mismatch count, and representative review/unmapped logical
+IDs. The new source files participate in the unchanged-input gate and the
+existing temporary-build, full-validation, atomic-publication workflow.

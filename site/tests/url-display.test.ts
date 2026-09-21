@@ -48,11 +48,37 @@ describe("URL state and explicit display semantics", () => {
 
   it("round-trips unselected university and intermediate GPA form drafts", () => {
     const request = parseSearchParams(new URLSearchParams(), options).request;
-    const params = serializeSearchFormState(request, "東京", "3.");
+    const params = serializeSearchFormState(request, "東京", "3.", "");
     const parsed = parseSearchParams(params, options);
     expect(parsed.universityQuery).toBe("東京");
     expect(parsed.gpaQuery).toBe("3.");
     expect(parsed.request.university).toEqual([]);
     expect(parsed.request.gpa_tenths).toBeNull();
+  });
+
+  it("round-trips the reviewed grade requirement and overall GPA independently", () => {
+    const parsed = parseSearchParams(
+      new URLSearchParams("grade_requirement=required&overall_gpa=3.8"),
+      options,
+    );
+    expect(parsed.request.grade_requirement_status).toBe("required");
+    expect(parsed.request.overall_gpa_tenths).toBe(38);
+    expect(serializeRequest(parsed.request).toString()).toContain("overall_gpa=3.8");
+    const old = parseSearchParams(new URLSearchParams("gpa=3.8&gpa_mode=safe"), options);
+    expect(old.request.gpa_tenths).toBe(38);
+    expect(old.request.grade_requirement_status).toBeNull();
+  });
+
+  it("fails closed for invalid or orphaned overall GPA URL state", () => {
+    const orphaned = parseSearchParams(new URLSearchParams("overall_gpa=3.8"), options);
+    expect(orphaned.request.overall_gpa_tenths).toBeNull();
+    expect(orphaned.warnings).toContain("評定条件ありの指定がないため全体評定を無視しました。");
+    const invalid = parseSearchParams(
+      new URLSearchParams("grade_requirement=required&overall_gpa=3.75"),
+      options,
+    );
+    expect(invalid.request.grade_requirement_status).toBe("required");
+    expect(invalid.request.overall_gpa_tenths).toBeNull();
+    expect(serializeRequest(invalid.request).toString()).toBe("grade_requirement=required");
   });
 });

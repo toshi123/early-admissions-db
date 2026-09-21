@@ -54,6 +54,12 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".result-card__utility { flex-wrap: wrap; }");
   });
 
+  it("keeps the dependent overall-grade control within the mobile viewport", () => {
+    expect(css).toContain(".nested-filter { margin: 1rem 0 0 2.5rem;");
+    expect(css).toContain(".grade-input-row { display: flex;");
+    expect(css).toContain("@media (max-width: 40rem) { .nested-filter { margin-left: 0; } }");
+  });
+
   it("uses fixed desktop and non-obscuring sticky mobile placement for the detail candidate action", () => {
     expect(css).toContain(".detail-candidate-action { position: fixed;");
     expect(css).toContain("top: 5rem");

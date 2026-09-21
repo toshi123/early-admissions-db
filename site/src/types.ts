@@ -22,11 +22,24 @@ export interface SiteManifest {
     unified_contract_version: string;
     source_versions: Record<string, string>;
     gpa_parser_contract_version: string;
+    grade_requirement_mapping_contract_version: string;
+    grade_requirement_crosswalk_sha256: string;
     academic_field_mapping_contract_version: string;
     academic_field_taxonomy_version: string;
     english_requirement_parser_contract_version: string;
     prefecture_mapping_contract_version: string;
     prefecture_taxonomy_version: string;
+  };
+  grade_requirement_search: {
+    mapping_contract_version: string;
+    crosswalk_distinct_non_null_raw_values: number;
+    audited_distinct_raw_classes: number;
+    classification_counts: Record<string, number>;
+    overall_status_counts: Record<string, number>;
+    numeric_floor_rows: number;
+    raw_mismatch_rows: number;
+    representative_review_record_ids: string[];
+    representative_unmapped_record_ids: string[];
   };
   outputs: { artifacts: ArtifactReceipt[] };
   counts: {
@@ -87,6 +100,11 @@ export interface SearchRow {
   gpa_max_tenths: Nullable<number>;
   gpa_max_inclusive: Nullable<boolean>;
   gpa_source_value_status: string;
+  grade_requirement_status: "required" | "not_required" | "review_required" | "unknown" | "not_applicable" | "unmapped";
+  overall_gpa_min_tenths: Nullable<number>;
+  overall_gpa_min_inclusive: Nullable<boolean>;
+  overall_gpa_status: string;
+  additional_grade_conditions: Nullable<boolean>;
   application_start: Nullable<string>;
   application_end: Nullable<string>;
   fallback_previous_year: Nullable<boolean>;
@@ -164,6 +182,8 @@ export interface SearchRequest {
   english_requirement_status: string[];
   gpa_tenths: number | null;
   gpa_mode: "safe" | "review" | "all";
+  grade_requirement_status: "required" | null;
+  overall_gpa_tenths: number | null;
   page: number;
 }
 
@@ -187,6 +207,7 @@ export interface DetailRecord {
   identity: { source_dataset: string; source_version: string; record_id: string };
   admission: Record<string, Scalar>;
   gpa_derived: Record<string, Scalar>;
+  grade_requirement_derived: Record<string, Scalar>;
   academic_field_derived: Record<string, Scalar | Array<Record<string, Scalar>>>;
   english_requirement_derived: Record<string, Scalar>;
   research_requirements: Array<Record<string, Scalar>>;

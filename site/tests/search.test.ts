@@ -14,6 +14,9 @@ function row(update: Partial<SearchRow> = {}): SearchRow {
     selection_aptitude_test: "No", selection_common_test: "No", gpa_requirement: "3.8以上",
     gpa_parse_status: "parsed_safe", gpa_search_disposition: "safe_numeric", gpa_min_tenths: 38, gpa_min_inclusive: true,
     gpa_max_tenths: null, gpa_max_inclusive: null, gpa_source_value_status: "current", application_start: null, application_end: null,
+    grade_requirement_status: "required", overall_gpa_min_tenths: 38,
+    overall_gpa_min_inclusive: true, overall_gpa_status: "safe_simple_overall",
+    additional_grade_conditions: false,
     english_requirement: "英検準1級以上", english_requirement_status: "required", english_requirement_parse_status: "exact_crosswalk", english_requirement_search_disposition: "safe_exact",
     fallback_previous_year: false, information_year: 2027, publication_status: null, detail_path: "details.json", ...update,
   };
@@ -43,6 +46,19 @@ describe("frozen frontend search semantics", () => {
   it("distinguishes safe threshold boundaries", () => {
     expect(gpaStatus(row(), 37)).toBe("safe no match");
     expect(gpaStatus(row(), 38)).toBe("safe match");
+  });
+
+  it("separates grade requirement membership from reviewed overall GPA filtering", () => {
+    const subjectOnly = row({
+      record_id: "SUBJECT", overall_gpa_min_tenths: null,
+      overall_gpa_min_inclusive: null, overall_gpa_status: "no_safe_overall_floor",
+      additional_grade_conditions: null,
+    });
+    const noRequirement = row({ record_id: "NONE", grade_requirement_status: "not_required" });
+    const checkbox = emptyRequest(); checkbox.grade_requirement_status = "required";
+    expect(searchRows([row(), subjectOnly, noRequirement], checkbox).rows.map((item) => item.record_id)).toEqual(["A", "SUBJECT"]);
+    checkbox.overall_gpa_tenths = 38;
+    expect(searchRows([row(), subjectOnly, noRequirement], checkbox).rows.map((item) => item.record_id)).toEqual(["A"]);
   });
 
   it("filters English requirements only by safe derived status", () => {

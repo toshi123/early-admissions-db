@@ -36,6 +36,13 @@ from .gpa_search import (
     GPACrosswalk,
     GPAParser,
 )
+from .grade_requirement import (
+    GRADE_REQUIREMENT_CROSSWALK_PATH,
+    GRADE_REQUIREMENT_DESIGN_PATH,
+    GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+    GRADE_REQUIREMENT_SCHEMA_PATH,
+    GradeRequirementCrosswalk,
+)
 from .english_requirement import (
     ENGLISH_REQUIREMENT_CONTRACT_VERSION,
     ENGLISH_REQUIREMENT_CROSSWALK_PATH,
@@ -59,7 +66,7 @@ UNIFIED_MANIFEST = UNIFIED_DIR / "build_manifest.json"
 SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql")
 SQLITE_DESIGN = Path("docs/sqlite_design_v0_1.md")
 DATABASE_SCHEMA_VERSION = "0.1"
-BUILDER_VERSION = "0.5.0"
+BUILDER_VERSION = "0.6.0"
 GPA_REGRESSION_TENTHS = (30, 35, 38, 40, 45)
 
 TABLE_ORDER = ("master", "coverage", "research_requirements")
@@ -166,6 +173,9 @@ class SQLiteBuildPipeline:
         self.gpa_schema_path = self.repo_root / GPA_SCHEMA_PATH
         self.gpa_design_path = self.repo_root / GPA_DESIGN_PATH
         self.gpa_audit_path = self.repo_root / GPA_AUDIT_PATH
+        self.grade_requirement_schema_path = self.repo_root / GRADE_REQUIREMENT_SCHEMA_PATH
+        self.grade_requirement_design_path = self.repo_root / GRADE_REQUIREMENT_DESIGN_PATH
+        self.grade_requirement_crosswalk_path = self.repo_root / GRADE_REQUIREMENT_CROSSWALK_PATH
         self.academic_field_schema_path = self.repo_root / ACADEMIC_FIELD_SCHEMA_PATH
         self.academic_field_design_path = self.repo_root / ACADEMIC_FIELD_DESIGN_PATH
         self.academic_field_freeze_path = self.repo_root / ACADEMIC_FIELD_FREEZE_PATH
@@ -195,6 +205,12 @@ class SQLiteBuildPipeline:
         gpa_schema_sha = hashlib.sha256(gpa_schema_raw).hexdigest()
         gpa_audit_sha = sha256_file(self.gpa_audit_path)
         gpa_crosswalk = GPACrosswalk.load(self.gpa_audit_path)
+        grade_requirement_schema_raw = self.grade_requirement_schema_path.read_bytes()
+        grade_requirement_schema_sha = hashlib.sha256(grade_requirement_schema_raw).hexdigest()
+        grade_requirement_crosswalk_sha = sha256_file(self.grade_requirement_crosswalk_path)
+        grade_requirement_crosswalk = GradeRequirementCrosswalk.load(
+            self.grade_requirement_crosswalk_path
+        )
         academic_field_schema_raw = self.academic_field_schema_path.read_bytes()
         academic_field_schema_sha = hashlib.sha256(
             academic_field_schema_raw
@@ -232,6 +248,15 @@ class SQLiteBuildPipeline:
         gpa_design_metadata = file_metadata(self.gpa_design_path, self.repo_root)
         gpa_schema_metadata = file_metadata(self.gpa_schema_path, self.repo_root)
         gpa_audit_metadata = file_metadata(self.gpa_audit_path, self.repo_root)
+        grade_requirement_schema_metadata = file_metadata(
+            self.grade_requirement_schema_path, self.repo_root
+        )
+        grade_requirement_design_metadata = file_metadata(
+            self.grade_requirement_design_path, self.repo_root
+        )
+        grade_requirement_crosswalk_metadata = file_metadata(
+            self.grade_requirement_crosswalk_path, self.repo_root
+        )
         academic_field_schema_metadata = file_metadata(
             self.academic_field_schema_path, self.repo_root
         )
@@ -273,12 +298,16 @@ class SQLiteBuildPipeline:
                     )
                 )
                 connection.executescript(gpa_schema_raw.decode("utf-8"))
+                connection.executescript(grade_requirement_schema_raw.decode("utf-8"))
                 connection.executescript(academic_field_schema_raw.decode("utf-8"))
                 connection.executescript(english_requirement_schema_raw.decode("utf-8"))
                 connection.executescript(prefecture_schema_raw.decode("utf-8"))
                 self._assert_schema_columns(connection, inputs)
                 self._load_base_tables(connection, inputs)
                 gpa_build = self._load_gpa_layer(connection, gpa_crosswalk)
+                grade_requirement_build = self._load_grade_requirement_layer(
+                    connection, grade_requirement_crosswalk
+                )
                 academic_field_build = self._load_academic_field_layer(
                     connection,
                     academic_field_taxonomy,
@@ -298,6 +327,9 @@ class SQLiteBuildPipeline:
                     gpa_schema_sha=gpa_schema_sha,
                     gpa_audit_sha=gpa_audit_sha,
                     gpa_build=gpa_build,
+                    grade_requirement_schema_sha=grade_requirement_schema_sha,
+                    grade_requirement_crosswalk_sha=grade_requirement_crosswalk_sha,
+                    grade_requirement_build=grade_requirement_build,
                     academic_field_schema_sha=academic_field_schema_sha,
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
@@ -326,6 +358,9 @@ class SQLiteBuildPipeline:
                     gpa_schema_sha=gpa_schema_sha,
                     gpa_audit_sha=gpa_audit_sha,
                     gpa_build=gpa_build,
+                    grade_requirement_schema_sha=grade_requirement_schema_sha,
+                    grade_requirement_crosswalk_sha=grade_requirement_crosswalk_sha,
+                    grade_requirement_build=grade_requirement_build,
                     academic_field_schema_sha=academic_field_schema_sha,
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
@@ -361,6 +396,9 @@ class SQLiteBuildPipeline:
                     gpa_schema_sha=gpa_schema_sha,
                     gpa_design_sha=gpa_design_metadata["sha256"],
                     gpa_audit_sha=gpa_audit_sha,
+                    grade_requirement_schema_sha=grade_requirement_schema_sha,
+                    grade_requirement_design_sha=grade_requirement_design_metadata["sha256"],
+                    grade_requirement_crosswalk_sha=grade_requirement_crosswalk_sha,
                     academic_field_schema_sha=academic_field_schema_sha,
                     academic_field_design_sha=academic_field_design_metadata["sha256"],
                     academic_field_freeze_sha=academic_field_freeze_metadata["sha256"],
@@ -400,6 +438,10 @@ class SQLiteBuildPipeline:
                 gpa_design_metadata=gpa_design_metadata,
                 gpa_audit_metadata=gpa_audit_metadata,
                 gpa_build=gpa_build,
+                grade_requirement_schema_metadata=grade_requirement_schema_metadata,
+                grade_requirement_design_metadata=grade_requirement_design_metadata,
+                grade_requirement_crosswalk_metadata=grade_requirement_crosswalk_metadata,
+                grade_requirement_build=grade_requirement_build,
                 academic_field_schema_metadata=academic_field_schema_metadata,
                 academic_field_design_metadata=academic_field_design_metadata,
                 academic_field_freeze_metadata=academic_field_freeze_metadata,
@@ -457,6 +499,9 @@ class SQLiteBuildPipeline:
             self.gpa_schema_path,
             self.gpa_design_path,
             self.gpa_audit_path,
+            self.grade_requirement_schema_path,
+            self.grade_requirement_design_path,
+            self.grade_requirement_crosswalk_path,
             self.academic_field_schema_path,
             self.academic_field_design_path,
             self.academic_field_freeze_path,
@@ -548,6 +593,9 @@ class SQLiteBuildPipeline:
         gpa_schema_sha: str,
         gpa_design_sha: str,
         gpa_audit_sha: str,
+        grade_requirement_schema_sha: str,
+        grade_requirement_design_sha: str,
+        grade_requirement_crosswalk_sha: str,
         academic_field_schema_sha: str,
         academic_field_design_sha: str,
         academic_field_freeze_sha: str,
@@ -573,6 +621,9 @@ class SQLiteBuildPipeline:
             (self.gpa_schema_path, gpa_schema_sha),
             (self.gpa_design_path, gpa_design_sha),
             (self.gpa_audit_path, gpa_audit_sha),
+            (self.grade_requirement_schema_path, grade_requirement_schema_sha),
+            (self.grade_requirement_design_path, grade_requirement_design_sha),
+            (self.grade_requirement_crosswalk_path, grade_requirement_crosswalk_sha),
             (self.academic_field_schema_path, academic_field_schema_sha),
             (self.academic_field_design_path, academic_field_design_sha),
             (self.academic_field_freeze_path, academic_field_freeze_sha),
@@ -757,6 +808,81 @@ class SQLiteBuildPipeline:
             "rule_group_rows": 0,
             "clause_rows": 0,
             "representative_unparsed_record_ids": unparsed_record_ids,
+        }
+
+    @staticmethod
+    def _load_grade_requirement_layer(
+        connection: sqlite3.Connection,
+        crosswalk: GradeRequirementCrosswalk,
+    ) -> dict[str, Any]:
+        values: list[tuple[object, ...]] = []
+        status_counts: Counter[str] = Counter()
+        overall_counts: Counter[str] = Counter()
+        review_ids: list[str] = []
+        unmapped_ids: list[str] = []
+        for row in connection.execute(
+            """
+            SELECT admission_rowid, source_dataset, source_version, record_id,
+                   gpa_requirement
+            FROM admissions ORDER BY admission_rowid
+            """
+        ):
+            result = crosswalk.classify(row["gpa_requirement"])
+            status_counts[result.grade_requirement_status] += 1
+            overall_counts[result.overall_gpa_status] += 1
+            identity = (
+                f"{row['source_dataset']}:{row['source_version']}:"
+                f"{row['record_id']}"
+            )
+            if result.grade_requirement_status == "review_required" and len(review_ids) < 10:
+                review_ids.append(identity)
+            if result.grade_requirement_status == "unmapped" and len(unmapped_ids) < 10:
+                unmapped_ids.append(identity)
+            values.append(result.sqlite_values(row["admission_rowid"]))
+        connection.executemany(
+            """
+            INSERT INTO admission_search_grade_requirements (
+                admission_rowid, raw_value, grade_requirement_status,
+                overall_gpa_min_tenths, overall_gpa_min_inclusive,
+                overall_gpa_status, additional_grade_conditions,
+                parse_status, mapping_contract_version, review_note
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            values,
+        )
+        numeric_floor_rows = sum(
+            count
+            for status, count in overall_counts.items()
+            if status in {
+                "safe_simple_overall",
+                "safe_overall_with_additional_conditions",
+            }
+        )
+        return {
+            "mapping_contract_version": GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+            "crosswalk_distinct_non_null_raw_values": len(crosswalk),
+            "audited_distinct_raw_classes": len(crosswalk) + 1,
+            "classification_counts": {
+                status: status_counts.get(status, 0)
+                for status in (
+                    "required", "not_required", "review_required", "unknown",
+                    "not_applicable", "unmapped",
+                )
+            },
+            "overall_status_counts": {
+                status: overall_counts.get(status, 0)
+                for status in (
+                    "safe_simple_overall",
+                    "safe_overall_with_additional_conditions",
+                    "no_safe_overall_floor", "historical", "non_binding",
+                    "non_admission_numeric", "ambiguous", "unknown",
+                    "not_applicable", "unmapped",
+                )
+            },
+            "numeric_floor_rows": numeric_floor_rows,
+            "raw_mismatch_rows": 0,
+            "representative_review_record_ids": review_ids,
+            "representative_unmapped_record_ids": unmapped_ids,
         }
 
     @staticmethod
@@ -972,6 +1098,9 @@ class SQLiteBuildPipeline:
         gpa_schema_sha: str,
         gpa_audit_sha: str,
         gpa_build: Mapping[str, Any],
+        grade_requirement_schema_sha: str,
+        grade_requirement_crosswalk_sha: str,
+        grade_requirement_build: Mapping[str, Any],
         academic_field_schema_sha: str,
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
@@ -1005,6 +1134,13 @@ class SQLiteBuildPipeline:
             GPA_PARSER_CONTRACT_VERSION,
             gpa_schema_sha,
             gpa_audit_sha,
+            GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+            grade_requirement_schema_sha,
+            grade_requirement_crosswalk_sha,
+            canonical_json(grade_requirement_build["classification_counts"]),
+            canonical_json(grade_requirement_build["overall_status_counts"]),
+            grade_requirement_build["numeric_floor_rows"],
+            grade_requirement_build["raw_mismatch_rows"],
             ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION,
             ACADEMIC_FIELD_TAXONOMY_VERSION,
             academic_field_schema_sha,
@@ -1045,8 +1181,9 @@ class SQLiteBuildPipeline:
             academic_field_build["classification_counts"]["not_applicable"],
             academic_field_build["raw_mismatch_rows"],
         )
+        placeholders = ", ".join("?" for _ in values)
         connection.execute(
-            """
+            f"""
             INSERT INTO build_metadata (
                 singleton_id, database_schema_version, unified_contract_version,
                 unified_schema_id, build_timestamp_utc, builder_version,
@@ -1055,6 +1192,13 @@ class SQLiteBuildPipeline:
                 input_build_manifest_sha256, schema_sql_sha256,
                 gpa_parser_contract_version, gpa_schema_sql_sha256,
                 gpa_crosswalk_sha256,
+                grade_requirement_mapping_contract_version,
+                grade_requirement_schema_sql_sha256,
+                grade_requirement_crosswalk_sha256,
+                grade_requirement_classification_counts_json,
+                grade_requirement_overall_status_counts_json,
+                grade_requirement_numeric_floor_rows,
+                grade_requirement_raw_mismatch_rows,
                 academic_field_mapping_contract_version,
                 academic_field_taxonomy_version,
                 academic_field_schema_sql_sha256,
@@ -1088,7 +1232,7 @@ class SQLiteBuildPipeline:
                 academic_field_unmapped_rows,
                 academic_field_not_applicable_rows,
                 academic_field_raw_mismatch_rows
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ) VALUES ({placeholders})
             """,
             values,
         )
@@ -1104,6 +1248,9 @@ class SQLiteBuildPipeline:
         gpa_schema_sha: str,
         gpa_audit_sha: str,
         gpa_build: Mapping[str, Any],
+        grade_requirement_schema_sha: str,
+        grade_requirement_crosswalk_sha: str,
+        grade_requirement_build: Mapping[str, Any],
         academic_field_schema_sha: str,
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
@@ -1129,6 +1276,9 @@ class SQLiteBuildPipeline:
         source_validation = self._validate_sources(connection, source_versions)
         views = self._validate_views(connection, counts)
         gpa = self._validate_gpa_layer(connection, counts["admissions"], gpa_build)
+        grade_requirement = self._validate_grade_requirement_layer(
+            connection, counts["admissions"], grade_requirement_build
+        )
         academic_field = self._validate_academic_field_layer(
             connection, counts["admissions"], academic_field_build
         )
@@ -1146,6 +1296,9 @@ class SQLiteBuildPipeline:
             gpa_schema_sha=gpa_schema_sha,
             gpa_audit_sha=gpa_audit_sha,
             gpa_build=gpa_build,
+            grade_requirement_schema_sha=grade_requirement_schema_sha,
+            grade_requirement_crosswalk_sha=grade_requirement_crosswalk_sha,
+            grade_requirement_build=grade_requirement_build,
             academic_field_schema_sha=academic_field_schema_sha,
             academic_field_taxonomy_sha=academic_field_taxonomy_sha,
             academic_field_crosswalk_sha=academic_field_crosswalk_sha,
@@ -1173,6 +1326,7 @@ class SQLiteBuildPipeline:
             "research_duplicate_preservation": duplicate_validation,
             "views": views,
             "gpa_search": gpa,
+            "grade_requirement_search": grade_requirement,
             "academic_field_search": academic_field,
             "english_requirement_search": english_requirement,
             "prefecture_search": prefecture,
@@ -1836,6 +1990,128 @@ class SQLiteBuildPipeline:
         return {"status": "passed", "parent_rows": parent_rows, "raw_mismatch_rows": raw_mismatch, "classification_counts": expected}
 
     @staticmethod
+    def _validate_grade_requirement_layer(
+        connection: sqlite3.Connection,
+        admissions_rows: int,
+        build: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        parent_rows = connection.execute(
+            "SELECT COUNT(*) FROM admission_search_grade_requirements"
+        ).fetchone()[0]
+        raw_mismatch = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM admissions AS a
+            JOIN admission_search_grade_requirements AS g USING (admission_rowid)
+            WHERE a.gpa_requirement IS NOT g.raw_value
+            """
+        ).fetchone()[0]
+        statuses = dict(connection.execute(
+            """
+            SELECT grade_requirement_status, COUNT(*)
+            FROM admission_search_grade_requirements
+            GROUP BY grade_requirement_status
+            """
+        ))
+        overall_statuses = dict(connection.execute(
+            """
+            SELECT overall_gpa_status, COUNT(*)
+            FROM admission_search_grade_requirements
+            GROUP BY overall_gpa_status
+            """
+        ))
+        safe_rows = connection.execute(
+            "SELECT COUNT(*) FROM admission_search_grade_requirements_safe"
+        ).fetchone()[0]
+        unsafe_numeric = connection.execute(
+            """
+            SELECT COUNT(*) FROM admission_search_grade_requirements
+            WHERE (overall_gpa_min_tenths IS NOT NULL
+                   OR overall_gpa_min_inclusive IS NOT NULL
+                   OR additional_grade_conditions IS NOT NULL)
+              AND (grade_requirement_status <> 'required'
+                   OR parse_status <> 'exact_crosswalk'
+                   OR overall_gpa_status NOT IN (
+                       'safe_simple_overall',
+                       'safe_overall_with_additional_conditions'
+                   ))
+            """
+        ).fetchone()[0]
+        rikkyo = connection.execute(
+            """
+            SELECT g.grade_requirement_status, g.overall_gpa_min_tenths,
+                   g.overall_gpa_min_inclusive, g.overall_gpa_status,
+                   g.additional_grade_conditions
+            FROM admissions AS a
+            JOIN admission_search_grade_requirements AS g USING (admission_rowid)
+            WHERE a.source_dataset = 'shidai' AND a.source_version = '0.97'
+              AND a.record_id = 'RIKKYO-2027-SCI-03'
+            """
+        ).fetchone()
+        rikkyo_parent_present = bool(connection.execute(
+            """
+            SELECT 1
+            FROM admissions
+            WHERE source_dataset = 'shidai' AND source_version = '0.97'
+              AND record_id = 'RIKKYO-2027-SCI-03'
+            """
+        ).fetchone())
+        expected_rikkyo = (
+            "required", 38, 1,
+            "safe_overall_with_additional_conditions", 1,
+        )
+        rikkyo_values = tuple(rikkyo) if rikkyo is not None else None
+        if (
+            parent_rows != admissions_rows
+            or raw_mismatch
+            or unsafe_numeric
+            or statuses != {
+                key: value
+                for key, value in build["classification_counts"].items()
+                if value
+            }
+            or overall_statuses != {
+                key: value
+                for key, value in build["overall_status_counts"].items()
+                if value
+            }
+            or safe_rows != build["numeric_floor_rows"]
+            or (rikkyo_parent_present and rikkyo_values != expected_rikkyo)
+        ):
+            raise SQLiteBuildError(
+                "Grade-requirement derived layer validation failed: "
+                f"parent={parent_rows}, raw={raw_mismatch}, "
+                f"unmapped={statuses.get('unmapped', 0)}, "
+                f"unsafe_numeric={unsafe_numeric}, safe={safe_rows}, "
+                f"rikkyo={rikkyo_values}"
+            )
+        return {
+            "status": "passed",
+            "parent_rows": parent_rows,
+            "raw_mismatch_rows": raw_mismatch,
+            "classification_counts": build["classification_counts"],
+            "overall_status_counts": build["overall_status_counts"],
+            "numeric_floor_rows": safe_rows,
+            "representative_review_record_ids": build[
+                "representative_review_record_ids"
+            ],
+            "representative_unmapped_record_ids": build[
+                "representative_unmapped_record_ids"
+            ],
+            "rikkyo_2027_sci_03": (
+                {
+                    "grade_requirement_status": rikkyo_values[0],
+                    "overall_gpa_min_tenths": rikkyo_values[1],
+                    "overall_gpa_min_inclusive": rikkyo_values[2],
+                    "overall_gpa_status": rikkyo_values[3],
+                    "additional_grade_conditions": bool(rikkyo_values[4]),
+                }
+                if rikkyo_values is not None
+                else None
+            ),
+        }
+
+    @staticmethod
     def _validate_prefecture_layer(connection: sqlite3.Connection, admissions_rows: int, build: Mapping[str, Any]) -> dict[str, Any]:
         parent=connection.execute("SELECT COUNT(*) FROM admission_search_prefectures").fetchone()[0]
         child=connection.execute("SELECT COUNT(*) FROM admission_search_prefecture_memberships").fetchone()[0]
@@ -1870,6 +2146,9 @@ class SQLiteBuildPipeline:
         gpa_schema_sha: str,
         gpa_audit_sha: str,
         gpa_build: Mapping[str, Any],
+        grade_requirement_schema_sha: str,
+        grade_requirement_crosswalk_sha: str,
+        grade_requirement_build: Mapping[str, Any],
         academic_field_schema_sha: str,
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
@@ -1909,6 +2188,21 @@ class SQLiteBuildPipeline:
             "gpa_parser_contract_version": GPA_PARSER_CONTRACT_VERSION,
             "gpa_schema_sql_sha256": gpa_schema_sha,
             "gpa_crosswalk_sha256": gpa_audit_sha,
+            "grade_requirement_mapping_contract_version": GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+            "grade_requirement_schema_sql_sha256": grade_requirement_schema_sha,
+            "grade_requirement_crosswalk_sha256": grade_requirement_crosswalk_sha,
+            "grade_requirement_classification_counts_json": canonical_json(
+                grade_requirement_build["classification_counts"]
+            ),
+            "grade_requirement_overall_status_counts_json": canonical_json(
+                grade_requirement_build["overall_status_counts"]
+            ),
+            "grade_requirement_numeric_floor_rows": grade_requirement_build[
+                "numeric_floor_rows"
+            ],
+            "grade_requirement_raw_mismatch_rows": grade_requirement_build[
+                "raw_mismatch_rows"
+            ],
             "academic_field_mapping_contract_version": (
                 ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION
             ),
@@ -2138,6 +2432,10 @@ class SQLiteBuildPipeline:
         gpa_design_metadata: Mapping[str, Any],
         gpa_audit_metadata: Mapping[str, Any],
         gpa_build: Mapping[str, Any],
+        grade_requirement_schema_metadata: Mapping[str, Any],
+        grade_requirement_design_metadata: Mapping[str, Any],
+        grade_requirement_crosswalk_metadata: Mapping[str, Any],
+        grade_requirement_build: Mapping[str, Any],
         academic_field_schema_metadata: Mapping[str, Any],
         academic_field_design_metadata: Mapping[str, Any],
         academic_field_freeze_metadata: Mapping[str, Any],
@@ -2190,6 +2488,15 @@ class SQLiteBuildPipeline:
                 "gpa_search_design": dict(gpa_design_metadata),
                 "gpa_search_schema": dict(gpa_schema_metadata),
                 "gpa_approved_crosswalk": dict(gpa_audit_metadata),
+                "grade_requirement_search_design": dict(
+                    grade_requirement_design_metadata
+                ),
+                "grade_requirement_search_schema": dict(
+                    grade_requirement_schema_metadata
+                ),
+                "grade_requirement_crosswalk": dict(
+                    grade_requirement_crosswalk_metadata
+                ),
                 "academic_field_search_design": dict(
                     academic_field_design_metadata
                 ),
@@ -2220,6 +2527,7 @@ class SQLiteBuildPipeline:
             },
             "row_counts": dict(row_counts),
             "gpa_search": dict(gpa_build),
+            "grade_requirement_search": dict(grade_requirement_build),
             "academic_field_search": dict(academic_field_build),
             "english_requirement_search": dict(english_requirement_build),
             "prefecture_search": dict(prefecture_build),
@@ -2242,6 +2550,7 @@ class SQLiteBuildPipeline:
         validation = manifest["validation"]
         output = manifest["output"]
         gpa = manifest["gpa_search"]
+        grade_requirement = manifest["grade_requirement_search"]
         academic_field = manifest["academic_field_search"]
         prefecture = manifest["prefecture_search"]
         lines = [
@@ -2258,6 +2567,8 @@ class SQLiteBuildPipeline:
             f"- Database size: {output['size_bytes']} bytes",
             f"- Database SHA-256: `{output['sha256']}`",
             f"- GPA parser contract version: `{gpa['parser_contract_version']}`",
+            "- Grade-requirement mapping contract version: "
+            f"`{grade_requirement['mapping_contract_version']}`",
             "- Academic-field mapping/taxonomy version: "
             f"`{academic_field['mapping_contract_version']}` / "
             f"`{academic_field['taxonomy_version']}`",
@@ -2287,6 +2598,7 @@ class SQLiteBuildPipeline:
                 "- PRAGMA foreign_key_check / quick_check: passed",
                 f"- FTS validation: {validation['fts']['status']}",
                 "- GPA raw-value equality, fail-closed numeric bounds, and safe view: passed",
+                "- Grade-requirement raw equality, exact crosswalk, and safe overall-floor view: passed",
                 "- Academic-field raw equality, exact crosswalk, group enum, and cardinality: passed",
                 "- Prefecture raw equality, exact crosswalk, membership FK, and cardinality: passed",
                 "",
@@ -2307,6 +2619,30 @@ class SQLiteBuildPipeline:
                 "",
                 "Result meaning: `overall GPA condition safely matched`. "
                 "This is not an application-eligibility determination.",
+                "",
+                "## Grade-requirement derived search layer",
+                "",
+                "| Requirement status | Rows |",
+                "|---|---:|",
+                *(
+                    f"| {status} | {count} |"
+                    for status, count in grade_requirement[
+                        "classification_counts"
+                    ].items()
+                ),
+                "",
+                "| Overall numeric usability | Rows |",
+                "|---|---:|",
+                *(
+                    f"| {status} | {count} |"
+                    for status, count in grade_requirement[
+                        "overall_status_counts"
+                    ].items()
+                ),
+                "",
+                f"- Safe overall-floor rows: {grade_requirement['numeric_floor_rows']}",
+                "- This layer filters a reviewed overall-grade lower bound only; "
+                "it does not determine complete application eligibility.",
                 "",
                 "## Academic-field derived search layer",
                 "",

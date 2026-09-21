@@ -7,6 +7,7 @@ export interface SearchDraftEvaluation {
   request: SearchRequest;
   universityQuery: string;
   gpaQuery: string;
+  overallGpaQuery: string;
   errors: string[];
 }
 
@@ -35,13 +36,12 @@ export function evaluateSearchDraft(
   baseRequest: SearchRequest,
   options: FilterOptions,
   universityQuery: string,
-  gpaQuery: string,
+  overallGpaQuery: string,
 ): SearchDraftEvaluation {
   const request: SearchRequest = {
     ...baseRequest,
     university: [],
-    gpa_tenths: null,
-    gpa_mode: "all",
+    overall_gpa_tenths: null,
     page: 1,
   };
   const errors: string[] = [];
@@ -50,15 +50,16 @@ export function evaluateSearchDraft(
     if (universities.has(universityQuery)) request.university = [universityQuery];
     else errors.push("大学名は候補から1校選んでください。");
   }
-  if (gpaQuery) {
-    if (GPA_PATTERN.test(gpaQuery)) {
-      request.gpa_tenths = Math.round(Number(gpaQuery) * 10);
-      request.gpa_mode = "safe";
+  if (overallGpaQuery) {
+    if (request.grade_requirement_status !== "required") {
+      errors.push("全体評定は「評定条件あり」を選んでから入力してください。");
+    } else if (GPA_PATTERN.test(overallGpaQuery)) {
+      request.overall_gpa_tenths = Math.round(Number(overallGpaQuery) * 10);
     } else {
-      errors.push("評定は0.0〜5.0、小数1桁までで入力してください。");
+      errors.push("全体評定は0.0〜5.0、小数1桁までで入力してください。");
     }
   }
-  return { request, universityQuery, gpaQuery, errors };
+  return { request, universityQuery, gpaQuery: "", overallGpaQuery, errors };
 }
 
 export function liveSearchResult(
@@ -98,6 +99,7 @@ export function selectionMethodLabels(row: SearchRow): string[] {
 
 export function applicationConditionLabels(row: SearchRow): string[] {
   return [
+    ...(row.grade_requirement_status === "required" ? ["評定"] : []),
     ...(row.english_requirement_status === "required" ? ["英語資格"] : []),
     ...(row.research_requirement_required === "Yes" ? ["研究業績"] : []),
   ];
@@ -134,7 +136,7 @@ export function compactResultCard(
       ? ['<span class="result-chip derived-chip safe-match">評定：安全照合一致</span>']
       : []),
     ...(row.fallback_previous_year ? ['<span class="result-chip derived-chip previous-year">前年度情報</span>'] : []),
-    ...conditions.map((condition) => `<span class="result-chip condition-chip" aria-label="出願条件 ${escapeHtml(condition)}">条件：${escapeHtml(condition)}</span>`),
+    ...conditions.map((condition) => `<span class="result-chip condition-chip" aria-label="出願条件 ${escapeHtml(condition)}">${condition === "評定" ? "評定" : `条件：${escapeHtml(condition)}`}</span>`),
     ...(exclusive ? [`<span class="result-chip exclusive-chip" aria-label="専願・併願 ${escapeHtml(exclusive)}">${escapeHtml(exclusive)}</span>`] : []),
   ];
   const detailHref = detailLink(row.source_dataset, row.source_version, row.record_id);

@@ -13,7 +13,8 @@ export const MULTI_FIELDS: MultiField[] = [
 
 export function emptyRequest(): SearchRequest {
   return Object.assign(Object.fromEntries(MULTI_FIELDS.map((field) => [field, []])), {
-    stem_flag: null, gpa_tenths: null, gpa_mode: "all", page: 1,
+    stem_flag: null, gpa_tenths: null, gpa_mode: "all",
+    grade_requirement_status: null, overall_gpa_tenths: null, page: 1,
   }) as unknown as SearchRequest;
 }
 
@@ -54,6 +55,18 @@ function matches(row: SearchRow, request: SearchRequest): boolean {
     if (request.gpa_mode === "safe" && !safe) return false;
     if (request.gpa_mode === "review" && !safe && row.gpa_parse_status !== "conditional_review") return false;
   }
+  if (
+    request.grade_requirement_status !== null
+    && row.grade_requirement_status !== request.grade_requirement_status
+  ) return false;
+  if (request.overall_gpa_tenths !== null) {
+    if (row.overall_gpa_min_tenths === null) return false;
+    if (request.overall_gpa_tenths < row.overall_gpa_min_tenths) return false;
+    if (
+      request.overall_gpa_tenths === row.overall_gpa_min_tenths
+      && row.overall_gpa_min_inclusive !== true
+    ) return false;
+  }
   return true;
 }
 
@@ -64,6 +77,8 @@ const sortFields: Array<keyof SearchRow> = [
 
 export function searchRows(rows: SearchRow[], request: SearchRequest): SearchResult {
   if (request.gpa_tenths !== null && (request.gpa_tenths < 0 || request.gpa_tenths > 50)) throw new Error("GPA範囲が不正です");
+  if (request.grade_requirement_status !== null && request.grade_requirement_status !== "required") throw new Error("評定条件指定が不正です");
+  if (request.overall_gpa_tenths !== null && (request.grade_requirement_status !== "required" || request.overall_gpa_tenths < 0 || request.overall_gpa_tenths > 50)) throw new Error("全体評定指定が不正です");
   const matched = rows.filter((row) => matches(row, request)).slice().sort((a, b) => {
     for (const field of sortFields) {
       const compared = String(a[field] ?? "").localeCompare(String(b[field] ?? ""), "ja");

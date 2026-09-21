@@ -24,13 +24,15 @@ export function registerSearchTools(
           institution_type: { type: "array", items: { type: "string" } },
           gpa_tenths: { type: ["integer", "null"], minimum: 0, maximum: 50 },
           gpa_mode: { type: "string", enum: ["safe", "review", "all"] },
+          grade_requirement_status: { type: ["string", "null"], enum: ["required", null] },
+          overall_gpa_tenths: { type: ["integer", "null"], minimum: 0, maximum: 50 },
         },
       },
       annotations: { readOnlyHint: false, untrustedContentHint: false },
       execute: async (input: unknown) => {
         if (!input || typeof input !== "object" || Array.isArray(input)) throw new Error("object input required");
         const record = input as Record<string, unknown>;
-        const allowed = new Set(["prefecture_membership", "institution_type", "gpa_tenths", "gpa_mode"]);
+        const allowed = new Set(["prefecture_membership", "institution_type", "gpa_tenths", "gpa_mode", "grade_requirement_status", "overall_gpa_tenths"]);
         if (Object.keys(record).some((key) => !allowed.has(key))) throw new Error("unsupported field");
         for (const field of ["prefecture_membership", "institution_type"] as const) {
           if (record[field] !== undefined && (!Array.isArray(record[field]) || record[field].some((value) => typeof value !== "string" || !value))) {
@@ -42,6 +44,9 @@ export function registerSearchTools(
           throw new Error("gpa_tenths must be an integer from 0 to 50");
         }
         if (record.gpa_mode !== undefined && !["safe", "review", "all"].includes(record.gpa_mode as string)) throw new Error("unsupported gpa_mode");
+        if (record.grade_requirement_status !== undefined && record.grade_requirement_status !== null && record.grade_requirement_status !== "required") throw new Error("unsupported grade_requirement_status");
+        if (record.overall_gpa_tenths !== undefined && record.overall_gpa_tenths !== null && (!Number.isInteger(record.overall_gpa_tenths) || (record.overall_gpa_tenths as number) < 0 || (record.overall_gpa_tenths as number) > 50)) throw new Error("overall_gpa_tenths must be an integer from 0 to 50");
+        if (record.overall_gpa_tenths !== undefined && record.overall_gpa_tenths !== null && record.grade_requirement_status !== "required") throw new Error("overall_gpa_tenths requires grade_requirement_status required");
         return apply(record as Partial<SearchRequest>);
       },
     }, { signal: lifecycle.signal })).catch(report);

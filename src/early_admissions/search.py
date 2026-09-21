@@ -58,6 +58,10 @@ TABLE_GROUPS: tuple[tuple[str, tuple[tuple[str, int], ...]], ...] = (
             ("gpa_parse_status", 18),
             ("gpa_search_disposition", 18),
             ("gpa_min_tenths", 14),
+            ("grade_requirement_status", 18),
+            ("overall_gpa_min_tenths", 16),
+            ("overall_gpa_status", 28),
+            ("additional_grade_conditions", 18),
             ("school_recommendation_required", 15),
             ("academic_record_required", 15),
             ("common_test_required", 15),
@@ -196,6 +200,21 @@ def build_parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument(
+        "--grade-requirement",
+        choices=(
+            "required", "not_required", "review_required", "unknown",
+            "not_applicable",
+        ),
+        help="Reviewed grade-requirement status. Use required for 評定条件あり.",
+    )
+    parser.add_argument(
+        "--overall-gpa",
+        help=(
+            "Overall five-point grade value for the new reviewed grade layer; "
+            "requires --grade-requirement required."
+        ),
+    )
+    parser.add_argument(
         "--format", choices=("table", "csv", "tsv"), default="table"
     )
     parser.add_argument(
@@ -228,6 +247,15 @@ def criteria_from_args(
         except GPAContractError as error:
             parser.error(str(error))
         gpa_mode = args.gpa_mode or "safe"
+    if args.overall_gpa is None:
+        overall_gpa_tenths = None
+    else:
+        if args.grade_requirement != "required":
+            parser.error("--overall-gpa requires --grade-requirement required")
+        try:
+            overall_gpa_tenths = parse_gpa_tenths(args.overall_gpa)
+        except GPAContractError as error:
+            parser.error(str(error))
     stem_flag = True if args.stem else False if args.non_stem else None
     return SearchCriteria(
         university=_values(args, "university"),
@@ -261,6 +289,8 @@ def criteria_from_args(
         selection_common_test=_values(args, "selection_common_test"),
         gpa_tenths=gpa_tenths,
         gpa_mode=gpa_mode,
+        grade_requirement_status=args.grade_requirement,
+        overall_gpa_tenths=overall_gpa_tenths,
     )
 
 

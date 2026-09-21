@@ -1,13 +1,13 @@
 # Site-data projection v0.1 QA
 
-- Build ID: `2f77f8f2b14343d803fd`
-- Input SQLite SHA-256: `8fb343257d75ff3a001679c0c55f60c85fcb7ac7a38893271ee444ce99bd6354`
+- Build ID: `407ddfbc5a6da6389cd9`
+- Input SQLite SHA-256: `629e93518f67c52b57127516af5cb721a225766c2ec8daee80138b708ae8ea47`
 - Site-data schema: `0.1`
 - Validation: `passed`
 - Search rows / detail records / child rows: 5921 / 5921 / 437
-- Search shards / detail shards: 16 / 128
-- Search bytes / gzip equivalent: 11219892 / 649882
-- Detail bytes / gzip equivalent: 30744264 / 3793639
+- Search shards / detail shards: 16 / 256
+- Search bytes / gzip equivalent: 12254865 / 693228
+- Detail bytes / gzip equivalent: 33520791 / 4455174
 - SQLite-to-Site semantic equivalence: 25 queries, logical-key set and summary equality PASS
 
 ## GPA strict-safe regression
@@ -17,6 +17,13 @@
 - GPA 3.8: 743
 - GPA 4.0: 1124
 - GPA 4.5: 1199
+
+## Grade-requirement regression
+
+- Reviewed requirement-only rows: 2286
+- Reviewed overall GPA 3.8 rows: 833
+- Requirement statuses: `{"not_applicable": 20, "not_required": 339, "required": 2286, "review_required": 1291, "unknown": 1985}`
+- Overall numeric usability: `{"ambiguous": 1284, "historical": 2, "no_safe_overall_floor": 1269, "non_admission_numeric": 7, "non_binding": 26, "not_applicable": 20, "safe_overall_with_additional_conditions": 123, "safe_simple_overall": 1206, "unknown": 1984}`
 
 ## Academic-field regression
 

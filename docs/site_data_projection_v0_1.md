@@ -6,9 +6,10 @@ This document freezes Site-data schema version `0.1`. The projection is a
 read-only, reproducible derivative of the validated SQLite database. It does
 not reinterpret admission facts and is not a Site UI or an eligibility engine.
 
-Authority remains, in order, the unified contract, the GPA and academic-field
-derived-layer contracts, the SQLite design/schema, and then this delivery
-contract. The machine-readable Site schemas are:
+Authority remains, in order, the unified contract, the legacy GPA, reviewed
+grade-requirement, and academic-field derived-layer contracts, the SQLite
+design/schema, and then this delivery contract. The machine-readable Site
+schemas are:
 
 - `schema/site/site_data_manifest_schema_v0_1.json`
 - `schema/site/site_search_row_schema_v0_1.json`
@@ -24,7 +25,8 @@ The only factual input is
 `data/derived/sqlite/early_admissions_2027.sqlite`, accompanied by its SQLite
 build manifest. Before projection the builder verifies the database byte size
 and SHA-256 against that manifest and verifies the SQLite schema, unified, GPA,
-academic-field mapping, and taxonomy versions against `build_metadata`.
+grade-requirement, academic-field mapping, and taxonomy versions against
+`build_metadata`.
 
 SQLite is opened with URI `mode=ro&immutable=1` and `PRAGMA query_only=ON`.
 Its SHA-256 is checked again before publication. Canonical, release, unified,
@@ -43,9 +45,9 @@ data/derived/site/v0_1/
 
 `build_id` is the first 20 hex characters of SHA-256 over canonical JSON that
 contains the SQLite SHA-256, Site-data schema and builder versions, GPA parser
-version, and academic-field mapping/taxonomy versions. Every asset repeats the
-build ID. A runtime reads the manifest first and must not mix assets with a
-different build ID.
+version, grade-requirement mapping version, and academic-field
+mapping/taxonomy versions. Every asset repeats the build ID. A runtime reads
+the manifest first and must not mix assets with a different build ID.
 
 The builder writes a new sibling temporary directory, completes every
 validation, and only then replaces the publication directory. On a failed
@@ -82,6 +84,8 @@ There is exactly one search row per admission logical key. It contains:
   `selection_common_test` separate;
 - raw GPA plus SQLite-derived parse status, search disposition, lower/upper
   integer-tenths bounds and inclusivity, and source-value status;
+- reviewed grade-requirement status plus a separate safe overall-grade lower
+  bound, inclusivity, usability status, and additional-condition flag;
 - raw `application_start` / `application_end`;
 - fallback disclosure fields: `fallback_previous_year`, `information_year`,
   and `publication_status`;
@@ -98,6 +102,7 @@ There is exactly one detail record per admission logical key. It contains:
 identity
 admission                  # every admissions column, including technical rowid
 gpa_derived                # every admission_search_gpa column
+grade_requirement_derived  # every admission_search_grade_requirements column
 academic_field_derived     # parent plus every ordered group row
 research_requirements[]    # every linked child row in research_rowid order
 ```
@@ -154,6 +159,8 @@ of a browser framework. It implements:
   ANDed field;
 - `stem_flag=true/false` without treating null as false;
 - GPA `safe`, `review`, and `all` modes exclusively from SQLite-derived fields;
+- reviewed grade-requirement membership and optional overall-grade integer-
+  tenths filtering exclusively from SQLite-derived fields;
 - no raw GPA parsing, date parsing, free-text/FTS, or conditional-rule
   evaluation.
 
@@ -181,7 +188,8 @@ Publication requires all of the following:
 8. Every artifact's SHA-256, byte size, and record count.
 9. The frozen 25-query suite: complete logical-key set, total count, source
    counts, university count, and GPA status-count equality with SQLite.
-10. Dynamic GPA and academic-field regressions derived from the SQLite input.
+10. Dynamic legacy GPA, reviewed grade-requirement, and academic-field
+    regressions derived from the SQLite input.
 11. Input SQLite SHA-256 unchanged after the build.
 
 The timestamp is execution metadata. With it removed, two builds from identical

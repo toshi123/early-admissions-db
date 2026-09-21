@@ -88,6 +88,46 @@ class StructuredSearchFixtureTests(unittest.TestCase):
             {"safe no match"},
         )
 
+    def test_reviewed_grade_requirement_and_overall_gpa_filters(self) -> None:
+        required = search_database(
+            self.database,
+            SearchCriteria(grade_requirement_status="required"),
+            limit=20,
+        )
+        below = search_database(
+            self.database,
+            SearchCriteria(
+                grade_requirement_status="required", overall_gpa_tenths=34
+            ),
+            limit=20,
+        )
+        matched = search_database(
+            self.database,
+            SearchCriteria(
+                grade_requirement_status="required", overall_gpa_tenths=35
+            ),
+            limit=20,
+        )
+        self.assertEqual(required.summary.total_matched_rows, 2)
+        self.assertEqual(below.summary.total_matched_rows, 0)
+        self.assertEqual(matched.summary.total_matched_rows, 2)
+
+    def test_cli_exposes_new_grade_filters_without_changing_old_gpa(self) -> None:
+        stdout = io.StringIO()
+        stderr = io.StringIO()
+        with redirect_stdout(stdout), redirect_stderr(stderr):
+            status = search_main(
+                [
+                    "--database", str(self.database),
+                    "--grade-requirement", "required",
+                    "--overall-gpa", "3.5",
+                    "--format", "tsv",
+                ]
+            )
+        self.assertEqual(status, 0)
+        self.assertIn("grade_requirement_status", stdout.getvalue().splitlines()[0])
+        self.assertIn("total matched rows: 2", stderr.getvalue())
+
     def test_result_contains_all_contract_columns(self) -> None:
         result = search_database(self.database, SearchCriteria(), limit=1)
         self.assertEqual(tuple(result.rows[0]), RESULT_COLUMNS)
@@ -232,6 +272,12 @@ class StructuredSearchFixtureTests(unittest.TestCase):
                 self.database, SearchCriteria(gpa_mode="review"), limit=1
             )
 
+    def test_overall_gpa_requires_the_reviewed_grade_requirement_filter(self) -> None:
+        with self.assertRaisesRegex(StructuredSearchError, "requires"):
+            search_database(
+                self.database, SearchCriteria(overall_gpa_tenths=38), limit=1
+            )
+
 
 class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
     def test_current_gpa_modes_and_read_only_hash(self) -> None:
@@ -257,6 +303,48 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
         self.assertEqual(all_rows.summary.gpa_conditional_review_rows, 707)
         self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4015)
         self.assertEqual(sha256(database), before)
+
+    def test_current_grade_requirement_counts_and_rikkyo_boundary(self) -> None:
+        database = REPO_ROOT / "data/derived/sqlite/early_admissions_2027.sqlite"
+        required = search_database(
+            database,
+            SearchCriteria(grade_requirement_status="required"),
+            limit=0,
+        )
+        overall_38 = search_database(
+            database,
+            SearchCriteria(
+                grade_requirement_status="required", overall_gpa_tenths=38
+            ),
+            limit=0,
+        )
+        self.assertEqual(required.summary.total_matched_rows, 2286)
+        self.assertEqual(overall_38.summary.total_matched_rows, 833)
+
+        base = {"university": ("立教大学",)}
+        below = search_database(
+            database,
+            SearchCriteria(
+                **base, grade_requirement_status="required", overall_gpa_tenths=37
+            ),
+            limit=None,
+        )
+        matched = search_database(
+            database,
+            SearchCriteria(
+                **base, grade_requirement_status="required", overall_gpa_tenths=38
+            ),
+            limit=None,
+        )
+        strict = search_database(
+            database,
+            SearchCriteria(**base, gpa_tenths=38, gpa_mode="safe"),
+            limit=None,
+        )
+        identity = "RIKKYO-2027-SCI-03"
+        self.assertNotIn(identity, {row["record_id"] for row in below.rows})
+        self.assertIn(identity, {row["record_id"] for row in matched.rows})
+        self.assertNotIn(identity, {row["record_id"] for row in strict.rows})
 
     def test_representative_qa_set_has_required_coverage(self) -> None:
         self.assertEqual(len(QA_SPECS), 25)
