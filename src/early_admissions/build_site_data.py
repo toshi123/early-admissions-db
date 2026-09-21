@@ -1,4 +1,4 @@
-"""CLI entry point for the Site-data projection v0.1 build."""
+"""CLI entry point for the Site-data projection v0.2 build."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ def default_repo_root() -> Path:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Build validated static Site-data v0.1 from SQLite."
+        description="Build validated static Site-data v0.2 from SQLite."
     )
     parser.add_argument("--repo-root", type=Path, default=default_repo_root())
     parser.add_argument("--database", type=Path, default=DEFAULT_DATABASE)

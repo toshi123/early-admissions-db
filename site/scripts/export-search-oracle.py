@@ -23,7 +23,7 @@ from early_admissions.site_search import (  # noqa: E402
 
 
 def main() -> None:
-    rows = load_search_rows(REPOSITORY_ROOT / "data" / "derived" / "site" / "v0_1")
+    rows = load_search_rows(REPOSITORY_ROOT / "data" / "derived" / "site" / "v0_2")
     cases: list[dict[str, object]] = []
     for spec in QA_SPECS:
         criteria = asdict(spec.criteria)

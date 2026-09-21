@@ -52,6 +52,26 @@ describe("canonical last-search state", () => {
     expect(restored.request.overall_gpa_tenths).toBe(38);
   });
 
+  it("restores v0.2 Broad/Subcategory state through the header search link", () => {
+    const storage = new MemoryStorage();
+    const request = parseSearchParams(new URLSearchParams(
+      "academic_field_v2=natural_sciences"
+      + "&academic_subfield_v2=natural_sciences:mathematics_statistics"
+      + "&academic_field_v2=engineering",
+    ), options).request;
+    rememberLastSearch(request, storage);
+    const href = headerSearchHref(
+      "/admissions/kokkoritsu/5.61/example",
+      request,
+      storage,
+    );
+    const restored = parseSearchParams(
+      new URL(href, "https://example.test").searchParams,
+      options,
+    );
+    expect(restored.request.academic_field_v2_branches).toEqual(request.academic_field_v2_branches);
+  });
+
   it("falls back to /search when a new session has no remembered query", () => {
     const request = parseSearchParams(new URLSearchParams(), options).request;
     expect(headerSearchHref("/about/data", request, new MemoryStorage())).toBe("/search");

@@ -12,6 +12,8 @@ const PARAMS = new Set<string>([
   "grade_requirement",
   "overall_gpa",
   "overall_gpa_query",
+  "academic_field_v2",
+  "academic_subfield_v2",
 ]);
 
 export interface SearchUrlState {
@@ -58,6 +60,46 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
       else warnings.push(`「${field}=${value}」は現在のデータにないため無視しました。`);
     }
   }
+  const broadOptions = options.academic_field_v2_broad_groups;
+  const broadByCode = new Map(
+    broadOptions.map((item) => [item.group_code, item] as const),
+  );
+  const requestedBroad = new Set<string>();
+  for (const code of params.getAll("academic_field_v2")) {
+    if (broadByCode.has(code)) requestedBroad.add(code);
+    else warnings.push(`「academic_field_v2=${code}」は現在の分類にないため無視しました。`);
+  }
+  const selectedSubcategories = new Map<string, Set<string>>();
+  const subcategoryByCode = new Map(
+    options.academic_field_v2_subcategories.map((item) => [item.subcategory_code, item] as const),
+  );
+  for (const value of params.getAll("academic_subfield_v2")) {
+    const separator = value.indexOf(":");
+    const parent = separator < 0 ? "" : value.slice(0, separator);
+    const code = separator < 0 ? "" : value.slice(separator + 1);
+    const option = subcategoryByCode.get(code);
+    if (!option || option.parent_group_code !== parent) {
+      warnings.push(`「academic_subfield_v2=${value}」は現在の分類にないため無視しました。`);
+      continue;
+    }
+    if (!requestedBroad.has(parent)) {
+      warnings.push(`「academic_subfield_v2=${value}」は親の学問分野がないため無視しました。`);
+      continue;
+    }
+    const selected = selectedSubcategories.get(parent) ?? new Set<string>();
+    selected.add(code);
+    selectedSubcategories.set(parent, selected);
+  }
+  request.academic_field_v2_branches = broadOptions
+    .filter((item) => requestedBroad.has(item.group_code))
+    .map((item) => ({
+      group_code: item.group_code,
+      subcategory_codes: options.academic_field_v2_subcategories
+        .filter((subcategory) =>
+          subcategory.parent_group_code === item.group_code
+          && selectedSubcategories.get(item.group_code)?.has(subcategory.subcategory_code))
+        .map((subcategory) => subcategory.subcategory_code),
+    }));
   const stem = params.get("stem");
   if (stem === "1") request.stem_flag = true;
   else if (stem === "0") request.stem_flag = false;
@@ -102,6 +144,21 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
 export function serializeRequest(request: SearchRequest): URLSearchParams {
   const params = new URLSearchParams();
   for (const field of MULTI_FIELDS) for (const value of request[field]) params.append(field, value);
+  const seenBroad = new Set<string>();
+  for (const branch of request.academic_field_v2_branches) {
+    if (seenBroad.has(branch.group_code)) continue;
+    seenBroad.add(branch.group_code);
+    params.append("academic_field_v2", branch.group_code);
+    const seenSubcategories = new Set<string>();
+    for (const code of branch.subcategory_codes) {
+      if (seenSubcategories.has(code)) continue;
+      seenSubcategories.add(code);
+      params.append(
+        "academic_subfield_v2",
+        `${branch.group_code}:${code}`,
+      );
+    }
+  }
   if (request.stem_flag !== null) params.set("stem", request.stem_flag ? "1" : "0");
   if (request.gpa_tenths !== null) {
     params.set("gpa", (request.gpa_tenths / 10).toFixed(1));

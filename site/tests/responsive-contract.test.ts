@@ -39,6 +39,14 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".form-actions .button { width: 100%; }");
   });
 
+  it("keeps Broad groups responsive and their dynamic children visibly nested", () => {
+    expect(css).toContain(".academic-field-branch-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))");
+    expect(css).toContain(".academic-subcategory-filter {");
+    expect(css).toContain("border-left: 3px solid var(--gray-300)");
+    expect(css).toContain(".academic-subcategory-filter[hidden] { display: none; }");
+    expect(css).toContain(".academic-field-branch-grid { grid-template-columns: 1fr; }");
+  });
+
   it("keeps university disclosures and nested admissions compact on mobile", () => {
     expect(css).toContain(".university-disclosure__button { min-height: 52px");
     expect(css).toContain(".university-disclosure__name { font-size: 1rem; }");

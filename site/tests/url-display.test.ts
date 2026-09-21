@@ -81,4 +81,45 @@ describe("URL state and explicit display semantics", () => {
     expect(invalid.request.overall_gpa_tenths).toBeNull();
     expect(serializeRequest(invalid.request).toString()).toBe("grade_requirement=required");
   });
+
+  it("canonicalizes v0.2 Broad and Subcategory parameters in taxonomy order", () => {
+    const parsed = parseSearchParams(new URLSearchParams(
+      "academic_field_v2=engineering&academic_field_v2=natural_sciences&academic_field_v2=engineering"
+      + "&academic_subfield_v2=natural_sciences:physics"
+      + "&academic_subfield_v2=natural_sciences:mathematics_statistics",
+    ), options);
+    expect(parsed.warnings).toEqual([]);
+    expect(parsed.request.academic_field_v2_branches).toEqual([
+      { group_code: "natural_sciences", subcategory_codes: ["mathematics_statistics", "physics"] },
+      { group_code: "engineering", subcategory_codes: [] },
+    ]);
+    expect(serializeRequest(parsed.request).getAll("academic_field_v2")).toEqual([
+      "natural_sciences", "engineering",
+    ]);
+    expect(serializeRequest(parsed.request).getAll("academic_subfield_v2")).toEqual([
+      "natural_sciences:mathematics_statistics", "natural_sciences:physics",
+    ]);
+  });
+
+  it("rejects orphaned or unknown v0.2 Subcategory parameters without adding a parent", () => {
+    const parsed = parseSearchParams(new URLSearchParams(
+      "academic_subfield_v2=natural_sciences:physics&academic_field_v2=unknown",
+    ), options);
+    expect(parsed.request.academic_field_v2_branches).toEqual([]);
+    expect(parsed.warnings).toHaveLength(2);
+    expect(serializeRequest(parsed.request).toString()).toBe("");
+  });
+
+  it("preserves legacy v0.1 and v0.2 filters as separate ANDed URL state", () => {
+    const parsed = parseSearchParams(new URLSearchParams(
+      "academic_field_group=engineering&academic_field_v2=natural_sciences",
+    ), options);
+    expect(parsed.request.academic_field_group).toEqual(["engineering"]);
+    expect(parsed.request.academic_field_v2_branches).toEqual([
+      { group_code: "natural_sciences", subcategory_codes: [] },
+    ]);
+    const serialized = serializeRequest(parsed.request);
+    expect(serialized.get("academic_field_group")).toBe("engineering");
+    expect(serialized.get("academic_field_v2")).toBe("natural_sciences");
+  });
 });

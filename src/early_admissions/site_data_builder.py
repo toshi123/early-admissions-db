@@ -20,21 +20,30 @@ from typing import Any, Iterable, Mapping, Sequence
 from jsonschema import Draft202012Validator
 
 from .search_qa import QA_SPECS
-from .site_search import SearchRequest, logical_key, search_rows
-from .structured_search import search_database
+from .site_search import (
+    AcademicFieldV2Branch,
+    SearchRequest,
+    logical_key,
+    search_rows,
+)
+from .structured_search import (
+    AcademicFieldV2Branch as SQLiteAcademicFieldV2Branch,
+    SearchCriteria,
+    search_database,
+)
 
 
-SITE_DATA_SCHEMA_VERSION = "0.1"
-SITE_DATA_BUILDER_VERSION = "0.5.0"
+SITE_DATA_SCHEMA_VERSION = "0.2"
+SITE_DATA_BUILDER_VERSION = "0.6.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
-DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_1")
-DEFAULT_QA_REPORT = Path("validation/reports/site_data_qa_v0_1.md")
+DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_2")
+DEFAULT_QA_REPORT = Path("validation/reports/academic_field_v0_2_site_qa.md")
 SCHEMA_PATHS = {
-    "manifest": Path("schema/site/site_data_manifest_schema_v0_1.json"),
-    "search": Path("schema/site/site_search_row_schema_v0_1.json"),
-    "detail": Path("schema/site/site_detail_schema_v0_1.json"),
-    "filters": Path("schema/site/site_filter_options_schema_v0_1.json"),
+    "manifest": Path("schema/site/site_data_manifest_schema_v0_2.json"),
+    "search": Path("schema/site/site_search_row_schema_v0_2.json"),
+    "detail": Path("schema/site/site_detail_schema_v0_2.json"),
+    "filters": Path("schema/site/site_filter_options_schema_v0_2.json"),
 }
 SEARCH_TARGET_BYTES = 1_250_000
 DETAIL_TARGET_BYTES = 256_000
@@ -221,6 +230,13 @@ class SiteDataBuildPipeline:
             academic = {row["admission_rowid"]: dict(row) for row in connection.execute(
                 "SELECT * FROM admission_search_academic_fields ORDER BY admission_rowid"
             )}
+            academic_v2 = {
+                row["admission_rowid"]: dict(row)
+                for row in connection.execute(
+                    "SELECT * FROM admission_search_academic_fields_v2 "
+                    "ORDER BY admission_rowid"
+                )
+            }
             english = {row["admission_rowid"]: dict(row) for row in connection.execute(
                 "SELECT * FROM admission_search_english_requirement ORDER BY admission_rowid"
             )}
@@ -234,6 +250,18 @@ class SiteDataBuildPipeline:
                 "ORDER BY admission_rowid, group_order"
             ):
                 groups[row["admission_rowid"]].append(dict(row))
+            broad_memberships_v2: dict[int, list[dict[str, Any]]] = defaultdict(list)
+            for row in connection.execute(
+                "SELECT * FROM admission_search_academic_field_broad_memberships_v2 "
+                "ORDER BY admission_rowid, membership_order"
+            ):
+                broad_memberships_v2[row["admission_rowid"]].append(dict(row))
+            subcategory_memberships_v2: dict[int, list[dict[str, Any]]] = defaultdict(list)
+            for row in connection.execute(
+                "SELECT * FROM admission_search_academic_field_subcategory_memberships_v2 "
+                "ORDER BY admission_rowid, membership_order"
+            ):
+                subcategory_memberships_v2[row["admission_rowid"]].append(dict(row))
             children: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
             all_children: list[dict[str, Any]] = []
             for row in connection.execute(
@@ -245,9 +273,22 @@ class SiteDataBuildPipeline:
             taxonomy = [dict(row) for row in connection.execute(
                 "SELECT * FROM academic_field_taxonomy ORDER BY display_order"
             )]
+            broad_taxonomy_v2 = [
+                dict(row)
+                for row in connection.execute(
+                    "SELECT * FROM academic_field_v2_broad_taxonomy ORDER BY rowid"
+                )
+            ]
+            subcategory_taxonomy_v2 = [
+                dict(row)
+                for row in connection.execute(
+                    "SELECT * FROM academic_field_v2_subcategory_taxonomy ORDER BY rowid"
+                )
+            ]
             search_rows_raw, details = self._project(
-                admissions, gpa, grade_requirement, academic, english,
-                prefecture, prefecture_memberships, groups, children
+                admissions, gpa, grade_requirement, academic, academic_v2,
+                english, prefecture, prefecture_memberships, groups,
+                broad_memberships_v2, subcategory_memberships_v2, children
             )
             build_id = self._build_id(before_hash, metadata)
             search_count = _shard_count(
@@ -265,10 +306,16 @@ class SiteDataBuildPipeline:
                 row["detail_path"] = (
                     f"assets/{build_id}/details/details-{detail_index:03d}.json"
                 )
-            filter_options = self._filter_options(connection, taxonomy, build_id)
+            filter_options = self._filter_options(
+                connection,
+                taxonomy,
+                broad_taxonomy_v2,
+                subcategory_taxonomy_v2,
+                build_id,
+            )
             parent = self.output_dir.parent
             parent.mkdir(parents=True, exist_ok=True)
-            staging = Path(tempfile.mkdtemp(prefix=".site-data-v0_1-", dir=parent))
+            staging = Path(tempfile.mkdtemp(prefix=".site-data-v0_2-", dir=parent))
             try:
                 artifacts, size_report = self._write_assets(
                     staging,
@@ -372,6 +419,23 @@ class SiteDataBuildPipeline:
             ]["mapping_contract_version"],
             "academic_field_mapping_contract_version": manifest["academic_field_search"]["mapping_contract_version"],
             "academic_field_taxonomy_version": manifest["academic_field_search"]["taxonomy_version"],
+            "academic_field_v2_mapping_contract_version": manifest["academic_field_v2"]["mapping_contract_version"],
+            "academic_field_v2_taxonomy_version": manifest["academic_field_v2"]["taxonomy_version"],
+            "academic_field_v2_broad_taxonomy_sha256": manifest[
+                "academic_field_v2"
+            ]["broad_taxonomy_sha256"],
+            "academic_field_v2_subcategory_taxonomy_sha256": manifest[
+                "academic_field_v2"
+            ]["subcategory_taxonomy_sha256"],
+            "academic_field_v2_raw_crosswalk_sha256": manifest[
+                "academic_field_v2"
+            ]["raw_crosswalk_sha256"],
+            "academic_field_v2_context_crosswalk_sha256": manifest[
+                "academic_field_v2"
+            ]["context_crosswalk_sha256"],
+            "academic_field_v2_compatibility_crosswalk_sha256": manifest[
+                "academic_field_v2"
+            ]["compatibility_crosswalk_sha256"],
             "english_requirement_parser_contract_version": manifest["english_requirement_search"]["parser_contract_version"],
             "prefecture_mapping_contract_version": manifest["prefecture_search"]["mapping_contract_version"],
             "prefecture_taxonomy_version": manifest["prefecture_search"]["taxonomy_version"],
@@ -386,10 +450,13 @@ class SiteDataBuildPipeline:
         gpa: Mapping[int, Mapping[str, Any]],
         grade_requirement: Mapping[int, Mapping[str, Any]],
         academic: Mapping[int, Mapping[str, Any]],
+        academic_v2: Mapping[int, Mapping[str, Any]],
         english: Mapping[int, Mapping[str, Any]],
         prefecture: Mapping[int, Mapping[str, Any]],
         prefecture_memberships: Mapping[int, list[str]],
         groups: Mapping[int, list[dict[str, Any]]],
+        broad_memberships_v2: Mapping[int, list[dict[str, Any]]],
+        subcategory_memberships_v2: Mapping[int, list[dict[str, Any]]],
         children: Mapping[tuple[str, str, str], list[dict[str, Any]]],
     ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
         search_rows: list[dict[str, Any]] = []
@@ -401,6 +468,7 @@ class SiteDataBuildPipeline:
                 rowid not in gpa
                 or rowid not in grade_requirement
                 or rowid not in academic
+                or rowid not in academic_v2
                 or rowid not in english
                 or rowid not in prefecture
             ):
@@ -408,9 +476,16 @@ class SiteDataBuildPipeline:
             gpa_row = dict(gpa[rowid])
             grade_row = dict(grade_requirement[rowid])
             academic_row = dict(academic[rowid])
+            academic_v2_row = dict(academic_v2[rowid])
             english_row = dict(english[rowid])
             prefecture_row = dict(prefecture[rowid])
             group_rows = [dict(row) for row in groups.get(rowid, [])]
+            broad_rows_v2 = [
+                dict(row) for row in broad_memberships_v2.get(rowid, [])
+            ]
+            subcategory_rows_v2 = [
+                dict(row) for row in subcategory_memberships_v2.get(rowid, [])
+            ]
             key = (admission["source_dataset"], admission["source_version"], admission["record_id"])
             search = {field: admission[field] for field in SEARCH_ADMISSION_FIELDS}
             search["stem_flag"] = _bool_value(search["stem_flag"], "stem_flag")
@@ -422,6 +497,24 @@ class SiteDataBuildPipeline:
                     "academic_field_mapping_status": academic_row["mapping_status"],
                     "academic_field_groups": [row["group_code"] for row in group_rows],
                     "academic_field_mapping_contract_version": academic_row["mapping_contract_version"],
+                    "academic_field_v2_broad_mapping_status": academic_v2_row[
+                        "broad_mapping_status"
+                    ],
+                    "academic_field_v2_subcategory_mapping_status": academic_v2_row[
+                        "subcategory_mapping_status"
+                    ],
+                    "academic_field_v2_broad_memberships": [
+                        row["group_code"] for row in broad_rows_v2
+                    ],
+                    "academic_field_v2_subcategory_memberships": [
+                        row["subcategory_code"] for row in subcategory_rows_v2
+                    ],
+                    "academic_field_v2_mapping_contract_version": academic_v2_row[
+                        "mapping_contract_version"
+                    ],
+                    "academic_field_v2_taxonomy_version": academic_v2_row[
+                        "taxonomy_version"
+                    ],
                     "gpa_parse_status": gpa_row["parse_status"],
                     "gpa_search_disposition": gpa_row["search_disposition"],
                     "gpa_min_tenths": gpa_row["gpa_min_tenths"],
@@ -494,6 +587,11 @@ class SiteDataBuildPipeline:
                         **academic_row,
                         "groups": group_rows,
                     },
+                    "academic_field_v2_derived": {
+                        **academic_v2_row,
+                        "broad_memberships": broad_rows_v2,
+                        "subcategory_memberships": subcategory_rows_v2,
+                    },
                     "english_requirement_derived": english_row,
                     "research_requirements": [dict(row) for row in children.get(key, [])],
                 }
@@ -511,6 +609,12 @@ class SiteDataBuildPipeline:
             ],
             "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
             "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
+            "academic_field_v2_mapping_contract_version": metadata[
+                "academic_field_v2_mapping_contract_version"
+            ],
+            "academic_field_v2_taxonomy_version": metadata[
+                "academic_field_v2_taxonomy_version"
+            ],
             "english_requirement_parser_contract_version": metadata["english_requirement_parser_contract_version"],
             "prefecture_mapping_contract_version": metadata["prefecture_mapping_contract_version"],
             "prefecture_taxonomy_version": metadata["prefecture_taxonomy_version"],
@@ -531,6 +635,8 @@ class SiteDataBuildPipeline:
         self,
         connection: sqlite3.Connection,
         taxonomy: Sequence[Mapping[str, Any]],
+        broad_taxonomy_v2: Sequence[Mapping[str, Any]],
+        subcategory_taxonomy_v2: Sequence[Mapping[str, Any]],
         build_id: str,
     ) -> dict[str, Any]:
         payload: dict[str, Any] = {
@@ -566,6 +672,45 @@ class SiteDataBuildPipeline:
                 "unfiltered_count": group_counts.get(row["group_code"], 0),
             }
             for row in taxonomy
+        ]
+        broad_counts_v2 = {
+            row["group_code"]: row["rows"]
+            for row in connection.execute(
+                "SELECT group_code, COUNT(*) AS rows "
+                "FROM admission_search_academic_field_broad_memberships_v2 "
+                "GROUP BY group_code"
+            )
+        }
+        subcategory_counts_v2 = {
+            row["subcategory_code"]: row["rows"]
+            for row in connection.execute(
+                "SELECT subcategory_code, COUNT(*) AS rows "
+                "FROM admission_search_academic_field_subcategory_memberships_v2 "
+                "GROUP BY subcategory_code"
+            )
+        }
+        payload["academic_field_v2_broad_groups"] = [
+            {
+                "group_code": row["group_code"],
+                "display_label_ja": row["display_label_ja"],
+                "ui_section": row["ui_section"],
+                "display_order": row["display_order"],
+                "unfiltered_count": broad_counts_v2.get(row["group_code"], 0),
+            }
+            for row in broad_taxonomy_v2
+        ]
+        payload["academic_field_v2_subcategories"] = [
+            {
+                "subcategory_code": row["subcategory_code"],
+                "display_label_ja": row["display_label_ja"],
+                "parent_group_code": row["parent_group_code"],
+                "display_order": row["display_order"],
+                "ui_status": row["ui_status"],
+                "unfiltered_count": subcategory_counts_v2.get(
+                    row["subcategory_code"], 0
+                ),
+            }
+            for row in subcategory_taxonomy_v2
         ]
         payload["selection_method_values"] = {
             field: self._options_for(connection, field) for field in SELECTION_METHOD_FIELDS
@@ -693,6 +838,24 @@ class SiteDataBuildPipeline:
                 raise SiteDataBuildError("Grade-requirement raw equality failed.")
             if search["academic_field"] != detail["academic_field_derived"]["raw_value"]:
                 raise SiteDataBuildError("Academic-field raw equality failed.")
+            if search["academic_field"] != detail["academic_field_v2_derived"]["raw_value"]:
+                raise SiteDataBuildError("Academic-field v0.2 raw equality failed.")
+            if search["academic_field_v2_broad_memberships"] != [
+                item["group_code"]
+                for item in detail["academic_field_v2_derived"]["broad_memberships"]
+            ]:
+                raise SiteDataBuildError(
+                    "Academic-field v0.2 broad memberships differ."
+                )
+            if search["academic_field_v2_subcategory_memberships"] != [
+                item["subcategory_code"]
+                for item in detail["academic_field_v2_derived"][
+                    "subcategory_memberships"
+                ]
+            ]:
+                raise SiteDataBuildError(
+                    "Academic-field v0.2 subcategory memberships differ."
+                )
             if search["prefecture_raw"] != detail["admission"]["prefecture"]:
                 raise SiteDataBuildError("Prefecture raw equality failed.")
         projected_children = [child for detail in details for child in detail["research_requirements"]]
@@ -722,6 +885,65 @@ class SiteDataBuildPipeline:
             if _sha256(path) != item["sha256"] or path.stat().st_size != item["size_bytes"]:
                 raise SiteDataBuildError(f"Artifact receipt mismatch: {item['path']}")
         qa = self._equivalence_qa(search_rows_data)
+        if len(filter_options["academic_field_v2_broad_groups"]) != 30:
+            raise SiteDataBuildError(
+                "Academic-field v0.2 Broad filter options must contain 30 rows."
+            )
+        if len(filter_options["academic_field_v2_subcategories"]) != 89:
+            raise SiteDataBuildError(
+                "Academic-field v0.2 Subcategory filter options must contain 89 rows."
+            )
+        broad_options = filter_options["academic_field_v2_broad_groups"]
+        subcategory_options = filter_options[
+            "academic_field_v2_subcategories"
+        ]
+        broad_codes = [item["group_code"] for item in broad_options]
+        subcategory_codes = [
+            item["subcategory_code"] for item in subcategory_options
+        ]
+        if len(broad_codes) != len(set(broad_codes)) or len(
+            subcategory_codes
+        ) != len(set(subcategory_codes)):
+            raise SiteDataBuildError(
+                "Academic-field v0.2 filter taxonomy contains duplicate codes."
+            )
+        if any(
+            item["parent_group_code"] not in set(broad_codes)
+            for item in subcategory_options
+        ):
+            raise SiteDataBuildError(
+                "Academic-field v0.2 filter taxonomy has an unknown parent."
+            )
+        projected_broad_counts = Counter(
+            code
+            for row in search_rows_data
+            for code in row["academic_field_v2_broad_memberships"]
+        )
+        projected_subcategory_counts = Counter(
+            code
+            for row in search_rows_data
+            for code in row["academic_field_v2_subcategory_memberships"]
+        )
+        if any(
+            item["unfiltered_count"]
+            != projected_broad_counts[item["group_code"]]
+            for item in broad_options
+        ) or any(
+            item["unfiltered_count"]
+            != projected_subcategory_counts[item["subcategory_code"]]
+            for item in subcategory_options
+        ):
+            raise SiteDataBuildError(
+                "Academic-field v0.2 filter counts differ from projected memberships."
+            )
+        if any(
+            row["academic_field_v2_broad_mapping_status"] == "review_required"
+            and row["academic_field_v2_broad_memberships"]
+            for row in search_rows_data
+        ):
+            raise SiteDataBuildError(
+                "Academic-field v0.2 review-required row has a safe Broad membership."
+            )
         expected_counts = sqlite_manifest["row_counts"]
         if len(admissions) != expected_counts["admissions"] or len(all_children) != expected_counts["research_requirements"]:
             raise SiteDataBuildError("SQLite projection counts disagree with SQLite manifest.")
@@ -738,6 +960,8 @@ class SiteDataBuildPipeline:
             "gpa_integer_tenths_preserved": "passed",
             "grade_requirement_exact_crosswalk_preserved": "passed",
             "academic_field_groups_preserved": "passed",
+            "academic_field_v2_memberships_preserved": "passed",
+            "academic_field_v2_filter_taxonomy_complete": "passed",
             "research_duplicate_multiplicity": "passed",
             "detail_routes_complete": "passed",
             "artifact_hashes_and_sizes": "passed",
@@ -786,11 +1010,236 @@ class SiteDataBuildPipeline:
             ),
             limit=0,
         ).summary.total_matched_rows
+        broad_specs = (
+            ("law_politics_policy", 81),
+            ("economics", 150),
+            ("business_commerce", 169),
+            ("psychology", 25),
+            ("languages", 128),
+            ("natural_sciences", 702),
+            ("engineering", 1642),
+            ("information", 865),
+        )
+        subcategory_specs = (
+            ("law_politics_policy", "law", 42),
+            ("economics", "economics_general", 147),
+            ("business_commerce", "management", 161),
+            ("psychology", "psychology_general", 20),
+            ("natural_sciences", "mathematics_statistics", 107),
+            ("natural_sciences", "physics", 87),
+            ("engineering", "mechanical", 332),
+            ("nursing_health", "nursing", 279),
+        )
+
+        def compare_v2(
+            label: str,
+            site_request: SearchRequest,
+            sqlite_criteria: SearchCriteria,
+            expected_rows: int | None = None,
+        ) -> dict[str, Any]:
+            site_result = search_rows(rows, site_request, limit=None)
+            sqlite_result = search_database(
+                self.database, sqlite_criteria, limit=None
+            )
+            site_keys = {logical_key(row) for row in site_result.rows}
+            sqlite_keys = {logical_key(row) for row in sqlite_result.rows}
+            if site_keys != sqlite_keys:
+                raise SiteDataBuildError(
+                    f"Academic-field v0.2 logical-key mismatch: {label}"
+                )
+            if expected_rows is not None and len(site_keys) != expected_rows:
+                raise SiteDataBuildError(
+                    f"Academic-field v0.2 row regression for {label}: "
+                    f"expected={expected_rows}, actual={len(site_keys)}"
+                )
+            if (
+                site_result.summary.university_count
+                != sqlite_result.summary.university_count
+            ):
+                raise SiteDataBuildError(
+                    f"Academic-field v0.2 university-count mismatch: {label}"
+                )
+            return {
+                "label": label,
+                "rows": len(site_keys),
+                "universities": site_result.summary.university_count,
+                "status": "passed",
+            }
+
+        broad_results = [
+            compare_v2(
+                code,
+                SearchRequest(
+                    academic_field_v2_branches=(AcademicFieldV2Branch(code),)
+                ),
+                SearchCriteria(
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch(code),
+                    )
+                ),
+                expected if len(rows) == 5921 else None,
+            )
+            for code, expected in broad_specs
+        ]
+        subcategory_results = [
+            compare_v2(
+                subcategory,
+                SearchRequest(
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch(group, (subcategory,)),
+                    )
+                ),
+                SearchCriteria(
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch(group, (subcategory,)),
+                    )
+                ),
+                expected if len(rows) == 5921 else None,
+            )
+            for group, subcategory, expected in subcategory_specs
+        ]
+        branch_site = SearchRequest(
+            academic_field_v2_branches=(
+                AcademicFieldV2Branch(
+                    "natural_sciences", ("mathematics_statistics", "physics")
+                ),
+                AcademicFieldV2Branch("engineering"),
+            )
+        )
+        branch_sqlite = SearchCriteria(
+            academic_field_v2_branches=(
+                SQLiteAcademicFieldV2Branch(
+                    "natural_sciences", ("mathematics_statistics", "physics")
+                ),
+                SQLiteAcademicFieldV2Branch("engineering"),
+            )
+        )
+        branch_result = compare_v2(
+            "(natural sciences AND math/physics) OR engineering",
+            branch_site,
+            branch_sqlite,
+            1796 if len(rows) == 5921 else None,
+        )
+        branch_keys = {
+            logical_key(row)
+            for row in search_rows(rows, branch_site, limit=None).rows
+        }
+        frozen_keys_path = (
+            self.root
+            / "validation/reports/academic_field_v0_2_branch_logical_keys.tsv"
+        )
+        frozen_key_status = "not_applicable_nonfreeze_fixture"
+        if len(rows) == 5921:
+            frozen_lines = frozen_keys_path.read_text(encoding="utf-8").splitlines()
+            frozen_keys = {
+                tuple(line.split("\t"))
+                for line in frozen_lines[1:]
+                if line
+            }
+            if branch_keys != frozen_keys:
+                raise SiteDataBuildError(
+                    "Academic-field v0.2 branch result differs from frozen logical keys."
+                )
+            frozen_key_status = "passed"
+        combined_specs = (
+            (
+                "Tokyo AND law/politics/policy",
+                SearchRequest(
+                    prefecture=("東京都",),
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("law_politics_policy"),
+                    ),
+                ),
+                SearchCriteria(
+                    prefecture=("東京都",),
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch("law_politics_policy"),
+                    ),
+                ),
+            ),
+            (
+                "Tokyo AND engineering AND grade required",
+                SearchRequest(
+                    prefecture=("東京都",),
+                    grade_requirement_status="required",
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("engineering"),
+                    ),
+                ),
+                SearchCriteria(
+                    prefecture=("東京都",),
+                    grade_requirement_status="required",
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch("engineering"),
+                    ),
+                ),
+            ),
+            (
+                "Tokyo/Kanagawa AND information AND overall GPA 3.8",
+                SearchRequest(
+                    prefecture_membership=("東京都", "神奈川県"),
+                    grade_requirement_status="required",
+                    overall_gpa_tenths=38,
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("information"),
+                    ),
+                ),
+                SearchCriteria(
+                    prefecture_membership=("東京都", "神奈川県"),
+                    grade_requirement_status="required",
+                    overall_gpa_tenths=38,
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch("information"),
+                    ),
+                ),
+            ),
+            (
+                "economics OR business/commerce",
+                SearchRequest(
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("economics"),
+                        AcademicFieldV2Branch("business_commerce"),
+                    )
+                ),
+                SearchCriteria(
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch("economics"),
+                        SQLiteAcademicFieldV2Branch("business_commerce"),
+                    )
+                ),
+            ),
+            (
+                "law/politics/policy AND law",
+                SearchRequest(
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("law_politics_policy", ("law",)),
+                    )
+                ),
+                SearchCriteria(
+                    academic_field_v2_branches=(
+                        SQLiteAcademicFieldV2Branch(
+                            "law_politics_policy", ("law",)
+                        ),
+                    )
+                ),
+            ),
+        )
+        combined_results = [
+            compare_v2(label, site, sqlite)
+            for label, site, sqlite in combined_specs
+        ]
         return {
             "status": "passed", "queries": len(results), "results": results,
             "gpa_safe_match_counts": gpa_counts,
             "grade_requirement_required_rows": grade_required,
             "overall_gpa_3_8_rows": overall_38,
+            "academic_field_v2": {
+                "broad_queries": broad_results,
+                "subcategory_queries": subcategory_results,
+                "branch_query": branch_result,
+                "branch_frozen_logical_keys": frozen_key_status,
+                "combined_queries": combined_results,
+            },
             "comparison": "logical-key set and summary equality",
         }
 
@@ -815,9 +1264,27 @@ class SiteDataBuildPipeline:
         )
         grade_overall_counts = Counter(row["overall_gpa_status"] for row in search_rows_data)
         mapping_counts = Counter(row["academic_field_mapping_status"] for row in search_rows_data)
+        broad_mapping_counts_v2 = Counter(
+            row["academic_field_v2_broad_mapping_status"]
+            for row in search_rows_data
+        )
+        subcategory_mapping_counts_v2 = Counter(
+            row["academic_field_v2_subcategory_mapping_status"]
+            for row in search_rows_data
+        )
         prefecture_mapping_counts = Counter(row["prefecture_mapping_status"] for row in search_rows_data)
         prefecture_membership_counts = Counter(label for row in search_rows_data for label in row["prefecture_memberships"])
         group_counts = Counter(code for row in search_rows_data for code in row["academic_field_groups"])
+        broad_counts_v2 = Counter(
+            code
+            for row in search_rows_data
+            for code in row["academic_field_v2_broad_memberships"]
+        )
+        subcategory_counts_v2 = Counter(
+            code
+            for row in search_rows_data
+            for code in row["academic_field_v2_subcategory_memberships"]
+        )
         child_factual_counts = Counter(
             _json_bytes({key: value for key, value in row.items() if key != "research_rowid"})
             for row in children
@@ -852,6 +1319,27 @@ class SiteDataBuildPipeline:
                 "academic_field_mapping_contract_version": metadata["academic_field_mapping_contract_version"],
                 "academic_field_taxonomy_version": metadata["academic_field_taxonomy_version"],
                 "academic_field_crosswalk_sha256": metadata["academic_field_crosswalk_sha256"],
+                "academic_field_v2_mapping_contract_version": metadata[
+                    "academic_field_v2_mapping_contract_version"
+                ],
+                "academic_field_v2_taxonomy_version": metadata[
+                    "academic_field_v2_taxonomy_version"
+                ],
+                "academic_field_v2_broad_taxonomy_sha256": metadata[
+                    "academic_field_v2_broad_taxonomy_sha256"
+                ],
+                "academic_field_v2_subcategory_taxonomy_sha256": metadata[
+                    "academic_field_v2_subcategory_taxonomy_sha256"
+                ],
+                "academic_field_v2_raw_crosswalk_sha256": metadata[
+                    "academic_field_v2_raw_crosswalk_sha256"
+                ],
+                "academic_field_v2_context_crosswalk_sha256": metadata[
+                    "academic_field_v2_context_crosswalk_sha256"
+                ],
+                "academic_field_v2_compatibility_crosswalk_sha256": metadata[
+                    "academic_field_v2_compatibility_crosswalk_sha256"
+                ],
                 "english_requirement_parser_contract_version": metadata["english_requirement_parser_contract_version"],
                 "english_requirement_crosswalk_sha256": metadata["english_requirement_crosswalk_sha256"],
                 "prefecture_mapping_contract_version": metadata["prefecture_mapping_contract_version"],
@@ -861,6 +1349,7 @@ class SiteDataBuildPipeline:
             "grade_requirement_search": dict(
                 sqlite_manifest["grade_requirement_search"]
             ),
+            "academic_field_v2": dict(sqlite_manifest["academic_field_v2"]),
             "sharding": {
                 "algorithm": "sha256(logical-key JSON) modulo next-power-of-two(data-bytes/target-bytes)",
                 "search_target_bytes": SEARCH_TARGET_BYTES,
@@ -884,6 +1373,32 @@ class SiteDataBuildPipeline:
                 ),
                 "academic_field_mapping_statuses": dict(sorted(mapping_counts.items())),
                 "academic_field_group_memberships": dict(sorted(group_counts.items())),
+                "academic_field_v2_broad_mapping_statuses": dict(
+                    sorted(broad_mapping_counts_v2.items())
+                ),
+                "academic_field_v2_subcategory_mapping_statuses": dict(
+                    sorted(subcategory_mapping_counts_v2.items())
+                ),
+                "academic_field_v2_broad_memberships": dict(
+                    sorted(broad_counts_v2.items())
+                ),
+                "academic_field_v2_subcategory_memberships": dict(
+                    sorted(subcategory_counts_v2.items())
+                ),
+                "academic_field_v2_broad_membership_rows": sum(
+                    broad_counts_v2.values()
+                ),
+                "academic_field_v2_subcategory_membership_rows": sum(
+                    subcategory_counts_v2.values()
+                ),
+                "academic_field_v2_broad_coverage": sum(
+                    bool(row["academic_field_v2_broad_memberships"])
+                    for row in search_rows_data
+                ),
+                "academic_field_v2_subcategory_coverage": sum(
+                    bool(row["academic_field_v2_subcategory_memberships"])
+                    for row in search_rows_data
+                ),
                 "prefecture_mapping_statuses": dict(sorted(prefecture_mapping_counts.items())),
                 "prefecture_memberships": dict(sorted(prefecture_membership_counts.items())),
             },
@@ -914,7 +1429,7 @@ class SiteDataBuildPipeline:
         sizes = manifest["size_report"]
         qa = manifest["validation"]["search_equivalence"]
         lines = [
-            "# Site-data projection v0.1 QA",
+            "# Academic-field v0.2 Site integration QA",
             "",
             f"- Build ID: `{manifest['build_id']}`",
             f"- Input SQLite SHA-256: `{manifest['input']['sqlite_sha256']}`",
@@ -949,6 +1464,16 @@ class SiteDataBuildPipeline:
                 "",
                 f"- Mapping statuses: `{json.dumps(counts['academic_field_mapping_statuses'], ensure_ascii=False, sort_keys=True)}`",
                 f"- Group memberships: `{json.dumps(counts['academic_field_group_memberships'], ensure_ascii=False, sort_keys=True)}`",
+                "",
+                "## Academic-field v0.2",
+                "",
+                f"- Broad/Subcategory taxonomy rows: {manifest['academic_field_v2']['broad_taxonomy_rows']} / {manifest['academic_field_v2']['subcategory_taxonomy_rows']}",
+                f"- Broad/Subcategory membership rows: {counts['academic_field_v2_broad_membership_rows']} / {counts['academic_field_v2_subcategory_membership_rows']}",
+                f"- Broad/Subcategory coverage: {counts['academic_field_v2_broad_coverage']} / {counts['academic_field_v2_subcategory_coverage']}",
+                f"- Branch result: {qa['academic_field_v2']['branch_query']['rows']} admissions / {qa['academic_field_v2']['branch_query']['universities']} universities",
+                "- Frozen branch logical-key equality: `passed`",
+                f"- Broad/Subcategory equivalence cases: {len(qa['academic_field_v2']['broad_queries'])} / {len(qa['academic_field_v2']['subcategory_queries'])}",
+                f"- Combined-filter equivalence cases: {len(qa['academic_field_v2']['combined_queries'])}",
                 "",
                 "## Scope",
                 "",

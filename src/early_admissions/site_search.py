@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 
-SITE_DATA_SCHEMA_VERSION = "0.1"
+SITE_DATA_SCHEMA_VERSION = "0.2"
 GPA_MODES = frozenset({"safe", "review", "all"})
 LOGICAL_KEY_FIELDS = ("source_dataset", "source_version", "record_id")
 MULTI_VALUE_FIELDS = (
@@ -34,7 +34,15 @@ MULTI_VALUE_FIELDS = (
 
 
 class SiteSearchError(RuntimeError):
-    """Raised when a static projection or search request violates v0.1."""
+    """Raised when a static projection or search request violates v0.2."""
+
+
+@dataclass(frozen=True)
+class AcademicFieldV2Branch:
+    """One v0.2 broad branch with an optional OR-list of subcategories."""
+
+    group_code: str
+    subcategory_codes: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -46,6 +54,7 @@ class SearchRequest:
     academic_field: tuple[str, ...] = ()
     academic_field_group: tuple[str, ...] = ()
     academic_field_mapping_status: tuple[str, ...] = ()
+    academic_field_v2_branches: tuple[AcademicFieldV2Branch, ...] = ()
     stem_flag: bool | None = None
     selection_category: tuple[str, ...] = ()
     exclusive_enrollment_status: tuple[str, ...] = ()
@@ -86,6 +95,28 @@ class SearchRequest:
                 not isinstance(value, str) or value == "" for value in values
             ):
                 raise SiteSearchError(f"{name} must be a tuple of non-empty strings.")
+        if not isinstance(self.academic_field_v2_branches, tuple):
+            raise SiteSearchError("academic_field_v2_branches must be a tuple.")
+        broad_codes: list[str] = []
+        for branch in self.academic_field_v2_branches:
+            if not isinstance(branch, AcademicFieldV2Branch) or not branch.group_code:
+                raise SiteSearchError("Invalid academic-field v0.2 branch.")
+            if not isinstance(branch.subcategory_codes, tuple) or any(
+                not isinstance(code, str) or not code
+                for code in branch.subcategory_codes
+            ):
+                raise SiteSearchError(
+                    "Academic-field v0.2 subcategory codes must be non-empty text."
+                )
+            if len(branch.subcategory_codes) != len(set(branch.subcategory_codes)):
+                raise SiteSearchError(
+                    "Academic-field v0.2 subcategory codes must be unique per branch."
+                )
+            broad_codes.append(branch.group_code)
+        if len(broad_codes) != len(set(broad_codes)):
+            raise SiteSearchError(
+                "Academic-field v0.2 broad branches must be unique."
+            )
 
 
 @dataclass(frozen=True)
@@ -156,6 +187,24 @@ def _matches(row: Mapping[str, Any], request: SearchRequest) -> bool:
         row["academic_field_groups"]
     ):
         return False
+    if request.academic_field_v2_branches:
+        broad_memberships = set(row["academic_field_v2_broad_memberships"])
+        subcategory_memberships = set(
+            row["academic_field_v2_subcategory_memberships"]
+        )
+        if not any(
+            branch.group_code in broad_memberships
+            and (
+                not branch.subcategory_codes
+                or bool(
+                    set(branch.subcategory_codes).intersection(
+                        subcategory_memberships
+                    )
+                )
+            )
+            for branch in request.academic_field_v2_branches
+        ):
+            return False
     if request.prefecture_membership and not set(request.prefecture_membership).intersection(row["prefecture_memberships"]):
         return False
     if (

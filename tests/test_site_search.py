@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import unittest
 
-from early_admissions.site_search import SearchRequest, SiteSearchError, search_rows
+from early_admissions.site_search import (
+    AcademicFieldV2Branch,
+    SearchRequest,
+    SiteSearchError,
+    search_rows,
+)
 
 
 def row(**updates: object) -> dict[str, object]:
@@ -16,6 +21,8 @@ def row(**updates: object) -> dict[str, object]:
         "academic_field": "工学",
         "academic_field_groups": ["engineering"],
         "academic_field_mapping_status": "single",
+        "academic_field_v2_broad_memberships": ["engineering"],
+        "academic_field_v2_subcategory_memberships": ["mechanical"],
         "stem_flag": True,
         "selection_category": "総合型選抜",
         "exclusive_enrollment_status": "専願",
@@ -119,6 +126,64 @@ class SiteSearchUnitTests(unittest.TestCase):
     def test_invalid_gpa_mode_without_value_is_rejected(self) -> None:
         with self.assertRaisesRegex(SiteSearchError, "requires a GPA"):
             search_rows([], SearchRequest(gpa_mode="review"))
+
+    def test_academic_field_v2_branches_are_or_and_subcategories_are_or(self) -> None:
+        rows = [
+            row(),
+            row(
+                record_id="PHYSICS",
+                academic_field_v2_broad_memberships=["natural_sciences"],
+                academic_field_v2_subcategory_memberships=["physics"],
+            ),
+            row(
+                record_id="CHEMISTRY",
+                academic_field_v2_broad_memberships=["natural_sciences"],
+                academic_field_v2_subcategory_memberships=["chemistry"],
+            ),
+        ]
+        request = SearchRequest(
+            academic_field_v2_branches=(
+                AcademicFieldV2Branch(
+                    "natural_sciences", ("mathematics_statistics", "physics")
+                ),
+                AcademicFieldV2Branch("engineering"),
+            )
+        )
+        self.assertEqual(
+            [item["record_id"] for item in search_rows(rows, request, limit=None).rows],
+            ["A", "PHYSICS"],
+        )
+
+    def test_academic_field_v1_and_v2_are_anded(self) -> None:
+        rows = [
+            row(),
+            row(
+                record_id="LEGACY_ONLY",
+                academic_field_groups=["engineering"],
+                academic_field_v2_broad_memberships=["natural_sciences"],
+                academic_field_v2_subcategory_memberships=["physics"],
+            ),
+        ]
+        request = SearchRequest(
+            academic_field_group=("engineering",),
+            academic_field_v2_branches=(AcademicFieldV2Branch("engineering"),),
+        )
+        self.assertEqual(
+            [item["record_id"] for item in search_rows(rows, request, limit=None).rows],
+            ["A"],
+        )
+
+    def test_duplicate_academic_field_v2_branches_are_rejected(self) -> None:
+        with self.assertRaisesRegex(SiteSearchError, "must be unique"):
+            search_rows(
+                [],
+                SearchRequest(
+                    academic_field_v2_branches=(
+                        AcademicFieldV2Branch("engineering"),
+                        AcademicFieldV2Branch("engineering"),
+                    )
+                ),
+            )
 
 
 if __name__ == "__main__":

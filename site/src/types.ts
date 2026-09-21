@@ -12,7 +12,7 @@ export interface ArtifactReceipt {
 export interface SiteManifest {
   artifact: string;
   manifest_version: string;
-  site_data_schema_version: "0.1";
+  site_data_schema_version: "0.2";
   build_id: string;
   build_timestamp_utc: string;
   builder_version: string;
@@ -26,6 +26,8 @@ export interface SiteManifest {
     grade_requirement_crosswalk_sha256: string;
     academic_field_mapping_contract_version: string;
     academic_field_taxonomy_version: string;
+    academic_field_v2_mapping_contract_version: string;
+    academic_field_v2_taxonomy_version: string;
     english_requirement_parser_contract_version: string;
     prefecture_mapping_contract_version: string;
     prefecture_taxonomy_version: string;
@@ -73,6 +75,12 @@ export interface SearchRow {
   stem_flag: Nullable<boolean>;
   academic_field_mapping_status: string;
   academic_field_groups: string[];
+  academic_field_v2_broad_mapping_status: string;
+  academic_field_v2_subcategory_mapping_status: string;
+  academic_field_v2_broad_memberships: string[];
+  academic_field_v2_subcategory_memberships: string[];
+  academic_field_v2_mapping_contract_version: "0.2";
+  academic_field_v2_taxonomy_version: "0.2";
   exclusive_enrollment_status: Nullable<string>;
   school_recommendation_required: Nullable<string>;
   academic_record_required: Nullable<string>;
@@ -127,13 +135,32 @@ export interface AcademicGroupOption extends OptionValue {
 }
 export interface PrefectureOption extends OptionValue { value:string; region:string; display_order:number; }
 
+export interface AcademicFieldV2BroadOption {
+  group_code: string;
+  display_label_ja: string;
+  ui_section: string;
+  display_order: number;
+  unfiltered_count: number;
+}
+
+export interface AcademicFieldV2SubcategoryOption {
+  subcategory_code: string;
+  display_label_ja: string;
+  parent_group_code: string;
+  display_order: number;
+  ui_status: "primary" | "secondary" | "hidden";
+  unfiltered_count: number;
+}
+
 export interface FilterOptions {
-  site_data_schema_version: "0.1";
+  site_data_schema_version: "0.2";
   build_id: string;
   universities: OptionValue[];
   institution_types: OptionValue[];
   prefectures: OptionValue[];
   academic_field_groups: AcademicGroupOption[];
+  academic_field_v2_broad_groups: AcademicFieldV2BroadOption[];
+  academic_field_v2_subcategories: AcademicFieldV2SubcategoryOption[];
   raw_academic_fields: OptionValue[];
   academic_field_mapping_statuses: OptionValue[];
   selection_categories: OptionValue[];
@@ -165,6 +192,7 @@ export interface SearchRequest {
   academic_field: string[];
   academic_field_group: string[];
   academic_field_mapping_status: string[];
+  academic_field_v2_branches: AcademicFieldV2Branch[];
   stem_flag: boolean | null;
   selection_category: string[];
   exclusive_enrollment_status: string[];
@@ -187,6 +215,11 @@ export interface SearchRequest {
   page: number;
 }
 
+export interface AcademicFieldV2Branch {
+  group_code: string;
+  subcategory_codes: string[];
+}
+
 export type GpaDerivedStatus = "safe match" | "safe no match" | "safe numeric rule (GPA not supplied)" | "conditional/review required" | "not numerically evaluable";
 
 export interface SearchSummary {
@@ -203,12 +236,13 @@ export interface SearchSummary {
 export interface SearchResult { rows: SearchRow[]; summary: SearchSummary; }
 
 export interface DetailRecord {
-  site_data_schema_version: "0.1";
+  site_data_schema_version: "0.2";
   identity: { source_dataset: string; source_version: string; record_id: string };
   admission: Record<string, Scalar>;
   gpa_derived: Record<string, Scalar>;
   grade_requirement_derived: Record<string, Scalar>;
   academic_field_derived: Record<string, Scalar | Array<Record<string, Scalar>>>;
+  academic_field_v2_derived: Record<string, Scalar | Array<Record<string, Scalar>>>;
   english_requirement_derived: Record<string, Scalar>;
   research_requirements: Array<Record<string, Scalar>>;
 }

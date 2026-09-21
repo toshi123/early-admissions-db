@@ -1,4 +1,5 @@
 import "./styles.css";
+import { syncBroadSubcategoryVisibility, visibleSubcategories } from "./academic-field-v2-ui";
 import { CandidateStore, browserCandidateStorage, candidateKey } from "./candidates";
 import { detailCandidateAction } from "./candidate-controls";
 import { CandidateView } from "./candidate-view";
@@ -52,6 +53,8 @@ let cleanupWebMcp: () => void = () => undefined;
 let floatingLiveCount: FloatingLiveCountController | null = null;
 let expandedUniversities = new Set<string>();
 const groupLabels = new Map<string, string>();
+const v2BroadLabels = new Map<string, string>();
+const v2SubcategoryLabels = new Map<string, string>();
 const candidates = new CandidateView(new CandidateStore(browserCandidateStorage()));
 
 if ("scrollRestoration" in history) history.scrollRestoration = "manual";
@@ -85,11 +88,32 @@ function radios(field: string, choices: Array<[string, string]>): string {
     .join("")}</div>`;
 }
 
+function academicFieldV2Controls(): string {
+  const selectedBranches = new Map(
+    applied.academic_field_v2_branches.map((branch) => [branch.group_code, branch]),
+  );
+  const sections = [...new Set(
+    options.academic_field_v2_broad_groups.map((item) => item.ui_section),
+  )];
+  return `<div class="academic-field-sections">${sections.map((section) => {
+    const broadGroups = options.academic_field_v2_broad_groups
+      .filter((item) => item.ui_section === section)
+      .sort((left, right) => left.display_order - right.display_order);
+    return `<section class="academic-field-section"><h3>${escapeHtml(section)}</h3><div class="academic-field-branch-grid">${broadGroups.map((broad) => {
+      const selectedBranch = selectedBranches.get(broad.group_code);
+      const subcategories = visibleSubcategories(
+        options.academic_field_v2_subcategories,
+        broad.group_code,
+      );
+      const subcategoryMarkup = subcategories.length
+        ? `<div class="academic-subcategory-filter" data-subcategories-for="${escapeHtml(broad.group_code)}"${selectedBranch ? "" : " hidden"}><p class="academic-subcategory-label">さらに絞る</p><div class="academic-subcategory-grid">${subcategories.map((subcategory) => `<label class="choice choice--checkbox choice--subcategory"><span class="choice__control"><input type="checkbox" name="academic_subfield_v2" value="${escapeHtml(subcategory.subcategory_code)}" data-parent-group="${escapeHtml(broad.group_code)}" ${selectedBranch?.subcategory_codes.includes(subcategory.subcategory_code) ? "checked" : ""}></span><span class="choice__label">${escapeHtml(subcategory.display_label_ja)}</span></label>`).join("")}</div></div>`
+        : "";
+      return `<div class="academic-field-branch"><label class="choice choice--checkbox choice--broad"><span class="choice__control"><input type="checkbox" name="academic_field_v2" value="${escapeHtml(broad.group_code)}" ${selectedBranch ? "checked" : ""}></span><span class="choice__label">${escapeHtml(broad.display_label_ja)}</span></label>${subcategoryMarkup}</div>`;
+    }).join("")}</div></section>`;
+  }).join("")}</div>`;
+}
+
 function searchForm(): string {
-  const groups = options.academic_field_groups.map((item) => ({
-    value: item.value,
-    display_label: item.display_label,
-  }));
   const institutionTypes = inValueOrder(options.institution_types, ["国立", "公立", "私立"]);
   const exclusive = inValueOrder(
     options.exclusive_enrollment_statuses.filter((item) => ["専願", "併願可", "条件付き", "不明"].includes(item.value ?? "")),
@@ -111,7 +135,7 @@ function searchForm(): string {
     <output id="live-summary" class="live-summary" aria-live="polite"></output>
     <div id="floating-live-summary" class="floating-live-summary" aria-hidden="true"><span id="floating-live-summary-text"></span></div>
     <fieldset><legend>1. 大学名</legend><label class="input-label" for="university-input">大学名を入力</label><div class="university-combobox"><input id="university-input" class="text-input" type="text" value="${escapeHtml(universityQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="university-suggestions" aria-expanded="false" placeholder="大学名の一部を入力"><div id="university-suggestions" class="suggestions" role="listbox" hidden></div></div><p class="help">表示された候補から1校を選択してください。</p></fieldset>
-    <fieldset><legend>2. 学問分野</legend><p class="help">複数選択可</p>${checks("academic_field_group", groups)}</fieldset>
+    <fieldset><legend>2. 学問分野</legend><p class="help">複数選択可。選んだ分野は、必要に応じて「さらに絞る」ことができます。</p>${academicFieldV2Controls()}${applied.academic_field_group.length ? `<div class="notice legacy-academic-filter"><strong>旧学問分野条件が適用されています：</strong> ${escapeHtml(applied.academic_field_group.map((value) => groupLabels.get(value) ?? value).join("、"))}</div>` : ""}</fieldset>
     <fieldset><legend>3. 大学種別</legend>${checks("institution_type", institutionTypes)}</fieldset>
     <fieldset><legend>4. 専願・併願</legend>${checks("exclusive_enrollment_status", exclusive, { 不明: "不明・記載確認できず" })}</fieldset>
     <fieldset><legend>5. 共通テスト</legend>${radios("common_test_required", [["", "指定なし"], ["Yes", "あり"], ["No", "なし"]])}</fieldset>
@@ -130,8 +154,11 @@ function readBaseForm(): SearchRequest {
   const request = emptyRequest();
   request.gpa_tenths = applied.gpa_tenths;
   request.gpa_mode = applied.gpa_mode;
+  request.academic_field_group = [...applied.academic_field_group];
+  request.academic_field_mapping_status = [
+    ...applied.academic_field_mapping_status,
+  ];
   for (const field of [
-    "academic_field_group",
     "institution_type",
     "exclusive_enrollment_status",
     "selection_interview",
@@ -144,6 +171,19 @@ function readBaseForm(): SearchRequest {
     request[field] = [...form.querySelectorAll<HTMLInputElement>(`input[name="${field}"]:checked`)]
       .map((input) => input.value);
   }
+  request.academic_field_v2_branches = [
+    ...form.querySelectorAll<HTMLInputElement>(
+      'input[name="academic_field_v2"]:checked',
+    ),
+  ].map((input) => ({
+    group_code: input.value,
+    subcategory_codes: [
+      ...form.querySelectorAll<HTMLInputElement>(
+        'input[name="academic_subfield_v2"]:checked',
+      ),
+    ].filter((subcategory) => subcategory.dataset.parentGroup === input.value)
+      .map((subcategory) => subcategory.value),
+  }));
   for (const field of [
     "common_test_required",
     "research_requirement_required",
@@ -231,7 +271,13 @@ function bindForm(): void {
       scrollTo: (settings) => window.scrollTo(settings),
     });
   });
-  form.addEventListener("change", () => refreshForm());
+  form.addEventListener("change", (event) => {
+    const input = event.target as HTMLInputElement;
+    if (input.name === "academic_field_v2") {
+      syncBroadSubcategoryVisibility(form, input);
+    }
+    refreshForm();
+  });
   form.addEventListener("input", (event) => {
     if (event.target === university) renderSuggestions();
     refreshForm();
@@ -287,7 +333,14 @@ function searchPage(warnings: string[]): void {
 function summaryText(): string {
   const parts: string[] = [];
   if (applied.university.length) parts.push(`大学：${applied.university[0]}`);
-  if (applied.academic_field_group.length) parts.push(`学問分野：${applied.academic_field_group.map((value) => groupLabels.get(value) ?? value).join("、")}`);
+  if (applied.academic_field_group.length) parts.push(`旧学問分野条件：${applied.academic_field_group.map((value) => groupLabels.get(value) ?? value).join("、")}`);
+  if (applied.academic_field_v2_branches.length) {
+    parts.push(`学問分野：${applied.academic_field_v2_branches.map((branch) => {
+      const broad = v2BroadLabels.get(branch.group_code) ?? branch.group_code;
+      if (!branch.subcategory_codes.length) return broad;
+      return `${broad}（${branch.subcategory_codes.map((code) => v2SubcategoryLabels.get(code) ?? code).join("、")}）`;
+    }).join(" または ")}`);
+  }
   if (applied.institution_type.length) parts.push(`大学種別：${applied.institution_type.join("、")}`);
   if (applied.exclusive_enrollment_status.length) parts.push(`専願・併願：${applied.exclusive_enrollment_status.join("、")}`);
   if (applied.common_test_required.length) parts.push(`共通テスト：${applied.common_test_required[0] === "Yes" ? "あり" : "なし"}`);
@@ -377,7 +430,7 @@ async function detailPage(parts: string[]): Promise<void> {
 function aboutPage(): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
-  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定条件の有無と、安全に確認できる全体評定の下限を分けて検索します。科目別・分岐等の追加条件は原文で確認してください。英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の19分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定条件の有無と、安全に確認できる全体評定の下限を分けて検索します。科目別・分岐等の追加条件は原文で確認してください。英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の30分類と詳細分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
@@ -505,6 +558,15 @@ try {
   candidates.rows = new Map(rows.map((row) => [candidateKey(row), row]));
   candidates.manifest = manifest;
   for (const group of options.academic_field_groups) groupLabels.set(group.value, group.display_label);
+  for (const group of options.academic_field_v2_broad_groups) {
+    v2BroadLabels.set(group.group_code, group.display_label_ja);
+  }
+  for (const subcategory of options.academic_field_v2_subcategories) {
+    v2SubcategoryLabels.set(
+      subcategory.subcategory_code,
+      subcategory.display_label_ja,
+    );
+  }
   await route(true);
   cleanupWebMcp();
   cleanupWebMcp = registerSearchTools(async (partial) => {

@@ -8,6 +8,9 @@ function row(update: Partial<SearchRow> = {}): SearchRow {
     prefecture: "東京都", prefecture_raw:"東京都", prefecture_mapping_status:"single", prefecture_memberships:["東京都"], faculty_school: "工学部", department: null, selection_category: "総合型選抜", selection_name: "選抜A",
     slot_type: null, capacity: "2", academic_field: "工学", stem_flag: true, academic_field_mapping_status: "single",
     academic_field_groups: ["engineering"], exclusive_enrollment_status: "専願", school_recommendation_required: "No",
+    academic_field_v2_broad_mapping_status: "single", academic_field_v2_subcategory_mapping_status: "single",
+    academic_field_v2_broad_memberships: ["engineering"], academic_field_v2_subcategory_memberships: ["mechanical"],
+    academic_field_v2_mapping_contract_version: "0.2", academic_field_v2_taxonomy_version: "0.2",
     academic_record_required: "Yes", common_test_required: "No", research_requirement_required: "Unknown",
     research_activity_level_status: null, selection_interview: "Yes", selection_oral_exam: "No", selection_presentation: "Unknown",
     selection_essay: null, selection_written_exam: "No", selection_practical: "No", selection_group_discussion: "No",
@@ -33,6 +36,28 @@ describe("frozen frontend search semantics", () => {
     const request = emptyRequest(); request.academic_field_group = ["information", "medicine"];
     const result = searchRows([row({ academic_field_groups: ["engineering", "information"] }), row({ record_id: "B", academic_field_groups: ["humanities"] })], request);
     expect(result.rows.map((item) => item.record_id)).toEqual(["A"]);
+  });
+
+  it("keeps v0.2 subcategories OR within a Broad branch and Broad branches OR", () => {
+    const rows = [
+      row(),
+      row({ record_id: "P", academic_field_v2_broad_memberships: ["natural_sciences"], academic_field_v2_subcategory_memberships: ["physics"] }),
+      row({ record_id: "C", academic_field_v2_broad_memberships: ["natural_sciences"], academic_field_v2_subcategory_memberships: ["chemistry"] }),
+    ];
+    const request = emptyRequest();
+    request.academic_field_v2_branches = [
+      { group_code: "natural_sciences", subcategory_codes: ["mathematics_statistics", "physics"] },
+      { group_code: "engineering", subcategory_codes: [] },
+    ];
+    expect(searchRows(rows, request).rows.map((item) => item.record_id)).toEqual(["A", "P"]);
+  });
+
+  it("ANDs legacy v0.1 and v0.2 academic-field filters", () => {
+    const request = emptyRequest();
+    request.academic_field_group = ["engineering"];
+    request.academic_field_v2_branches = [{ group_code: "engineering", subcategory_codes: [] }];
+    const legacyOnly = row({ record_id: "B", academic_field_v2_broad_memberships: ["natural_sciences"] });
+    expect(searchRows([row(), legacyOnly], request).rows.map((item) => item.record_id)).toEqual(["A"]);
   });
 
   it("fails closed for GPA safe, review, and all", () => {

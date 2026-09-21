@@ -39,7 +39,7 @@ async function fetchVerifiedJson<T>(receipt: ArtifactReceipt): Promise<{ value: 
 
 function assertManifest(value: unknown): asserts value is SiteManifest {
   const manifest = value as Partial<SiteManifest>;
-  if (manifest.artifact !== "early_admissions_site_data" || manifest.site_data_schema_version !== "0.1" ||
+  if (manifest.artifact !== "early_admissions_site_data" || manifest.site_data_schema_version !== "0.2" ||
     manifest.validation?.status !== "passed" || !/^[0-9a-f]{20}$/.test(manifest.build_id ?? "") ||
     !Array.isArray(manifest.outputs?.artifacts)) {
     throw new SiteDataError("対応していない、または未検証のSite-data manifestです。");
@@ -66,14 +66,14 @@ export async function loadSearchData() {
   const filterReceipt = manifest.outputs.artifacts.find((item) => item.kind === "filter_options");
   if (!filterReceipt) throw new SiteDataError("検索条件データが目録にありません。");
   const optionsResult = await fetchVerifiedJson<FilterOptions>(filterReceipt);
-  if (optionsResult.value.build_id !== manifest.build_id || optionsResult.value.site_data_schema_version !== "0.1") {
+  if (optionsResult.value.build_id !== manifest.build_id || optionsResult.value.site_data_schema_version !== "0.2") {
     throw new SiteDataError("検索条件データのbuild IDまたはschema versionが一致しません。");
   }
   const receipts = manifest.outputs.artifacts.filter((item) => item.kind === "search_shard");
   const payloads = await Promise.all(receipts.map((receipt) => fetchVerifiedJson<{
     build_id: string; site_data_schema_version: string; rows: SearchRow[];
   }>(receipt)));
-  if (payloads.some(({ value }) => value.build_id !== manifest.build_id || value.site_data_schema_version !== "0.1")) {
+  if (payloads.some(({ value }) => value.build_id !== manifest.build_id || value.site_data_schema_version !== "0.2")) {
     throw new SiteDataError("検索データのbuild IDまたはschema versionが一致しません。");
   }
   const prepared = performance.now();
@@ -113,7 +113,7 @@ export async function loadDetail(
   }
   let payload: DetailPayload;
   try { payload = await pending; } catch (error) { cache?.delete(key); throw error; }
-  if (payload.build_id !== manifest.build_id || payload.site_data_schema_version !== "0.1") {
+  if (payload.build_id !== manifest.build_id || payload.site_data_schema_version !== "0.2") {
     cache?.delete(key);
     throw new SiteDataError("詳細データのbuild IDまたはschema versionが一致しません。");
   }

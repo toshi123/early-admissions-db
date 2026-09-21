@@ -4,12 +4,12 @@ import { fileURLToPath } from "node:url";
 
 const siteRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repoRoot = resolve(siteRoot, "..");
-const source = resolve(repoRoot, "data/derived/site/v0_1");
+const source = resolve(repoRoot, "data/derived/site/v0_2");
 const destination = resolve(siteRoot, "public/site-data");
 
 const manifest = JSON.parse(await readFile(resolve(source, "build_manifest.json"), "utf8"));
-if (manifest.site_data_schema_version !== "0.1" || manifest.validation?.status !== "passed") {
-  throw new Error("Site-data manifest is not a validated v0.1 projection.");
+if (manifest.site_data_schema_version !== "0.2" || manifest.validation?.status !== "passed") {
+  throw new Error("Site-data manifest is not a validated v0.2 projection.");
 }
 
 await rm(destination, { recursive: true, force: true });

@@ -54,6 +54,13 @@ class SiteDataBuildTests(unittest.TestCase):
             self.assertIs(kokkoritsu["stem_flag"], True)
             self.assertIs(kokkoritsu["fallback_previous_year"], False)
             self.assertEqual(kokkoritsu["academic_field_groups"], ["natural_sciences", "engineering", "information"])
+            self.assertEqual(
+                kokkoritsu["academic_field_v2_broad_mapping_status"], "multi"
+            )
+            self.assertTrue(kokkoritsu["academic_field_v2_broad_memberships"])
+            self.assertEqual(
+                kokkoritsu["academic_field_v2_mapping_contract_version"], "0.2"
+            )
             self.assertEqual(kokkoritsu["gpa_min_tenths"], 35)
             self.assertIn("selection_practical", kokkoritsu)
             self.assertIn("selection_group_discussion", kokkoritsu)
@@ -66,6 +73,22 @@ class SiteDataBuildTests(unittest.TestCase):
                 manifest["grade_requirement_search"]["raw_mismatch_rows"], 0
             )
             self.assertEqual(sha256(database), before)
+            filter_receipt = next(
+                item
+                for item in manifest["outputs"]["artifacts"]
+                if item["kind"] == "filter_options"
+            )
+            filter_options = json.loads(
+                (result.output_dir / filter_receipt["path"]).read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertEqual(
+                len(filter_options["academic_field_v2_broad_groups"]), 30
+            )
+            self.assertEqual(
+                len(filter_options["academic_field_v2_subcategories"]), 89
+            )
 
     def test_exact_duplicate_children_are_preserved(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -206,6 +229,28 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         self.assertEqual(
             self.manifest["grade_requirement_search"]["numeric_floor_rows"],
             1329,
+        )
+        self.assertEqual(
+            self.manifest["counts"]["academic_field_v2_broad_membership_rows"],
+            8275,
+        )
+        self.assertEqual(
+            self.manifest["counts"][
+                "academic_field_v2_subcategory_membership_rows"
+            ],
+            6880,
+        )
+        self.assertEqual(
+            self.manifest["validation"]["search_equivalence"][
+                "academic_field_v2"
+            ]["branch_query"]["rows"],
+            1796,
+        )
+        self.assertEqual(
+            self.manifest["validation"]["search_equivalence"][
+                "academic_field_v2"
+            ]["branch_frozen_logical_keys"],
+            "passed",
         )
 
 

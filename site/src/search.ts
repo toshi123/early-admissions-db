@@ -13,6 +13,7 @@ export const MULTI_FIELDS: MultiField[] = [
 
 export function emptyRequest(): SearchRequest {
   return Object.assign(Object.fromEntries(MULTI_FIELDS.map((field) => [field, []])), {
+    academic_field_v2_branches: [],
     stem_flag: null, gpa_tenths: null, gpa_mode: "all",
     grade_requirement_status: null, overall_gpa_tenths: null, page: 1,
   }) as unknown as SearchRequest;
@@ -48,6 +49,17 @@ function matches(row: SearchRow, request: SearchRequest): boolean {
     } else if (field === "prefecture_membership") {
       if (!values.some((value) => row.prefecture_memberships.includes(value))) return false;
     } else if (!values.includes(row[field as keyof SearchRow] as string)) return false;
+  }
+  if (request.academic_field_v2_branches.length) {
+    const broad = new Set(row.academic_field_v2_broad_memberships);
+    const subcategories = new Set(row.academic_field_v2_subcategory_memberships);
+    const branchMatch = request.academic_field_v2_branches.some((branch) =>
+      broad.has(branch.group_code)
+      && (
+        branch.subcategory_codes.length === 0
+        || branch.subcategory_codes.some((code) => subcategories.has(code))
+      ));
+    if (!branchMatch) return false;
   }
   if (request.stem_flag !== null && row.stem_flag !== request.stem_flag) return false;
   if (request.gpa_tenths !== null) {

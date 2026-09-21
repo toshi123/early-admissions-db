@@ -1,8 +1,8 @@
 # Structured search CLI v0.1 representative QA
 
-- Generated: `2026-09-21T03:32:42Z`
+- Generated: `2026-09-21T09:30:57Z`
 - SQLite: `data/derived/sqlite/early_admissions_2027.sqlite`
-- SQLite SHA-256 before/after: `629e93518f67c52b57127516af5cb721a225766c2ec8daee80138b708ae8ea47` / `629e93518f67c52b57127516af5cb721a225766c2ec8daee80138b708ae8ea47`
+- SQLite SHA-256 before/after: `a83055bfab2d9e32b7078f3ee12ea0673392abdc06c32c14b8900e30ec67c624` / `a83055bfab2d9e32b7078f3ee12ea0673392abdc06c32c14b8900e30ec67c624`
 - Queries: 25
 - Access: URI `mode=ro&immutable=1` plus `PRAGMA query_only=ON`
 - GPA meaning: `safe match` means `overall GPA condition safely matched`; it is not an application-eligibility determination.
