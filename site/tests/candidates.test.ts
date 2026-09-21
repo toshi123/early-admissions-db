@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CANDIDATE_STORAGE_KEY, CandidateSelection, CandidateStore, candidateKey, resolveCandidates } from "../src/candidates";
-import { candidateButton, syncCandidateControls } from "../src/candidate-controls";
+import { candidateButton, detailCandidateAction, syncCandidateControls } from "../src/candidate-controls";
 import { candidateListMarkup } from "../src/candidate-page";
 import { compactResultCard } from "../src/search-ui";
 import { CandidateView } from "../src/candidate-view";
@@ -109,6 +109,21 @@ describe("candidate controls and export selection", () => {
     expect([...document.querySelectorAll("button")].every((b) => b.textContent === "候補から外す" && b.getAttribute("aria-pressed") === "true")).toBe(true);
     store.remove(candidateKey(row));
     expect([...document.querySelectorAll("button")].every((b) => b.textContent === "候補に追加")).toBe(true);
+  });
+
+  it("renders the detail action as one native pressed-state control and keeps it synchronized", () => {
+    const row = candidateRow();
+    document.body.innerHTML = `<span id="candidate-count"></span>${detailCandidateAction(row)}`;
+    const button = document.querySelector<HTMLButtonElement>(".detail-candidate-action button")!;
+    expect(button.tagName).toBe("BUTTON");
+    expect(button.type).toBe("button");
+    expect(button.getAttribute("aria-pressed")).toBe("false");
+    const store = new CandidateStore(localStorage);
+    store.subscribe(() => syncCandidateControls(document, new Set(store.items.map(candidateKey)), store.warning));
+    store.add(row);
+    expect(button.getAttribute("aria-pressed")).toBe("true");
+    expect(button.textContent).toBe("候補から外す");
+    expect(document.querySelector("#candidate-count")?.textContent).toBe("（1）");
   });
 
   it("defaults to all selected, keeps unchecks on rerender, and never removes a saved candidate on deselection", () => {

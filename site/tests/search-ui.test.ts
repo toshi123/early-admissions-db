@@ -4,6 +4,7 @@ import { emptyRequest } from "../src/search";
 import {
   applicationConditionLabels,
   compactResultCard,
+  exclusiveEnrollmentLabel,
   evaluateSearchDraft,
   liveSearchResult,
   liveSummaryPresentation,
@@ -88,7 +89,7 @@ describe("compact result cards", () => {
     expect(html).not.toContain("募集人数");
     expect(html).not.toContain("評定条件（原文）");
     expect(html).not.toContain("出願期間");
-    expect(html).not.toContain("専願");
+    expect(html).toContain("専願");
 
     const groupedHtml = compactResultCard(row(), false, false);
     expect(groupedHtml).not.toContain("東京大学");
@@ -118,14 +119,37 @@ describe("compact result cards", () => {
     expect(html.includes("条件：研究業績")).toBe(expected);
   });
 
-  it("keeps application conditions separate from selection methods in text, semantics, and styling", () => {
+  it("keeps methods, conditions, and exclusive status distinct within one chip row", () => {
     const fixture = row({ english_requirement_status: "required", research_requirement_required: "Yes" });
     expect(applicationConditionLabels(fixture)).toEqual(["英語資格", "研究業績"]);
     const html = compactResultCard(fixture, false, false);
-    expect(html).toContain('class="method-badges" aria-label="選考方法"');
-    expect(html).toContain('class="condition-badges" aria-label="出願条件"');
-    expect(html).toContain('class="condition-badge" aria-label="出願条件 英語資格">条件：英語資格');
-    expect(html).toContain('class="condition-badge" aria-label="出願条件 研究業績">条件：研究業績');
+    expect(html).toContain('class="result-chips" aria-label="選考方法・出願条件・専願併願"');
+    expect(html).toContain('class="result-chip method-chip" aria-label="選考方法 面接"');
+    expect(html).toContain('class="result-chip condition-chip" aria-label="出願条件 英語資格">条件：英語資格');
+    expect(html).toContain('class="result-chip condition-chip" aria-label="出願条件 研究業績">条件：研究業績');
+    expect(html).toContain('class="result-chip exclusive-chip" aria-label="専願・併願 専願">専願');
+    expect(html.indexOf("method-chip")).toBeLessThan(html.indexOf("condition-chip"));
+    expect(html.indexOf("condition-chip")).toBeLessThan(html.indexOf("exclusive-chip"));
+  });
+
+  it.each([
+    ["専願", "専願"],
+    ["併願可", "併願可"],
+    ["条件付き", "条件付き"],
+    ["不明", "不明"],
+    [null, null],
+    ["unexpected", null],
+  ] as const)("maps exclusive enrollment status %s without strengthening its meaning", (value, expected) => {
+    expect(exclusiveEnrollmentLabel(value)).toBe(expected);
+    const html = compactResultCard(row({ exclusive_enrollment_status: value }), false, false);
+    expect(html.includes('class="result-chip exclusive-chip"')).toBe(expected !== null);
+  });
+
+  it("keeps the candidate control beside the unified wrapping chip row", () => {
+    document.body.innerHTML = compactResultCard(row(), false, false);
+    const utility = document.querySelector(".result-card__utility")!;
+    expect(utility.querySelector(".result-chips")).not.toBeNull();
+    expect(utility.querySelector("button.candidate-toggle")).not.toBeNull();
   });
 });
 

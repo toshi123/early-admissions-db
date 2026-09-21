@@ -45,9 +45,19 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".university-admissions { margin: 0 .25rem .75rem 1rem; }");
   });
 
-  it("lets selection-method and application-condition badges wrap independently", () => {
-    expect(css).toContain(".method-badges { display: flex; flex-wrap: wrap;");
-    expect(css).toContain(".condition-badges { display: flex; flex-wrap: wrap;");
-    expect(css).toContain(".condition-badge {");
+  it("keeps all result-chip categories in one wrapping row beside the candidate action", () => {
+    expect(css).toContain(".result-card__utility { display: flex;");
+    expect(css).toContain(".result-chips { min-width: 0; display: flex; flex: 1 1 auto; flex-wrap: wrap;");
+    expect(css).toContain(".method-chip {");
+    expect(css).toContain(".condition-chip {");
+    expect(css).toContain(".exclusive-chip {");
+    expect(css).toContain(".result-card__utility { flex-wrap: wrap; }");
+  });
+
+  it("uses fixed desktop and non-obscuring sticky mobile placement for the detail candidate action", () => {
+    expect(css).toContain(".detail-candidate-action { position: fixed;");
+    expect(css).toContain("top: 5rem");
+    expect(css).toContain(".detail-candidate-action { position: sticky; top: .5rem;");
+    expect(css).toContain(".detail-candidate-action .candidate-toggle");
   });
 });

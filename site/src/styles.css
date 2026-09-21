@@ -215,16 +215,19 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 .faculty-line { color: var(--gray-700); font-size: .9375rem; }
 .selection-line { display: flex; align-items: baseline; flex-wrap: wrap; gap: .375rem .625rem; font-size: .9375rem; }
 .selection-category { color: var(--gray-700); font-size: .8125rem; }
-.method-badges { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .5rem; }
-.method-badges span { padding: .125rem .5rem; border: 1px solid var(--gray-420); border-radius: 999px; background: #fff; color: var(--gray-700); font-size: .75rem; line-height: 1.5; }
-.method-badges .safe-match { border-color: var(--blue-900); background: var(--blue-50); color: var(--blue-1000); }
-.method-badges .previous-year { border-color: #a58000; background: #fbf5e0; color: #6e5600; }
-.condition-badges { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .375rem; }
-.condition-badge { padding: .125rem .5rem; border: 1px solid var(--blue-900); border-radius: 3px; background: var(--blue-50); color: var(--blue-1100); font-size: .75rem; font-weight: 700; line-height: 1.5; }
-.admission-row-footer { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .375rem .75rem; margin-top: .5rem; }
+.result-card__utility { display: flex; align-items: flex-start; justify-content: space-between; gap: .375rem .75rem; margin-top: .5rem; }
+.result-chips { min-width: 0; display: flex; flex: 1 1 auto; flex-wrap: wrap; gap: .25rem; }
+.result-chip { padding: .125rem .5rem; border: 1px solid var(--gray-420); background: #fff; color: var(--gray-700); font-size: .75rem; line-height: 1.5; }
+.method-chip { border-radius: 999px; }
+.method-chip--empty { border-style: dashed; }
+.condition-chip { border-color: var(--blue-900); border-radius: 3px; background: var(--blue-50); color: var(--blue-1100); font-weight: 700; }
+.exclusive-chip { border: 2px double var(--gray-700); border-radius: 2px; padding-block: calc(.125rem - 1px); color: var(--gray-900); font-weight: 700; }
+.derived-chip.safe-match { border-color: var(--blue-900); border-radius: 999px; background: var(--blue-50); color: var(--blue-1000); }
+.derived-chip.previous-year { border-color: #a58000; border-radius: 999px; background: #fbf5e0; color: #6e5600; }
 .application-end { flex: 1 1 12rem; font-size: .875rem; color: var(--gray-900); }
 .application-end span { white-space: pre-wrap; overflow-wrap: anywhere; }
 .candidate-toggle { min-height: 44px; font-size: .875rem; padding: .375rem .75rem; }
+.result-card__utility .candidate-toggle { flex: 0 0 auto; }
 .candidate-toggle[aria-pressed="true"] { background: var(--blue-50); }
 .candidate-actions, .candidate-row-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1rem; }
 .candidate-row-actions { width: 100%; justify-content: space-between; }
@@ -242,6 +245,9 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 
 .detail-title { padding: 1.25rem 0; border-bottom: 4px solid var(--blue-900); background: #fff; }
 .detail-title h1 { margin: .25rem 0; }
+.detail-candidate-action { position: fixed; z-index: 40; top: 5rem; right: max(1rem, calc((100vw - 1140px) / 2)); }
+.detail-candidate-action .candidate-toggle { background: rgb(255 255 255 / 97%); box-shadow: 0 2px 8px rgb(0 0 0 / 10%); }
+.detail-candidate-action .candidate-toggle[aria-pressed="true"] { background: rgb(232 241 254 / 97%); }
 .fallback-warning { margin: 1rem 0; padding: 1rem; border: 1px solid #b78f00; border-left-width: 6px; background: #fbf5e0; }
 .detail-section, .about section { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-420); }
 .detail-section h2, .about h2 { margin: 0 0 1rem; font-size: 1.5rem; }
@@ -254,6 +260,9 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 .developer-details { margin-top: 1.25rem; color: var(--gray-700); font-size: .875rem; }
 .developer-details summary { width: fit-content; cursor: pointer; }
 
+@media (max-width: 1100px) {
+  .detail-candidate-action { position: sticky; top: .5rem; display: flex; justify-content: flex-end; margin: 0 0 .5rem; }
+}
 @media (max-width: 800px) {
   .site-header__inner { min-height: auto; padding: .75rem .75rem 0; flex-direction: column; align-items: flex-start; gap: .25rem; }
   .brand { max-width: none; font-size: .875rem; line-height: 1.4; }
@@ -276,6 +285,8 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
   .university-admissions { margin: 0 .25rem .75rem 1rem; }
   .result-card { padding: .875rem .75rem; }
   .result-card h2 { font-size: 1.125rem; }
+  .result-card__utility { flex-wrap: wrap; }
+  .result-card__utility .candidate-toggle { margin-left: auto; }
   .floating-live-summary {
     top: .625rem;
     right: auto;

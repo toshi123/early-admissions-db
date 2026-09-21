@@ -103,6 +103,17 @@ export function applicationConditionLabels(row: SearchRow): string[] {
   ];
 }
 
+const EXCLUSIVE_ENROLLMENT_LABELS: Readonly<Record<string, string>> = {
+  "専願": "専願",
+  "併願可": "併願可",
+  "条件付き": "条件付き",
+  "不明": "不明",
+};
+
+export function exclusiveEnrollmentLabel(value: string | null): string | null {
+  return value === null ? null : EXCLUSIVE_ENROLLMENT_LABELS[value] ?? null;
+}
+
 export function compactResultCard(
   row: SearchRow,
   showGpaSafeMatch: boolean,
@@ -111,15 +122,20 @@ export function compactResultCard(
 ): string {
   const methods = selectionMethodLabels(row);
   const conditions = applicationConditionLabels(row);
+  const exclusive = exclusiveEnrollmentLabel(row.exclusive_enrollment_status);
   const category = row.selection_category
     ? `<span class="selection-category">${displayValue(row.selection_category)}</span>`
     : "";
-  const badges = [
-    ...methods.map((method) => `<span>${escapeHtml(method)}</span>`),
+  const chips = [
+    ...(methods.length
+      ? methods.map((method) => `<span class="result-chip method-chip" aria-label="選考方法 ${escapeHtml(method)}">${escapeHtml(method)}</span>`)
+      : ['<span class="result-chip method-chip method-chip--empty">選考方法の記載なし</span>']),
     ...(showGpaSafeMatch && row.gpa_derived_status === "safe match"
-      ? ['<span class="safe-match">評定：安全照合一致</span>']
+      ? ['<span class="result-chip derived-chip safe-match">評定：安全照合一致</span>']
       : []),
-    ...(row.fallback_previous_year ? ['<span class="previous-year">前年度情報</span>'] : []),
+    ...(row.fallback_previous_year ? ['<span class="result-chip derived-chip previous-year">前年度情報</span>'] : []),
+    ...conditions.map((condition) => `<span class="result-chip condition-chip" aria-label="出願条件 ${escapeHtml(condition)}">条件：${escapeHtml(condition)}</span>`),
+    ...(exclusive ? [`<span class="result-chip exclusive-chip" aria-label="専願・併願 ${escapeHtml(exclusive)}">${escapeHtml(exclusive)}</span>`] : []),
   ];
   const detailHref = detailLink(row.source_dataset, row.source_version, row.record_id);
   const selectionName = displayValue(row.selection_name);
@@ -129,9 +145,6 @@ export function compactResultCard(
   const selection = showUniversity
     ? `<strong>${selectionName}</strong>${category}`
     : `<strong><a class="admission-detail-link" href="${detailHref}" data-route>${selectionName}</a></strong>${category}`;
-  const conditionBadges = conditions.length
-    ? `<div class="condition-badges" aria-label="出願条件">${conditions.map((condition) => `<span class="condition-badge" aria-label="出願条件 ${escapeHtml(condition)}">条件：${escapeHtml(condition)}</span>`).join("")}</div>`
-    : "";
   const deadline = row.application_end === null ? "" : `<p class="application-end">出願終了：<span>${escapeHtml(row.application_end)}</span></p>`;
-  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="method-badges" aria-label="選考方法">${badges.length ? badges.join("") : "<span>選考方法の記載なし</span>"}</div>${conditionBadges}<div class="admission-row-footer">${deadline}${actions ?? candidateButton(row)}</div></article>`;
+  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="result-card__utility"><div class="result-chips" aria-label="選考方法・出願条件・専願併願">${chips.join("")}</div>${actions ?? candidateButton(row)}</div>${deadline}</article>`;
 }

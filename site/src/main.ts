@@ -1,6 +1,6 @@
 import "./styles.css";
 import { CandidateStore, browserCandidateStorage, candidateKey } from "./candidates";
-import { candidateButton } from "./candidate-controls";
+import { detailCandidateAction } from "./candidate-controls";
 import { CandidateView } from "./candidate-view";
 import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
@@ -348,7 +348,7 @@ async function detailPage(parts: string[]): Promise<void> {
     const remaining = Object.keys(admission).filter((field) => !assigned.has(field) && !hidden.has(field));
     app.innerHTML = `${header()}<main id="main" class="page detail-page">
       ${admission.fallback_previous_year === true ? '<div class="fallback-warning"><strong>前年度情報を参照しています。</strong> 2027年度の公式資料を確認してください。</div>' : ""}
-      <header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p>${candidateButton(row, candidates.store.has(row))}</header>
+      ${detailCandidateAction(row, candidates.store.has(row))}<header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p></header>
       ${sections.map(([title, fields]) => `<section class="detail-section"><h2>${title}</h2>${grid(admission, fields)}${title === "研究" ? research(detail) : ""}</section>`).join("")}<section class="detail-section"><h2>その他の記録項目</h2>${grid(admission, remaining)}</section><section class="detail-section"><h2>出典</h2><div class="source-links">${safeExternalLink(admission.guideline_url, "募集要項")}${safeExternalLink(admission.source_url, "公式情報")}${safeExternalLink(admission.schedule_url, "日程")}${safeExternalLink(admission.exclusive_enrollment_evidence_url, "専願根拠")}${safeExternalLink(admission.previous_year_source_url, "前年度資料")}</div><details class="developer-details"><summary>データ識別情報</summary><p>${escapeHtml(dataset)} ／ ${escapeHtml(version)} ／ ${escapeHtml(id)}</p></details></section></main>${footer()}`;
   } catch (error) {
     dataError(error instanceof SiteDataError ? error.message : "詳細データを読み込めませんでした。");
