@@ -68,10 +68,14 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain("@media (max-width: 40rem) { .nested-filter { margin-left: 0; } }");
   });
 
-  it("uses fixed desktop and non-obscuring sticky mobile placement for the detail candidate action", () => {
-    expect(css).toContain(".detail-candidate-action { position: fixed;");
+  it("uses one fixed desktop navigation surface and a safe-area mobile action bar", () => {
+    expect(css).toContain(".floating-navigation {");
+    expect(css).toContain("position: fixed;");
     expect(css).toContain("top: 5rem");
-    expect(css).toContain(".detail-candidate-action { position: sticky; top: .5rem;");
-    expect(css).toContain(".detail-candidate-action .candidate-toggle");
+    expect(css).toContain(".floating-navigation .detail-candidate-action { display: flex;");
+    expect(css).toContain("padding-bottom: calc(6rem + env(safe-area-inset-bottom))");
+    expect(css).toContain("padding: .625rem .75rem calc(.625rem + env(safe-area-inset-bottom))");
+    expect(css).toContain("inset: auto 0 0");
+    expect(css).toContain("white-space: normal");
   });
 });

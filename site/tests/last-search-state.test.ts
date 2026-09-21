@@ -2,10 +2,15 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  LAST_RESULTS_URL_KEY,
   LAST_SEARCH_QUERY_KEY,
+  canonicalResultsUrl,
   canonicalSearchQuery,
+  detailReturnTarget,
   headerSearchHref,
+  readLastResultsUrl,
   readLastSearchQuery,
+  rememberLastResults,
   rememberLastSearch,
   type SearchStateStorage,
 } from "../src/last-search-state";
@@ -85,6 +90,64 @@ describe("canonical last-search state", () => {
     expect(storage.values.get(LAST_SEARCH_QUERY_KEY)).toBe(query);
   });
 
+  it("stores a canonical results URL with pagination and without unknown input", () => {
+    const parsed = parseSearchParams(new URLSearchParams(
+      "institution_type=国立&prefecture_membership=東京都&page=3&unknown=1",
+    ), options);
+    const storage = new MemoryStorage();
+    const url = rememberLastResults(parsed.request, storage);
+    expect(url).toBe(
+      "/results?institution_type=%E5%9B%BD%E7%AB%8B&prefecture_membership=%E6%9D%B1%E4%BA%AC%E9%83%BD&page=3",
+    );
+    expect(storage.values.get(LAST_RESULTS_URL_KEY)).toBe(url);
+    expect(canonicalResultsUrl(parsed.request)).toBe(url);
+  });
+
+  it("re-canonicalizes stored results URLs and rejects external or fragmented values", () => {
+    const storage = new MemoryStorage();
+    storage.setItem(LAST_RESULTS_URL_KEY, "/results?institution_type=国立&unknown=1&page=2");
+    expect(readLastResultsUrl(options, storage)).toBe(
+      "/results?institution_type=%E5%9B%BD%E7%AB%8B&page=2",
+    );
+    storage.setItem(LAST_RESULTS_URL_KEY, "https://example.com/results?institution_type=国立");
+    expect(readLastResultsUrl(options, storage)).toBe("");
+    storage.setItem(LAST_RESULTS_URL_KEY, "/results?institution_type=国立#unexpected");
+    expect(readLastResultsUrl(options, storage)).toBe("");
+  });
+
+  it("uses browser history for a detail opened from results", () => {
+    expect(detailReturnTarget(
+      { from: "/results?institution_type=国立&page=2" },
+      options,
+      new MemoryStorage(),
+    )).toEqual({ mode: "history", label: "検索結果へ" });
+  });
+
+  it("uses last-results for a direct detail and preserves its page", () => {
+    const storage = new MemoryStorage();
+    storage.setItem(LAST_RESULTS_URL_KEY, "/results?institution_type=私立&page=4");
+    expect(detailReturnTarget(null, options, storage)).toEqual({
+      mode: "url",
+      label: "検索結果へ",
+      href: "/results?institution_type=%E7%A7%81%E7%AB%8B&page=4",
+    });
+  });
+
+  it("falls back from a direct detail to last-search, then plain search", () => {
+    const storage = new MemoryStorage();
+    storage.setItem(LAST_SEARCH_QUERY_KEY, "prefecture_membership=%E6%9D%B1%E4%BA%AC%E9%83%BD");
+    expect(detailReturnTarget(null, options, storage)).toEqual({
+      mode: "url",
+      label: "検索へ",
+      href: "/search?prefecture_membership=%E6%9D%B1%E4%BA%AC%E9%83%BD",
+    });
+    expect(detailReturnTarget(null, options, new MemoryStorage())).toEqual({
+      mode: "url",
+      label: "検索へ",
+      href: "/search",
+    });
+  });
+
   it("does not serialize invalid draft-only university or GPA text", () => {
     const parsed = parseSearchParams(new URLSearchParams("university_query=東京&gpa_query=3.&institution_type=私立"), options);
     expect(canonicalSearchQuery(parsed.request)).toBe("institution_type=%E7%A7%81%E7%AB%8B");
@@ -97,6 +160,8 @@ describe("canonical last-search state", () => {
     };
     const request = parseSearchParams(new URLSearchParams("institution_type=公立"), options).request;
     expect(rememberLastSearch(request, failing)).toContain("institution_type=");
+    expect(rememberLastResults(request, failing)).toContain("/results?institution_type=");
     expect(readLastSearchQuery(failing)).toBe("");
+    expect(readLastResultsUrl(options, failing)).toBe("");
   });
 });

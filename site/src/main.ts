@@ -7,7 +7,13 @@ import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
 import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
-import { headerSearchHref, rememberLastSearch } from "./last-search-state";
+import {
+  canonicalSearchQuery,
+  detailReturnTarget,
+  headerSearchHref,
+  rememberLastResults,
+  rememberLastSearch,
+} from "./last-search-state";
 import { submitSearchNavigation } from "./navigation";
 import { emptyRequest, searchRows } from "./search";
 import {
@@ -373,16 +379,17 @@ function resultsPage(warnings: string[]): void {
   const universityGroups = groupAdmissionsByUniversity(currentResult.rows);
   const pages = Math.max(1, Math.ceil(universityGroups.length / UNIVERSITY_GROUP_PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
+  rememberLastResults(applied);
   const shown = paginateUniversityGroups(universityGroups, applied.page);
   const firstGroupIndex = (applied.page - 1) * UNIVERSITY_GROUP_PAGE_SIZE;
-  const query = serializeRequest({ ...applied, page: 1 }).toString();
+  const query = canonicalSearchQuery(applied);
   const previous = applied.page > 1
     ? `<button class="button button--text" data-page="${applied.page - 1}"><span aria-hidden="true">←</span> 前のページ</button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
   const next = applied.page < pages
     ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
-  app.innerHTML = `${header()}<main id="main" class="page results-page"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p><a href="/search${query ? `?${query}` : ""}" data-route>検索条件を変更</a></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page results-page page--with-floating-actions"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main><nav class="floating-navigation floating-navigation--results" aria-label="検索結果の操作"><a class="button button--outline floating-navigation__action" href="/search${query ? `?${query}` : ""}" data-route data-start-at-top><span aria-hidden="true">←</span> 検索条件を変更</a></nav>${footer()}`;
   candidates.sync();
 }
 
@@ -418,10 +425,14 @@ async function detailPage(parts: string[]): Promise<void> {
     const assigned = new Set(sections.flatMap(([, fields]) => fields));
     const hidden = new Set(["admission_rowid", "source_url", "guideline_url", "schedule_url", "exclusive_enrollment_evidence_url", "previous_year_source_url"]);
     const remaining = Object.keys(admission).filter((field) => !assigned.has(field) && !hidden.has(field));
-    app.innerHTML = `${header()}<main id="main" class="page detail-page">
+    const returnTarget = detailReturnTarget(history.state, options);
+    const returnAction = returnTarget.mode === "history"
+      ? `<button type="button" class="button button--outline floating-navigation__action" data-detail-history-back><span aria-hidden="true">←</span> ${returnTarget.label}</button>`
+      : `<a class="button button--outline floating-navigation__action" href="${escapeHtml(returnTarget.href)}" data-route data-start-at-top><span aria-hidden="true">←</span> ${returnTarget.label}</a>`;
+    app.innerHTML = `${header()}<main id="main" class="page detail-page page--with-floating-actions">
       ${admission.fallback_previous_year === true ? '<div class="fallback-warning"><strong>前年度情報を参照しています。</strong> 2027年度の公式資料を確認してください。</div>' : ""}
-      ${detailCandidateAction(row, candidates.store.has(row))}<header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p></header>
-      ${sections.map(([title, fields]) => `<section class="detail-section"><h2>${title}</h2>${grid(admission, fields)}${title === "研究" ? research(detail) : ""}</section>`).join("")}<section class="detail-section"><h2>その他の記録項目</h2>${grid(admission, remaining)}</section><section class="detail-section"><h2>出典</h2><div class="source-links">${safeExternalLink(admission.guideline_url, "募集要項")}${safeExternalLink(admission.source_url, "公式情報")}${safeExternalLink(admission.schedule_url, "日程")}${safeExternalLink(admission.exclusive_enrollment_evidence_url, "専願根拠")}${safeExternalLink(admission.previous_year_source_url, "前年度資料")}</div><details class="developer-details"><summary>データ識別情報</summary><p>${escapeHtml(dataset)} ／ ${escapeHtml(version)} ／ ${escapeHtml(id)}</p></details></section></main>${footer()}`;
+      <header class="detail-title"><p>${displayValue(admission.prefecture as never)} ／ ${displayValue(admission.institution_type as never)}</p><h1>${displayValue(admission.university as never)}</h1><p>${displayValue(admission.faculty_school as never)} ／ ${displayValue(admission.department as never)}</p><p><strong>${displayValue(admission.selection_category as never)}</strong>　${displayValue(admission.selection_name as never)}</p></header>
+      ${sections.map(([title, fields]) => `<section class="detail-section"><h2>${title}</h2>${grid(admission, fields)}${title === "研究" ? research(detail) : ""}</section>`).join("")}<section class="detail-section"><h2>その他の記録項目</h2>${grid(admission, remaining)}</section><section class="detail-section"><h2>出典</h2><div class="source-links">${safeExternalLink(admission.guideline_url, "募集要項")}${safeExternalLink(admission.source_url, "公式情報")}${safeExternalLink(admission.schedule_url, "日程")}${safeExternalLink(admission.exclusive_enrollment_evidence_url, "専願根拠")}${safeExternalLink(admission.previous_year_source_url, "前年度資料")}</div><details class="developer-details"><summary>データ識別情報</summary><p>${escapeHtml(dataset)} ／ ${escapeHtml(version)} ／ ${escapeHtml(id)}</p></details></section></main><nav class="floating-navigation floating-navigation--detail" aria-label="入試詳細の操作">${returnAction}${detailCandidateAction(row, candidates.store.has(row))}</nav>${footer()}`;
   } catch (error) {
     dataError(error instanceof SiteDataError ? error.message : "詳細データを読み込めませんでした。");
   }
@@ -513,12 +524,21 @@ function restoreCurrentView(): void {
 document.addEventListener("click", (event) => {
   const target = event.target as HTMLElement;
   if (candidates.handleClick(target)) return;
+  const detailBack = target.closest<HTMLButtonElement>("button[data-detail-history-back]");
+  if (detailBack) {
+    history.back();
+    return;
+  }
   const link = target.closest<HTMLAnchorElement>("a[data-route]");
   if (link && link.origin === location.origin) {
     event.preventDefault();
     rememberCurrentView();
     history.pushState({ from: location.pathname + location.search }, "", link.href);
-    void route();
+    void route().then(() => {
+      if (link.hasAttribute("data-start-at-top")) {
+        window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      }
+    });
     return;
   }
   const universityToggle = target.closest<HTMLButtonElement>("button[data-university-toggle]");

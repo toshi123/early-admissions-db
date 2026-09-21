@@ -111,10 +111,11 @@ describe("candidate controls and export selection", () => {
     expect([...document.querySelectorAll("button")].every((b) => b.textContent === "候補に追加")).toBe(true);
   });
 
-  it("renders the detail action as one native pressed-state control and keeps it synchronized", () => {
+  it("renders the detail action for the shared floating group and keeps it synchronized", () => {
     const row = candidateRow();
-    document.body.innerHTML = `<span id="candidate-count"></span>${detailCandidateAction(row)}`;
+    document.body.innerHTML = `<span id="candidate-count"></span><nav class="floating-navigation">${detailCandidateAction(row)}</nav>`;
     const button = document.querySelector<HTMLButtonElement>(".detail-candidate-action button")!;
+    expect(button.closest(".floating-navigation")).not.toBeNull();
     expect(button.tagName).toBe("BUTTON");
     expect(button.type).toBe("button");
     expect(button.getAttribute("aria-pressed")).toBe("false");

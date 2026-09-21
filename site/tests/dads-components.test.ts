@@ -92,6 +92,17 @@ describe("DADS component contracts", () => {
     expect(main).toContain('class="fallback-warning"');
   });
 
+  it("uses labelled floating navigation with native actions and no summary-level return link", () => {
+    expect(main).toContain('aria-label="検索結果の操作"');
+    expect(main).toContain('aria-label="入試詳細の操作"');
+    expect(main).toContain('data-detail-history-back');
+    expect(main).toContain('history.back()');
+    expect(main).toContain('data-start-at-top');
+    expect(main).not.toContain('data-route>検索条件を変更</a></section>');
+    expect(css).toContain('.floating-navigation__action:any-link');
+    expect(css).toContain(':focus-visible');
+  });
+
   it("places raw dates before selection and eligibility without moving the fallback warning", () => {
     const sectionSource = main.slice(main.indexOf("const sections:"), main.indexOf("const labels:"));
     const headings = [...sectionSource.matchAll(/\["(基本情報|日程|選考方法|出願条件|研究)"/g)].map((match) => match[1]);
