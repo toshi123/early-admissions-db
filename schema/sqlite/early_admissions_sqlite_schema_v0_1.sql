@@ -320,6 +320,40 @@ CREATE TABLE build_metadata (
         CHECK (academic_field_not_applicable_rows >= 0),
     academic_field_raw_mismatch_rows INTEGER NOT NULL
         CHECK (academic_field_raw_mismatch_rows = 0),
+    academic_field_v2_mapping_contract_version TEXT NOT NULL
+        CHECK (academic_field_v2_mapping_contract_version = '0.2'),
+    academic_field_v2_taxonomy_version TEXT NOT NULL
+        CHECK (academic_field_v2_taxonomy_version = '0.2'),
+    academic_field_v2_schema_sql_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_schema_sql_sha256) = 64),
+    academic_field_v2_broad_taxonomy_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_broad_taxonomy_sha256) = 64),
+    academic_field_v2_subcategory_taxonomy_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_subcategory_taxonomy_sha256) = 64),
+    academic_field_v2_raw_crosswalk_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_raw_crosswalk_sha256) = 64),
+    academic_field_v2_context_crosswalk_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_context_crosswalk_sha256) = 64),
+    academic_field_v2_compatibility_crosswalk_sha256 TEXT NOT NULL
+        CHECK (length(academic_field_v2_compatibility_crosswalk_sha256) = 64),
+    academic_field_v2_broad_taxonomy_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_broad_taxonomy_rows >= 0),
+    academic_field_v2_subcategory_taxonomy_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_subcategory_taxonomy_rows >= 0),
+    academic_field_v2_parent_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_parent_rows >= 0),
+    academic_field_v2_broad_membership_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_broad_membership_rows >= 0),
+    academic_field_v2_subcategory_membership_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_subcategory_membership_rows >= 0),
+    academic_field_v2_broad_review_required_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_broad_review_required_rows >= 0),
+    academic_field_v2_subcategory_review_required_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_subcategory_review_required_rows >= 0),
+    academic_field_v2_unmapped_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_unmapped_rows >= 0),
+    academic_field_v2_raw_mismatch_rows INTEGER NOT NULL
+        CHECK (academic_field_v2_raw_mismatch_rows = 0),
     CHECK (
         (fts5_enabled = 1 AND fts_tokenizer IN ('trigram', 'unicode61')) OR
         (fts5_enabled = 0 AND fts_tokenizer = 'none')

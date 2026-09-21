@@ -12,6 +12,7 @@ from typing import Any, Mapping, Sequence, TextIO
 from .gpa_search import GPAContractError, parse_gpa_tenths
 from .sqlite_builder import DATABASE_FILENAME, DEFAULT_OUTPUT_DIR
 from .structured_search import (
+    AcademicFieldV2Branch,
     RESULT_COLUMNS,
     SearchCriteria,
     SearchResult,
@@ -154,6 +155,23 @@ def build_parser() -> argparse.ArgumentParser:
             "unmapped, or not_applicable."
         ),
     )
+    _add_multi_value_argument(
+        parser,
+        "--academic-field-v2",
+        dest="academic_field_v2",
+        help_text=(
+            "Frozen v0.2 broad group code; each code is a separate OR branch."
+        ),
+    )
+    _add_multi_value_argument(
+        parser,
+        "--academic-subfield-v2",
+        dest="academic_subfield_v2",
+        help_text=(
+            "v0.2 branch child filter as BROAD=SUB[,SUB...]; BROAD must also "
+            "be supplied with --academic-field-v2."
+        ),
+    )
     stem_group = parser.add_mutually_exclusive_group()
     stem_group.add_argument("--stem", action="store_true", help="Require stem_flag=1.")
     stem_group.add_argument(
@@ -233,6 +251,43 @@ def _values(namespace: argparse.Namespace, name: str) -> tuple[str, ...]:
     return tuple(getattr(namespace, name) or ())
 
 
+def _academic_field_v2_branches(
+    args: argparse.Namespace, parser: argparse.ArgumentParser
+) -> tuple[AcademicFieldV2Branch, ...]:
+    broad_codes = tuple(dict.fromkeys(_values(args, "academic_field_v2")))
+    subcategories_by_broad: dict[str, list[str]] = {}
+    for specification in _values(args, "academic_subfield_v2"):
+        if specification.count("=") != 1:
+            parser.error(
+                "--academic-subfield-v2 must use BROAD=SUB[,SUB...] syntax"
+            )
+        broad_code, raw_subcategories = specification.split("=", 1)
+        subcategories = raw_subcategories.split(",")
+        if not broad_code or not subcategories or any(
+            not subcategory for subcategory in subcategories
+        ):
+            parser.error(
+                "--academic-subfield-v2 must use non-empty "
+                "BROAD=SUB[,SUB...] values"
+            )
+        if broad_code not in broad_codes:
+            parser.error(
+                "--academic-subfield-v2 parent must also be listed with "
+                f"--academic-field-v2: {broad_code}"
+            )
+        values = subcategories_by_broad.setdefault(broad_code, [])
+        for subcategory in subcategories:
+            if subcategory not in values:
+                values.append(subcategory)
+    return tuple(
+        AcademicFieldV2Branch(
+            group_code=group_code,
+            subcategory_codes=tuple(subcategories_by_broad.get(group_code, ())),
+        )
+        for group_code in broad_codes
+    )
+
+
 def criteria_from_args(
     args: argparse.Namespace, parser: argparse.ArgumentParser
 ) -> SearchCriteria:
@@ -267,6 +322,7 @@ def criteria_from_args(
         academic_field_mapping_status=_values(
             args, "academic_field_mapping_status"
         ),
+        academic_field_v2_branches=_academic_field_v2_branches(args, parser),
         stem_flag=stem_flag,
         selection_category=_values(args, "selection_category"),
         exclusive_enrollment_status=_values(args, "exclusive_enrollment_status"),

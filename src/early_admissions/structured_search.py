@@ -13,6 +13,8 @@ from .academic_field import (
     ACADEMIC_FIELD_TAXONOMY_VERSION,
     GENERATED_MAPPING_STATUSES,
 )
+from .academic_field_v0_2 import MAPPING_VERSION as ACADEMIC_FIELD_V2_MAPPING_VERSION
+from .academic_field_v0_2 import TAXONOMY_VERSION as ACADEMIC_FIELD_V2_TAXONOMY_VERSION
 from .gpa_search import GPA_PARSER_CONTRACT_VERSION
 from .grade_requirement import (
     GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
@@ -115,6 +117,14 @@ class StructuredSearchError(RuntimeError):
 
 
 @dataclass(frozen=True)
+class AcademicFieldV2Branch:
+    """One broad branch with an optional OR-list of child subcategories."""
+
+    group_code: str
+    subcategory_codes: tuple[str, ...] = ()
+
+
+@dataclass(frozen=True)
 class SearchCriteria:
     university: tuple[str, ...] = ()
     institution_type: tuple[str, ...] = ()
@@ -123,6 +133,7 @@ class SearchCriteria:
     academic_field: tuple[str, ...] = ()
     academic_field_group: tuple[str, ...] = ()
     academic_field_mapping_status: tuple[str, ...] = ()
+    academic_field_v2_branches: tuple[AcademicFieldV2Branch, ...] = ()
     stem_flag: bool | None = None
     selection_category: tuple[str, ...] = ()
     exclusive_enrollment_status: tuple[str, ...] = ()
@@ -194,6 +205,33 @@ class SearchCriteria:
             raise StructuredSearchError(
                 "Unsupported academic-field mapping status: "
                 + ", ".join(sorted(invalid_statuses))
+            )
+        if not isinstance(self.academic_field_v2_branches, tuple):
+            raise StructuredSearchError(
+                "academic_field_v2_branches must be supplied as a tuple."
+            )
+        group_codes: list[str] = []
+        for branch in self.academic_field_v2_branches:
+            if not isinstance(branch, AcademicFieldV2Branch):
+                raise StructuredSearchError(
+                    "Each academic-field v0.2 branch must use "
+                    "AcademicFieldV2Branch."
+                )
+            if not branch.group_code:
+                raise StructuredSearchError(
+                    "Academic-field v0.2 branch has an empty broad code."
+                )
+            if not isinstance(branch.subcategory_codes, tuple) or any(
+                not isinstance(value, str) or value == ""
+                for value in branch.subcategory_codes
+            ):
+                raise StructuredSearchError(
+                    "Academic-field v0.2 subcategory codes must be non-empty text."
+                )
+            group_codes.append(branch.group_code)
+        if len(group_codes) != len(set(group_codes)):
+            raise StructuredSearchError(
+                "Academic-field v0.2 broad branches must be unique."
             )
 
 
@@ -270,6 +308,8 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
                grade_requirement_mapping_contract_version,
                academic_field_mapping_contract_version,
                academic_field_taxonomy_version,
+               academic_field_v2_mapping_contract_version,
+               academic_field_v2_taxonomy_version,
                english_requirement_parser_contract_version
                ,prefecture_mapping_contract_version, prefecture_taxonomy_version
         FROM build_metadata
@@ -306,6 +346,15 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         raise StructuredSearchError(
             "Academic-field taxonomy version is incompatible."
         )
+    if (
+        rows[0]["academic_field_v2_mapping_contract_version"]
+        != ACADEMIC_FIELD_V2_MAPPING_VERSION
+        or rows[0]["academic_field_v2_taxonomy_version"]
+        != ACADEMIC_FIELD_V2_TAXONOMY_VERSION
+    ):
+        raise StructuredSearchError(
+            "Academic-field v0.2 contract is incompatible."
+        )
 
 
 def _validate_academic_filter_values(
@@ -321,6 +370,41 @@ def _validate_academic_filter_values(
         invalid_prefectures=set(criteria.prefecture_membership).difference(approved_prefectures)
         if invalid_prefectures:
             raise StructuredSearchError("Unknown prefecture membership: " + ", ".join(sorted(invalid_prefectures)))
+    if criteria.academic_field_v2_branches:
+        broad_codes = {
+            row[0]
+            for row in connection.execute(
+                "SELECT group_code FROM academic_field_v2_broad_taxonomy"
+            )
+        }
+        subcategory_parents = {
+            row[0]: row[1]
+            for row in connection.execute(
+                """
+                SELECT subcategory_code, parent_group_code
+                FROM academic_field_v2_subcategory_taxonomy
+                """
+            )
+        }
+        for branch in criteria.academic_field_v2_branches:
+            if branch.group_code not in broad_codes:
+                raise StructuredSearchError(
+                    "Unknown academic-field v0.2 broad group: "
+                    + branch.group_code
+                )
+            for subcategory in branch.subcategory_codes:
+                actual_parent = subcategory_parents.get(subcategory)
+                if actual_parent is None:
+                    raise StructuredSearchError(
+                        "Unknown academic-field v0.2 subcategory: "
+                        + subcategory
+                    )
+                if actual_parent != branch.group_code:
+                    raise StructuredSearchError(
+                        "Academic-field v0.2 subcategory parent mismatch: "
+                        f"{subcategory} belongs to {actual_parent}, not "
+                        f"{branch.group_code}."
+                    )
 
 
 def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
@@ -371,6 +455,30 @@ def _compile_base(criteria: SearchCriteria) -> _CompiledBase:
         placeholders = ", ".join("?" for _ in status_values)
         predicates.append(f"af.mapping_status IN ({placeholders})")
         parameters.extend(status_values)
+    if criteria.academic_field_v2_branches:
+        branches: list[str] = []
+        for branch in criteria.academic_field_v2_branches:
+            branch_sql = (
+                "EXISTS (SELECT 1 FROM "
+                "admission_search_academic_field_broad_memberships_v2 AS b2 "
+                "WHERE b2.admission_rowid = a.admission_rowid "
+                "AND b2.group_code = ?)"
+            )
+            parameters.append(branch.group_code)
+            subcategories = _deduplicate(branch.subcategory_codes)
+            if subcategories:
+                placeholders = ", ".join("?" for _ in subcategories)
+                branch_sql += (
+                    " AND EXISTS (SELECT 1 FROM "
+                    "admission_search_academic_field_subcategory_memberships_v2 "
+                    "AS s2 WHERE s2.admission_rowid = a.admission_rowid "
+                    "AND s2.parent_group_code = ? "
+                    f"AND s2.subcategory_code IN ({placeholders}))"
+                )
+                parameters.append(branch.group_code)
+                parameters.extend(subcategories)
+            branches.append(f"({branch_sql})")
+        predicates.append("(" + " OR ".join(branches) + ")")
     if criteria.stem_flag is not None:
         predicates.append("a.stem_flag = ?")
         parameters.append(int(criteria.stem_flag))

@@ -28,6 +28,19 @@ from .academic_field import (
     AcademicFieldCrosswalk,
     AcademicFieldTaxonomy,
 )
+from .academic_field_v2 import (
+    ACADEMIC_FIELD_V2_AUDIT_PATH,
+    ACADEMIC_FIELD_V2_BROAD_PATH,
+    ACADEMIC_FIELD_V2_COMPATIBILITY_PATH,
+    ACADEMIC_FIELD_V2_CONTEXT_PATH,
+    ACADEMIC_FIELD_V2_DESIGN_PATH,
+    ACADEMIC_FIELD_V2_FREEZE_PATH,
+    ACADEMIC_FIELD_V2_FROZEN_SHA256,
+    ACADEMIC_FIELD_V2_RAW_PATH,
+    ACADEMIC_FIELD_V2_SCHEMA_PATH,
+    ACADEMIC_FIELD_V2_SUBCATEGORY_PATH,
+    AcademicFieldV2Contract,
+)
 from .gpa_search import (
     GPA_AUDIT_PATH,
     GPA_DESIGN_PATH,
@@ -66,7 +79,7 @@ UNIFIED_MANIFEST = UNIFIED_DIR / "build_manifest.json"
 SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql")
 SQLITE_DESIGN = Path("docs/sqlite_design_v0_1.md")
 DATABASE_SCHEMA_VERSION = "0.1"
-BUILDER_VERSION = "0.6.0"
+BUILDER_VERSION = "0.7.0"
 GPA_REGRESSION_TENTHS = (30, 35, 38, 40, 45)
 
 TABLE_ORDER = ("master", "coverage", "research_requirements")
@@ -181,6 +194,22 @@ class SQLiteBuildPipeline:
         self.academic_field_freeze_path = self.repo_root / ACADEMIC_FIELD_FREEZE_PATH
         self.academic_field_taxonomy_path = self.repo_root / ACADEMIC_FIELD_TAXONOMY_PATH
         self.academic_field_crosswalk_path = self.repo_root / ACADEMIC_FIELD_CROSSWALK_PATH
+        self.academic_field_v2_schema_path = (
+            self.repo_root / ACADEMIC_FIELD_V2_SCHEMA_PATH
+        )
+        self.academic_field_v2_design_path = (
+            self.repo_root / ACADEMIC_FIELD_V2_DESIGN_PATH
+        )
+        self.academic_field_v2_freeze_path = (
+            self.repo_root / ACADEMIC_FIELD_V2_FREEZE_PATH
+        )
+        self.academic_field_v2_audit_path = (
+            self.repo_root / ACADEMIC_FIELD_V2_AUDIT_PATH
+        )
+        self.academic_field_v2_artifact_paths = {
+            relative: self.repo_root / relative
+            for relative in ACADEMIC_FIELD_V2_FROZEN_SHA256
+        }
         self.english_requirement_schema_path = self.repo_root / ENGLISH_REQUIREMENT_SCHEMA_PATH
         self.english_requirement_design_path = self.repo_root / ENGLISH_REQUIREMENT_DESIGN_PATH
         self.english_requirement_crosswalk_path = self.repo_root / ENGLISH_REQUIREMENT_CROSSWALK_PATH
@@ -231,6 +260,20 @@ class SQLiteBuildPipeline:
         academic_field_crosswalk = AcademicFieldCrosswalk.load(
             self.academic_field_crosswalk_path, academic_field_taxonomy
         )
+        academic_field_v2_schema_raw = self.academic_field_v2_schema_path.read_bytes()
+        academic_field_v2_schema_sha = hashlib.sha256(
+            academic_field_v2_schema_raw
+        ).hexdigest()
+        try:
+            academic_field_v2_contract = AcademicFieldV2Contract.load(
+                self.repo_root
+            )
+        except ValueError as error:
+            raise SQLiteBuildError(str(error)) from error
+        academic_field_v2_frozen_shas = {
+            str(relative): sha256_file(path)
+            for relative, path in self.academic_field_v2_artifact_paths.items()
+        }
         english_requirement_schema_raw = self.english_requirement_schema_path.read_bytes()
         english_requirement_schema_sha = hashlib.sha256(english_requirement_schema_raw).hexdigest()
         english_requirement_crosswalk_sha = sha256_file(self.english_requirement_crosswalk_path)
@@ -272,6 +315,38 @@ class SQLiteBuildPipeline:
         academic_field_crosswalk_metadata = file_metadata(
             self.academic_field_crosswalk_path, self.repo_root
         )
+        academic_field_v2_metadata = {
+            "schema": file_metadata(
+                self.academic_field_v2_schema_path, self.repo_root
+            ),
+            "design": file_metadata(
+                self.academic_field_v2_design_path, self.repo_root
+            ),
+            "freeze": file_metadata(
+                self.academic_field_v2_freeze_path, self.repo_root
+            ),
+            "audit": file_metadata(
+                self.academic_field_v2_audit_path, self.repo_root
+            ),
+            "broad_taxonomy": file_metadata(
+                self.repo_root / ACADEMIC_FIELD_V2_BROAD_PATH, self.repo_root
+            ),
+            "subcategory_taxonomy": file_metadata(
+                self.repo_root / ACADEMIC_FIELD_V2_SUBCATEGORY_PATH,
+                self.repo_root,
+            ),
+            "raw_crosswalk": file_metadata(
+                self.repo_root / ACADEMIC_FIELD_V2_RAW_PATH, self.repo_root
+            ),
+            "context_crosswalk": file_metadata(
+                self.repo_root / ACADEMIC_FIELD_V2_CONTEXT_PATH,
+                self.repo_root,
+            ),
+            "compatibility_crosswalk": file_metadata(
+                self.repo_root / ACADEMIC_FIELD_V2_COMPATIBILITY_PATH,
+                self.repo_root,
+            ),
+        }
         english_requirement_schema_metadata = file_metadata(self.english_requirement_schema_path, self.repo_root)
         english_requirement_design_metadata = file_metadata(self.english_requirement_design_path, self.repo_root)
         english_requirement_crosswalk_metadata = file_metadata(self.english_requirement_crosswalk_path, self.repo_root)
@@ -300,6 +375,9 @@ class SQLiteBuildPipeline:
                 connection.executescript(gpa_schema_raw.decode("utf-8"))
                 connection.executescript(grade_requirement_schema_raw.decode("utf-8"))
                 connection.executescript(academic_field_schema_raw.decode("utf-8"))
+                connection.executescript(
+                    academic_field_v2_schema_raw.decode("utf-8")
+                )
                 connection.executescript(english_requirement_schema_raw.decode("utf-8"))
                 connection.executescript(prefecture_schema_raw.decode("utf-8"))
                 self._assert_schema_columns(connection, inputs)
@@ -312,6 +390,9 @@ class SQLiteBuildPipeline:
                     connection,
                     academic_field_taxonomy,
                     academic_field_crosswalk,
+                )
+                academic_field_v2_build = self._load_academic_field_v2_layer(
+                    connection, academic_field_v2_contract
                 )
                 english_requirement_build = self._load_english_requirement_layer(
                     connection, english_requirement_crosswalk
@@ -334,6 +415,9 @@ class SQLiteBuildPipeline:
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
                     academic_field_build=academic_field_build,
+                    academic_field_v2_schema_sha=academic_field_v2_schema_sha,
+                    academic_field_v2_frozen_shas=academic_field_v2_frozen_shas,
+                    academic_field_v2_build=academic_field_v2_build,
                     english_requirement_schema_sha=english_requirement_schema_sha,
                     english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
                     english_requirement_build=english_requirement_build,
@@ -365,6 +449,9 @@ class SQLiteBuildPipeline:
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
                     academic_field_build=academic_field_build,
+                    academic_field_v2_schema_sha=academic_field_v2_schema_sha,
+                    academic_field_v2_frozen_shas=academic_field_v2_frozen_shas,
+                    academic_field_v2_build=academic_field_v2_build,
                     english_requirement_schema_sha=english_requirement_schema_sha,
                     english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
                     english_requirement_build=english_requirement_build,
@@ -404,6 +491,17 @@ class SQLiteBuildPipeline:
                     academic_field_freeze_sha=academic_field_freeze_metadata["sha256"],
                     academic_field_taxonomy_sha=academic_field_taxonomy_sha,
                     academic_field_crosswalk_sha=academic_field_crosswalk_sha,
+                    academic_field_v2_schema_sha=academic_field_v2_schema_sha,
+                    academic_field_v2_design_sha=academic_field_v2_metadata["design"][
+                        "sha256"
+                    ],
+                    academic_field_v2_freeze_sha=academic_field_v2_metadata["freeze"][
+                        "sha256"
+                    ],
+                    academic_field_v2_audit_sha=academic_field_v2_metadata["audit"][
+                        "sha256"
+                    ],
+                    academic_field_v2_frozen_shas=academic_field_v2_frozen_shas,
                     english_requirement_schema_sha=english_requirement_schema_sha,
                     english_requirement_design_sha=english_requirement_design_metadata["sha256"],
                     english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
@@ -448,6 +546,8 @@ class SQLiteBuildPipeline:
                 academic_field_taxonomy_metadata=academic_field_taxonomy_metadata,
                 academic_field_crosswalk_metadata=academic_field_crosswalk_metadata,
                 academic_field_build=academic_field_build,
+                academic_field_v2_metadata=academic_field_v2_metadata,
+                academic_field_v2_build=academic_field_v2_build,
                 english_requirement_schema_metadata=english_requirement_schema_metadata,
                 english_requirement_design_metadata=english_requirement_design_metadata,
                 english_requirement_crosswalk_metadata=english_requirement_crosswalk_metadata,
@@ -507,6 +607,11 @@ class SQLiteBuildPipeline:
             self.academic_field_freeze_path,
             self.academic_field_taxonomy_path,
             self.academic_field_crosswalk_path,
+            self.academic_field_v2_schema_path,
+            self.academic_field_v2_design_path,
+            self.academic_field_v2_freeze_path,
+            self.academic_field_v2_audit_path,
+            *self.academic_field_v2_artifact_paths.values(),
             *(self.input_dir / TABLE_FILES[table] for table in TABLE_ORDER),
         )
         missing = [str(path) for path in required if not path.is_file()]
@@ -601,6 +706,11 @@ class SQLiteBuildPipeline:
         academic_field_freeze_sha: str,
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
+        academic_field_v2_schema_sha: str,
+        academic_field_v2_design_sha: str,
+        academic_field_v2_freeze_sha: str,
+        academic_field_v2_audit_sha: str,
+        academic_field_v2_frozen_shas: Mapping[str, str],
         english_requirement_schema_sha: str,
         english_requirement_design_sha: str,
         english_requirement_crosswalk_sha: str,
@@ -629,6 +739,14 @@ class SQLiteBuildPipeline:
             (self.academic_field_freeze_path, academic_field_freeze_sha),
             (self.academic_field_taxonomy_path, academic_field_taxonomy_sha),
             (self.academic_field_crosswalk_path, academic_field_crosswalk_sha),
+            (self.academic_field_v2_schema_path, academic_field_v2_schema_sha),
+            (self.academic_field_v2_design_path, academic_field_v2_design_sha),
+            (self.academic_field_v2_freeze_path, academic_field_v2_freeze_sha),
+            (self.academic_field_v2_audit_path, academic_field_v2_audit_sha),
+            *(
+                (path, academic_field_v2_frozen_shas[str(relative)])
+                for relative, path in self.academic_field_v2_artifact_paths.items()
+            ),
             (self.english_requirement_schema_path, english_requirement_schema_sha),
             (self.english_requirement_design_path, english_requirement_design_sha),
             (self.english_requirement_crosswalk_path, english_requirement_crosswalk_sha),
@@ -1016,6 +1134,245 @@ class SQLiteBuildPipeline:
             "representative_unmapped_record_ids": representative_unmapped_record_ids,
         }
 
+    @staticmethod
+    def _load_academic_field_v2_layer(
+        connection: sqlite3.Connection,
+        contract: AcademicFieldV2Contract,
+    ) -> dict[str, Any]:
+        """Load the frozen v0.2 exact raw/context classification layer."""
+
+        connection.executemany(
+            """
+            INSERT INTO academic_field_v2_broad_taxonomy (
+                group_code, display_label_ja, ui_section, display_order,
+                description, status, taxonomy_version
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                (
+                    item.group_code,
+                    item.display_label_ja,
+                    item.ui_section,
+                    item.display_order,
+                    item.description,
+                    item.status,
+                    "0.2",
+                )
+                for item in contract.broad_groups
+            ),
+        )
+        connection.executemany(
+            """
+            INSERT INTO academic_field_v2_subcategory_taxonomy (
+                subcategory_code, display_label_ja, parent_group_code,
+                display_order, description, ui_status, taxonomy_version
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                (
+                    item.subcategory_code,
+                    item.display_label_ja,
+                    item.parent_group_code,
+                    item.display_order,
+                    item.description,
+                    item.ui_status,
+                    "0.2",
+                )
+                for item in contract.subcategories
+            ),
+        )
+
+        parent_rows: list[tuple[Any, ...]] = []
+        broad_rows: list[tuple[Any, ...]] = []
+        subcategory_rows: list[tuple[Any, ...]] = []
+        broad_status_counts: Counter[str] = Counter()
+        subcategory_status_counts: Counter[str] = Counter()
+        broad_membership_counts: Counter[str] = Counter()
+        subcategory_membership_counts: Counter[str] = Counter()
+        context_effect_counts: Counter[str] = Counter()
+        raw_only_admissions = 0
+        context_consulted_admissions = 0
+        context_effect_admissions = 0
+        representative_review_record_ids: list[str] = []
+        representative_unmapped_record_ids: list[str] = []
+
+        admissions = connection.execute(
+            """
+            SELECT admission_rowid, source_dataset, source_version, record_id,
+                   university, faculty_school, department, academic_field
+            FROM admissions ORDER BY admission_rowid
+            """
+        )
+        for row in admissions:
+            classification = contract.classify(
+                source_dataset=row["source_dataset"],
+                university=row["university"],
+                faculty_school=row["faculty_school"],
+                department=row["department"],
+                academic_field=row["academic_field"],
+            )
+            broad_status_counts[classification.broad_mapping_status] += 1
+            subcategory_status_counts[
+                classification.subcategory_mapping_status
+            ] += 1
+            context_effect_counts[classification.context_mapping_effect] += 1
+            if classification.context_mapping_consulted:
+                context_consulted_admissions += 1
+            else:
+                raw_only_admissions += 1
+            if classification.context_mapping_effect != "none":
+                context_effect_admissions += 1
+            logical_id = (
+                f"{row['source_dataset']}:{row['source_version']}:"
+                f"{row['record_id']}"
+            )
+            if (
+                classification.broad_mapping_status == "review_required"
+                and len(representative_review_record_ids) < 12
+            ):
+                representative_review_record_ids.append(logical_id)
+            if (
+                classification.broad_mapping_status == "unmapped"
+                and len(representative_unmapped_record_ids) < 12
+            ):
+                representative_unmapped_record_ids.append(logical_id)
+            parent_rows.append(
+                (
+                    row["admission_rowid"],
+                    classification.raw_value,
+                    classification.broad_mapping_status,
+                    classification.subcategory_mapping_status,
+                    classification.context_mapping_consulted,
+                    classification.context_mapping_effect,
+                    classification.mapping_contract_version,
+                    classification.taxonomy_version,
+                    classification.review_note,
+                )
+            )
+            for order, (group_code, mapping_basis) in enumerate(
+                classification.broad_memberships, start=1
+            ):
+                broad_membership_counts[group_code] += 1
+                broad_rows.append(
+                    (
+                        row["admission_rowid"],
+                        group_code,
+                        order,
+                        mapping_basis,
+                    )
+                )
+            for order, (
+                subcategory_code,
+                parent_group_code,
+                mapping_basis,
+            ) in enumerate(classification.subcategory_memberships, start=1):
+                subcategory_membership_counts[subcategory_code] += 1
+                subcategory_rows.append(
+                    (
+                        row["admission_rowid"],
+                        subcategory_code,
+                        parent_group_code,
+                        order,
+                        mapping_basis,
+                    )
+                )
+
+        connection.executemany(
+            """
+            INSERT INTO admission_search_academic_fields_v2 (
+                admission_rowid, raw_value, broad_mapping_status,
+                subcategory_mapping_status, context_mapping_consulted,
+                context_mapping_effect, mapping_contract_version,
+                taxonomy_version, review_note
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
+            parent_rows,
+        )
+        connection.executemany(
+            """
+            INSERT INTO admission_search_academic_field_broad_memberships_v2 (
+                admission_rowid, group_code, membership_order, mapping_basis
+            ) VALUES (?, ?, ?, ?)
+            """,
+            broad_rows,
+        )
+        connection.executemany(
+            """
+            INSERT INTO admission_search_academic_field_subcategory_memberships_v2 (
+                admission_rowid, subcategory_code, parent_group_code,
+                membership_order, mapping_basis
+            ) VALUES (?, ?, ?, ?, ?)
+            """,
+            subcategory_rows,
+        )
+
+        broad_statuses = (
+            "single",
+            "multi",
+            "review_required",
+            "unmapped",
+            "not_applicable",
+        )
+        subcategory_statuses = (
+            "single",
+            "multi",
+            "none",
+            "review_required",
+            "unmapped",
+            "not_applicable",
+        )
+        return {
+            "taxonomy_version": "0.2",
+            "mapping_contract_version": "0.2",
+            "broad_taxonomy_rows": len(contract.broad_groups),
+            "subcategory_taxonomy_rows": len(contract.subcategories),
+            "raw_crosswalk_keys": len(contract.raw_mappings),
+            "raw_crosswalk_rows": contract.raw_crosswalk_rows,
+            "context_crosswalk_tuples": len(contract.context_mappings),
+            "context_crosswalk_rows": contract.context_crosswalk_rows,
+            "compatibility_crosswalk_rows": contract.compatibility_crosswalk_rows,
+            "parent_rows": len(parent_rows),
+            "broad_membership_rows": len(broad_rows),
+            "subcategory_membership_rows": len(subcategory_rows),
+            "broad_mapping_status_counts": {
+                status: broad_status_counts.get(status, 0)
+                for status in broad_statuses
+            },
+            "subcategory_mapping_status_counts": {
+                status: subcategory_status_counts.get(status, 0)
+                for status in subcategory_statuses
+            },
+            "broad_membership_counts": {
+                item.group_code: broad_membership_counts.get(item.group_code, 0)
+                for item in contract.broad_groups
+            },
+            "subcategory_membership_counts": {
+                item.subcategory_code: subcategory_membership_counts.get(
+                    item.subcategory_code, 0
+                )
+                for item in contract.subcategories
+            },
+            "raw_only_mapping_admissions": raw_only_admissions,
+            "context_consulted_admissions": context_consulted_admissions,
+            "context_effect_admissions": context_effect_admissions,
+            "context_effect_counts": {
+                effect: context_effect_counts.get(effect, 0)
+                for effect in ("none", "additive", "authoritative")
+            },
+            "broad_review_required": broad_status_counts.get(
+                "review_required", 0
+            ),
+            "subcategory_review_required": subcategory_status_counts.get(
+                "review_required", 0
+            ),
+            "unmapped": broad_status_counts.get("unmapped", 0),
+            "raw_mismatch_rows": 0,
+            "representative_review_record_ids": representative_review_record_ids,
+            "representative_unmapped_record_ids": (
+                representative_unmapped_record_ids
+            ),
+        }
+
     def _iter_typed_rows(self, item: CSVInput) -> Iterator[tuple[Any, ...]]:
         with item.path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.reader(handle)
@@ -1105,6 +1462,9 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        academic_field_v2_schema_sha: str,
+        academic_field_v2_frozen_shas: Mapping[str, str],
+        academic_field_v2_build: Mapping[str, Any],
         english_requirement_schema_sha: str,
         english_requirement_crosswalk_sha: str,
         english_requirement_build: Mapping[str, Any],
@@ -1180,6 +1540,27 @@ class SQLiteBuildPipeline:
             academic_field_build["classification_counts"]["unmapped"],
             academic_field_build["classification_counts"]["not_applicable"],
             academic_field_build["raw_mismatch_rows"],
+            academic_field_v2_build["mapping_contract_version"],
+            academic_field_v2_build["taxonomy_version"],
+            academic_field_v2_schema_sha,
+            academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_BROAD_PATH)],
+            academic_field_v2_frozen_shas[
+                str(ACADEMIC_FIELD_V2_SUBCATEGORY_PATH)
+            ],
+            academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_RAW_PATH)],
+            academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_CONTEXT_PATH)],
+            academic_field_v2_frozen_shas[
+                str(ACADEMIC_FIELD_V2_COMPATIBILITY_PATH)
+            ],
+            academic_field_v2_build["broad_taxonomy_rows"],
+            academic_field_v2_build["subcategory_taxonomy_rows"],
+            academic_field_v2_build["parent_rows"],
+            academic_field_v2_build["broad_membership_rows"],
+            academic_field_v2_build["subcategory_membership_rows"],
+            academic_field_v2_build["broad_review_required"],
+            academic_field_v2_build["subcategory_review_required"],
+            academic_field_v2_build["unmapped"],
+            academic_field_v2_build["raw_mismatch_rows"],
         )
         placeholders = ", ".join("?" for _ in values)
         connection.execute(
@@ -1231,7 +1612,24 @@ class SQLiteBuildPipeline:
                 academic_field_review_required_rows,
                 academic_field_unmapped_rows,
                 academic_field_not_applicable_rows,
-                academic_field_raw_mismatch_rows
+                academic_field_raw_mismatch_rows,
+                academic_field_v2_mapping_contract_version,
+                academic_field_v2_taxonomy_version,
+                academic_field_v2_schema_sql_sha256,
+                academic_field_v2_broad_taxonomy_sha256,
+                academic_field_v2_subcategory_taxonomy_sha256,
+                academic_field_v2_raw_crosswalk_sha256,
+                academic_field_v2_context_crosswalk_sha256,
+                academic_field_v2_compatibility_crosswalk_sha256,
+                academic_field_v2_broad_taxonomy_rows,
+                academic_field_v2_subcategory_taxonomy_rows,
+                academic_field_v2_parent_rows,
+                academic_field_v2_broad_membership_rows,
+                academic_field_v2_subcategory_membership_rows,
+                academic_field_v2_broad_review_required_rows,
+                academic_field_v2_subcategory_review_required_rows,
+                academic_field_v2_unmapped_rows,
+                academic_field_v2_raw_mismatch_rows
             ) VALUES ({placeholders})
             """,
             values,
@@ -1255,6 +1653,9 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        academic_field_v2_schema_sha: str,
+        academic_field_v2_frozen_shas: Mapping[str, str],
+        academic_field_v2_build: Mapping[str, Any],
         english_requirement_schema_sha: str,
         english_requirement_crosswalk_sha: str,
         english_requirement_build: Mapping[str, Any],
@@ -1282,6 +1683,9 @@ class SQLiteBuildPipeline:
         academic_field = self._validate_academic_field_layer(
             connection, counts["admissions"], academic_field_build
         )
+        academic_field_v2 = self._validate_academic_field_v2_layer(
+            connection, counts["admissions"], academic_field_v2_build
+        )
         english_requirement = self._validate_english_requirement_layer(
             connection, counts["admissions"], english_requirement_build
         )
@@ -1303,6 +1707,9 @@ class SQLiteBuildPipeline:
             academic_field_taxonomy_sha=academic_field_taxonomy_sha,
             academic_field_crosswalk_sha=academic_field_crosswalk_sha,
             academic_field_build=academic_field_build,
+            academic_field_v2_schema_sha=academic_field_v2_schema_sha,
+            academic_field_v2_frozen_shas=academic_field_v2_frozen_shas,
+            academic_field_v2_build=academic_field_v2_build,
             english_requirement_schema_sha=english_requirement_schema_sha,
             english_requirement_crosswalk_sha=english_requirement_crosswalk_sha,
             english_requirement_build=english_requirement_build,
@@ -1328,6 +1735,7 @@ class SQLiteBuildPipeline:
             "gpa_search": gpa,
             "grade_requirement_search": grade_requirement,
             "academic_field_search": academic_field,
+            "academic_field_v2": academic_field_v2,
             "english_requirement_search": english_requirement,
             "prefecture_search": prefecture,
             "pragmas": pragmas,
@@ -1964,6 +2372,326 @@ class SQLiteBuildPipeline:
         }
 
     @staticmethod
+    def _validate_academic_field_v2_layer(
+        connection: sqlite3.Connection,
+        admissions_rows: int,
+        expected: Mapping[str, Any],
+    ) -> dict[str, Any]:
+        """Validate v0.2 classification, provenance, and hierarchy invariants."""
+
+        counts = {
+            "broad_taxonomy_rows": connection.execute(
+                "SELECT COUNT(*) FROM academic_field_v2_broad_taxonomy"
+            ).fetchone()[0],
+            "subcategory_taxonomy_rows": connection.execute(
+                "SELECT COUNT(*) FROM academic_field_v2_subcategory_taxonomy"
+            ).fetchone()[0],
+            "parent_rows": connection.execute(
+                "SELECT COUNT(*) FROM admission_search_academic_fields_v2"
+            ).fetchone()[0],
+            "broad_membership_rows": connection.execute(
+                "SELECT COUNT(*) FROM "
+                "admission_search_academic_field_broad_memberships_v2"
+            ).fetchone()[0],
+            "subcategory_membership_rows": connection.execute(
+                "SELECT COUNT(*) FROM "
+                "admission_search_academic_field_subcategory_memberships_v2"
+            ).fetchone()[0],
+        }
+        raw_mismatches = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM admissions AS a
+            LEFT JOIN admission_search_academic_fields_v2 AS p
+              USING (admission_rowid)
+            WHERE NOT (p.raw_value IS a.academic_field)
+            """
+        ).fetchone()[0]
+        version_mismatches = connection.execute(
+            """
+            SELECT COUNT(*) FROM admission_search_academic_fields_v2
+            WHERE mapping_contract_version <> '0.2'
+               OR taxonomy_version <> '0.2'
+            """
+        ).fetchone()[0]
+        taxonomy_version_mismatches = connection.execute(
+            """
+            SELECT
+              (SELECT COUNT(*) FROM academic_field_v2_broad_taxonomy
+               WHERE taxonomy_version <> '0.2') +
+              (SELECT COUNT(*) FROM academic_field_v2_subcategory_taxonomy
+               WHERE taxonomy_version <> '0.2')
+            """
+        ).fetchone()[0]
+        broad_status_counts = {
+            row[0]: row[1]
+            for row in connection.execute(
+                """
+                SELECT broad_mapping_status, COUNT(*)
+                FROM admission_search_academic_fields_v2
+                GROUP BY broad_mapping_status ORDER BY broad_mapping_status
+                """
+            )
+        }
+        broad_status_counts = {
+            status: broad_status_counts.get(status, 0)
+            for status in (
+                "single", "multi", "review_required", "unmapped",
+                "not_applicable",
+            )
+        }
+        subcategory_status_counts = {
+            row[0]: row[1]
+            for row in connection.execute(
+                """
+                SELECT subcategory_mapping_status, COUNT(*)
+                FROM admission_search_academic_fields_v2
+                GROUP BY subcategory_mapping_status
+                ORDER BY subcategory_mapping_status
+                """
+            )
+        }
+        subcategory_status_counts = {
+            status: subcategory_status_counts.get(status, 0)
+            for status in (
+                "single", "multi", "none", "review_required", "unmapped",
+                "not_applicable",
+            )
+        }
+        broad_membership_counts = {
+            row[0]: row[1]
+            for row in connection.execute(
+                """
+                SELECT t.group_code, COUNT(m.admission_rowid)
+                FROM academic_field_v2_broad_taxonomy AS t
+                LEFT JOIN admission_search_academic_field_broad_memberships_v2 AS m
+                  USING (group_code)
+                GROUP BY t.group_code, t.rowid ORDER BY t.rowid
+                """
+            )
+        }
+        subcategory_membership_counts = {
+            row[0]: row[1]
+            for row in connection.execute(
+                """
+                SELECT t.subcategory_code, COUNT(m.admission_rowid)
+                FROM academic_field_v2_subcategory_taxonomy AS t
+                LEFT JOIN admission_search_academic_field_subcategory_memberships_v2 AS m
+                  USING (subcategory_code)
+                GROUP BY t.subcategory_code, t.rowid ORDER BY t.rowid
+                """
+            )
+        }
+        context_counts = {
+            "raw_only_mapping_admissions": connection.execute(
+                "SELECT COUNT(*) FROM admission_search_academic_fields_v2 "
+                "WHERE context_mapping_consulted = 0"
+            ).fetchone()[0],
+            "context_consulted_admissions": connection.execute(
+                "SELECT COUNT(*) FROM admission_search_academic_fields_v2 "
+                "WHERE context_mapping_consulted = 1"
+            ).fetchone()[0],
+            "context_effect_admissions": connection.execute(
+                "SELECT COUNT(*) FROM admission_search_academic_fields_v2 "
+                "WHERE context_mapping_effect <> 'none'"
+            ).fetchone()[0],
+        }
+        context_effect_counts = {
+            effect: count
+            for effect, count in connection.execute(
+                """
+                SELECT context_mapping_effect, COUNT(*)
+                FROM admission_search_academic_fields_v2
+                GROUP BY context_mapping_effect ORDER BY context_mapping_effect
+                """
+            )
+        }
+        context_effect_counts = {
+            effect: context_effect_counts.get(effect, 0)
+            for effect in ("none", "additive", "authoritative")
+        }
+        cardinality = connection.execute(
+            """
+            WITH broad AS (
+                SELECT admission_rowid, COUNT(*) AS child_count,
+                       MIN(membership_order) AS minimum_order,
+                       MAX(membership_order) AS maximum_order
+                FROM admission_search_academic_field_broad_memberships_v2
+                GROUP BY admission_rowid
+            ), subcategory AS (
+                SELECT admission_rowid, COUNT(*) AS child_count,
+                       MIN(membership_order) AS minimum_order,
+                       MAX(membership_order) AS maximum_order
+                FROM admission_search_academic_field_subcategory_memberships_v2
+                GROUP BY admission_rowid
+            )
+            SELECT
+              SUM(CASE WHEN p.broad_mapping_status = 'single'
+                        AND COALESCE(b.child_count, 0) <> 1 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN p.broad_mapping_status = 'multi'
+                        AND COALESCE(b.child_count, 0) < 2 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN p.broad_mapping_status IN (
+                            'review_required', 'unmapped', 'not_applicable')
+                        AND COALESCE(b.child_count, 0) <> 0 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN p.subcategory_mapping_status = 'single'
+                        AND COALESCE(s.child_count, 0) <> 1 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN p.subcategory_mapping_status = 'multi'
+                        AND COALESCE(s.child_count, 0) < 2 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN p.subcategory_mapping_status IN (
+                            'none', 'review_required', 'unmapped', 'not_applicable')
+                        AND COALESCE(s.child_count, 0) <> 0 THEN 1 ELSE 0 END),
+              SUM(CASE WHEN COALESCE(b.child_count, 0) > 0
+                        AND (b.minimum_order <> 1
+                             OR b.maximum_order <> b.child_count)
+                       THEN 1 ELSE 0 END),
+              SUM(CASE WHEN COALESCE(s.child_count, 0) > 0
+                        AND (s.minimum_order <> 1
+                             OR s.maximum_order <> s.child_count)
+                       THEN 1 ELSE 0 END)
+            FROM admission_search_academic_fields_v2 AS p
+            LEFT JOIN broad AS b USING (admission_rowid)
+            LEFT JOIN subcategory AS s USING (admission_rowid)
+            """
+        ).fetchone()
+        cardinality_failures = {
+            "broad_single_wrong_count": cardinality[0],
+            "broad_multi_wrong_count": cardinality[1],
+            "broad_zero_status_has_membership": cardinality[2],
+            "subcategory_single_wrong_count": cardinality[3],
+            "subcategory_multi_wrong_count": cardinality[4],
+            "subcategory_zero_status_has_membership": cardinality[5],
+            "broad_non_contiguous_order": cardinality[6],
+            "subcategory_non_contiguous_order": cardinality[7],
+        }
+        missing_parent_broad = connection.execute(
+            """
+            SELECT COUNT(*)
+            FROM admission_search_academic_field_subcategory_memberships_v2 AS s
+            LEFT JOIN admission_search_academic_field_broad_memberships_v2 AS b
+              ON b.admission_rowid = s.admission_rowid
+             AND b.group_code = s.parent_group_code
+            WHERE b.admission_rowid IS NULL
+            """
+        ).fetchone()[0]
+        order_mismatches = connection.execute(
+            """
+            SELECT
+              (SELECT COUNT(*) FROM (
+                  SELECT m.admission_rowid, m.membership_order,
+                         ROW_NUMBER() OVER (
+                             PARTITION BY m.admission_rowid ORDER BY t.rowid
+                         ) AS expected_order
+                  FROM admission_search_academic_field_broad_memberships_v2 AS m
+                  JOIN academic_field_v2_broad_taxonomy AS t USING (group_code)
+              ) WHERE membership_order <> expected_order) +
+              (SELECT COUNT(*) FROM (
+                  SELECT m.admission_rowid, m.membership_order,
+                         ROW_NUMBER() OVER (
+                             PARTITION BY m.admission_rowid ORDER BY t.rowid
+                         ) AS expected_order
+                  FROM admission_search_academic_field_subcategory_memberships_v2 AS m
+                  JOIN academic_field_v2_subcategory_taxonomy AS t
+                    USING (subcategory_code)
+              ) WHERE membership_order <> expected_order)
+            """
+        ).fetchone()[0]
+        failures = {
+            "parent_row_difference": counts["parent_rows"] - admissions_rows,
+            "broad_taxonomy_row_difference": (
+                counts["broad_taxonomy_rows"]
+                - expected["broad_taxonomy_rows"]
+            ),
+            "subcategory_taxonomy_row_difference": (
+                counts["subcategory_taxonomy_rows"]
+                - expected["subcategory_taxonomy_rows"]
+            ),
+            "broad_membership_row_difference": (
+                counts["broad_membership_rows"]
+                - expected["broad_membership_rows"]
+            ),
+            "subcategory_membership_row_difference": (
+                counts["subcategory_membership_rows"]
+                - expected["subcategory_membership_rows"]
+            ),
+            "raw_value_mismatches": raw_mismatches,
+            "version_mismatches": version_mismatches,
+            "taxonomy_version_mismatches": taxonomy_version_mismatches,
+            "missing_subcategory_parent_broad": missing_parent_broad,
+            "taxonomy_order_mismatches": order_mismatches,
+            **cardinality_failures,
+        }
+        if any(failures.values()):
+            raise SQLiteBuildError(
+                f"Academic-field v0.2 layer validation failed: {failures}"
+            )
+        comparisons = (
+            ("broad mapping status", broad_status_counts,
+             expected["broad_mapping_status_counts"]),
+            ("subcategory mapping status", subcategory_status_counts,
+             expected["subcategory_mapping_status_counts"]),
+            ("broad membership", broad_membership_counts,
+             expected["broad_membership_counts"]),
+            ("subcategory membership", subcategory_membership_counts,
+             expected["subcategory_membership_counts"]),
+            ("context effect", context_effect_counts,
+             expected["context_effect_counts"]),
+        )
+        for label, actual, expected_value in comparisons:
+            if actual != expected_value:
+                raise SQLiteBuildError(
+                    f"Academic-field v0.2 {label} counts changed during load: "
+                    f"expected={expected_value}, actual={actual}"
+                )
+        for key, actual in context_counts.items():
+            if actual != expected[key]:
+                raise SQLiteBuildError(
+                    f"Academic-field v0.2 {key} changed during load: "
+                    f"expected={expected[key]}, actual={actual}"
+                )
+        broad_plan = [
+            row[3]
+            for row in connection.execute(
+                """
+                EXPLAIN QUERY PLAN
+                SELECT admission_rowid
+                FROM admission_search_academic_field_broad_memberships_v2
+                WHERE group_code = ? ORDER BY admission_rowid
+                """,
+                ("engineering",),
+            )
+        ]
+        subcategory_plan = [
+            row[3]
+            for row in connection.execute(
+                """
+                EXPLAIN QUERY PLAN
+                SELECT admission_rowid
+                FROM admission_search_academic_field_subcategory_memberships_v2
+                WHERE subcategory_code = ? ORDER BY admission_rowid
+                """,
+                ("mechanical",),
+            )
+        ]
+        return {
+            "status": "passed",
+            **counts,
+            "raw_mismatch_rows": raw_mismatches,
+            "broad_mapping_status_counts": broad_status_counts,
+            "subcategory_mapping_status_counts": subcategory_status_counts,
+            "broad_membership_counts": broad_membership_counts,
+            "subcategory_membership_counts": subcategory_membership_counts,
+            **context_counts,
+            "context_effect_counts": context_effect_counts,
+            "cardinality_failures": cardinality_failures,
+            "missing_subcategory_parent_broad": missing_parent_broad,
+            "taxonomy_order_mismatches": order_mismatches,
+            "query_plans": {
+                "broad": broad_plan,
+                "subcategory": subcategory_plan,
+            },
+        }
+
+    @staticmethod
     def _validate_english_requirement_layer(
         connection: sqlite3.Connection,
         admissions_rows: int,
@@ -2153,6 +2881,9 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_sha: str,
         academic_field_crosswalk_sha: str,
         academic_field_build: Mapping[str, Any],
+        academic_field_v2_schema_sha: str,
+        academic_field_v2_frozen_shas: Mapping[str, str],
+        academic_field_v2_build: Mapping[str, Any],
         english_requirement_schema_sha: str,
         english_requirement_crosswalk_sha: str,
         english_requirement_build: Mapping[str, Any],
@@ -2260,6 +2991,59 @@ class SQLiteBuildPipeline:
                 "classification_counts"
             ]["not_applicable"],
             "academic_field_raw_mismatch_rows": academic_field_build[
+                "raw_mismatch_rows"
+            ],
+            "academic_field_v2_mapping_contract_version": (
+                academic_field_v2_build["mapping_contract_version"]
+            ),
+            "academic_field_v2_taxonomy_version": academic_field_v2_build[
+                "taxonomy_version"
+            ],
+            "academic_field_v2_schema_sql_sha256": academic_field_v2_schema_sha,
+            "academic_field_v2_broad_taxonomy_sha256": (
+                academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_BROAD_PATH)]
+            ),
+            "academic_field_v2_subcategory_taxonomy_sha256": (
+                academic_field_v2_frozen_shas[
+                    str(ACADEMIC_FIELD_V2_SUBCATEGORY_PATH)
+                ]
+            ),
+            "academic_field_v2_raw_crosswalk_sha256": (
+                academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_RAW_PATH)]
+            ),
+            "academic_field_v2_context_crosswalk_sha256": (
+                academic_field_v2_frozen_shas[str(ACADEMIC_FIELD_V2_CONTEXT_PATH)]
+            ),
+            "academic_field_v2_compatibility_crosswalk_sha256": (
+                academic_field_v2_frozen_shas[
+                    str(ACADEMIC_FIELD_V2_COMPATIBILITY_PATH)
+                ]
+            ),
+            "academic_field_v2_broad_taxonomy_rows": academic_field_v2_build[
+                "broad_taxonomy_rows"
+            ],
+            "academic_field_v2_subcategory_taxonomy_rows": (
+                academic_field_v2_build["subcategory_taxonomy_rows"]
+            ),
+            "academic_field_v2_parent_rows": academic_field_v2_build[
+                "parent_rows"
+            ],
+            "academic_field_v2_broad_membership_rows": academic_field_v2_build[
+                "broad_membership_rows"
+            ],
+            "academic_field_v2_subcategory_membership_rows": (
+                academic_field_v2_build["subcategory_membership_rows"]
+            ),
+            "academic_field_v2_broad_review_required_rows": (
+                academic_field_v2_build["broad_review_required"]
+            ),
+            "academic_field_v2_subcategory_review_required_rows": (
+                academic_field_v2_build["subcategory_review_required"]
+            ),
+            "academic_field_v2_unmapped_rows": academic_field_v2_build[
+                "unmapped"
+            ],
+            "academic_field_v2_raw_mismatch_rows": academic_field_v2_build[
                 "raw_mismatch_rows"
             ],
         }
@@ -2442,6 +3226,8 @@ class SQLiteBuildPipeline:
         academic_field_taxonomy_metadata: Mapping[str, Any],
         academic_field_crosswalk_metadata: Mapping[str, Any],
         academic_field_build: Mapping[str, Any],
+        academic_field_v2_metadata: Mapping[str, Mapping[str, Any]],
+        academic_field_v2_build: Mapping[str, Any],
         english_requirement_schema_metadata: Mapping[str, Any],
         english_requirement_design_metadata: Mapping[str, Any],
         english_requirement_crosswalk_metadata: Mapping[str, Any],
@@ -2512,6 +3298,10 @@ class SQLiteBuildPipeline:
                 "academic_field_crosswalk": dict(
                     academic_field_crosswalk_metadata
                 ),
+                "academic_field_v2": {
+                    name: dict(metadata)
+                    for name, metadata in academic_field_v2_metadata.items()
+                },
                 "english_requirement_search_design": dict(english_requirement_design_metadata),
                 "english_requirement_search_schema": dict(english_requirement_schema_metadata),
                 "english_requirement_crosswalk": dict(english_requirement_crosswalk_metadata),
@@ -2529,6 +3319,25 @@ class SQLiteBuildPipeline:
             "gpa_search": dict(gpa_build),
             "grade_requirement_search": dict(grade_requirement_build),
             "academic_field_search": dict(academic_field_build),
+            "academic_field_v2": {
+                **dict(academic_field_v2_build),
+                "broad_taxonomy_sha256": academic_field_v2_metadata[
+                    "broad_taxonomy"
+                ]["sha256"],
+                "subcategory_taxonomy_sha256": academic_field_v2_metadata[
+                    "subcategory_taxonomy"
+                ]["sha256"],
+                "raw_crosswalk_sha256": academic_field_v2_metadata[
+                    "raw_crosswalk"
+                ]["sha256"],
+                "context_crosswalk_sha256": academic_field_v2_metadata[
+                    "context_crosswalk"
+                ]["sha256"],
+                "compatibility_crosswalk_sha256": academic_field_v2_metadata[
+                    "compatibility_crosswalk"
+                ]["sha256"],
+                "validation_status": validation["academic_field_v2"]["status"],
+            },
             "english_requirement_search": dict(english_requirement_build),
             "prefecture_search": dict(prefecture_build),
             "validation": dict(validation),
@@ -2552,6 +3361,7 @@ class SQLiteBuildPipeline:
         gpa = manifest["gpa_search"]
         grade_requirement = manifest["grade_requirement_search"]
         academic_field = manifest["academic_field_search"]
+        academic_field_v2 = manifest["academic_field_v2"]
         prefecture = manifest["prefecture_search"]
         lines = [
             "# Early Admissions SQLite v0.1 build summary",
@@ -2572,6 +3382,9 @@ class SQLiteBuildPipeline:
             "- Academic-field mapping/taxonomy version: "
             f"`{academic_field['mapping_contract_version']}` / "
             f"`{academic_field['taxonomy_version']}`",
+            "- Academic-field v0.2 mapping/taxonomy version: "
+            f"`{academic_field_v2['mapping_contract_version']}` / "
+            f"`{academic_field_v2['taxonomy_version']}`",
             "",
             "## Row counts",
             "",
@@ -2600,6 +3413,7 @@ class SQLiteBuildPipeline:
                 "- GPA raw-value equality, fail-closed numeric bounds, and safe view: passed",
                 "- Grade-requirement raw equality, exact crosswalk, and safe overall-floor view: passed",
                 "- Academic-field raw equality, exact crosswalk, group enum, and cardinality: passed",
+                "- Academic-field v0.2 exact raw/context mapping, hierarchy, and ordering: passed",
                 "- Prefecture raw equality, exact crosswalk, membership FK, and cardinality: passed",
                 "",
                 "## GPA derived search layer",
@@ -2659,6 +3473,23 @@ class SQLiteBuildPipeline:
                         "classification_counts"
                     ].items()
                 ),
+                "",
+                "## Academic-field v0.2 derived search layer",
+                "",
+                f"- Broad taxonomy rows: {academic_field_v2['broad_taxonomy_rows']}",
+                "- Subcategory taxonomy rows: "
+                f"{academic_field_v2['subcategory_taxonomy_rows']}",
+                f"- Parent rows: {academic_field_v2['parent_rows']}",
+                f"- Broad memberships: {academic_field_v2['broad_membership_rows']}",
+                "- Subcategory memberships: "
+                f"{academic_field_v2['subcategory_membership_rows']}",
+                "- Context consulted / effective: "
+                f"{academic_field_v2['context_consulted_admissions']} / "
+                f"{academic_field_v2['context_effect_admissions']}",
+                "- Broad mapping counts: `"
+                f"{canonical_json(academic_field_v2['broad_mapping_status_counts'])}`",
+                "- Subcategory mapping counts: `"
+                f"{canonical_json(academic_field_v2['subcategory_mapping_status_counts'])}`",
                 "",
                 "## Prefecture derived membership layer",
                 "",

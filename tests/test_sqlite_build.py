@@ -9,6 +9,7 @@ import tempfile
 import unittest
 from contextlib import closing
 from pathlib import Path
+from typing import Mapping
 
 from early_admissions.sqlite_builder import (
     DATABASE_FILENAME,
@@ -31,6 +32,7 @@ def prepare_unified_fixture(
     duplicate_children: bool = False,
     gpa_requirement: str | None = None,
     academic_field: str | None = "理工・情報",
+    master_overrides_by_dataset: Mapping[str, Mapping[str, str]] | None = None,
 ) -> dict[str, dict[str, object]]:
     states = build_synthetic_repo(root)
     for relative in (
@@ -47,6 +49,30 @@ def prepare_unified_fixture(
         Path("validation/reports/gpa_requirement_raw_value_audit_v0_1.csv"),
         Path("docs/academic_field_search_design_v0_1.md"),
         Path("docs/academic_field_mapping_freeze_v0_1.md"),
+        Path("docs/academic_field_v0_2_sqlite_design.md"),
+        Path("docs/academic_field_taxonomy_v0_2_freeze.md"),
+        Path("validation/reports/academic_field_taxonomy_v0_2_audit.md"),
+        Path("schema/sqlite/admission_search_academic_field_v0_2_schema.sql"),
+        Path(
+            "schema/academic_field/v0_2/"
+            "academic_field_broad_taxonomy_v0_2.csv"
+        ),
+        Path(
+            "schema/academic_field/v0_2/"
+            "academic_field_subcategory_taxonomy_v0_2.csv"
+        ),
+        Path(
+            "schema/academic_field/v0_2/"
+            "academic_field_raw_crosswalk_v0_2.csv"
+        ),
+        Path(
+            "schema/academic_field/v0_2/"
+            "academic_field_context_crosswalk_v0_2.csv"
+        ),
+        Path(
+            "schema/academic_field/v0_2/"
+            "academic_field_v0_1_to_v0_2_crosswalk.csv"
+        ),
         Path("docs/english_requirement_search_design_v0_1.md"),
         Path("schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"),
         Path("schema/english_requirement/english_requirement_crosswalk_v0_1.csv"),
@@ -58,12 +84,29 @@ def prepare_unified_fixture(
         destination = root / relative
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(REPO_ROOT / relative, destination)
-    if gpa_requirement is not None or academic_field is not None:
-        for state in states.values():
+    if (
+        gpa_requirement is not None
+        or academic_field is not None
+        or master_overrides_by_dataset
+    ):
+        for dataset, state in states.items():
             if gpa_requirement is not None:
                 state["master"]["gpa_requirement"] = gpa_requirement
             if academic_field is not None:
                 state["master"]["academic_field"] = academic_field
+            if master_overrides_by_dataset:
+                state["master"].update(
+                    master_overrides_by_dataset.get(dataset, {})
+                )
+                if "university" in master_overrides_by_dataset.get(dataset, {}):
+                    state["coverage"]["university"] = state["master"][
+                        "university"
+                    ]
+                    write_csv(
+                        state["canonical"] / "coverage.csv",
+                        state["coverage_header"],
+                        [state["coverage"]],
+                    )
             write_csv(
                 state["canonical"] / "master.csv",
                 state["master_header"],
