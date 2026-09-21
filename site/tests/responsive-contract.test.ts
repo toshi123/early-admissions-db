@@ -68,14 +68,27 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain("@media (max-width: 40rem) { .nested-filter { margin-left: 0; } }");
   });
 
-  it("uses one fixed desktop navigation surface and a safe-area mobile action bar", () => {
+  it("anchors the desktop navigation to the content edge and uses one borderless action surface", () => {
     expect(css).toContain(".floating-navigation {");
     expect(css).toContain("position: fixed;");
     expect(css).toContain("top: 5rem");
-    expect(css).toContain(".floating-navigation .detail-candidate-action { display: flex;");
+    expect(css).toContain("left: calc(50% + var(--floating-content-half) + 1rem)");
+    expect(css).toContain(".floating-navigation--results { --floating-content-half: 390px; }");
+    expect(css).toContain("--floating-content-half: 430px");
+    expect(css).toContain("border: 0;");
+    expect(css).toContain("border-radius: 0;");
+    expect(css).toContain("background: transparent;");
+    expect(css).toContain("min-height: 44px;");
+    expect(css).toContain("font-size: 1rem;");
+    expect(css).toContain("border-top: 1px solid var(--gray-200)");
+    expect(css).toContain(".floating-navigation .candidate-toggle:hover { background: var(--blue-50); }");
+  });
+
+  it("falls back to a safe-area action bar when the side rail does not fit", () => {
+    expect(css).toContain("@media (max-width: 1260px)");
     expect(css).toContain("padding-bottom: calc(6rem + env(safe-area-inset-bottom))");
     expect(css).toContain("padding: .625rem .75rem calc(.625rem + env(safe-area-inset-bottom))");
     expect(css).toContain("inset: auto 0 0");
-    expect(css).toContain("white-space: normal");
+    expect(css).toContain("border-left: 1px solid var(--gray-200)");
   });
 });
