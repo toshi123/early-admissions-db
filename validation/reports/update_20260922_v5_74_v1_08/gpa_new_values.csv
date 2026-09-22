@@ -1,0 +1,52 @@
+raw_or_context,frequency,representative_university,representative_faculty,representative_department,representative_record_id,current_fail_closed_status,suggested_review_note
+IB資格・学類別指定科目要件による,29,筑波大学,人間学群,教育学類,TSU-2027-IB-JUL-EDU,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+Unknown（指定校推薦の詳細は対象校へ別途書面で通知）,1,川崎市立看護大学,看護学部,看護学科,KCN-2027-REC-DES,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+なし（出願要件として評定平均等の数値基準なし。選抜では調査書の評定平均値等を評価に使用）,28,滋賀県立大学,環境科学部,環境生態学科,USP-2027-REC-ENV-ECO-A,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+なし（数値基準なし）,17,大阪公立大学,現代システム科学域,知識情報システム学類,OMU-2027-REC-KIS-H,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+なし（数値基準の明示なし）,5,神戸大学,国際人間科学部,発達コミュニティ学科,KOBE-2027-AO-ACTIVE,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+なし（評定平均等の数値要件なし）,63,お茶の水女子大学,文教育学部,人文科学科,OCHA-2027-RETURN-HUM,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。,1,法政大学,スポーツ健康学部,スポーツ健康学科,HOSEI-2027-SPORT-ATHLETE,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+一律の評定平均値基準なし。,28,中央大学,商学部,経営学科 フレックス・コース,CHUO-2027-COM-FL-MGT-FLEX,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+一般枠は全体の学習成績の状況4.0以上（算出不能者等は要項の例外規定あり）。,1,明治大学,国際日本学部,国際日本学科,MEIJI-2027-GJS-01,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体3.8以上、国語4.0以上、地理歴史・公民の評定平均4.0以上。,1,立教大学,文学部,文学科 文芸・思想専修,RIKKYO-2027-LIT-ART,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体3.8以上、国語4.0以上。,1,立教大学,文学部,文学科 日本文学専修,RIKKYO-2027-LIT-JPN,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体3.8以上。,1,立教大学,経営学部,経営学科,RIKKYO-2027-BIZ-BUS-A1,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上、かつ外国語/英語1教科＋指定群から2教科の計3教科平均4.2以上,2,大阪公立大学,現代システム科学域,環境社会システム学類,OMU-2027-REC-ENV,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上、かつ数学または理科4.2以上。,1,国際基督教大学,教養学部,アーツ・サイエンス学科,ICU-2027-SOGO-SCI,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上、または全体3.8以上かつ「世界史探究」または「日本史探究」の学習成績の状況4.5以上。,1,青山学院大学,文学部,史学科,AGU-2027-SELF-HIST,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上、または国語4.2以上かつ地理歴史・公民4.2以上。,1,青山学院大学,文学部,比較芸術学科,AGU-2027-SELF-ART,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上。,4,立教大学,経営学部,経営学科,RIKKYO-2027-BIZ-BUS-A2,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ国語4.3以上,1,上智大学,文学部,国文学科,SOPHIA-2027-KOBO-JPN,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ地理歴史4.3以上,1,上智大学,文学部,史学科,SOPHIA-2027-KOBO-HIST,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ外国語4.3以上,1,上智大学,外国語学部,ロシア語学科,SOPHIA-2027-KOBO-RUS,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ外国語・国語それぞれ4.0以上,2,上智大学,文学部,ドイツ文学科,SOPHIA-2027-KOBO-GER,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ外国語・国語それぞれ4.3以上,2,上智大学,外国語学部,ドイツ語学科,SOPHIA-2027-KOBO-GERFL,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ数学4.5以上,1,上智大学,経済学部,経済学科,SOPHIA-2027-KOBO-ECON,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ英語4.3以上,1,上智大学,外国語学部,英語学科,SOPHIA-2027-KOBO-ENGFL,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体4.0以上かつ英語4.5以上,1,上智大学,文学部,英文学科,SOPHIA-2027-KOBO-ENG,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の学習成績の状況3.5以上。専攻により追加の科目・成績条件あり。,14,明治大学,文学部,文学科 日本文学専攻,MEIJI-2027-LIT-JPN,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の学習成績の状況3.8以上、または課外活動・社会活動等で顕著な実績をアピールできること。,1,中央大学,国際経営学部,国際経営学科,CHUO-2027-GBS-SELF,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の学習成績の状況4.0以上、又は外国語・数学・理科の学習成績の状況がいずれも4.3以上,1,東京都立大学,都市環境学部,都市基盤環境学科,TMU-2027-AO-29,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の学習成績の状況4.1以上。,1,国際基督教大学,教養学部,アーツ・サイエンス学科,ICU-2027-SOGO-ENG,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値3.5以上。ただし一部高卒同等資格者および資格VIIは評定条件なし。,1,立教大学,スポーツウエルネス学部,スポーツウエルネス学科,RIKKYO-2027-SW-01,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値3.8以上。,8,立教大学,文学部,史学科,RIKKYO-2027-LIT-HIST,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値3.8以上。出願条件5(a)では学科指定科目の評定平均値4.5以上（高卒同等資格の一部は評定条件なし）。,4,立教大学,理学部,数学科,RIKKYO-2027-SCI-01,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値3.8以上（高卒同等資格の一部は評定条件なし）。,2,立教大学,文学部,キリスト教学科,RIKKYO-2027-LIT-CHRIST,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値4.0以上。,2,立教大学,文学部,文学科 英米文学専修,RIKKYO-2027-LIT-ENG,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+全体の評定平均値4.0以上。欠席45日以内（4年制定時制は60日以内）。,1,早稲田大学,社会科学部,社会科学科,WASEDA-2027-SSS-NATIONWIDE,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。,12,中央大学,文学部,国文学専攻,CHUO-2027-LIT-JPN,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+前年参考（学部・系別要件は2027年度詳細要項で再監査）,21,東北大学,文学部,人文社会学科,TOHOKU-2027-AO3-LIT,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+原則として全体の学習成績の状況3.8以上（出願区分により条件あり）。,1,青山学院大学,地球社会共生学部,地球社会共生学科,AGU-2027-SELF-GSC,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+外国語・数学・国語・地理歴史・公民および全体の学習成績の状況がすべて4.0以上。,2,慶應義塾大学,法学部,法律学科,KEIO-2027-FIT-LAW-B,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+学科指定基準あり（全体4.0以上等）,1,上智大学,文学部,哲学科,SOPHIA-2027-KOBO-PHIL,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+学習成績概評A（評定平均4.3以上）,1,東京科学大学,医学部,保健衛生学科 看護学専攻,ST-2027-MDREC-NURS,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+学類別出願要件による,9,金沢大学,融合学域,スマート創成科学類,KAN-2027-KUGS-DIGI-SMART,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）,22,金沢大学,融合学域,先導学類,KAN-2027-CHOZEN-A1-LEAD,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+学類別要件を募集要項で確認,6,金沢大学,融合学域,先導学類,KAN-2027-CHOZEN-LIT-LEAD,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+情報Ⅰ・情報Ⅱの評定がいずれも4以上,1,東京都立大学,システムデザイン学部,情報科学科,TMU-2027-AO-24,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+望ましい基準：全体4.1以上、数学・理科の指定各科目の評定4以上。,3,慶應義塾大学,理工学部,電気情報工学科,KEIO-2027-ST-EE,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+評定平均の数値条件なし（IBDP利用）。,1,国際基督教大学,教養学部,アーツ・サイエンス学科,ICU-2027-SOGO-IBDP,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+評定平均値の数値条件なし。,12,立教大学,文学部,文学科 ドイツ文学専修,RIKKYO-2027-LIT-GER,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+調査書の全体の学習成績の状況4.7以上、又はきわめて優れた特性・学科能力/課外活動経験,1,東京科学大学,医学部,医学科,ST-2027-MDREC-MED,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+調査書の国語・数学・外国語・理科・地理歴史・公民の評定平均を単純平均し、小数点以下第2位で四捨五入した値が4.0以上,1,滋賀県立大学,人間看護学部,人間看護学科,USP-2027-REC-NURS-D,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.
+高等学校全期間の「全体の学習成績の状況」4.1以上。,1,慶應義塾大学,文学部,学部一括募集,KEIO-2027-LIT-SELF,do_not_numeric_unmapped,Human review required; do not parse numeric tokens.

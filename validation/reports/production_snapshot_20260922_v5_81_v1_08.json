@@ -1,0 +1,270 @@
+{
+  "artifact": "early_admissions_production_snapshot_receipt",
+  "promotion_date": "2026-09-22",
+  "status": "production_promoted",
+  "previous_production": {
+    "kokkoritsu": "5.61",
+    "shidai": "0.97"
+  },
+  "production_sources": {
+    "kokkoritsu": {
+      "version": "5.81",
+      "canonical_release_byte_identical": true,
+      "release_path": "data/releases/kokkoritsu-v5.81",
+      "rows": {
+        "master": 4011,
+        "coverage": 187,
+        "research_requirements": 281
+      },
+      "sha256": {
+        "master": "d77665c27c2a4deed8f85d73ba6c546fe24fad21ded6a28719d67e2f3b490d6b",
+        "coverage": "8bce9276537767eb4fa2285f4d398f33d3634369e4168720c7f752d964e9bc5e",
+        "research_requirements": "044dba433319b482ae309952be4e765c85a412c77be1431617c8ff1584f40ec3",
+        "schema": "26b0bd61ea21f92927c31823a9b0057167d161c5ff0da0dd17dcaef0479c6bd0"
+      }
+    },
+    "shidai": {
+      "version": "1.08",
+      "canonical_release_byte_identical": true,
+      "release_path": "data/releases/shidai-v1.08",
+      "rows": {
+        "master": 2400,
+        "coverage": 73,
+        "research_requirements": 214
+      },
+      "sha256": {
+        "master": "7062ae8afb09eabc9aa6118dc0fc44e6170037db8c1f069684b5cdbcd170ce0e",
+        "coverage": "489f97680cc51374af59ab8e037e3ab399e1aff7cb00ed5fb95c043ff36b349d",
+        "research_requirements": "9269bb49ca61ad7d6a0771445c5bb925821fff4e699fd4807d35cc3a33b35ac8",
+        "schema": "6abf1bd3ae76fdd22ecabe968804ef9aac98d15d95f36f14046fec178a09c4cd"
+      }
+    },
+    "universities": 250,
+    "superseded_kokkoritsu_v5_74_used": false
+  },
+  "representative_human_review_spot_checks": {
+    "status": "passed",
+    "passed": 8,
+    "total": 8,
+    "checks": [
+      {
+        "id": "RIKKYO-2027-SCI-03",
+        "result": "Grade required; overall GPA floor 3.8; additional grade conditions true; strict GPA conditional_review; English required"
+      },
+      {
+        "id": "KYUSHU-2027-RETURN-ECONENG",
+        "result": "Broad economics; no engineering membership"
+      },
+      {
+        "id": "KAN-2027-KUGS-DR-REG",
+        "result": "Broad sociology_community; Subcategory community_regional_society"
+      },
+      {
+        "id": "KEIO political science representative",
+        "result": "Broad law_politics_policy; Subcategory politics; no law membership"
+      },
+      {
+        "id": "KEIO law representative",
+        "result": "Broad law_politics_policy; Subcategory law; no politics membership"
+      },
+      {
+        "id": "MEIJI geography representative",
+        "result": "Broad humanities_culture_history; no history_folklore membership"
+      },
+      {
+        "id": "HOSEI geography representative",
+        "result": "Broad humanities_culture_history; no regional_studies membership"
+      },
+      {
+        "id": "RIKKYO-2027-LIT-EDU",
+        "result": "English or other-language qualification alternative classified as English required"
+      }
+    ],
+    "evidence_layers": [
+      "human decision artifact",
+      "versioned crosswalk",
+      "candidate database"
+    ]
+  },
+  "source_validation": {
+    "status": "passed_with_findings",
+    "errors": 0,
+    "warnings": 1167,
+    "informational": 3292,
+    "warning_policy": "accepted known quality backlog; source values and severity unchanged",
+    "warning_counts": {
+      "DETAIL_COMPLETENESS_UNMAPPED": 767,
+      "PROVENANCE_URL_MISSING": 55,
+      "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
+      "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 10,
+      "RESEARCH_EXACT_DUPLICATE": 4,
+      "RESEARCH_REQUIRED_WITHOUT_CHILD": 45,
+      "WHITESPACE_PADDING": 5
+    }
+  },
+  "crosswalks": {
+    "gpa": {
+      "version": "0.2",
+      "sha256": "bc6a5416f4b4efe3ce86ed10947e52f556d2a370d6472a2397bd8dbb6c887ffe"
+    },
+    "grade": {
+      "version": "0.2",
+      "sha256": "6095c2eebfa37a2a97359fa91f270e6a092bb77b06d23dad805a959710aa57c3"
+    },
+    "english": {
+      "version": "0.2",
+      "sha256": "5dc097fed020fd2f1c6c3ae963ffa82f7487eca22993c7b2430a8d764aedbaff"
+    },
+    "academic_field_v0_1_compatibility": {
+      "version": "0.2",
+      "sha256": "74162005e676a89c515a95d24bb78548df7ce6709fb04eb28c3ff14b57c99ab8"
+    },
+    "academic_field_v0_2_taxonomy": {
+      "version": "0.2",
+      "broad_sha256": "ba33e98fa58196a3b530b26ce47d036073bdbf929a6fd16636e2ff58afe72ebd",
+      "subcategory_sha256": "9813972ec7698cd923fbbfb9bbee16bff7af12b371f23f5e733f6d391b92576e"
+    },
+    "academic_field_mapping": {
+      "version": "0.3",
+      "raw_sha256": "e59a29c0bfadd5a4e633d2cf64ec9f2a2ae1b969b8a6302d6f2886a5a5a01a7b",
+      "context_sha256": "12eaf7a9e4870f5bf7c2381445abc007c5e00f3be5f601ad9198c60a14e0a5a8"
+    },
+    "prefecture": {
+      "version": "0.1",
+      "taxonomy_sha256": "d91fe231cde5698b074a8c86328dd61499aeccac32da2472e36a0e184457f906",
+      "crosswalk_sha256": "46a5c032e2fc79cd2d1cbfbc33b1dac5952e70300b557fd1884558d52153481c"
+    }
+  },
+  "unified": {
+    "status": "passed",
+    "rows": {
+      "master": 6411,
+      "coverage": 260,
+      "research_requirements": 495
+    },
+    "sha256": {
+      "master": "2af3a834bb00fd93235f711c0f50896c4158b633d550d333b1aad9667bf5985e",
+      "coverage": "4457e7cddb9b9bde8a5aa414dcbadeda9ac6d05ed45ef0794354b2883c837e2b",
+      "research_requirements": "0aae717876bef3c1ba8645fcbf7e15190ce9bc8521badb83d5f154b6e3782fd9",
+      "manifest": "66431d3ee6dca98bdb462a6838366017a8d02d25ce138e810844987f43b65eba"
+    },
+    "deterministic_rebuild": true,
+    "research_exact_duplicate_excess_preserved": 4
+  },
+  "sqlite": {
+    "status": "passed",
+    "validation_profile": "production",
+    "rows": {
+      "admissions": 6411,
+      "coverage": 260,
+      "research_requirements": 495
+    },
+    "size_bytes": 37318656,
+    "sha256": "3f7cda8c9788f601c86991b7d0ccb19fc516638ef9c19d91447fd71d2ab0bbe7",
+    "isolated_receipt_match": true,
+    "sqlite_version": "3.53.0",
+    "strict": true,
+    "fts5": true,
+    "trigram": true,
+    "quick_check": "ok",
+    "foreign_key_check_rows": 0,
+    "publication": "published_after_all_validations_passed"
+  },
+  "site_data": {
+    "status": "passed",
+    "validation_profile": "production",
+    "build_id": "f23d7efe23536453f276",
+    "manifest_sha256": "27a7ab931f71ccbd701b92c3210f226ec3b4fac39d7433c94696cea95b6c497a",
+    "isolated_receipt_match": true,
+    "rows": {
+      "search": 6411,
+      "details": 6411,
+      "research_requirements": 495
+    },
+    "deterministic_rebuild": "all files byte-identical"
+  },
+  "strict_validation": {
+    "master_pk_duplicates": 0,
+    "coverage_mismatches": 0,
+    "research_orphan_fk": 0,
+    "raw_and_provenance_equality": "passed",
+    "tri_state_validation": "passed",
+    "prohibited_unmapped_counts": {
+      "grade": 0,
+      "english": 0,
+      "academic_field_v0_1": 0,
+      "academic_field_v0_2": 0,
+      "prefecture": 0,
+      "new_gpa": 0,
+      "academic_field_context_review": 0
+    },
+    "accepted_gpa_unparsed": 227
+  },
+  "derived_counts": {
+    "english": {
+      "required": 467,
+      "not_required": 1265,
+      "review_required": 296,
+      "unknown": 4383,
+      "unmapped": 0
+    },
+    "grade": {
+      "required": 2373,
+      "not_required": 707,
+      "review_required": 1404,
+      "unknown": 1910,
+      "not_applicable": 17,
+      "unmapped": 0
+    },
+    "gpa_strict_safe": {
+      "3.0": 72,
+      "3.5": 499,
+      "3.8": 763,
+      "4.0": 1175,
+      "4.5": 1258
+    },
+    "academic_field_v0_2": {
+      "broad_covered": 6400,
+      "subcategory_covered": 5317,
+      "admissions": 6411
+    }
+  },
+  "search_regression": {
+    "status": "passed",
+    "passed": 25,
+    "total": 25,
+    "representative_counts": {
+      "gpa_3_8_strict_safe": 763,
+      "grade_required": 2373,
+      "overall_gpa_3_8": 871,
+      "english_required": 467,
+      "law_politics_policy": 114,
+      "economics": 173,
+      "business_commerce": 191,
+      "psychology": 31,
+      "languages": 197,
+      "natural_sciences": 762,
+      "engineering": 1696,
+      "information": 892
+    },
+    "sqlite_sha256_before_after_equal": true
+  },
+  "test_and_build_receipts": {
+    "repository_tests": "141/141 PASS",
+    "frontend_tests": "151/151 PASS",
+    "responsive_focused_tests": "11/11 PASS",
+    "search_oracle": "25/25 PASS",
+    "production_build": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "atomicity": {
+    "rollback_checkpoint_created": true,
+    "derived_publication_after_validation": true,
+    "wal_or_shm_sidecars": false
+  },
+  "scope_boundary": {
+    "chatgpt_sites_version_saved": false,
+    "deployment_updated": false,
+    "access_or_sharing_changed": false
+  }
+}

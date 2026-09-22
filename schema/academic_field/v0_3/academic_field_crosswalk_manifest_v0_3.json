@@ -1,0 +1,87 @@
+{
+  "artifacts": {
+    "academic_v0_1_compatibility_crosswalk": {
+      "path": "schema/academic_field/academic_field_crosswalk_v0_2.csv",
+      "rows": 782,
+      "sha256": "74162005e676a89c515a95d24bb78548df7ce6709fb04eb28c3ff14b57c99ab8",
+      "size_bytes": 65824
+    },
+    "academic_v0_2_context_crosswalk": {
+      "path": "schema/academic_field/v0_3/academic_field_context_crosswalk_v0_3.csv",
+      "rows": 941,
+      "sha256": "12eaf7a9e4870f5bf7c2381445abc007c5e00f3be5f601ad9198c60a14e0a5a8",
+      "size_bytes": 212113
+    },
+    "academic_v0_2_raw_crosswalk": {
+      "path": "schema/academic_field/v0_3/academic_field_raw_crosswalk_v0_3.csv",
+      "rows": 860,
+      "sha256": "e59a29c0bfadd5a4e633d2cf64ec9f2a2ae1b969b8a6302d6f2886a5a5a01a7b",
+      "size_bytes": 120385
+    },
+    "english_crosswalk": {
+      "path": "schema/english_requirement/english_requirement_crosswalk_v0_2.csv",
+      "rows": 243,
+      "sha256": "5dc097fed020fd2f1c6c3ae963ffa82f7487eca22993c7b2430a8d764aedbaff",
+      "size_bytes": 46494
+    }
+  },
+  "candidate_sources": {
+    "kokkoritsu": "5.81",
+    "shidai": "1.08"
+  },
+  "context_decision_count": 71,
+  "context_merge_mode": "authoritative_exact_tuple_only",
+  "decision_artifacts": [
+    {
+      "path": "validation/reports/update_20260922_v5_81_v1_08/academic_field_raw_human_review_decisions_v0_3.csv",
+      "rows": 39,
+      "sha256": "29299c0fa9c4646d74b7e1931c53fad3ba464ac8416d62de5f498ba89ed52b2d",
+      "size_bytes": 10815
+    },
+    {
+      "path": "validation/reports/update_20260922_v5_81_v1_08/academic_field_context_human_review_decisions_v0_3.csv",
+      "rows": 71,
+      "sha256": "30be7a22c46eda14972210c08b90365ef1904737bbf3f5edaa08aa19ecde2704",
+      "size_bytes": 22459
+    }
+  ],
+  "mapping_contract_version": "0.3",
+  "preserved_taxonomy_artifacts": [
+    {
+      "path": "schema/academic_field/v0_2/academic_field_broad_taxonomy_v0_2.csv",
+      "rows": 30,
+      "sha256": "ba33e98fa58196a3b530b26ce47d036073bdbf929a6fd16636e2ff58afe72ebd",
+      "size_bytes": 4015
+    },
+    {
+      "path": "schema/academic_field/v0_2/academic_field_subcategory_taxonomy_v0_2.csv",
+      "rows": 89,
+      "sha256": "9813972ec7698cd923fbbfb9bbee16bff7af12b371f23f5e733f6d391b92576e",
+      "size_bytes": 9156
+    },
+    {
+      "path": "schema/academic_field/v0_2/academic_field_v0_1_to_v0_2_crosswalk.csv",
+      "sha256": "55d3cbeebb0af7d6bcab6bb5b975616413ff8f5591cf3cab03089559913f92d7",
+      "size_bytes": 4184
+    }
+  ],
+  "previous_artifacts": [
+    {
+      "path": "schema/academic_field/v0_2/academic_field_raw_crosswalk_v0_2.csv",
+      "rows": 796,
+      "sha256": "bf8213c7fbe09877ed0ffd4701e985e3aad724e0cc519f6e1ba18ed53b8b83aa",
+      "size_bytes": 111300
+    },
+    {
+      "path": "schema/academic_field/v0_2/academic_field_context_crosswalk_v0_2.csv",
+      "rows": 824,
+      "sha256": "d6a80cc20c50e225f36eb96c0f51e8df367ffe3b2205bc1fbe5b83d5315eabf1",
+      "size_bytes": 183499
+    }
+  ],
+  "previous_mapping_contract_version": "0.2",
+  "raw_decision_count": 39,
+  "review_method": "human review",
+  "reviewed_on": "2026-09-22",
+  "taxonomy_version": "0.2"
+}

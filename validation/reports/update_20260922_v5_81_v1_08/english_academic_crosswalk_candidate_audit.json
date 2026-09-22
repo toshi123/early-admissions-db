@@ -1,0 +1,63 @@
+{
+  "academic_v0_1_classification_counts": {
+    "multi": 1877,
+    "review_required": 40,
+    "single": 4494
+  },
+  "academic_v0_2_broad_classification_counts": {
+    "multi": 2176,
+    "review_required": 11,
+    "single": 4224
+  },
+  "academic_v0_2_subcategory_classification_counts": {
+    "multi": 1656,
+    "none": 1083,
+    "review_required": 11,
+    "single": 3661
+  },
+  "artifacts": {
+    "academic_v0_1_compatibility_crosswalk": {
+      "path": "schema/academic_field/academic_field_crosswalk_v0_2.csv",
+      "rows": 782,
+      "sha256": "74162005e676a89c515a95d24bb78548df7ce6709fb04eb28c3ff14b57c99ab8",
+      "size_bytes": 65824
+    },
+    "academic_v0_2_context_crosswalk": {
+      "path": "schema/academic_field/v0_3/academic_field_context_crosswalk_v0_3.csv",
+      "rows": 941,
+      "sha256": "12eaf7a9e4870f5bf7c2381445abc007c5e00f3be5f601ad9198c60a14e0a5a8",
+      "size_bytes": 212113
+    },
+    "academic_v0_2_raw_crosswalk": {
+      "path": "schema/academic_field/v0_3/academic_field_raw_crosswalk_v0_3.csv",
+      "rows": 860,
+      "sha256": "e59a29c0bfadd5a4e633d2cf64ec9f2a2ae1b969b8a6302d6f2886a5a5a01a7b",
+      "size_bytes": 120385
+    },
+    "english_crosswalk": {
+      "path": "schema/english_requirement/english_requirement_crosswalk_v0_2.csv",
+      "rows": 243,
+      "sha256": "5dc097fed020fd2f1c6c3ae963ffa82f7487eca22993c7b2430a8d764aedbaff",
+      "size_bytes": 46494
+    }
+  },
+  "candidate_rows": 6411,
+  "correspondence": {
+    "academic_context": 71,
+    "academic_raw": 39,
+    "english": 66
+  },
+  "english_classification_counts": {
+    "not_required": 1265,
+    "required": 467,
+    "review_required": 296,
+    "unknown": 4383
+  },
+  "prohibited_unmapped": {
+    "academic_v0_1": 0,
+    "academic_v0_2": 0,
+    "english": 0
+  },
+  "reviewed_context_admission_rows": 88,
+  "status": "passed"
+}

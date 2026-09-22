@@ -16,21 +16,23 @@ from .academic_field_v0_2 import (
     BROAD_HEADER,
     COMPAT_HEADER,
     CONTEXT_HEADER,
-    MAPPING_VERSION,
     RAW_HEADER,
     SUBCATEGORY_HEADER,
-    TAXONOMY_VERSION,
     _group_contiguous,
     _read_frozen_csv,
     _validate_mapping_block,
 )
 
 
+MAPPING_VERSION = "0.3"
+TAXONOMY_VERSION = "0.2"
+
+
 ACADEMIC_FIELD_V2_SCHEMA_PATH = Path(
     "schema/sqlite/admission_search_academic_field_v0_2_schema.sql"
 )
 ACADEMIC_FIELD_V2_DESIGN_PATH = Path(
-    "docs/academic_field_v0_2_sqlite_design.md"
+    "docs/academic_field_crosswalk_v0_3.md"
 )
 ACADEMIC_FIELD_V2_FREEZE_PATH = Path(
     "docs/academic_field_taxonomy_v0_2_freeze.md"
@@ -45,10 +47,10 @@ ACADEMIC_FIELD_V2_SUBCATEGORY_PATH = Path(
     "schema/academic_field/v0_2/academic_field_subcategory_taxonomy_v0_2.csv"
 )
 ACADEMIC_FIELD_V2_RAW_PATH = Path(
-    "schema/academic_field/v0_2/academic_field_raw_crosswalk_v0_2.csv"
+    "schema/academic_field/v0_3/academic_field_raw_crosswalk_v0_3.csv"
 )
 ACADEMIC_FIELD_V2_CONTEXT_PATH = Path(
-    "schema/academic_field/v0_2/academic_field_context_crosswalk_v0_2.csv"
+    "schema/academic_field/v0_3/academic_field_context_crosswalk_v0_3.csv"
 )
 ACADEMIC_FIELD_V2_COMPATIBILITY_PATH = Path(
     "schema/academic_field/v0_2/academic_field_v0_1_to_v0_2_crosswalk.csv"
@@ -62,10 +64,10 @@ ACADEMIC_FIELD_V2_FROZEN_SHA256: Mapping[Path, str] = {
         "9813972ec7698cd923fbbfb9bbee16bff7af12b371f23f5e733f6d391b92576e"
     ),
     ACADEMIC_FIELD_V2_RAW_PATH: (
-        "bf8213c7fbe09877ed0ffd4701e985e3aad724e0cc519f6e1ba18ed53b8b83aa"
+        "e59a29c0bfadd5a4e633d2cf64ec9f2a2ae1b969b8a6302d6f2886a5a5a01a7b"
     ),
     ACADEMIC_FIELD_V2_CONTEXT_PATH: (
-        "d6a80cc20c50e225f36eb96c0f51e8df367ffe3b2205bc1fbe5b83d5315eabf1"
+        "12eaf7a9e4870f5bf7c2381445abc007c5e00f3be5f601ad9198c60a14e0a5a8"
     ),
     ACADEMIC_FIELD_V2_COMPATIBILITY_PATH: (
         "55d3cbeebb0af7d6bcab6bb5b975616413ff8f5591cf3cab03089559913f92d7"
@@ -332,13 +334,10 @@ class AcademicFieldV2Contract:
                 raise AcademicFieldV2ContractError(
                     f"Additive context repeats a raw membership: {key!r}."
                 )
-            if (
-                mode == "authoritative"
-                and raw_mapping.mapping_status != "review_required"
-            ):
-                raise AcademicFieldV2ContractError(
-                    f"Authoritative context has a non-review raw mapping: {key!r}."
-                )
+            # v0.3 allows explicitly human-reviewed authoritative contexts to
+            # replace either ambiguous or otherwise mapped raw memberships.
+            # This applies only to exact tuples present in the frozen context
+            # crosswalk; no rule is generalized to unreviewed contexts.
             context_mappings[key] = ExactMappingV2(
                 mapping_status=block[0]["mapping_status"],
                 broad_mapping_status=block[0]["broad_mapping_status"],

@@ -32,7 +32,7 @@ CREATE TABLE admission_search_grade_requirements (
         parse_status IN ('exact_crosswalk', 'missing', 'unmapped')
     ),
     mapping_contract_version TEXT NOT NULL
-        CHECK (mapping_contract_version = '0.1'),
+        CHECK (mapping_contract_version = '0.2'),
     review_note TEXT,
     CHECK (
         (overall_gpa_min_tenths IS NULL

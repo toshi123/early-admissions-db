@@ -38,7 +38,7 @@
         "overall_gpa_status": {"enum": ["safe_simple_overall", "safe_overall_with_additional_conditions", "no_safe_overall_floor", "historical", "non_binding", "non_admission_numeric", "ambiguous", "unknown", "not_applicable", "unmapped"]},
         "additional_grade_conditions": {"type": ["boolean", "null"]},
         "parse_status": {"enum": ["exact_crosswalk", "missing", "unmapped"]},
-        "mapping_contract_version": {"const": "0.1"},
+        "mapping_contract_version": {"enum": ["0.1", "0.2"]},
         "review_note": {"type": ["string", "null"]}
       }
     },
@@ -47,7 +47,7 @@
       "required": ["admission_rowid", "raw_value", "mapping_status", "mapping_contract_version", "review_note", "groups"],
       "properties": {
         "admission_rowid": {"type": "integer"}, "raw_value": {"type": ["string", "null"]},
-        "mapping_status": {"type": "string"}, "mapping_contract_version": {"const": "0.1"},
+        "mapping_status": {"type": "string"}, "mapping_contract_version": {"enum": ["0.1", "0.2"]},
         "review_note": {"type": ["string", "null"]},
         "groups": {"type": "array", "items": {"$ref": "#/$defs/academic_group"}}
       }
@@ -61,7 +61,7 @@
         "subcategory_mapping_status": {"enum": ["single", "multi", "none", "review_required", "unmapped", "not_applicable"]},
         "context_mapping_consulted": {"enum": [0, 1]},
         "context_mapping_effect": {"enum": ["none", "additive", "authoritative"]},
-        "mapping_contract_version": {"const": "0.2"}, "taxonomy_version": {"const": "0.2"},
+        "mapping_contract_version": {"enum": ["0.2", "0.3"]}, "taxonomy_version": {"const": "0.2"},
         "review_note": {"type": ["string", "null"]},
         "broad_memberships": {"type": "array", "items": {"$ref": "#/$defs/academic_v2_broad_membership"}},
         "subcategory_memberships": {"type": "array", "items": {"$ref": "#/$defs/academic_v2_subcategory_membership"}}
@@ -75,7 +75,7 @@
         "requirement_status": {"enum": ["required", "not_required", "review_required", "unknown", "not_applicable", "unmapped"]},
         "parse_status": {"enum": ["exact_crosswalk", "missing", "unmapped"]},
         "search_disposition": {"enum": ["safe_exact", "review_required", "not_searchable"]},
-        "parser_contract_version": {"const": "0.1"}, "review_note": {"type": ["string", "null"]}
+        "parser_contract_version": {"enum": ["0.1", "0.2"]}, "review_note": {"type": ["string", "null"]}
       }
     },
     "research_requirements": {"type": "array", "items": {"$ref": "#/$defs/research"}}

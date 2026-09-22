@@ -12,6 +12,7 @@ from .sqlite_builder import (
     SQLiteBuildError,
     SQLiteBuildPipeline,
 )
+from .validation_profile import PRODUCTION_PROFILE
 
 
 def default_repo_root() -> Path:
@@ -39,6 +40,22 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Suppress the successful build summary.",
     )
+    parser.add_argument(
+        "--validation-profile",
+        choices=("production", "candidate-audit"),
+        default=PRODUCTION_PROFILE,
+        help=(
+            "Validation policy (default: production). candidate-audit is an "
+            "explicit inspection-only mode and never marks output production-ready."
+        ),
+    )
+    parser.add_argument(
+        "--build-timestamp-utc",
+        help=(
+            "Optional deterministic UTC timestamp recorded in the artifact "
+            "(for example 2026-09-22T11:38:21Z)."
+        ),
+    )
     return parser
 
 
@@ -48,6 +65,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         result = SQLiteBuildPipeline(
             args.repo_root,
             output_dir=args.output_dir,
+            validation_profile=args.validation_profile,
+            build_timestamp_utc=args.build_timestamp_utc,
         ).build()
     except (OSError, KeyError, TypeError, ValueError, SQLiteBuildError) as error:
         print(f"SQLite build failed: {error}", file=sys.stderr)
@@ -55,6 +74,7 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     if not args.quiet:
         print("SQLite build status: passed")
+        print(f"Validation profile: {args.validation_profile}")
         print(
             f"Profile: {result.capabilities.profile}; "
             f"SQLite {result.capabilities.sqlite_version}; "

@@ -39,8 +39,8 @@ class AcademicFieldV2ContractTests(unittest.TestCase):
             self.assertEqual(actual, expected)
         self.assertEqual(len(self.contract.broad_groups), 30)
         self.assertEqual(len(self.contract.subcategories), 89)
-        self.assertEqual(len(self.contract.raw_mappings), 448)
-        self.assertEqual(len(self.contract.context_mappings), 718)
+        self.assertEqual(len(self.contract.raw_mappings), 487)
+        self.assertEqual(len(self.contract.context_mappings), 789)
 
     def test_exact_raw_multi_and_no_substring_inference(self) -> None:
         multi = self.contract.classify(
@@ -492,19 +492,19 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
         layer = self.manifest["academic_field_v2"]
         self.assertEqual(layer["broad_taxonomy_rows"], 30)
         self.assertEqual(layer["subcategory_taxonomy_rows"], 89)
-        self.assertEqual(layer["parent_rows"], 5921)
-        self.assertEqual(layer["raw_crosswalk_keys"], 448)
-        self.assertEqual(layer["raw_crosswalk_rows"], 796)
-        self.assertEqual(layer["context_crosswalk_tuples"], 718)
-        self.assertEqual(layer["context_crosswalk_rows"], 824)
-        self.assertEqual(layer["raw_only_mapping_admissions"], 4443)
-        self.assertEqual(layer["context_consulted_admissions"], 1478)
-        self.assertEqual(layer["context_effect_admissions"], 1467)
+        self.assertEqual(layer["parent_rows"], 6411)
+        self.assertEqual(layer["raw_crosswalk_keys"], 487)
+        self.assertEqual(layer["raw_crosswalk_rows"], 860)
+        self.assertEqual(layer["context_crosswalk_tuples"], 789)
+        self.assertEqual(layer["context_crosswalk_rows"], 941)
+        self.assertEqual(layer["raw_only_mapping_admissions"], 4832)
+        self.assertEqual(layer["context_consulted_admissions"], 1579)
+        self.assertEqual(layer["context_effect_admissions"], 1568)
         self.assertEqual(
             layer["broad_mapping_status_counts"],
             {
-                "single": 3871,
-                "multi": 2039,
+                "single": 4224,
+                "multi": 2176,
                 "review_required": 11,
                 "unmapped": 0,
                 "not_applicable": 0,
@@ -513,9 +513,9 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
         self.assertEqual(
             layer["subcategory_mapping_status_counts"],
             {
-                "single": 3462,
-                "multi": 1565,
-                "none": 883,
+                "single": 3661,
+                "multi": 1656,
+                "none": 1083,
                 "review_required": 11,
                 "unmapped": 0,
                 "not_applicable": 0,
@@ -526,14 +526,14 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
 
     def test_representative_production_queries(self) -> None:
         for group_code, expected in (
-            ("law_politics_policy", 81),
-            ("economics", 150),
-            ("business_commerce", 169),
-            ("psychology", 25),
-            ("languages", 128),
-            ("natural_sciences", 702),
-            ("engineering", 1642),
-            ("information", 865),
+            ("law_politics_policy", 114),
+            ("economics", 173),
+            ("business_commerce", 191),
+            ("psychology", 31),
+            ("languages", 197),
+            ("natural_sciences", 762),
+            ("engineering", 1696),
+            ("information", 892),
         ):
             with self.subTest(group_code=group_code):
                 result = search_database(
@@ -547,14 +547,14 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
                 )
                 self.assertEqual(result.summary.total_matched_rows, expected)
         for group_code, subcategory, expected in (
-            ("law_politics_policy", "law", 42),
-            ("economics", "economics_general", 147),
-            ("business_commerce", "management", 161),
-            ("psychology", "psychology_general", 20),
-            ("natural_sciences", "mathematics_statistics", 107),
-            ("natural_sciences", "physics", 87),
-            ("engineering", "mechanical", 332),
-            ("nursing_health", "nursing", 279),
+            ("law_politics_policy", "law", 73),
+            ("economics", "economics_general", 169),
+            ("business_commerce", "management", 183),
+            ("psychology", "psychology_general", 25),
+            ("natural_sciences", "mathematics_statistics", 113),
+            ("natural_sciences", "physics", 93),
+            ("engineering", "mechanical", 335),
+            ("nursing_health", "nursing", 286),
         ):
             with self.subTest(subcategory=subcategory):
                 result = search_database(

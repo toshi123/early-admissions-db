@@ -1,0 +1,2518 @@
+{
+  "baseline_receipt": {
+    "canonical_kokkoritsu_coverage": {
+      "path": "data/canonical/kokkoritsu/coverage.csv",
+      "sha256": "a8db0a6d56ce92d80c1a8a4cb832fd0144de02727bdfe2bdf4b4b466cedeab07",
+      "size_bytes": 94624
+    },
+    "canonical_kokkoritsu_master": {
+      "path": "data/canonical/kokkoritsu/master.csv",
+      "sha256": "61b50442f6fa9dad6a9483b702d5d463f37c0b338c6c3154a31a33e8cb0dd2ff",
+      "size_bytes": 6005511
+    },
+    "canonical_kokkoritsu_research": {
+      "path": "data/canonical/kokkoritsu/research_requirements.csv",
+      "sha256": "9eb98576862a44fbd4535938bc70938a34faeafb051e41125ed055ee60be214f",
+      "size_bytes": 93314
+    },
+    "canonical_shidai_coverage": {
+      "path": "data/canonical/shidai/coverage.csv",
+      "sha256": "9e73c1cc2fea2830419d5ab7682d97baa7f6c5d191440fa06042714466c4bdbd",
+      "size_bytes": 49400
+    },
+    "canonical_shidai_master": {
+      "path": "data/canonical/shidai/master.csv",
+      "sha256": "bb40f2db7687f28475ac01b8118daf4565ef80de63f11dfda8e1ac322cd3294d",
+      "size_bytes": 4695215
+    },
+    "canonical_shidai_research": {
+      "path": "data/canonical/shidai/research_requirements.csv",
+      "sha256": "bb617567d26549a2798d29949afeff7cd0478c47f0fff46078a67dee938ebeaa",
+      "size_bytes": 109290
+    },
+    "site_data_manifest": {
+      "content_receipt": {
+        "build_id": "cc11abf42ba59717eec3",
+        "counts": {
+          "detail_records": 5921,
+          "research_requirement_rows": 437,
+          "search_rows": 5921,
+          "universities": 249
+        },
+        "site_data_schema_version": "0.2",
+        "source_versions": {
+          "kokkoritsu": "5.61",
+          "shidai": "0.97"
+        },
+        "validation_status": "passed"
+      },
+      "path": "data/derived/site/v0_2/build_manifest.json",
+      "sha256": "378f1f44065877065703ce8a709ba567835f271111093da311a73169cebaf2b3",
+      "size_bytes": 73056
+    },
+    "sqlite": {
+      "path": "data/derived/sqlite/early_admissions_2027.sqlite",
+      "sha256": "a83055bfab2d9e32b7078f3ee12ea0673392abdc06c32c14b8900e30ec67c624",
+      "size_bytes": 34058240
+    },
+    "sqlite_manifest": {
+      "content_receipt": {
+        "database_schema_version": "0.1",
+        "output": {
+          "path": "data/derived/sqlite/early_admissions_2027.sqlite",
+          "sha256": "a83055bfab2d9e32b7078f3ee12ea0673392abdc06c32c14b8900e30ec67c624",
+          "size_bytes": 34058240
+        },
+        "row_counts": {
+          "admissions": 5921,
+          "coverage": 259,
+          "research_requirements": 437
+        },
+        "source_versions": {
+          "kokkoritsu": "5.61",
+          "shidai": "0.97"
+        },
+        "validation_status": "passed"
+      },
+      "path": "data/derived/sqlite/build_manifest.json",
+      "sha256": "f05f4261fadfb401dfa788eceab2394148e7d3b4c1e8fdeb7e2499e5b7213b35",
+      "size_bytes": 39339
+    },
+    "unified_manifest": {
+      "content_receipt": {
+        "contract_version": "0.1",
+        "outputs": {
+          "coverage": {
+            "columns": 12,
+            "path": "data/canonical/unified/coverage.csv",
+            "rows": 259,
+            "sha256": "b10ca3381afb0f3e8740ed2d14ddf086233151d4c6eba6e946344b12638913fb",
+            "size_bytes": 147685
+          },
+          "master": {
+            "columns": 79,
+            "path": "data/canonical/unified/master.csv",
+            "rows": 5921,
+            "sha256": "1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279",
+            "size_bytes": 10874313
+          },
+          "research_requirements": {
+            "columns": 15,
+            "path": "data/canonical/unified/research_requirements.csv",
+            "rows": 437,
+            "sha256": "ba105cca34c03fee34fb7d04ce1d0818caa386d0832e7999bf9ec9bf9f135919",
+            "size_bytes": 208432
+          }
+        },
+        "source_versions": {
+          "kokkoritsu": "5.61",
+          "shidai": "0.97"
+        },
+        "validation_status": "passed"
+      },
+      "path": "data/canonical/unified/build_manifest.json",
+      "sha256": "51a3bbeb30ba81d0a98efddbcdcd8174b0389948dd034578fc205be1b6381901",
+      "size_bytes": 12639
+    }
+  },
+  "baseline_source_validation": {
+    "by_code": {
+      "COMMON_TEST_FIELDS_DIFFER": {
+        "by_dataset": {
+          "kokkoritsu": 108
+        },
+        "count": 108,
+        "representative_record_ids": [
+          "OCHA-2027-AO-BIO",
+          "OCHA-2027-AO-CHEM",
+          "OCHA-2027-AO-CULTINFO",
+          "OCHA-2027-AO-HENV",
+          "OCHA-2027-AO-HOME"
+        ],
+        "severity": "informational"
+      },
+      "COVERAGE_ZERO_MASTER_ROWS": {
+        "by_dataset": {
+          "kokkoritsu": 8,
+          "shidai": 2
+        },
+        "count": 10,
+        "representative_record_ids": [
+          "国立:政策研究大学院大学",
+          "国立:総合研究大学院大学",
+          "国立:北陸先端科学技術大学院大学",
+          "国立:奈良先端科学技術大学院大学",
+          "公立:東京都立産業技術大学院大学"
+        ],
+        "severity": "informational"
+      },
+      "DATE_RAW_PARTIAL": {
+        "by_dataset": {
+          "kokkoritsu": 1194,
+          "shidai": 1754
+        },
+        "count": 2948,
+        "representative_record_ids": [
+          "HU-2027-F1-01",
+          "HU-2027-F1-02",
+          "HU-2027-F1-03",
+          "HU-2027-F1-04",
+          "HU-2027-F1-05"
+        ],
+        "severity": "informational"
+      },
+      "DATE_RAW_UNPARSED": {
+        "by_dataset": {
+          "kokkoritsu": 15,
+          "shidai": 3
+        },
+        "count": 18,
+        "representative_record_ids": [
+          "ST-2027-C-01",
+          "ST-2027-C-02",
+          "ST-2027-C-03",
+          "ST-2027-C-04",
+          "ST-2027-C-05"
+        ],
+        "severity": "informational"
+      },
+      "DETAIL_COMPLETENESS_UNMAPPED": {
+        "by_dataset": {
+          "kokkoritsu": 318
+        },
+        "count": 318,
+        "representative_record_ids": [
+          "NWU-2027-PICASO-01",
+          "NWU-2027-PICASO-02",
+          "NWU-2027-PICASO-03",
+          "NWU-2027-PICASO-04",
+          "NWU-2027-PICASO-05"
+        ],
+        "severity": "warning"
+      },
+      "PROVENANCE_URL_MISSING": {
+        "by_dataset": {
+          "kokkoritsu": 19
+        },
+        "count": 19,
+        "representative_record_ids": [
+          "TMU-2027-AO-01",
+          "TMU-2027-AO-02",
+          "TMU-2027-AO-03",
+          "TMU-2027-AO-04",
+          "TMU-2027-AO-05"
+        ],
+        "severity": "warning"
+      },
+      "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+        "by_dataset": {
+          "kokkoritsu": 281
+        },
+        "count": 281,
+        "representative_record_ids": [
+          "HUE-2027-AO-SELF-01",
+          "HUE-2027-AO-SELF-02",
+          "HUE-2027-AO-SELF-03",
+          "AKITA-2027-AO1-EDU-REGCULT",
+          "YAM-2027-REC1-HSS-GLOBAL"
+        ],
+        "severity": "warning"
+      },
+      "RESEARCH_DENORMALIZED_FIELD_MISMATCH": {
+        "by_dataset": {
+          "kokkoritsu": 8
+        },
+        "count": 8,
+        "representative_record_ids": [
+          "OU-2027-C-06"
+        ],
+        "severity": "warning"
+      },
+      "RESEARCH_EXACT_DUPLICATE": {
+        "by_dataset": {
+          "shidai": 4
+        },
+        "count": 4,
+        "representative_record_ids": [
+          "MU-2027-AO1-DS",
+          "MU-2027-AO1-SUS",
+          "MU-2027-AO1-MATH",
+          "MU-2027-AO1-ARCH"
+        ],
+        "severity": "warning"
+      },
+      "RESEARCH_NOT_REQUIRED_WITH_CHILD": {
+        "by_dataset": {
+          "kokkoritsu": 16,
+          "shidai": 36
+        },
+        "count": 52,
+        "representative_record_ids": [
+          "FUKU-2027-AO-ENG-GEN",
+          "FUKU-2027-AO-ENG-W",
+          "HIT-2027-REC-COM",
+          "HIT-2027-REC-ECON",
+          "HIT-2027-REC-LAW"
+        ],
+        "severity": "informational"
+      },
+      "RESEARCH_REQUIRED_WITHOUT_CHILD": {
+        "by_dataset": {
+          "kokkoritsu": 39,
+          "shidai": 12
+        },
+        "count": 51,
+        "representative_record_ids": [
+          "NWU-2027-PICASO-01",
+          "NWU-2027-PICASO-02",
+          "NWU-2027-PICASO-03",
+          "NWU-2027-PICASO-04",
+          "NWU-2027-PICASO-05"
+        ],
+        "severity": "warning"
+      },
+      "WHITESPACE_PADDING": {
+        "by_dataset": {
+          "kokkoritsu": 5
+        },
+        "count": 5,
+        "representative_record_ids": [
+          "SPU-2027-REC-01",
+          "SPU-2027-REC-04",
+          "SPU-2027-REC-08",
+          "SPU-2027-REC-11",
+          "SPU-2027-REC-14"
+        ],
+        "severity": "warning"
+      }
+    },
+    "by_dataset": {
+      "kokkoritsu": {
+        "by_code": {
+          "COMMON_TEST_FIELDS_DIFFER": 108,
+          "COVERAGE_ZERO_MASTER_ROWS": 8,
+          "DATE_RAW_PARTIAL": 1194,
+          "DATE_RAW_UNPARSED": 15,
+          "DETAIL_COMPLETENESS_UNMAPPED": 318,
+          "PROVENANCE_URL_MISSING": 19,
+          "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
+          "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 8,
+          "RESEARCH_NOT_REQUIRED_WITH_CHILD": 16,
+          "RESEARCH_REQUIRED_WITHOUT_CHILD": 39,
+          "WHITESPACE_PADDING": 5
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1341,
+          "warning": 670
+        },
+        "total": 2011
+      },
+      "shidai": {
+        "by_code": {
+          "COVERAGE_ZERO_MASTER_ROWS": 2,
+          "DATE_RAW_PARTIAL": 1754,
+          "DATE_RAW_UNPARSED": 3,
+          "RESEARCH_EXACT_DUPLICATE": 4,
+          "RESEARCH_NOT_REQUIRED_WITH_CHILD": 36,
+          "RESEARCH_REQUIRED_WITHOUT_CHILD": 12
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1795,
+          "warning": 16
+        },
+        "total": 1811
+      }
+    },
+    "by_severity": {
+      "error": 0,
+      "informational": 3136,
+      "warning": 686
+    },
+    "status": "passed_with_findings",
+    "total_issues": 3822
+  },
+  "candidate_versions": {
+    "kokkoritsu": "5.74",
+    "shidai": "1.08"
+  },
+  "crosswalk_audit": {
+    "academic_field_v0_1": {
+      "distinct_raw": 476,
+      "new_vs_old_distinct": 28,
+      "new_vs_old_values": [
+        "コミュニティ・社会",
+        "スポーツ科学・健康",
+        "体育・芸術",
+        "医薬",
+        "哲学",
+        "哲学・思想",
+        "国際・教養",
+        "地域",
+        "地球科学",
+        "地理・地域",
+        "宗教・神学",
+        "情報・文理融合",
+        "教育・キャリア",
+        "教養・リベラルアーツ",
+        "数学・理学",
+        "文化・芸術",
+        "文学・メディア",
+        "文学・人文",
+        "文学・文化",
+        "文学・芸術",
+        "文学・語学",
+        "歴史・地理",
+        "法・国際",
+        "法・政治",
+        "法・環境",
+        "社会科学",
+        "福祉・地域",
+        "福祉・教育"
+      ],
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/academic_field_v0_1_new_values.csv",
+      "unmapped_distinct": 28,
+      "unmapped_rows": 64,
+      "unmapped_values": {
+        "コミュニティ・社会": 1,
+        "スポーツ科学・健康": 1,
+        "体育・芸術": 1,
+        "医薬": 1,
+        "哲学": 1,
+        "哲学・思想": 3,
+        "国際・教養": 3,
+        "地域": 1,
+        "地球科学": 4,
+        "地理・地域": 1,
+        "宗教・神学": 1,
+        "情報・文理融合": 3,
+        "教育・キャリア": 3,
+        "教養・リベラルアーツ": 3,
+        "数学・理学": 1,
+        "文化・芸術": 2,
+        "文学・メディア": 1,
+        "文学・人文": 9,
+        "文学・文化": 2,
+        "文学・芸術": 1,
+        "文学・語学": 5,
+        "歴史・地理": 5,
+        "法・国際": 2,
+        "法・政治": 4,
+        "法・環境": 1,
+        "社会科学": 1,
+        "福祉・地域": 1,
+        "福祉・教育": 2
+      }
+    },
+    "academic_field_v0_2": {
+      "broad_coverage": 6165,
+      "broad_review_required": 76,
+      "context_consulted": 1495,
+      "context_effective": 1484,
+      "context_review_artifact": "validation/reports/update_20260922_v5_74_v1_08/academic_field_v0_2_new_contexts.csv",
+      "distinct_raw": 476,
+      "frozen_context_tuple_count": 718,
+      "new_vs_old_distinct": 28,
+      "new_vs_old_values": [
+        "コミュニティ・社会",
+        "スポーツ科学・健康",
+        "体育・芸術",
+        "医薬",
+        "哲学",
+        "哲学・思想",
+        "国際・教養",
+        "地域",
+        "地球科学",
+        "地理・地域",
+        "宗教・神学",
+        "情報・文理融合",
+        "教育・キャリア",
+        "教養・リベラルアーツ",
+        "数学・理学",
+        "文化・芸術",
+        "文学・メディア",
+        "文学・人文",
+        "文学・文化",
+        "文学・芸術",
+        "文学・語学",
+        "歴史・地理",
+        "法・国際",
+        "法・政治",
+        "法・環境",
+        "社会科学",
+        "福祉・地域",
+        "福祉・教育"
+      ],
+      "raw_only": 4682,
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/academic_field_v0_2_new_raw_values.csv",
+      "review_context_tuple_count": 1,
+      "rows": 6241,
+      "subcategory_coverage": 5203,
+      "subcategory_review_required": 1038,
+      "unmapped": 64,
+      "unmapped_distinct": 28,
+      "unmapped_rows": 64,
+      "unmapped_values": {
+        "コミュニティ・社会": 1,
+        "スポーツ科学・健康": 1,
+        "体育・芸術": 1,
+        "医薬": 1,
+        "哲学": 1,
+        "哲学・思想": 3,
+        "国際・教養": 3,
+        "地域": 1,
+        "地球科学": 4,
+        "地理・地域": 1,
+        "宗教・神学": 1,
+        "情報・文理融合": 3,
+        "教育・キャリア": 3,
+        "教養・リベラルアーツ": 3,
+        "数学・理学": 1,
+        "文化・芸術": 2,
+        "文学・メディア": 1,
+        "文学・人文": 9,
+        "文学・文化": 2,
+        "文学・芸術": 1,
+        "文学・語学": 5,
+        "歴史・地理": 5,
+        "法・国際": 2,
+        "法・政治": 4,
+        "法・環境": 1,
+        "社会科学": 1,
+        "福祉・地域": 1,
+        "福祉・教育": 2
+      }
+    },
+    "derived_counts_new_candidate": {
+      "academic_field_v0_1_mapping_statuses": {
+        "multi": 1848,
+        "review_required": 24,
+        "single": 4305,
+        "unmapped": 64
+      },
+      "english_requirement_statuses": {
+        "not_required": 1257,
+        "required": 307,
+        "review_required": 251,
+        "unknown": 4281,
+        "unmapped": 145
+      },
+      "gpa_strict_safe_matches": {
+        "3.0": 72,
+        "3.5": 498,
+        "3.8": 751,
+        "4.0": 1155,
+        "4.5": 1232
+      },
+      "gpa_tiers": {
+        "conditional_numeric": 703,
+        "do_not_numeric": 4306,
+        "safe_numeric": 1232
+      },
+      "grade_overall_statuses": {
+        "ambiguous": 1287,
+        "historical": 2,
+        "no_safe_overall_floor": 1269,
+        "non_admission_numeric": 7,
+        "non_binding": 26,
+        "not_applicable": 20,
+        "safe_overall_with_additional_conditions": 119,
+        "safe_simple_overall": 1239,
+        "unknown": 1947,
+        "unmapped": 325
+      },
+      "grade_requirement_statuses": {
+        "not_applicable": 20,
+        "not_required": 339,
+        "required": 2315,
+        "review_required": 1294,
+        "unknown": 1948,
+        "unmapped": 325
+      },
+      "prefecture_mapping_statuses": {
+        "multi": 27,
+        "single": 6214
+      }
+    },
+    "derived_counts_old": {
+      "academic_field_v0_1_mapping_statuses": {
+        "multi": 1833,
+        "review_required": 19,
+        "single": 4069
+      },
+      "english_requirement_statuses": {
+        "not_required": 1257,
+        "required": 311,
+        "review_required": 251,
+        "unknown": 4102
+      },
+      "gpa_strict_safe_matches": {
+        "3.0": 72,
+        "3.5": 490,
+        "3.8": 743,
+        "4.0": 1124,
+        "4.5": 1199
+      },
+      "gpa_tiers": {
+        "conditional_numeric": 707,
+        "do_not_numeric": 4015,
+        "safe_numeric": 1199
+      },
+      "grade_overall_statuses": {
+        "ambiguous": 1284,
+        "historical": 2,
+        "no_safe_overall_floor": 1269,
+        "non_admission_numeric": 7,
+        "non_binding": 26,
+        "not_applicable": 20,
+        "safe_overall_with_additional_conditions": 123,
+        "safe_simple_overall": 1206,
+        "unknown": 1984
+      },
+      "grade_requirement_statuses": {
+        "not_applicable": 20,
+        "not_required": 339,
+        "required": 2286,
+        "review_required": 1291,
+        "unknown": 1985
+      },
+      "prefecture_mapping_statuses": {
+        "multi": 27,
+        "single": 5894
+      }
+    },
+    "english_requirement": {
+      "distinct_raw": 218,
+      "new_vs_old_distinct": 43,
+      "new_vs_old_values": [
+        "2024年4月以降受験の英検/英検S-CBT 2級以上",
+        "2024年4月以降受験の英検/英検S-CBT 2級以上、またはGTEC CBT 690点以上",
+        "2025年4月1日以降実施のTOEFL iBT又はIELTSアカデミック・モジュールを受験していること。",
+        "A基準所定の英語資格・スコア要件あり。",
+        "S基準所定の英語資格・スコア要件あり。",
+        "TOEFL iBT 83以上またはIELTS6.5以上",
+        "TOEFL iBT又はIELTSの所定スコア",
+        "TOEFL iBT旧61/新3.5、IELTS5.0、TOEIC4技能980、英検準1級、GTEC1040、TEAP295、Cambridge150以上のいずれか。",
+        "TOEFL iBT旧72/新4.0以上、TOEIC L&R785＋S&W310以上、IELTS5.5以上、英検CSE2304以上（準1級以上受験）のいずれか。",
+        "TOEFL iBT旧80/新4.5以上、Cambridge C1 Advanced以上、英検1級、国連英検B級、TOEIC L&R785以上、IELTS6.0、TEAP300（各分野70）以上のいずれか。",
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。",
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 または指定他言語資格（ドイツ語・フランス語・スペイン語・中国語・韓国語・ロシア語・タイ語・ベトナム語）。",
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格IIは英語・ドイツ語・フランス語・中国語・韓国語の上位資格条件あり。",
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格Vは英語上位基準（ケンブリッジ160、英検2,300等）。",
+        "コース別英語基準あり。例：通訳翻訳はケンブリッジ167、英検2,400、GTEC1,247、IELTS6.0、TEAP332、TOEFL旧80/新4.5以上。その他コースは段階的基準。",
+        "出願区分に応じて英語資格・検定基準あり（要項概要p.174）。",
+        "外国語検定基準あり",
+        "学科所定の英語外部試験基準あり。",
+        "専攻・プログラム別に英語・ドイツ語・フランス語等の資格基準または専攻適性条件あり。",
+        "指定なし",
+        "方式Iは英語基準（ケンブリッジ140、英検1,950等）または指定他言語資格。方式IIは英語の上位基準（ケンブリッジ150、英検2,125、GTEC1,065、IELTS4.5、TEAP267、TOEFL旧57/新3.5以上）。",
+        "英検CSE1950、GTEC930、IELTS4.0、TEAP225、TOEFL iBT新3.0（旧42）、TOEIC4技能換算1150以上のいずれか。",
+        "英検準1級以上、TOEIC L&R730以上かつSpeaking130以上・Writing140以上、TOEFL iBT旧72/新3.5以上、TEAP300以上、IELTS5.5以上のいずれか。",
+        "英語4技能資格・検定試験のスコア提出必須（Grade7〜12のうち5学年以上を英語で教育された者は免除）。",
+        "英語はTOEFL iBT旧61/新3.5以上、英検CSE等の指定基準あり。独・仏・中・西語でも出願可。",
+        "英語はTOEFL iBT旧68/新4.0、英検準1級、国連英検B級、TOEIC4技能合計940、IELTS6.0、TEAP280、GTEC1180、Cambridge B2 First等。独・仏・中・西・朝鮮語にも指定基準あり。",
+        "英語基準：ケンブリッジ120、英検1,700、GTEC930、IELTS4.0、TEAP135、TOEFL旧42/新3.0、TOEIC合算625以上。",
+        "英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新3.5、TOEIC合算1,560以上。",
+        "英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新4.0以上、または指定ドイツ語・フランス語資格。",
+        "英語能力を証明する指定外部試験の公式スコア提出必須。",
+        "英語能力証明書を提出。ただしIBDPでEnglish A履修済み/履修中なら任意。",
+        "英語資格の受験・スコア提出が必須。さらに、英語上位基準（ケンブリッジ160、英検2,300等）またはドイツ語・フランス語・スペイン語・中国語・韓国語の指定資格を満たす。",
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。",
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC L&R＋2.5×S&W 合計1,150以上。",
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC合算1,150以上。",
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 または指定他言語資格。",
+        "英語資格の基準あり：ケンブリッジ146、英検CSE 2,067、GTEC 1,027、IELTS 4.5、TEAP 253、TOEFL iBT旧52 / 新Overall 3.5以上のいずれか。 または指定他言語資格。",
+        "英語資格の基準あり：ケンブリッジ160、英検CSE 2,300、GTEC 1,180、IELTS 5.5、TEAP 309、TOEFL iBT旧72 / 新Overall 3.5以上のいずれか。 またはTOEIC合算1,560以上。",
+        "英語資格基準あり（例：英検CSE2304以上、TOEFL iBT旧72/新4.0、IELTS5.5等）。",
+        "英語資格等の必須条件なし。",
+        "高水準の外国語検定基準あり",
+        "高水準の英語資格基準あり",
+        "高英語基準：ケンブリッジ167、英検2,400、GTEC1,237、IELTS6.0、TEAP332、TOEFL旧80/新4.0、TOEIC合算1,660以上。"
+      ],
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/english_requirement_new_values.csv",
+      "unmapped_distinct": 43,
+      "unmapped_rows": 145,
+      "unmapped_values": {
+        "2024年4月以降受験の英検/英検S-CBT 2級以上": 1,
+        "2024年4月以降受験の英検/英検S-CBT 2級以上、またはGTEC CBT 690点以上": 1,
+        "2025年4月1日以降実施のTOEFL iBT又はIELTSアカデミック・モジュールを受験していること。": 1,
+        "A基準所定の英語資格・スコア要件あり。": 1,
+        "S基準所定の英語資格・スコア要件あり。": 1,
+        "TOEFL iBT 83以上またはIELTS6.5以上": 1,
+        "TOEFL iBT又はIELTSの所定スコア": 1,
+        "TOEFL iBT旧61/新3.5、IELTS5.0、TOEIC4技能980、英検準1級、GTEC1040、TEAP295、Cambridge150以上のいずれか。": 1,
+        "TOEFL iBT旧72/新4.0以上、TOEIC L&R785＋S&W310以上、IELTS5.5以上、英検CSE2304以上（準1級以上受験）のいずれか。": 1,
+        "TOEFL iBT旧80/新4.5以上、Cambridge C1 Advanced以上、英検1級、国連英検B級、TOEIC L&R785以上、IELTS6.0、TEAP300（各分野70）以上のいずれか。": 3,
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。": 10,
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 または指定他言語資格（ドイツ語・フランス語・スペイン語・中国語・韓国語・ロシア語・タイ語・ベトナム語）。": 1,
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格IIは英語・ドイツ語・フランス語・中国語・韓国語の上位資格条件あり。": 2,
+        "ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格Vは英語上位基準（ケンブリッジ160、英検2,300等）。": 1,
+        "コース別英語基準あり。例：通訳翻訳はケンブリッジ167、英検2,400、GTEC1,247、IELTS6.0、TEAP332、TOEFL旧80/新4.5以上。その他コースは段階的基準。": 1,
+        "出願区分に応じて英語資格・検定基準あり（要項概要p.174）。": 1,
+        "外国語検定基準あり": 19,
+        "学科所定の英語外部試験基準あり。": 2,
+        "専攻・プログラム別に英語・ドイツ語・フランス語等の資格基準または専攻適性条件あり。": 12,
+        "指定なし": 1,
+        "方式Iは英語基準（ケンブリッジ140、英検1,950等）または指定他言語資格。方式IIは英語の上位基準（ケンブリッジ150、英検2,125、GTEC1,065、IELTS4.5、TEAP267、TOEFL旧57/新3.5以上）。": 1,
+        "英検CSE1950、GTEC930、IELTS4.0、TEAP225、TOEFL iBT新3.0（旧42）、TOEIC4技能換算1150以上のいずれか。": 1,
+        "英検準1級以上、TOEIC L&R730以上かつSpeaking130以上・Writing140以上、TOEFL iBT旧72/新3.5以上、TEAP300以上、IELTS5.5以上のいずれか。": 1,
+        "英語4技能資格・検定試験のスコア提出必須（Grade7〜12のうち5学年以上を英語で教育された者は免除）。": 41,
+        "英語はTOEFL iBT旧61/新3.5以上、英検CSE等の指定基準あり。独・仏・中・西語でも出願可。": 2,
+        "英語はTOEFL iBT旧68/新4.0、英検準1級、国連英検B級、TOEIC4技能合計940、IELTS6.0、TEAP280、GTEC1180、Cambridge B2 First等。独・仏・中・西・朝鮮語にも指定基準あり。": 8,
+        "英語基準：ケンブリッジ120、英検1,700、GTEC930、IELTS4.0、TEAP135、TOEFL旧42/新3.0、TOEIC合算625以上。": 1,
+        "英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新3.5、TOEIC合算1,560以上。": 2,
+        "英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新4.0以上、または指定ドイツ語・フランス語資格。": 1,
+        "英語能力を証明する指定外部試験の公式スコア提出必須。": 1,
+        "英語能力証明書を提出。ただしIBDPでEnglish A履修済み/履修中なら任意。": 1,
+        "英語資格の受験・スコア提出が必須。さらに、英語上位基準（ケンブリッジ160、英検2,300等）またはドイツ語・フランス語・スペイン語・中国語・韓国語の指定資格を満たす。": 1,
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。": 5,
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC L&R＋2.5×S&W 合計1,150以上。": 3,
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC合算1,150以上。": 1,
+        "英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 または指定他言語資格。": 2,
+        "英語資格の基準あり：ケンブリッジ146、英検CSE 2,067、GTEC 1,027、IELTS 4.5、TEAP 253、TOEFL iBT旧52 / 新Overall 3.5以上のいずれか。 または指定他言語資格。": 1,
+        "英語資格の基準あり：ケンブリッジ160、英検CSE 2,300、GTEC 1,180、IELTS 5.5、TEAP 309、TOEFL iBT旧72 / 新Overall 3.5以上のいずれか。 またはTOEIC合算1,560以上。": 1,
+        "英語資格基準あり（例：英検CSE2304以上、TOEFL iBT旧72/新4.0、IELTS5.5等）。": 1,
+        "英語資格等の必須条件なし。": 2,
+        "高水準の外国語検定基準あり": 3,
+        "高水準の英語資格基準あり": 1,
+        "高英語基準：ケンブリッジ167、英検2,400、GTEC1,237、IELTS6.0、TEAP332、TOEFL旧80/新4.0、TOEIC合算1,660以上。": 2
+      }
+    },
+    "gpa": {
+      "distinct_raw": 600,
+      "new_vs_old_distinct": 51,
+      "new_vs_old_values": [
+        "IB資格・学類別指定科目要件による",
+        "Unknown（指定校推薦の詳細は対象校へ別途書面で通知）",
+        "なし（出願要件として評定平均等の数値基準なし。選抜では調査書の評定平均値等を評価に使用）",
+        "なし（数値基準なし）",
+        "なし（数値基準の明示なし）",
+        "なし（評定平均等の数値要件なし）",
+        "アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。",
+        "一律の評定平均値基準なし。",
+        "一般枠は全体の学習成績の状況4.0以上（算出不能者等は要項の例外規定あり）。",
+        "全体3.8以上、国語4.0以上、地理歴史・公民の評定平均4.0以上。",
+        "全体3.8以上、国語4.0以上。",
+        "全体3.8以上。",
+        "全体4.0以上、かつ外国語/英語1教科＋指定群から2教科の計3教科平均4.2以上",
+        "全体4.0以上、かつ数学または理科4.2以上。",
+        "全体4.0以上、または全体3.8以上かつ「世界史探究」または「日本史探究」の学習成績の状況4.5以上。",
+        "全体4.0以上、または国語4.2以上かつ地理歴史・公民4.2以上。",
+        "全体4.0以上。",
+        "全体4.0以上かつ国語4.3以上",
+        "全体4.0以上かつ地理歴史4.3以上",
+        "全体4.0以上かつ外国語4.3以上",
+        "全体4.0以上かつ外国語・国語それぞれ4.0以上",
+        "全体4.0以上かつ外国語・国語それぞれ4.3以上",
+        "全体4.0以上かつ数学4.5以上",
+        "全体4.0以上かつ英語4.3以上",
+        "全体4.0以上かつ英語4.5以上",
+        "全体の学習成績の状況3.5以上。専攻により追加の科目・成績条件あり。",
+        "全体の学習成績の状況3.8以上、または課外活動・社会活動等で顕著な実績をアピールできること。",
+        "全体の学習成績の状況4.0以上、又は外国語・数学・理科の学習成績の状況がいずれも4.3以上",
+        "全体の学習成績の状況4.1以上。",
+        "全体の評定平均値3.5以上。ただし一部高卒同等資格者および資格VIIは評定条件なし。",
+        "全体の評定平均値3.8以上。",
+        "全体の評定平均値3.8以上。出願条件5(a)では学科指定科目の評定平均値4.5以上（高卒同等資格の一部は評定条件なし）。",
+        "全体の評定平均値3.8以上（高卒同等資格の一部は評定条件なし）。",
+        "全体の評定平均値4.0以上。",
+        "全体の評定平均値4.0以上。欠席45日以内（4年制定時制は60日以内）。",
+        "共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。",
+        "前年参考（学部・系別要件は2027年度詳細要項で再監査）",
+        "原則として全体の学習成績の状況3.8以上（出願区分により条件あり）。",
+        "外国語・数学・国語・地理歴史・公民および全体の学習成績の状況がすべて4.0以上。",
+        "学科指定基準あり（全体4.0以上等）",
+        "学習成績概評A（評定平均4.3以上）",
+        "学類別出願要件による",
+        "学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）",
+        "学類別要件を募集要項で確認",
+        "情報Ⅰ・情報Ⅱの評定がいずれも4以上",
+        "望ましい基準：全体4.1以上、数学・理科の指定各科目の評定4以上。",
+        "評定平均の数値条件なし（IBDP利用）。",
+        "評定平均値の数値条件なし。",
+        "調査書の全体の学習成績の状況4.7以上、又はきわめて優れた特性・学科能力/課外活動経験",
+        "調査書の国語・数学・外国語・理科・地理歴史・公民の評定平均を単純平均し、小数点以下第2位で四捨五入した値が4.0以上",
+        "高等学校全期間の「全体の学習成績の状況」4.1以上。"
+      ],
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/gpa_new_values.csv",
+      "unmapped_distinct": 51,
+      "unmapped_rows": 325,
+      "unmapped_values": {
+        "IB資格・学類別指定科目要件による": 29,
+        "Unknown（指定校推薦の詳細は対象校へ別途書面で通知）": 1,
+        "なし（出願要件として評定平均等の数値基準なし。選抜では調査書の評定平均値等を評価に使用）": 28,
+        "なし（数値基準なし）": 17,
+        "なし（数値基準の明示なし）": 5,
+        "なし（評定平均等の数値要件なし）": 63,
+        "アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。": 1,
+        "一律の評定平均値基準なし。": 28,
+        "一般枠は全体の学習成績の状況4.0以上（算出不能者等は要項の例外規定あり）。": 1,
+        "全体3.8以上、国語4.0以上、地理歴史・公民の評定平均4.0以上。": 1,
+        "全体3.8以上、国語4.0以上。": 1,
+        "全体3.8以上。": 1,
+        "全体4.0以上、かつ外国語/英語1教科＋指定群から2教科の計3教科平均4.2以上": 2,
+        "全体4.0以上、かつ数学または理科4.2以上。": 1,
+        "全体4.0以上、または全体3.8以上かつ「世界史探究」または「日本史探究」の学習成績の状況4.5以上。": 1,
+        "全体4.0以上、または国語4.2以上かつ地理歴史・公民4.2以上。": 1,
+        "全体4.0以上。": 4,
+        "全体4.0以上かつ国語4.3以上": 1,
+        "全体4.0以上かつ地理歴史4.3以上": 1,
+        "全体4.0以上かつ外国語4.3以上": 1,
+        "全体4.0以上かつ外国語・国語それぞれ4.0以上": 2,
+        "全体4.0以上かつ外国語・国語それぞれ4.3以上": 2,
+        "全体4.0以上かつ数学4.5以上": 1,
+        "全体4.0以上かつ英語4.3以上": 1,
+        "全体4.0以上かつ英語4.5以上": 1,
+        "全体の学習成績の状況3.5以上。専攻により追加の科目・成績条件あり。": 14,
+        "全体の学習成績の状況3.8以上、または課外活動・社会活動等で顕著な実績をアピールできること。": 1,
+        "全体の学習成績の状況4.0以上、又は外国語・数学・理科の学習成績の状況がいずれも4.3以上": 1,
+        "全体の学習成績の状況4.1以上。": 1,
+        "全体の評定平均値3.5以上。ただし一部高卒同等資格者および資格VIIは評定条件なし。": 1,
+        "全体の評定平均値3.8以上。": 8,
+        "全体の評定平均値3.8以上。出願条件5(a)では学科指定科目の評定平均値4.5以上（高卒同等資格の一部は評定条件なし）。": 4,
+        "全体の評定平均値3.8以上（高卒同等資格の一部は評定条件なし）。": 2,
+        "全体の評定平均値4.0以上。": 2,
+        "全体の評定平均値4.0以上。欠席45日以内（4年制定時制は60日以内）。": 1,
+        "共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。": 12,
+        "前年参考（学部・系別要件は2027年度詳細要項で再監査）": 21,
+        "原則として全体の学習成績の状況3.8以上（出願区分により条件あり）。": 1,
+        "外国語・数学・国語・地理歴史・公民および全体の学習成績の状況がすべて4.0以上。": 2,
+        "学科指定基準あり（全体4.0以上等）": 1,
+        "学習成績概評A（評定平均4.3以上）": 1,
+        "学類別出願要件による": 9,
+        "学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）": 22,
+        "学類別要件を募集要項で確認": 6,
+        "情報Ⅰ・情報Ⅱの評定がいずれも4以上": 1,
+        "望ましい基準：全体4.1以上、数学・理科の指定各科目の評定4以上。": 3,
+        "評定平均の数値条件なし（IBDP利用）。": 1,
+        "評定平均値の数値条件なし。": 12,
+        "調査書の全体の学習成績の状況4.7以上、又はきわめて優れた特性・学科能力/課外活動経験": 1,
+        "調査書の国語・数学・外国語・理科・地理歴史・公民の評定平均を単純平均し、小数点以下第2位で四捨五入した値が4.0以上": 1,
+        "高等学校全期間の「全体の学習成績の状況」4.1以上。": 1
+      }
+    },
+    "grade_requirement": {
+      "distinct_raw": 600,
+      "new_vs_old_distinct": 51,
+      "new_vs_old_values": [
+        "IB資格・学類別指定科目要件による",
+        "Unknown（指定校推薦の詳細は対象校へ別途書面で通知）",
+        "なし（出願要件として評定平均等の数値基準なし。選抜では調査書の評定平均値等を評価に使用）",
+        "なし（数値基準なし）",
+        "なし（数値基準の明示なし）",
+        "なし（評定平均等の数値要件なし）",
+        "アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。",
+        "一律の評定平均値基準なし。",
+        "一般枠は全体の学習成績の状況4.0以上（算出不能者等は要項の例外規定あり）。",
+        "全体3.8以上、国語4.0以上、地理歴史・公民の評定平均4.0以上。",
+        "全体3.8以上、国語4.0以上。",
+        "全体3.8以上。",
+        "全体4.0以上、かつ外国語/英語1教科＋指定群から2教科の計3教科平均4.2以上",
+        "全体4.0以上、かつ数学または理科4.2以上。",
+        "全体4.0以上、または全体3.8以上かつ「世界史探究」または「日本史探究」の学習成績の状況4.5以上。",
+        "全体4.0以上、または国語4.2以上かつ地理歴史・公民4.2以上。",
+        "全体4.0以上。",
+        "全体4.0以上かつ国語4.3以上",
+        "全体4.0以上かつ地理歴史4.3以上",
+        "全体4.0以上かつ外国語4.3以上",
+        "全体4.0以上かつ外国語・国語それぞれ4.0以上",
+        "全体4.0以上かつ外国語・国語それぞれ4.3以上",
+        "全体4.0以上かつ数学4.5以上",
+        "全体4.0以上かつ英語4.3以上",
+        "全体4.0以上かつ英語4.5以上",
+        "全体の学習成績の状況3.5以上。専攻により追加の科目・成績条件あり。",
+        "全体の学習成績の状況3.8以上、または課外活動・社会活動等で顕著な実績をアピールできること。",
+        "全体の学習成績の状況4.0以上、又は外国語・数学・理科の学習成績の状況がいずれも4.3以上",
+        "全体の学習成績の状況4.1以上。",
+        "全体の評定平均値3.5以上。ただし一部高卒同等資格者および資格VIIは評定条件なし。",
+        "全体の評定平均値3.8以上。",
+        "全体の評定平均値3.8以上。出願条件5(a)では学科指定科目の評定平均値4.5以上（高卒同等資格の一部は評定条件なし）。",
+        "全体の評定平均値3.8以上（高卒同等資格の一部は評定条件なし）。",
+        "全体の評定平均値4.0以上。",
+        "全体の評定平均値4.0以上。欠席45日以内（4年制定時制は60日以内）。",
+        "共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。",
+        "前年参考（学部・系別要件は2027年度詳細要項で再監査）",
+        "原則として全体の学習成績の状況3.8以上（出願区分により条件あり）。",
+        "外国語・数学・国語・地理歴史・公民および全体の学習成績の状況がすべて4.0以上。",
+        "学科指定基準あり（全体4.0以上等）",
+        "学習成績概評A（評定平均4.3以上）",
+        "学類別出願要件による",
+        "学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）",
+        "学類別要件を募集要項で確認",
+        "情報Ⅰ・情報Ⅱの評定がいずれも4以上",
+        "望ましい基準：全体4.1以上、数学・理科の指定各科目の評定4以上。",
+        "評定平均の数値条件なし（IBDP利用）。",
+        "評定平均値の数値条件なし。",
+        "調査書の全体の学習成績の状況4.7以上、又はきわめて優れた特性・学科能力/課外活動経験",
+        "調査書の国語・数学・外国語・理科・地理歴史・公民の評定平均を単純平均し、小数点以下第2位で四捨五入した値が4.0以上",
+        "高等学校全期間の「全体の学習成績の状況」4.1以上。"
+      ],
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/grade_requirement_new_values.csv",
+      "unmapped_distinct": 51,
+      "unmapped_rows": 325,
+      "unmapped_values": {
+        "IB資格・学類別指定科目要件による": 29,
+        "Unknown（指定校推薦の詳細は対象校へ別途書面で通知）": 1,
+        "なし（出願要件として評定平均等の数値基準なし。選抜では調査書の評定平均値等を評価に使用）": 28,
+        "なし（数値基準なし）": 17,
+        "なし（数値基準の明示なし）": 5,
+        "なし（評定平均等の数値要件なし）": 63,
+        "アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。": 1,
+        "一律の評定平均値基準なし。": 28,
+        "一般枠は全体の学習成績の状況4.0以上（算出不能者等は要項の例外規定あり）。": 1,
+        "全体3.8以上、国語4.0以上、地理歴史・公民の評定平均4.0以上。": 1,
+        "全体3.8以上、国語4.0以上。": 1,
+        "全体3.8以上。": 1,
+        "全体4.0以上、かつ外国語/英語1教科＋指定群から2教科の計3教科平均4.2以上": 2,
+        "全体4.0以上、かつ数学または理科4.2以上。": 1,
+        "全体4.0以上、または全体3.8以上かつ「世界史探究」または「日本史探究」の学習成績の状況4.5以上。": 1,
+        "全体4.0以上、または国語4.2以上かつ地理歴史・公民4.2以上。": 1,
+        "全体4.0以上。": 4,
+        "全体4.0以上かつ国語4.3以上": 1,
+        "全体4.0以上かつ地理歴史4.3以上": 1,
+        "全体4.0以上かつ外国語4.3以上": 1,
+        "全体4.0以上かつ外国語・国語それぞれ4.0以上": 2,
+        "全体4.0以上かつ外国語・国語それぞれ4.3以上": 2,
+        "全体4.0以上かつ数学4.5以上": 1,
+        "全体4.0以上かつ英語4.3以上": 1,
+        "全体4.0以上かつ英語4.5以上": 1,
+        "全体の学習成績の状況3.5以上。専攻により追加の科目・成績条件あり。": 14,
+        "全体の学習成績の状況3.8以上、または課外活動・社会活動等で顕著な実績をアピールできること。": 1,
+        "全体の学習成績の状況4.0以上、又は外国語・数学・理科の学習成績の状況がいずれも4.3以上": 1,
+        "全体の学習成績の状況4.1以上。": 1,
+        "全体の評定平均値3.5以上。ただし一部高卒同等資格者および資格VIIは評定条件なし。": 1,
+        "全体の評定平均値3.8以上。": 8,
+        "全体の評定平均値3.8以上。出願条件5(a)では学科指定科目の評定平均値4.5以上（高卒同等資格の一部は評定条件なし）。": 4,
+        "全体の評定平均値3.8以上（高卒同等資格の一部は評定条件なし）。": 2,
+        "全体の評定平均値4.0以上。": 2,
+        "全体の評定平均値4.0以上。欠席45日以内（4年制定時制は60日以内）。": 1,
+        "共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。": 12,
+        "前年参考（学部・系別要件は2027年度詳細要項で再監査）": 21,
+        "原則として全体の学習成績の状況3.8以上（出願区分により条件あり）。": 1,
+        "外国語・数学・国語・地理歴史・公民および全体の学習成績の状況がすべて4.0以上。": 2,
+        "学科指定基準あり（全体4.0以上等）": 1,
+        "学習成績概評A（評定平均4.3以上）": 1,
+        "学類別出願要件による": 9,
+        "学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）": 22,
+        "学類別要件を募集要項で確認": 6,
+        "情報Ⅰ・情報Ⅱの評定がいずれも4以上": 1,
+        "望ましい基準：全体4.1以上、数学・理科の指定各科目の評定4以上。": 3,
+        "評定平均の数値条件なし（IBDP利用）。": 1,
+        "評定平均値の数値条件なし。": 12,
+        "調査書の全体の学習成績の状況4.7以上、又はきわめて優れた特性・学科能力/課外活動経験": 1,
+        "調査書の国語・数学・外国語・理科・地理歴史・公民の評定平均を単純平均し、小数点以下第2位で四捨五入した値が4.0以上": 1,
+        "高等学校全期間の「全体の学習成績の状況」4.1以上。": 1
+      }
+    },
+    "prefecture": {
+      "distinct_raw": 48,
+      "new_vs_old_distinct": 0,
+      "new_vs_old_values": [],
+      "review_artifact": "validation/reports/update_20260922_v5_74_v1_08/prefecture_new_values.csv",
+      "unmapped_distinct": 0,
+      "unmapped_rows": 0,
+      "unmapped_values": {}
+    }
+  },
+  "downstream": {
+    "frontend_candidate": "not_run_site_data_gate",
+    "full_source_validator": "completed_zero_errors",
+    "site_data_candidate": "not_run_sqlite_gate",
+    "sites_version_or_deployment": "not_run_prohibited",
+    "sqlite_candidate": "not_run_unified_gate",
+    "structured_search": "not_run_sqlite_gate",
+    "unified_candidate": "not_run_unfrozen_source_gate"
+  },
+  "final_gate": {
+    "reason": "The complete versioned four-file bundles were supplied and the CSV relationships validate, but kokkoritsu v5.74 explicitly declares dataset_state=UNFROZEN and canonical_csv_json=active_unfrozen. That source-owned state is a mandatory stop gate.",
+    "status": "HOLD_SOURCE_COHERENCE",
+    "unfrozen_datasets": [
+      "kokkoritsu"
+    ]
+  },
+  "inputs": {
+    "kokkoritsu": {
+      "coverage": {
+        "absolute_path": "./sources/incoming/2026-09-22/kokkoritsu_early_admissions_2027_coverage_v5_74.csv",
+        "bom": false,
+        "columns": 10,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8",
+        "exact_duplicate_row_count": 0,
+        "header": [
+          "institution_type",
+          "university",
+          "undergraduate_scope",
+          "research_status",
+          "master_rows",
+          "current_year_status",
+          "fallback_status",
+          "checked_on",
+          "official_source_url",
+          "notes"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 0,
+          "lf": 188
+        },
+        "logical_key_fields": [
+          "institution_type",
+          "university"
+        ],
+        "row_width_mismatch_count": 0,
+        "rows": 187,
+        "sha256": "c241c39033781214aacb9ca11f7a354f88f8408a4054964263aeeb73e3c713cc",
+        "size_bytes": 94785
+      },
+      "master": {
+        "absolute_path": "./sources/incoming/2026-09-22/kokkoritsu_early_admissions_2027_master_v5_74.csv",
+        "bom": false,
+        "columns": 75,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8",
+        "exact_duplicate_row_count": 0,
+        "header": [
+          "record_id",
+          "admission_year",
+          "institution_type",
+          "university",
+          "prefecture",
+          "academic_field",
+          "stem_flag",
+          "faculty_school",
+          "department",
+          "selection_category",
+          "selection_name",
+          "slot_type",
+          "capacity",
+          "school_recommendation_required",
+          "school_nomination_limit",
+          "school_nomination_limit_total",
+          "school_nomination_limit_rule",
+          "exclusive_enrollment_status",
+          "exclusive_enrollment",
+          "exclusive_enrollment_evidence",
+          "exclusive_enrollment_evidence_page",
+          "exclusive_enrollment_evidence_url",
+          "eligibility_graduation",
+          "gpa_requirement",
+          "english_requirement",
+          "subject_prerequisites",
+          "common_test_required",
+          "common_test_usage",
+          "research_activity_level",
+          "research_requirement_required",
+          "research_activity_detail",
+          "research_requirement_summary",
+          "academic_record_required",
+          "academic_record_type",
+          "academic_record_detail",
+          "documents_summary",
+          "selection_process",
+          "selection_document_review",
+          "selection_interview",
+          "selection_oral_exam",
+          "selection_presentation",
+          "selection_essay",
+          "selection_written_exam",
+          "selection_practical",
+          "selection_group_discussion",
+          "selection_aptitude_test",
+          "selection_common_test",
+          "interview_detail",
+          "oral_exam_subjects",
+          "oral_exam_detail",
+          "presentation_detail",
+          "essay_detail",
+          "written_exam_detail",
+          "selection_method_detail",
+          "application_start",
+          "application_end",
+          "web_registration_period",
+          "first_stage_result_date",
+          "second_stage_start",
+          "second_stage_end",
+          "final_result_date",
+          "source_status",
+          "detail_completeness",
+          "verification_grade",
+          "verified_on",
+          "source_url",
+          "schedule_url",
+          "guideline_url",
+          "notes",
+          "information_year",
+          "publication_status",
+          "fallback_previous_year",
+          "current_year_release_expected",
+          "previous_year_source_url",
+          "fallback_note"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 0,
+          "lf": 3842
+        },
+        "logical_key_fields": [
+          "record_id"
+        ],
+        "row_width_mismatch_count": 0,
+        "rows": 3841,
+        "sha256": "d4e0df40df4ac45e773b0b16e4fa08151f8182d9122dbcf1dc65086b79de4bc5",
+        "size_bytes": 6349521
+      },
+      "research_requirements": {
+        "absolute_path": "./sources/incoming/2026-09-22/kokkoritsu_early_admissions_2027_research_requirements_v5_74.csv",
+        "bom": false,
+        "columns": 13,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8",
+        "exact_duplicate_row_count": 0,
+        "header": [
+          "admission_id",
+          "university",
+          "faculty_school",
+          "department",
+          "selection_name",
+          "requirement_code",
+          "program_or_competition",
+          "required_level",
+          "requirement_detail",
+          "alternative_allowed",
+          "evidence_required",
+          "source_url",
+          "verified_on"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 0,
+          "lf": 277
+        },
+        "logical_key_fields": [],
+        "row_width_mismatch_count": 0,
+        "rows": 276,
+        "sha256": "3d4374fa7f7373fb7ea1b2c012f1aefd79f5c5441b7b58a2dd2e8c6413e426e7",
+        "size_bytes": 106889
+      },
+      "schema": {
+        "absolute_path": "./sources/incoming/2026-09-22/kokkoritsu_early_admissions_schema_v5_74.json",
+        "bom": false,
+        "encoding": "UTF-8",
+        "line_endings": {
+          "cr": 0,
+          "crlf": 0,
+          "lf": 297
+        },
+        "sha256": "a75f6367c6d371f573eb9fcfc0f23d8ebb2474f33a1f3755695edfa9b522a05c",
+        "size_bytes": 10376,
+        "version": "5.74"
+      }
+    },
+    "shidai": {
+      "coverage": {
+        "absolute_path": "./sources/incoming/2026-09-22/shidai_early_admissions_2027_coverage_v1_08.csv",
+        "bom": true,
+        "columns": 10,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8-SIG",
+        "exact_duplicate_row_count": 0,
+        "header": [
+          "institution_type",
+          "university",
+          "undergraduate_scope",
+          "research_status",
+          "master_rows",
+          "current_year_status",
+          "fallback_status",
+          "checked_on",
+          "official_source_url",
+          "notes"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 74,
+          "lf": 0
+        },
+        "logical_key_fields": [
+          "institution_type",
+          "university"
+        ],
+        "row_width_mismatch_count": 0,
+        "rows": 73,
+        "sha256": "489f97680cc51374af59ab8e037e3ab399e1aff7cb00ed5fb95c043ff36b349d",
+        "size_bytes": 50061
+      },
+      "master": {
+        "absolute_path": "./sources/incoming/2026-09-22/shidai_early_admissions_2027_master_v1_08.csv",
+        "bom": true,
+        "columns": 75,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8-SIG",
+        "exact_duplicate_row_count": 0,
+        "header": [
+          "record_id",
+          "admission_year",
+          "institution_type",
+          "university",
+          "prefecture",
+          "academic_field",
+          "stem_flag",
+          "faculty_school",
+          "department",
+          "selection_category",
+          "selection_name",
+          "slot_type",
+          "capacity",
+          "school_recommendation_required",
+          "school_nomination_limit",
+          "school_nomination_limit_total",
+          "school_nomination_limit_rule",
+          "exclusive_enrollment_status",
+          "exclusive_enrollment",
+          "exclusive_enrollment_evidence",
+          "exclusive_enrollment_evidence_page",
+          "exclusive_enrollment_evidence_url",
+          "eligibility_graduation",
+          "gpa_requirement",
+          "english_requirement",
+          "subject_prerequisites",
+          "common_test_required",
+          "common_test_usage",
+          "research_activity_level",
+          "research_requirement_required",
+          "research_activity_detail",
+          "research_requirement_summary",
+          "academic_record_required",
+          "academic_record_type",
+          "academic_record_detail",
+          "documents_summary",
+          "selection_process",
+          "selection_document_review",
+          "selection_interview",
+          "selection_oral_exam",
+          "selection_presentation",
+          "selection_essay",
+          "selection_written_exam",
+          "selection_practical",
+          "selection_group_discussion",
+          "selection_aptitude_test",
+          "selection_common_test",
+          "interview_detail",
+          "oral_exam_subjects",
+          "oral_exam_detail",
+          "presentation_detail",
+          "essay_detail",
+          "written_exam_detail",
+          "selection_method_detail",
+          "application_start",
+          "application_end",
+          "web_registration_period",
+          "first_stage_result_date",
+          "second_stage_start",
+          "second_stage_end",
+          "final_result_date",
+          "source_status",
+          "detail_completeness",
+          "verification_grade",
+          "verified_on",
+          "source_url",
+          "schedule_url",
+          "guideline_url",
+          "notes",
+          "information_year",
+          "publication_status",
+          "fallback_previous_year",
+          "current_year_release_expected",
+          "previous_year_source_url",
+          "fallback_note"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 2401,
+          "lf": 0
+        },
+        "logical_key_fields": [
+          "record_id"
+        ],
+        "row_width_mismatch_count": 0,
+        "rows": 2400,
+        "sha256": "7062ae8afb09eabc9aa6118dc0fc44e6170037db8c1f069684b5cdbcd170ce0e",
+        "size_bytes": 5103903
+      },
+      "research_requirements": {
+        "absolute_path": "./sources/incoming/2026-09-22/shidai_early_admissions_2027_research_requirements_v1_08.csv",
+        "bom": true,
+        "columns": 13,
+        "duplicate_header": [],
+        "duplicate_logical_key_count": 0,
+        "duplicate_logical_key_examples": [],
+        "encoding": "UTF-8-SIG",
+        "exact_duplicate_row_count": 4,
+        "header": [
+          "admission_id",
+          "university",
+          "faculty_school",
+          "department",
+          "selection_name",
+          "requirement_code",
+          "program_or_competition",
+          "required_level",
+          "requirement_detail",
+          "alternative_allowed",
+          "evidence_required",
+          "source_url",
+          "verified_on"
+        ],
+        "line_endings": {
+          "cr": 0,
+          "crlf": 215,
+          "lf": 0
+        },
+        "logical_key_fields": [],
+        "row_width_mismatch_count": 0,
+        "rows": 214,
+        "sha256": "9269bb49ca61ad7d6a0771445c5bb925821fff4e699fd4807d35cc3a33b35ac8",
+        "size_bytes": 117769
+      },
+      "schema": {
+        "absolute_path": "./sources/incoming/2026-09-22/shidai_early_admissions_schema_v1_08.json",
+        "bom": false,
+        "encoding": "UTF-8",
+        "line_endings": {
+          "cr": 0,
+          "crlf": 0,
+          "lf": 361
+        },
+        "sha256": "6abf1bd3ae76fdd22ecabe968804ef9aac98d15d95f36f14046fec178a09c4cd",
+        "size_bytes": 16802,
+        "version": "1.08"
+      }
+    }
+  },
+  "master_validation": {
+    "kokkoritsu": {
+      "new": {
+        "by_code": {
+          "COMMON_TEST_FIELDS_DIFFER": {
+            "by_dataset": {
+              "kokkoritsu": 109
+            },
+            "count": 109,
+            "representative_record_ids": [
+              "OCHA-2027-AO-BIO",
+              "OCHA-2027-AO-CHEM",
+              "OCHA-2027-AO-CULTINFO",
+              "OCHA-2027-AO-HENV",
+              "OCHA-2027-AO-HOME"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_PARTIAL": {
+            "by_dataset": {
+              "kokkoritsu": 1210
+            },
+            "count": 1210,
+            "representative_record_ids": [
+              "HU-2027-F1-01",
+              "HU-2027-F1-02",
+              "HU-2027-F1-03",
+              "HU-2027-F1-04",
+              "HU-2027-F1-05"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_UNPARSED": {
+            "by_dataset": {
+              "kokkoritsu": 15
+            },
+            "count": 15,
+            "representative_record_ids": [
+              "ST-2027-C-01",
+              "ST-2027-C-02",
+              "ST-2027-C-03",
+              "ST-2027-C-04",
+              "ST-2027-C-05"
+            ],
+            "severity": "informational"
+          },
+          "DETAIL_COMPLETENESS_UNMAPPED": {
+            "by_dataset": {
+              "kokkoritsu": 612
+            },
+            "count": 612,
+            "representative_record_ids": [
+              "NWU-2027-PICASO-01",
+              "NWU-2027-PICASO-02",
+              "NWU-2027-PICASO-03",
+              "NWU-2027-PICASO-04",
+              "NWU-2027-PICASO-05"
+            ],
+            "severity": "warning"
+          },
+          "PROVENANCE_URL_MISSING": {
+            "by_dataset": {
+              "kokkoritsu": 51
+            },
+            "count": 51,
+            "representative_record_ids": [
+              "TMU-2027-AO-01",
+              "TMU-2027-AO-02",
+              "TMU-2027-AO-03",
+              "TMU-2027-AO-04",
+              "TMU-2027-AO-05"
+            ],
+            "severity": "warning"
+          },
+          "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+            "by_dataset": {
+              "kokkoritsu": 281
+            },
+            "count": 281,
+            "representative_record_ids": [
+              "HUE-2027-AO-SELF-01",
+              "HUE-2027-AO-SELF-02",
+              "HUE-2027-AO-SELF-03",
+              "AKITA-2027-AO1-EDU-REGCULT",
+              "YAM-2027-REC1-HSS-GLOBAL"
+            ],
+            "severity": "warning"
+          },
+          "WHITESPACE_PADDING": {
+            "by_dataset": {
+              "kokkoritsu": 5
+            },
+            "count": 5,
+            "representative_record_ids": [
+              "SPU-2027-REC-01",
+              "SPU-2027-REC-04",
+              "SPU-2027-REC-08",
+              "SPU-2027-REC-11",
+              "SPU-2027-REC-14"
+            ],
+            "severity": "warning"
+          }
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1334,
+          "warning": 949
+        },
+        "full_source_validator_blocker": "Candidate source schema, Coverage, and ResearchRequirements were not supplied.",
+        "full_source_validator_executed": false,
+        "scope": "master_only_current_validator_semantics"
+      },
+      "old": {
+        "by_code": {
+          "COMMON_TEST_FIELDS_DIFFER": {
+            "by_dataset": {
+              "kokkoritsu": 108
+            },
+            "count": 108,
+            "representative_record_ids": [
+              "OCHA-2027-AO-BIO",
+              "OCHA-2027-AO-CHEM",
+              "OCHA-2027-AO-CULTINFO",
+              "OCHA-2027-AO-HENV",
+              "OCHA-2027-AO-HOME"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_PARTIAL": {
+            "by_dataset": {
+              "kokkoritsu": 1194
+            },
+            "count": 1194,
+            "representative_record_ids": [
+              "HU-2027-F1-01",
+              "HU-2027-F1-02",
+              "HU-2027-F1-03",
+              "HU-2027-F1-04",
+              "HU-2027-F1-05"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_UNPARSED": {
+            "by_dataset": {
+              "kokkoritsu": 15
+            },
+            "count": 15,
+            "representative_record_ids": [
+              "ST-2027-C-01",
+              "ST-2027-C-02",
+              "ST-2027-C-03",
+              "ST-2027-C-04",
+              "ST-2027-C-05"
+            ],
+            "severity": "informational"
+          },
+          "DETAIL_COMPLETENESS_UNMAPPED": {
+            "by_dataset": {
+              "kokkoritsu": 318
+            },
+            "count": 318,
+            "representative_record_ids": [
+              "NWU-2027-PICASO-01",
+              "NWU-2027-PICASO-02",
+              "NWU-2027-PICASO-03",
+              "NWU-2027-PICASO-04",
+              "NWU-2027-PICASO-05"
+            ],
+            "severity": "warning"
+          },
+          "PROVENANCE_URL_MISSING": {
+            "by_dataset": {
+              "kokkoritsu": 18
+            },
+            "count": 18,
+            "representative_record_ids": [
+              "TMU-2027-AO-01",
+              "TMU-2027-AO-02",
+              "TMU-2027-AO-03",
+              "TMU-2027-AO-04",
+              "TMU-2027-AO-05"
+            ],
+            "severity": "warning"
+          },
+          "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+            "by_dataset": {
+              "kokkoritsu": 281
+            },
+            "count": 281,
+            "representative_record_ids": [
+              "HUE-2027-AO-SELF-01",
+              "HUE-2027-AO-SELF-02",
+              "HUE-2027-AO-SELF-03",
+              "AKITA-2027-AO1-EDU-REGCULT",
+              "YAM-2027-REC1-HSS-GLOBAL"
+            ],
+            "severity": "warning"
+          },
+          "WHITESPACE_PADDING": {
+            "by_dataset": {
+              "kokkoritsu": 5
+            },
+            "count": 5,
+            "representative_record_ids": [
+              "SPU-2027-REC-01",
+              "SPU-2027-REC-04",
+              "SPU-2027-REC-08",
+              "SPU-2027-REC-11",
+              "SPU-2027-REC-14"
+            ],
+            "severity": "warning"
+          }
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1317,
+          "warning": 622
+        },
+        "full_source_validator_blocker": "Candidate source schema, Coverage, and ResearchRequirements were not supplied.",
+        "full_source_validator_executed": false,
+        "scope": "master_only_current_validator_semantics"
+      }
+    },
+    "shidai": {
+      "new": {
+        "by_code": {
+          "DATE_RAW_PARTIAL": {
+            "by_dataset": {
+              "shidai": 1896
+            },
+            "count": 1896,
+            "representative_record_ids": [
+              "KU-2027-TANKYU-01",
+              "KU-2027-TANKYU-02",
+              "KU-2027-TANKYU-03",
+              "KU-2027-TANKYU-04",
+              "TTU-2027-AO-01"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_UNPARSED": {
+            "by_dataset": {
+              "shidai": 3
+            },
+            "count": 3,
+            "representative_record_ids": [
+              "OUS-2027-VN-AO-OC"
+            ],
+            "severity": "informational"
+          }
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1899,
+          "warning": 0
+        },
+        "full_source_validator_blocker": "Candidate source schema, Coverage, and ResearchRequirements were not supplied.",
+        "full_source_validator_executed": false,
+        "scope": "master_only_current_validator_semantics"
+      },
+      "old": {
+        "by_code": {
+          "DATE_RAW_PARTIAL": {
+            "by_dataset": {
+              "shidai": 1754
+            },
+            "count": 1754,
+            "representative_record_ids": [
+              "KU-2027-TANKYU-01",
+              "KU-2027-TANKYU-02",
+              "KU-2027-TANKYU-03",
+              "KU-2027-TANKYU-04",
+              "TTU-2027-AO-01"
+            ],
+            "severity": "informational"
+          },
+          "DATE_RAW_UNPARSED": {
+            "by_dataset": {
+              "shidai": 3
+            },
+            "count": 3,
+            "representative_record_ids": [
+              "OUS-2027-VN-AO-OC"
+            ],
+            "severity": "informational"
+          }
+        },
+        "by_severity": {
+          "error": 0,
+          "informational": 1757,
+          "warning": 0
+        },
+        "full_source_validator_blocker": "Candidate source schema, Coverage, and ResearchRequirements were not supplied.",
+        "full_source_validator_executed": false,
+        "scope": "master_only_current_validator_semantics"
+      }
+    }
+  },
+  "old_versions": {
+    "kokkoritsu": "5.61",
+    "shidai": "0.97"
+  },
+  "schema_compatibility": {
+    "kokkoritsu": {
+      "candidate_schema": "sources/incoming/2026-09-22/kokkoritsu_early_admissions_schema_v5_74.json",
+      "changed_contract_keys": [],
+      "contract_compatible_with_current": true,
+      "contract_keys_compared": [
+        "target_admission_year",
+        "grain",
+        "primary_key",
+        "relationships",
+        "fallback_policy",
+        "exclusive_enrollment_policy",
+        "academic_record_policy",
+        "selection_flags",
+        "school_nomination_fields",
+        "research_requirement_child_table",
+        "enum_definitions",
+        "null_semantics",
+        "normalization_rules",
+        "detail_completeness_gate",
+        "field_definitions",
+        "master_columns",
+        "coverage_columns",
+        "research_requirements_columns"
+      ],
+      "current_schema": "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_61.json",
+      "master_header_matches_candidate_schema": true,
+      "master_header_matches_current": true
+    },
+    "shidai": {
+      "candidate_schema": "sources/incoming/2026-09-22/shidai_early_admissions_schema_v1_08.json",
+      "changed_contract_keys": [],
+      "contract_compatible_with_current": true,
+      "contract_keys_compared": [
+        "target_admission_year",
+        "grain",
+        "primary_key",
+        "relationships",
+        "fallback_policy",
+        "exclusive_enrollment_policy",
+        "academic_record_policy",
+        "selection_flags",
+        "school_nomination_fields",
+        "research_requirement_child_table",
+        "enum_definitions",
+        "null_semantics",
+        "normalization_rules",
+        "detail_completeness_gate",
+        "field_definitions",
+        "master_columns",
+        "coverage_columns",
+        "research_requirements_columns"
+      ],
+      "current_schema": "schema/shidai/shidai_early_admissions_schema_v0_97.json",
+      "master_header_matches_candidate_schema": true,
+      "master_header_matches_current": true
+    }
+  },
+  "sidecar_coherence": {
+    "kokkoritsu": {
+      "candidate_coverage_path": "sources/incoming/2026-09-22/kokkoritsu_early_admissions_2027_coverage_v5_74.csv",
+      "candidate_coverage_rows": 187,
+      "candidate_master_university_keys": 179,
+      "candidate_research_path": "sources/incoming/2026-09-22/kokkoritsu_early_admissions_2027_research_requirements_v5_74.csv",
+      "candidate_research_rows": 276,
+      "candidate_sidecars_structurally_coherent": true,
+      "coverage_deterministically_rebuildable_from_master": false,
+      "coverage_master_rows_mismatch_count": 0,
+      "coverage_master_rows_mismatch_examples": [],
+      "coverage_missing_keys": [],
+      "coverage_non_derivable_fields": [
+        "undergraduate_scope",
+        "research_status",
+        "current_year_status",
+        "fallback_status",
+        "checked_on",
+        "official_source_url",
+        "notes"
+      ],
+      "coverage_stale_nonzero_keys": [],
+      "coverage_zero_master_keys": [
+        [
+          "公立",
+          "京都市立芸術大学"
+        ],
+        [
+          "公立",
+          "情報科学芸術大学院大学"
+        ],
+        [
+          "公立",
+          "東京都立産業技術大学院大学"
+        ],
+        [
+          "公立",
+          "静岡社会健康医学大学院大学"
+        ],
+        [
+          "国立",
+          "北陸先端科学技術大学院大学"
+        ],
+        [
+          "国立",
+          "奈良先端科学技術大学院大学"
+        ],
+        [
+          "国立",
+          "政策研究大学院大学"
+        ],
+        [
+          "国立",
+          "総合研究大学院大学"
+        ]
+      ],
+      "research_denormalized_field_mismatch_count": 8,
+      "research_denormalized_field_mismatch_examples": [
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "OU-2027-C-06",
+          "candidate_parent_value": "総合型選抜",
+          "child_value": "総合型選抜（研究奨励型）",
+          "field": "selection_name"
+        }
+      ],
+      "research_deterministically_rebuildable_from_master": false,
+      "research_exact_duplicate_rows": 0,
+      "research_orphan_examples": [],
+      "research_orphan_rows": 0,
+      "reuse_decision": "not_applicable_versioned_candidate_sidecars_supplied"
+    },
+    "shidai": {
+      "candidate_coverage_path": "sources/incoming/2026-09-22/shidai_early_admissions_2027_coverage_v1_08.csv",
+      "candidate_coverage_rows": 73,
+      "candidate_master_university_keys": 71,
+      "candidate_research_path": "sources/incoming/2026-09-22/shidai_early_admissions_2027_research_requirements_v1_08.csv",
+      "candidate_research_rows": 214,
+      "candidate_sidecars_structurally_coherent": true,
+      "coverage_deterministically_rebuildable_from_master": false,
+      "coverage_master_rows_mismatch_count": 0,
+      "coverage_master_rows_mismatch_examples": [],
+      "coverage_missing_keys": [],
+      "coverage_non_derivable_fields": [
+        "undergraduate_scope",
+        "research_status",
+        "current_year_status",
+        "fallback_status",
+        "checked_on",
+        "official_source_url",
+        "notes"
+      ],
+      "coverage_stale_nonzero_keys": [],
+      "coverage_zero_master_keys": [
+        [
+          "私立",
+          "城西国際大学"
+        ],
+        [
+          "私立",
+          "聖路加国際大学"
+        ]
+      ],
+      "research_denormalized_field_mismatch_count": 2,
+      "research_denormalized_field_mismatch_examples": [
+        {
+          "admission_id": "ICU-2027-SOGO-SCI",
+          "candidate_parent_value": "総合型選抜〈4月入学専願〉",
+          "child_value": "総合型選抜〈4月入学専願〉 理数探究利用",
+          "field": "selection_name"
+        },
+        {
+          "admission_id": "ICU-2027-SOGO-IBDP",
+          "candidate_parent_value": "総合型選抜〈4月入学専願〉",
+          "child_value": "総合型選抜〈4月入学専願〉 IBDP利用",
+          "field": "selection_name"
+        }
+      ],
+      "research_deterministically_rebuildable_from_master": false,
+      "research_exact_duplicate_rows": 4,
+      "research_orphan_examples": [],
+      "research_orphan_rows": 0,
+      "reuse_decision": "not_applicable_versioned_candidate_sidecars_supplied"
+    }
+  },
+  "source_diff": {
+    "kokkoritsu": {
+      "added": 174,
+      "added_fallback_rows": 21,
+      "added_record_examples": [
+        "HU-2027-INTL-HUM",
+        "HU-2027-INTL-SCI",
+        "KAN-2027-CHOZEN-A1-BIO",
+        "KAN-2027-CHOZEN-A1-CHEM",
+        "KAN-2027-CHOZEN-A1-EARTH",
+        "KAN-2027-CHOZEN-A1-ECON",
+        "KAN-2027-CHOZEN-A1-EDU",
+        "KAN-2027-CHOZEN-A1-EE",
+        "KAN-2027-CHOZEN-A1-FRONT",
+        "KAN-2027-CHOZEN-A1-HUM",
+        "KAN-2027-CHOZEN-A1-INTL",
+        "KAN-2027-CHOZEN-A1-LAW"
+      ],
+      "artifacts": {
+        "added": "derived/update_audit/20260922_v5_74_v1_08/kokkoritsu_added.csv",
+        "changed": "derived/update_audit/20260922_v5_74_v1_08/kokkoritsu_changed.csv",
+        "removed": "derived/update_audit/20260922_v5_74_v1_08/kokkoritsu_removed.csv"
+      },
+      "changed": 419,
+      "changed_record_examples": [
+        "AICHI-PU-2027-AO-EDU-ELEM-CT",
+        "AICHI-PU-2027-REC-CHN-NAT",
+        "AICHI-PU-2027-REC-CHN-PREF",
+        "AICHI-PU-2027-REC-EDU-CHILD-CT-NAT",
+        "AICHI-PU-2027-REC-EDU-CHILD-PREF",
+        "AICHI-PU-2027-REC-EDU-ELEM-PREF",
+        "AICHI-PU-2027-REC-ENG-NAT",
+        "AICHI-PU-2027-REC-ENG-PREF",
+        "AICHI-PU-2027-REC-FRE-NAT",
+        "AICHI-PU-2027-REC-FRE-PREF",
+        "AICHI-PU-2027-REC-GER-NAT",
+        "AICHI-PU-2027-REC-GER-PREF"
+      ],
+      "classification_counts": {
+        "A_search_visible_material": 429,
+        "B_publication_provenance": 1005,
+        "C_notes_completeness": 696,
+        "D_other": 437
+      },
+      "fallback_newly_introduced": 0,
+      "fallback_newly_introduced_record_ids": [],
+      "fallback_removed": 0,
+      "fallback_removed_record_ids": [],
+      "field_change_counts": {
+        "academic_record_detail": 44,
+        "academic_record_required": 42,
+        "academic_record_type": 42,
+        "common_test_required": 23,
+        "common_test_usage": 23,
+        "current_year_release_expected": 138,
+        "detail_completeness": 277,
+        "documents_summary": 39,
+        "english_requirement": 2,
+        "essay_detail": 3,
+        "exclusive_enrollment": 129,
+        "exclusive_enrollment_evidence": 57,
+        "exclusive_enrollment_evidence_page": 34,
+        "exclusive_enrollment_evidence_url": 48,
+        "exclusive_enrollment_status": 36,
+        "gpa_requirement": 54,
+        "guideline_url": 10,
+        "interview_detail": 7,
+        "notes": 419,
+        "oral_exam_detail": 1,
+        "presentation_detail": 1,
+        "publication_status": 157,
+        "school_nomination_limit": 53,
+        "school_nomination_limit_rule": 91,
+        "school_nomination_limit_total": 12,
+        "selection_aptitude_test": 5,
+        "selection_common_test": 24,
+        "selection_document_review": 29,
+        "selection_essay": 21,
+        "selection_group_discussion": 5,
+        "selection_interview": 31,
+        "selection_method_detail": 5,
+        "selection_oral_exam": 27,
+        "selection_practical": 5,
+        "selection_presentation": 5,
+        "selection_process": 6,
+        "selection_written_exam": 5,
+        "source_status": 303,
+        "subject_prerequisites": 1,
+        "verification_grade": 91,
+        "verified_on": 258,
+        "web_registration_period": 4
+      },
+      "information_year_changed": 0,
+      "material_changed_record_examples": [
+        "APU-2027-AOII-ADULT-ECON",
+        "APU-2027-AOII-ADULT-MGT",
+        "APU-2027-AOII-ADULT-REG",
+        "APU-2027-AOII-INTL-ECON",
+        "APU-2027-AOII-INTL-MGT",
+        "APU-2027-AOII-INTL-REG",
+        "APU-2027-AOII-RETURN-ECON",
+        "APU-2027-AOII-RETURN-MGT",
+        "APU-2027-AOII-RETURN-REG",
+        "KCN-2027-REC-DES",
+        "KCN-2027-REC-PUB",
+        "NNC-2027-REC-A"
+      ],
+      "material_changed_records": 133,
+      "new_rows": 3841,
+      "new_universities": 179,
+      "old_rows": 3668,
+      "old_universities": 179,
+      "publication_status_changed": 157,
+      "removed": 1,
+      "removed_record_examples": [
+        "TMU-2027-AO-22"
+      ],
+      "unchanged": 3248
+    },
+    "shidai": {
+      "added": 147,
+      "added_fallback_rows": 0,
+      "added_record_examples": [
+        "AGU-2027-SELF-ART",
+        "AGU-2027-SELF-COM",
+        "AGU-2027-SELF-ENG",
+        "AGU-2027-SELF-GSC",
+        "AGU-2027-SELF-HIST",
+        "CHUO-2027-COM-FL-ACC-FLEX",
+        "CHUO-2027-COM-FL-ACC-P1",
+        "CHUO-2027-COM-FL-FIN-FLEX",
+        "CHUO-2027-COM-FL-FIN-P1",
+        "CHUO-2027-COM-FL-MGT-FLEX",
+        "CHUO-2027-COM-FL-MGT-P1",
+        "CHUO-2027-COM-FL-MKT-FLEX"
+      ],
+      "artifacts": {
+        "added": "derived/update_audit/20260922_v5_74_v1_08/shidai_added.csv",
+        "changed": "derived/update_audit/20260922_v5_74_v1_08/shidai_changed.csv",
+        "removed": "derived/update_audit/20260922_v5_74_v1_08/shidai_removed.csv"
+      },
+      "changed": 372,
+      "changed_record_examples": [
+        "HOSEI-2027-INFO-01",
+        "HOSEI-2027-INFO-02",
+        "JIKEI-2027-NURS-REC-PRIVATE",
+        "JOSAI-2027-ALUM-CHEMBIO-A",
+        "JOSAI-2027-ALUM-CHEMBIO-B",
+        "JOSAI-2027-ALUM-CHEMBIO-C",
+        "JOSAI-2027-ALUM-CHEMBIO-D",
+        "JOSAI-2027-ALUM-ISM-A",
+        "JOSAI-2027-ALUM-MATH-A",
+        "JOSAI-2027-ALUM-NUT-A",
+        "JOSAI-2027-ALUM-NUT-B",
+        "JOSAI-2027-ALUM-NUT-C"
+      ],
+      "classification_counts": {
+        "A_search_visible_material": 54,
+        "B_publication_provenance": 760,
+        "C_notes_completeness": 113,
+        "D_other": 111
+      },
+      "fallback_newly_introduced": 0,
+      "fallback_newly_introduced_record_ids": [],
+      "fallback_removed": 0,
+      "fallback_removed_record_ids": [],
+      "field_change_counts": {
+        "academic_record_detail": 5,
+        "academic_record_required": 1,
+        "academic_record_type": 5,
+        "capacity": 6,
+        "detail_completeness": 5,
+        "documents_summary": 5,
+        "eligibility_graduation": 5,
+        "english_requirement": 5,
+        "essay_detail": 3,
+        "exclusive_enrollment": 12,
+        "exclusive_enrollment_evidence": 12,
+        "exclusive_enrollment_evidence_page": 67,
+        "exclusive_enrollment_evidence_url": 12,
+        "exclusive_enrollment_status": 2,
+        "gpa_requirement": 5,
+        "guideline_url": 73,
+        "interview_detail": 5,
+        "notes": 108,
+        "research_activity_detail": 5,
+        "research_requirement_summary": 5,
+        "selection_method_detail": 5,
+        "selection_process": 2,
+        "slot_type": 1,
+        "source_status": 361,
+        "source_url": 24,
+        "subject_prerequisites": 4,
+        "verification_grade": 14,
+        "verified_on": 276,
+        "web_registration_period": 5
+      },
+      "information_year_changed": 0,
+      "material_changed_record_examples": [
+        "HOSEI-2027-INFO-01",
+        "HOSEI-2027-INFO-02",
+        "RIKKYO-2027-ENV-01",
+        "RIKKYO-2027-SCI-01",
+        "RIKKYO-2027-SCI-02",
+        "RIKKYO-2027-SCI-03",
+        "RIKKYO-2027-SCI-04",
+        "SOPHIA-2027-KOBO-01",
+        "SOPHIA-2027-KOBO-02",
+        "SOPHIA-2027-KOBO-03",
+        "SOPHIA-2027-KOBO-04",
+        "SOPHIA-2027-KOBO-05"
+      ],
+      "material_changed_records": 12,
+      "new_rows": 2400,
+      "new_universities": 71,
+      "old_rows": 2253,
+      "old_universities": 70,
+      "publication_status_changed": 0,
+      "removed": 0,
+      "removed_record_examples": [],
+      "unchanged": 1881
+    },
+    "totals": {
+      "added": 321,
+      "added_fallback_rows": 21,
+      "changed": 791,
+      "fallback_newly_introduced": 0,
+      "fallback_removed": 0,
+      "information_year_changed": 0,
+      "material_changed_records": 145,
+      "new_rows": 6241,
+      "old_rows": 5921,
+      "publication_status_changed": 157,
+      "removed": 1,
+      "unchanged": 5129
+    }
+  },
+  "source_identity": {
+    "kokkoritsu": {
+      "artifact_canonical_state": "active_unfrozen",
+      "canonical_data_declared": {
+        "coverage": "kokkoritsu_early_admissions_2027_coverage_v5_74.csv",
+        "master": "kokkoritsu_early_admissions_2027_master_v5_74.csv",
+        "research_requirements": "kokkoritsu_early_admissions_2027_research_requirements_v5_74.csv",
+        "schema": "kokkoritsu_early_admissions_schema_v5_74.json"
+      },
+      "canonical_data_expected": {
+        "coverage": "kokkoritsu_early_admissions_2027_coverage_v5_74.csv",
+        "master": "kokkoritsu_early_admissions_2027_master_v5_74.csv",
+        "research_requirements": "kokkoritsu_early_admissions_2027_research_requirements_v5_74.csv",
+        "schema": "kokkoritsu_early_admissions_schema_v5_74.json"
+      },
+      "canonical_filenames_match": true,
+      "dataset_matches": true,
+      "dataset_state": "UNFROZEN",
+      "declared_dataset": "kokkoritsu_early_admissions_2027",
+      "effective_freeze_state": "UNFROZEN",
+      "expected_version": "5.74",
+      "explicitly_unfrozen": true,
+      "identity_coherent": true,
+      "internal_version": "5.74",
+      "source_coherence_gate_passed": false,
+      "source_freeze_status": null,
+      "unfreeze_metadata": {
+        "all_manual_drive_files_processed": true,
+        "batch": 3,
+        "date": "2026-09-22",
+        "processed_files": [
+          "2027_asat_bosyuuyoukou_jp.pdf",
+          "2027_tg2_bosyuuyoukou.pdf",
+          "2027_tg1_bosyuuyoukou_jp.pdf",
+          "2027_J12_bosyuuyoukou.pdf",
+          "2027_agg_bosyuuyoukou.pdf",
+          "2027_ako_bosyuuyoukou.pdf",
+          "2027_azn_kt_bosyuuyoukou.pdf",
+          "2027_sis_bosyuuyoukou.pdf",
+          "R09suisen.pdf",
+          "01_2027_kikoku_yoko.pdf",
+          "r9-guidelines-suisen.pdf",
+          "r9-guidelines-sougou.pdf",
+          "【公開版】令和9 (2027) 年度特別選抜Ⅰ（学校推薦型選抜）学生募集要項.pdf",
+          "kokusai_admissionR09.pdf",
+          "R9tokubetsu_boshuyoko_yakugakukodaiin.pdf",
+          "R9tokubetsu_boshuyoko_joshi.pdf",
+          "R9tokubetsu_boshuyoko_chozen.pdf",
+          "R9tokubetsu_boshuyoko_kugs.pdf",
+          "R9_senbatu_sec.pdf",
+          "book.pdf",
+          "2026_ao3.pdf",
+          "r9AO2_Application-Guidelines.pdf"
+        ],
+        "reason": "手動取得した2027年度公式募集要項を用いて、Freeze後に判明した選抜区分・募集単位の欠落/粒度を更新するため。",
+        "source_freeze": "freeze_20260920_v1"
+      },
+      "version_matches": true
+    },
+    "shidai": {
+      "artifact_canonical_state": null,
+      "canonical_data_declared": {
+        "coverage": "shidai_early_admissions_2027_coverage_v1_08.csv",
+        "master": "shidai_early_admissions_2027_master_v1_08.csv",
+        "research_requirements": "shidai_early_admissions_2027_research_requirements_v1_08.csv",
+        "schema": "shidai_early_admissions_schema_v1_08.json"
+      },
+      "canonical_data_expected": {
+        "coverage": "shidai_early_admissions_2027_coverage_v1_08.csv",
+        "master": "shidai_early_admissions_2027_master_v1_08.csv",
+        "research_requirements": "shidai_early_admissions_2027_research_requirements_v1_08.csv",
+        "schema": "shidai_early_admissions_schema_v1_08.json"
+      },
+      "canonical_filenames_match": true,
+      "dataset_matches": true,
+      "dataset_state": null,
+      "declared_dataset": null,
+      "effective_freeze_state": "FROZEN",
+      "expected_version": "1.08",
+      "explicitly_unfrozen": false,
+      "identity_coherent": true,
+      "internal_version": "1.08",
+      "source_coherence_gate_passed": true,
+      "source_freeze_status": "FROZEN",
+      "unfreeze_metadata": null,
+      "version_matches": true
+    }
+  },
+  "source_validation": {
+    "machine_report": "data/derived/update_audit/20260922_v5_74_v1_08/candidate_source_validation.json",
+    "metrics": {
+      "crosswalks": {
+        "kokkoritsu": {
+          "detail_completeness_status": {
+            "complete": 2490,
+            "partial": 739,
+            "unmapped": 612
+          },
+          "research_activity_level_status": {
+            "none": 387,
+            "null": 1328,
+            "relevant": 104,
+            "required": 121,
+            "unknown": 1620,
+            "unmapped": 281
+          }
+        },
+        "shidai": {
+          "detail_completeness_status": {
+            "complete": 2175,
+            "partial": 225
+          },
+          "research_activity_level_status": {
+            "none": 1645,
+            "relevant": 649,
+            "required": 101,
+            "unknown": 5
+          }
+        }
+      },
+      "row_counts": {
+        "kokkoritsu": {
+          "coverage": 187,
+          "master": 3841,
+          "research_requirements": 276
+        },
+        "shidai": {
+          "coverage": 73,
+          "master": 2400,
+          "research_requirements": 214
+        }
+      }
+    },
+    "scope": "complete_incoming_four_file_bundles",
+    "summary": {
+      "by_code": {
+        "COMMON_TEST_FIELDS_DIFFER": {
+          "by_dataset": {
+            "kokkoritsu": 109
+          },
+          "count": 109,
+          "representative_record_ids": [
+            "OCHA-2027-AO-BIO",
+            "OCHA-2027-AO-CHEM",
+            "OCHA-2027-AO-CULTINFO",
+            "OCHA-2027-AO-HENV",
+            "OCHA-2027-AO-HOME"
+          ],
+          "severity": "informational"
+        },
+        "COVERAGE_ZERO_MASTER_ROWS": {
+          "by_dataset": {
+            "kokkoritsu": 8,
+            "shidai": 2
+          },
+          "count": 10,
+          "representative_record_ids": [
+            "国立:政策研究大学院大学",
+            "国立:総合研究大学院大学",
+            "国立:北陸先端科学技術大学院大学",
+            "国立:奈良先端科学技術大学院大学",
+            "公立:東京都立産業技術大学院大学"
+          ],
+          "severity": "informational"
+        },
+        "DATE_RAW_PARTIAL": {
+          "by_dataset": {
+            "kokkoritsu": 1210,
+            "shidai": 1896
+          },
+          "count": 3106,
+          "representative_record_ids": [
+            "HU-2027-F1-01",
+            "HU-2027-F1-02",
+            "HU-2027-F1-03",
+            "HU-2027-F1-04",
+            "HU-2027-F1-05"
+          ],
+          "severity": "informational"
+        },
+        "DATE_RAW_UNPARSED": {
+          "by_dataset": {
+            "kokkoritsu": 15,
+            "shidai": 3
+          },
+          "count": 18,
+          "representative_record_ids": [
+            "ST-2027-C-01",
+            "ST-2027-C-02",
+            "ST-2027-C-03",
+            "ST-2027-C-04",
+            "ST-2027-C-05"
+          ],
+          "severity": "informational"
+        },
+        "DETAIL_COMPLETENESS_UNMAPPED": {
+          "by_dataset": {
+            "kokkoritsu": 612
+          },
+          "count": 612,
+          "representative_record_ids": [
+            "NWU-2027-PICASO-01",
+            "NWU-2027-PICASO-02",
+            "NWU-2027-PICASO-03",
+            "NWU-2027-PICASO-04",
+            "NWU-2027-PICASO-05"
+          ],
+          "severity": "warning"
+        },
+        "PROVENANCE_URL_MISSING": {
+          "by_dataset": {
+            "kokkoritsu": 52
+          },
+          "count": 52,
+          "representative_record_ids": [
+            "TMU-2027-AO-01",
+            "TMU-2027-AO-02",
+            "TMU-2027-AO-03",
+            "TMU-2027-AO-04",
+            "TMU-2027-AO-05"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+          "by_dataset": {
+            "kokkoritsu": 281
+          },
+          "count": 281,
+          "representative_record_ids": [
+            "HUE-2027-AO-SELF-01",
+            "HUE-2027-AO-SELF-02",
+            "HUE-2027-AO-SELF-03",
+            "AKITA-2027-AO1-EDU-REGCULT",
+            "YAM-2027-REC1-HSS-GLOBAL"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_DENORMALIZED_FIELD_MISMATCH": {
+          "by_dataset": {
+            "kokkoritsu": 8,
+            "shidai": 2
+          },
+          "count": 10,
+          "representative_record_ids": [
+            "OU-2027-C-06",
+            "ICU-2027-SOGO-SCI",
+            "ICU-2027-SOGO-IBDP"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_EXACT_DUPLICATE": {
+          "by_dataset": {
+            "shidai": 4
+          },
+          "count": 4,
+          "representative_record_ids": [
+            "MU-2027-AO1-DS",
+            "MU-2027-AO1-SUS",
+            "MU-2027-AO1-MATH",
+            "MU-2027-AO1-ARCH"
+          ],
+          "severity": "warning"
+        },
+        "RESEARCH_NOT_REQUIRED_WITH_CHILD": {
+          "by_dataset": {
+            "kokkoritsu": 16,
+            "shidai": 39
+          },
+          "count": 55,
+          "representative_record_ids": [
+            "FUKU-2027-AO-ENG-GEN",
+            "FUKU-2027-AO-ENG-W",
+            "HIT-2027-REC-COM",
+            "HIT-2027-REC-ECON",
+            "HIT-2027-REC-LAW"
+          ],
+          "severity": "informational"
+        },
+        "RESEARCH_REQUIRED_WITHOUT_CHILD": {
+          "by_dataset": {
+            "kokkoritsu": 33,
+            "shidai": 12
+          },
+          "count": 45,
+          "representative_record_ids": [
+            "NWU-2027-PICASO-01",
+            "NWU-2027-PICASO-02",
+            "NWU-2027-PICASO-03",
+            "NWU-2027-PICASO-04",
+            "NWU-2027-PICASO-05"
+          ],
+          "severity": "warning"
+        },
+        "WHITESPACE_PADDING": {
+          "by_dataset": {
+            "kokkoritsu": 5
+          },
+          "count": 5,
+          "representative_record_ids": [
+            "SPU-2027-REC-01",
+            "SPU-2027-REC-04",
+            "SPU-2027-REC-08",
+            "SPU-2027-REC-11",
+            "SPU-2027-REC-14"
+          ],
+          "severity": "warning"
+        }
+      },
+      "by_dataset": {
+        "kokkoritsu": {
+          "by_code": {
+            "COMMON_TEST_FIELDS_DIFFER": 109,
+            "COVERAGE_ZERO_MASTER_ROWS": 8,
+            "DATE_RAW_PARTIAL": 1210,
+            "DATE_RAW_UNPARSED": 15,
+            "DETAIL_COMPLETENESS_UNMAPPED": 612,
+            "PROVENANCE_URL_MISSING": 52,
+            "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
+            "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 8,
+            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 16,
+            "RESEARCH_REQUIRED_WITHOUT_CHILD": 33,
+            "WHITESPACE_PADDING": 5
+          },
+          "by_severity": {
+            "error": 0,
+            "informational": 1358,
+            "warning": 991
+          },
+          "total": 2349
+        },
+        "shidai": {
+          "by_code": {
+            "COVERAGE_ZERO_MASTER_ROWS": 2,
+            "DATE_RAW_PARTIAL": 1896,
+            "DATE_RAW_UNPARSED": 3,
+            "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 2,
+            "RESEARCH_EXACT_DUPLICATE": 4,
+            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 39,
+            "RESEARCH_REQUIRED_WITHOUT_CHILD": 12
+          },
+          "by_severity": {
+            "error": 0,
+            "informational": 1940,
+            "warning": 18
+          },
+          "total": 1958
+        }
+      },
+      "by_severity": {
+        "error": 0,
+        "informational": 3298,
+        "warning": 1009
+      },
+      "status": "passed_with_findings",
+      "total_issues": 4307
+    }
+  },
+  "source_validation_delta": {
+    "by_code": {
+      "COMMON_TEST_FIELDS_DIFFER": {
+        "baseline": 108,
+        "candidate": 109,
+        "delta": 1,
+        "severity": "informational"
+      },
+      "COVERAGE_ZERO_MASTER_ROWS": {
+        "baseline": 10,
+        "candidate": 10,
+        "delta": 0,
+        "severity": "informational"
+      },
+      "DATE_RAW_PARTIAL": {
+        "baseline": 2948,
+        "candidate": 3106,
+        "delta": 158,
+        "severity": "informational"
+      },
+      "DATE_RAW_UNPARSED": {
+        "baseline": 18,
+        "candidate": 18,
+        "delta": 0,
+        "severity": "informational"
+      },
+      "DETAIL_COMPLETENESS_UNMAPPED": {
+        "baseline": 318,
+        "candidate": 612,
+        "delta": 294,
+        "severity": "warning"
+      },
+      "PROVENANCE_URL_MISSING": {
+        "baseline": 19,
+        "candidate": 52,
+        "delta": 33,
+        "severity": "warning"
+      },
+      "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": {
+        "baseline": 281,
+        "candidate": 281,
+        "delta": 0,
+        "severity": "warning"
+      },
+      "RESEARCH_DENORMALIZED_FIELD_MISMATCH": {
+        "baseline": 8,
+        "candidate": 10,
+        "delta": 2,
+        "severity": "warning"
+      },
+      "RESEARCH_EXACT_DUPLICATE": {
+        "baseline": 4,
+        "candidate": 4,
+        "delta": 0,
+        "severity": "warning"
+      },
+      "RESEARCH_NOT_REQUIRED_WITH_CHILD": {
+        "baseline": 52,
+        "candidate": 55,
+        "delta": 3,
+        "severity": "informational"
+      },
+      "RESEARCH_REQUIRED_WITHOUT_CHILD": {
+        "baseline": 51,
+        "candidate": 45,
+        "delta": -6,
+        "severity": "warning"
+      },
+      "WHITESPACE_PADDING": {
+        "baseline": 5,
+        "candidate": 5,
+        "delta": 0,
+        "severity": "warning"
+      }
+    },
+    "by_severity": {
+      "error": {
+        "baseline": 0,
+        "candidate": 0,
+        "delta": 0
+      },
+      "informational": {
+        "baseline": 3136,
+        "candidate": 3298,
+        "delta": 162
+      },
+      "warning": {
+        "baseline": 686,
+        "candidate": 1009,
+        "delta": 323
+      }
+    }
+  },
+  "update_id": "update_20260922_v5_74_v1_08"
+}

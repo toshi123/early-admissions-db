@@ -1,0 +1,41 @@
+{
+  "artifact": {
+    "path": "schema/english_requirement/english_requirement_crosswalk_v0_2.csv",
+    "rows": 243,
+    "sha256": "5dc097fed020fd2f1c6c3ae963ffa82f7487eca22993c7b2430a8d764aedbaff",
+    "size_bytes": 46494
+  },
+  "candidate_sources": {
+    "kokkoritsu": "5.81",
+    "shidai": "1.08"
+  },
+  "contract_version": "0.2",
+  "decision_artifact": {
+    "path": "validation/reports/update_20260922_v5_81_v1_08/english_requirement_human_review_decisions_v0_2.csv",
+    "rows": 66,
+    "sha256": "ef790af83b755fa4f06edaba204b0a026126081ec4cbdd22beefe47ca7ad44fa",
+    "size_bytes": 21697
+  },
+  "decision_count": 66,
+  "decision_counts": {
+    "not_required": 3,
+    "required": 57,
+    "review_required": 5,
+    "unknown": 1
+  },
+  "previous_artifact": {
+    "path": "schema/english_requirement/english_requirement_crosswalk_v0_1.csv",
+    "rows": 177,
+    "sha256": "3c63e49e9aeedce6a602ba7f24e84d3da4e2d7eec0812e54f8fed90472e55e8b",
+    "size_bytes": 33533
+  },
+  "previous_contract_version": "0.1",
+  "review_method": "human review",
+  "reviewed_on": "2026-09-22",
+  "semantic_policy": {
+    "english_or_other_language_alternative": "required",
+    "merely_desirable": "not_required",
+    "required_with_special_exemptions": "required",
+    "unpublished_external_requirement": "unknown"
+  }
+}

@@ -23,9 +23,9 @@ class PrefectureContractTests(unittest.TestCase):
 class CurrentPrefectureSearchRegression(unittest.TestCase):
     def test_membership_qa(self):
         db=ROOT/"data/derived/sqlite/early_admissions_2027.sqlite"
-        self.assertEqual(search_database(db,SearchCriteria(),limit=0).summary.total_matched_rows,5921)
-        self.assertEqual(search_database(db,SearchCriteria(prefecture=("東京都",)),limit=0).summary.total_matched_rows,983)
-        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",)),limit=0).summary.total_matched_rows,1010)
-        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都","埼玉県")),limit=0).summary.total_matched_rows,1383)
-        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",),academic_field_group=("engineering",)),limit=0).summary.total_matched_rows,371)
-        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",),gpa_tenths=38,gpa_mode="safe"),limit=0).summary.total_matched_rows,73)
+        self.assertEqual(search_database(db,SearchCriteria(),limit=0).summary.total_matched_rows,6411)
+        self.assertEqual(search_database(db,SearchCriteria(prefecture=("東京都",)),limit=0).summary.total_matched_rows,1234)
+        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",)),limit=0).summary.total_matched_rows,1261)
+        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都","埼玉県")),limit=0).summary.total_matched_rows,1640)
+        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",),academic_field_group=("engineering",)),limit=0).summary.total_matched_rows,384)
+        self.assertEqual(search_database(db,SearchCriteria(prefecture_membership=("東京都",),gpa_tenths=38,gpa_mode="safe"),limit=0).summary.total_matched_rows,89)

@@ -68,13 +68,13 @@ SOURCE_CONFIG = {
     "kokkoritsu": {
         "canonical_dir": Path("data/canonical/kokkoritsu"),
         "schema": Path(
-            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_61.json"
+            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_81.json"
         ),
     },
     "shidai": {
         "canonical_dir": Path("data/canonical/shidai"),
         "schema": Path(
-            "schema/shidai/shidai_early_admissions_schema_v0_97.json"
+            "schema/shidai/shidai_early_admissions_schema_v1_08.json"
         ),
     },
 }

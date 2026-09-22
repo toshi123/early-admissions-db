@@ -20,14 +20,14 @@ from tests.test_validator import REPO_ROOT, build_synthetic_repo, write_csv
 
 
 FROZEN_V0_1_ROWS = {
-    "master": 5_921,
-    "coverage": 259,
-    "research_requirements": 437,
+    "master": 6_411,
+    "coverage": 260,
+    "research_requirements": 495,
 }
 FROZEN_V0_1_SHA256 = {
-    "master": "1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279",
-    "coverage": "b10ca3381afb0f3e8740ed2d14ddf086233151d4c6eba6e946344b12638913fb",
-    "research_requirements": "ba105cca34c03fee34fb7d04ce1d0818caa386d0832e7999bf9ec9bf9f135919",
+    "master": "2af3a834bb00fd93235f711c0f50896c4158b633d550d333b1aad9667bf5985e",
+    "coverage": "4457e7cddb9b9bde8a5aa414dcbadeda9ac6d05ed45ef0794354b2883c837e2b",
+    "research_requirements": "0aae717876bef3c1ba8645fcbf7e15190ce9bc8521badb83d5f154b6e3782fd9",
 }
 
 
@@ -71,7 +71,7 @@ class UnifiedAdapterTests(unittest.TestCase):
                 .read_text(encoding="utf-8")
             )
             adapter = UnifiedAdapter(contract)
-            record = adapter.adapt_master(master, "kokkoritsu", "5.61")
+            record = adapter.adapt_master(master, "kokkoritsu", "5.81")
 
             self.assertEqual(record["common_test_required"], "Conditional")
             self.assertEqual(record["research_activity_level_status"], "unmapped")
@@ -166,7 +166,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(manifest["contract_version"], "0.1")
             self.assertEqual(
                 manifest["source_versions"],
-                {"kokkoritsu": "5.61", "shidai": "0.97"},
+                {"kokkoritsu": "5.81", "shidai": "1.08"},
             )
             self.assertTrue(
                 manifest["validation"]["determinism"]["byte_identical"]
@@ -267,7 +267,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
 
 
 class FrozenReleaseRegressionTests(unittest.TestCase):
-    def test_v5_61_v0_97_rows_and_generated_csv_hashes(self) -> None:
+    def test_v5_81_v1_08_rows_and_generated_csv_hashes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = UnifiedBuildPipeline(
                 REPO_ROOT,

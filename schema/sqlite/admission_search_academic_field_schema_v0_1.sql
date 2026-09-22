@@ -22,7 +22,7 @@ CREATE TABLE admission_search_academic_fields (
             'not_applicable'
         )),
     mapping_contract_version TEXT NOT NULL
-        CHECK (mapping_contract_version = '0.1'),
+        CHECK (mapping_contract_version = '0.2'),
     review_note TEXT,
     CHECK (
         (raw_value IS NULL AND mapping_status = 'not_applicable')

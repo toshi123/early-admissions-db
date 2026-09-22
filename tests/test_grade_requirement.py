@@ -6,6 +6,7 @@ from collections import Counter
 
 from early_admissions.grade_requirement import (
     GRADE_REQUIREMENT_CROSSWALK_PATH,
+    GRADE_REQUIREMENT_PREVIOUS_CROSSWALK_PATH,
     GradeRequirementCrosswalk,
 )
 
@@ -31,7 +32,7 @@ class GradeRequirementCrosswalkTests(unittest.TestCase):
             audit = list(csv.DictReader(handle))
         non_null = [row for row in audit if row["primary_class"] != "null"]
         self.assertEqual(len(non_null), 553)
-        self.assertEqual(len(self.crosswalk), 553)
+        self.assertEqual(len(self.crosswalk), 616)
         self.assertFalse(
             [
                 row["raw_value"]
@@ -48,7 +49,12 @@ class GradeRequirementCrosswalkTests(unittest.TestCase):
             source_rows = list(csv.DictReader(handle))
         weights = {row["raw_value"]: int(row["row_count"]) for row in source_rows}
         with self.path.open(encoding="utf-8", newline="") as handle:
-            rows = list(csv.DictReader(handle))
+            rows = [
+                row
+                for row in csv.DictReader(handle)
+                if row["raw_value"] in weights
+            ]
+        self.assertEqual(len(rows), 553)
 
         status_distinct = Counter(row["grade_requirement_status"] for row in rows)
         overall_distinct = Counter(row["overall_gpa_status"] for row in rows)
@@ -112,6 +118,13 @@ class GradeRequirementCrosswalkTests(unittest.TestCase):
             },
         )
         self.assertEqual(sum(overall_rows.values()), 5921)
+
+    def test_v0_1_crosswalk_remains_loadable_for_snapshot_reproducibility(self) -> None:
+        previous = GradeRequirementCrosswalk.load(
+            REPO_ROOT / GRADE_REQUIREMENT_PREVIOUS_CROSSWALK_PATH,
+            expected_version="0.1",
+        )
+        self.assertEqual(len(previous), 553)
 
     def test_rikkyo_is_required_with_a_safe_overall_floor_and_additional_conditions(self) -> None:
         result = self.crosswalk.classify(RIKKYO_RAW)

@@ -79,7 +79,7 @@ export interface SearchRow {
   academic_field_v2_subcategory_mapping_status: string;
   academic_field_v2_broad_memberships: string[];
   academic_field_v2_subcategory_memberships: string[];
-  academic_field_v2_mapping_contract_version: "0.2";
+  academic_field_v2_mapping_contract_version: "0.2" | "0.3";
   academic_field_v2_taxonomy_version: "0.2";
   exclusive_enrollment_status: Nullable<string>;
   school_recommendation_required: Nullable<string>;

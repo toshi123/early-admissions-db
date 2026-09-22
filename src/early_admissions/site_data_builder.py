@@ -19,6 +19,9 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from jsonschema import Draft202012Validator
 
+from .grade_requirement import (
+    GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS,
+)
 from .search_qa import QA_SPECS
 from .site_search import (
     AcademicFieldV2Branch,
@@ -31,10 +34,15 @@ from .structured_search import (
     SearchCriteria,
     search_database,
 )
+from .validation_profile import (
+    PRODUCTION_PROFILE,
+    normalize_validation_profile,
+    publication_status,
+)
 
 
 SITE_DATA_SCHEMA_VERSION = "0.2"
-SITE_DATA_BUILDER_VERSION = "0.6.0"
+SITE_DATA_BUILDER_VERSION = "0.7.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
 DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_2")
@@ -190,12 +198,14 @@ class SiteDataBuildPipeline:
         output_dir: Path = DEFAULT_OUTPUT_DIR,
         qa_report_path: Path = DEFAULT_QA_REPORT,
         build_timestamp_utc: str | None = None,
+        validation_profile: str = PRODUCTION_PROFILE,
     ) -> None:
         self.root = repo_root.resolve()
         self.database = self._resolve(database_path)
         self.sqlite_manifest = self._resolve(sqlite_manifest_path)
         self.output_dir = self._resolve(output_dir)
         self.qa_report = self._resolve(qa_report_path)
+        self.validation_profile = normalize_validation_profile(validation_profile)
         self.build_timestamp = build_timestamp_utc or datetime.now(timezone.utc).replace(
             microsecond=0
         ).isoformat().replace("+00:00", "Z")
@@ -385,6 +395,14 @@ class SiteDataBuildPipeline:
             raise SiteDataBuildError("SQLite size does not match its build manifest.")
         if manifest.get("database_schema_version") != "0.1":
             raise SiteDataBuildError("SQLite manifest schema version mismatch.")
+        input_profile = normalize_validation_profile(
+            str(manifest.get("validation_profile", PRODUCTION_PROFILE))
+        )
+        if input_profile != self.validation_profile:
+            raise SiteDataBuildError(
+                "SQLite validation profile does not match the explicitly requested "
+                f"Site-data profile: {input_profile} != {self.validation_profile}."
+            )
 
     def _load_schemas(self) -> dict[str, Mapping[str, Any]]:
         documents: dict[str, Mapping[str, Any]] = {}
@@ -443,6 +461,19 @@ class SiteDataBuildPipeline:
         mismatches = {key: (metadata.get(key), value) for key, value in expected.items() if metadata.get(key) != value}
         if mismatches:
             raise SiteDataBuildError(f"SQLite metadata/manifest mismatch: {mismatches}")
+        metadata_profile = normalize_validation_profile(
+            str(metadata.get("validation_profile", PRODUCTION_PROFILE))
+        )
+        manifest_profile = normalize_validation_profile(
+            str(manifest.get("validation_profile", PRODUCTION_PROFILE))
+        )
+        if metadata_profile != manifest_profile or manifest_profile != self.validation_profile:
+            raise SiteDataBuildError("SQLite validation-profile metadata mismatch.")
+        metadata_review_counts = json.loads(
+            str(metadata.get("review_required_counts_json", "{}"))
+        )
+        if metadata_review_counts != manifest.get("review_required_counts", {}):
+            raise SiteDataBuildError("SQLite review-required count metadata mismatch.")
 
     def _project(
         self,
@@ -603,6 +634,7 @@ class SiteDataBuildPipeline:
             "sqlite_sha256": sqlite_hash,
             "site_data_schema_version": SITE_DATA_SCHEMA_VERSION,
             "builder_version": SITE_DATA_BUILDER_VERSION,
+            "validation_profile": self.validation_profile,
             "gpa_parser_contract_version": metadata["gpa_parser_contract_version"],
             "grade_requirement_mapping_contract_version": metadata[
                 "grade_requirement_mapping_contract_version"
@@ -811,6 +843,57 @@ class SiteDataBuildPipeline:
         for detail in details:
             detail_validator.validate(detail)
         filters_validator.validate(filter_options)
+        expected_grade_mapping_version = sqlite_manifest[
+            "grade_requirement_search"
+        ]["mapping_contract_version"]
+        if expected_grade_mapping_version not in (
+            GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS
+        ):
+            raise SiteDataBuildError(
+                "Unsupported Grade-requirement mapping contract version."
+            )
+        if any(
+            detail["grade_requirement_derived"]["mapping_contract_version"]
+            != expected_grade_mapping_version
+            for detail in details
+        ):
+            raise SiteDataBuildError(
+                "Grade-requirement detail versions differ from SQLite metadata."
+            )
+        derived_version_fields = (
+            (
+                "academic_field_derived",
+                "mapping_contract_version",
+                sqlite_manifest["academic_field_search"]["mapping_contract_version"],
+            ),
+            (
+                "academic_field_v2_derived",
+                "mapping_contract_version",
+                sqlite_manifest["academic_field_v2"]["mapping_contract_version"],
+            ),
+            (
+                "english_requirement_derived",
+                "parser_contract_version",
+                sqlite_manifest["english_requirement_search"]["parser_contract_version"],
+            ),
+        )
+        for section, field, expected_version in derived_version_fields:
+            if any(
+                detail[section][field] != expected_version for detail in details
+            ):
+                raise SiteDataBuildError(
+                    f"{section} versions differ from SQLite metadata."
+                )
+        if any(
+            row["academic_field_mapping_contract_version"]
+            != sqlite_manifest["academic_field_search"]["mapping_contract_version"]
+            or row["academic_field_v2_mapping_contract_version"]
+            != sqlite_manifest["academic_field_v2"]["mapping_contract_version"]
+            for row in search_rows_data
+        ):
+            raise SiteDataBuildError(
+                "Academic-field search-row versions differ from SQLite metadata."
+            )
         admission_keys = [(row["source_dataset"], row["source_version"], row["record_id"]) for row in admissions]
         search_keys = [logical_key(row) for row in search_rows_data]
         detail_keys = [logical_key(row["identity"]) for row in details]
@@ -1297,7 +1380,15 @@ class SiteDataBuildPipeline:
             "builder_version": SITE_DATA_BUILDER_VERSION,
             "build_timestamp_utc": self.build_timestamp,
             "build_id": build_id,
-            "publication": {"status": "published_after_all_validations_passed", "atomic_directory_replacement": True},
+            "validation_profile": self.validation_profile,
+            "review_required_counts": dict(
+                sqlite_manifest.get("review_required_counts", {})
+            ),
+            "publication": {
+                "status": publication_status(self.validation_profile),
+                "production_ready": self.validation_profile == PRODUCTION_PROFILE,
+                "atomic_directory_replacement": True,
+            },
             "input": {
                 "sqlite_path": _portable_path(self.database, self.root),
                 "sqlite_sha256": database_hash,
@@ -1432,6 +1523,8 @@ class SiteDataBuildPipeline:
             "# Academic-field v0.2 Site integration QA",
             "",
             f"- Build ID: `{manifest['build_id']}`",
+            f"- Validation profile: `{manifest['validation_profile']}`",
+            f"- Production ready: `{str(manifest['publication']['production_ready']).lower()}`",
             f"- Input SQLite SHA-256: `{manifest['input']['sqlite_sha256']}`",
             f"- Site-data schema: `{manifest['site_data_schema_version']}`",
             f"- Validation: `{manifest['validation']['status']}`",

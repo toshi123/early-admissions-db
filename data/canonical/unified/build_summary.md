@@ -10,20 +10,20 @@
 
 | Dataset | Version |
 |---|---|
-| kokkoritsu | `5.61` |
-| shidai | `0.97` |
+| kokkoritsu | `5.81` |
+| shidai | `1.08` |
 
 ## Output tables
 
 | Table | Rows | Bytes | SHA-256 |
 |---|---:|---:|---|
-| master | 5921 | 10874313 | `1df386ed99532a3dff381507978a1454d7c20113574285b2526f6ae122050279` |
-| coverage | 259 | 147685 | `b10ca3381afb0f3e8740ed2d14ddf086233151d4c6eba6e946344b12638913fb` |
-| research_requirements | 437 | 208432 | `ba105cca34c03fee34fb7d04ce1d0818caa386d0832e7999bf9ec9bf9f135919` |
+| master | 6411 | 12001153 | `2af3a834bb00fd93235f711c0f50896c4158b633d550d333b1aad9667bf5985e` |
+| coverage | 260 | 150535 | `4457e7cddb9b9bde8a5aa414dcbadeda9ac6d05ed45ef0794354b2883c837e2b` |
+| research_requirements | 495 | 234228 | `0aae717876bef3c1ba8645fcbf7e15190ce9bc8521badb83d5f154b6e3782fd9` |
 
 ## Validation gates
 
-- Source canonical validator: errors=0, warnings=686, informational=3136
+- Source canonical validator: errors=0, warnings=1167, informational=3292
 - Unified JSON Schema validation: passed
 - Unified Master PK / ResearchRequirements FK / Coverage: passed
 - Source-to-output row preservation: passed

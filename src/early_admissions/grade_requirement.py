@@ -7,11 +7,15 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION = "0.1"
+GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION = "0.2"
+GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS = frozenset({"0.1", "0.2"})
 GRADE_REQUIREMENT_SCHEMA_PATH = Path(
     "schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql"
 )
 GRADE_REQUIREMENT_CROSSWALK_PATH = Path(
+    "schema/grade_requirement/grade_requirement_crosswalk_v0_2.csv"
+)
+GRADE_REQUIREMENT_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/grade_requirement/grade_requirement_crosswalk_v0_1.csv"
 )
 GRADE_REQUIREMENT_DESIGN_PATH = Path(
@@ -87,14 +91,17 @@ class GradeRequirementCrosswalk:
         self._rows = rows
 
     @classmethod
-    def load(cls, path: Path) -> "GradeRequirementCrosswalk":
+    def load(
+        cls, path: Path, *, expected_version: str | None = None
+    ) -> "GradeRequirementCrosswalk":
+        version = expected_version or GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION
         rows: dict[str, GradeRequirementResult] = {}
         with path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
             if reader.fieldnames != cls._HEADER:
                 raise ValueError("Grade-requirement crosswalk header mismatch.")
             for row in reader:
-                if row["contract_version"] != GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION:
+                if row["contract_version"] != version:
                     raise ValueError("Grade-requirement crosswalk version mismatch.")
                 raw = row["raw_value"]
                 status = row["grade_requirement_status"]
@@ -135,7 +142,7 @@ class GradeRequirementCrosswalk:
                     overall_gpa_status=overall_status,
                     additional_grade_conditions=additional,
                     parse_status="exact_crosswalk",
-                    mapping_contract_version=GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+                    mapping_contract_version=row["contract_version"],
                     review_note=row["review_note"] or None,
                 )
         return cls(rows)

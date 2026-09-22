@@ -42,14 +42,15 @@ def prepare_unified_fixture(
         Path("schema/sqlite/admission_search_gpa_schema_v0_1.sql"),
         Path("docs/grade_requirement_search_design_v0_1.md"),
         Path("schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql"),
-        Path("schema/grade_requirement/grade_requirement_crosswalk_v0_1.csv"),
+        Path("schema/grade_requirement/grade_requirement_crosswalk_v0_2.csv"),
         Path("schema/sqlite/admission_search_academic_field_schema_v0_1.sql"),
         Path("schema/academic_field/academic_field_taxonomy_v0_1.csv"),
-        Path("schema/academic_field/academic_field_crosswalk_v0_1.csv"),
-        Path("validation/reports/gpa_requirement_raw_value_audit_v0_1.csv"),
+        Path("schema/academic_field/academic_field_crosswalk_v0_2.csv"),
+        Path("validation/reports/gpa_requirement_raw_value_audit_v0_2.csv"),
         Path("docs/academic_field_search_design_v0_1.md"),
         Path("docs/academic_field_mapping_freeze_v0_1.md"),
         Path("docs/academic_field_v0_2_sqlite_design.md"),
+        Path("docs/academic_field_crosswalk_v0_3.md"),
         Path("docs/academic_field_taxonomy_v0_2_freeze.md"),
         Path("validation/reports/academic_field_taxonomy_v0_2_audit.md"),
         Path("schema/sqlite/admission_search_academic_field_v0_2_schema.sql"),
@@ -62,20 +63,21 @@ def prepare_unified_fixture(
             "academic_field_subcategory_taxonomy_v0_2.csv"
         ),
         Path(
-            "schema/academic_field/v0_2/"
-            "academic_field_raw_crosswalk_v0_2.csv"
+            "schema/academic_field/v0_3/"
+            "academic_field_raw_crosswalk_v0_3.csv"
         ),
         Path(
-            "schema/academic_field/v0_2/"
-            "academic_field_context_crosswalk_v0_2.csv"
+            "schema/academic_field/v0_3/"
+            "academic_field_context_crosswalk_v0_3.csv"
         ),
         Path(
             "schema/academic_field/v0_2/"
             "academic_field_v0_1_to_v0_2_crosswalk.csv"
         ),
         Path("docs/english_requirement_search_design_v0_1.md"),
+        Path("docs/english_requirement_crosswalk_v0_2.md"),
         Path("schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"),
-        Path("schema/english_requirement/english_requirement_crosswalk_v0_1.csv"),
+        Path("schema/english_requirement/english_requirement_crosswalk_v0_2.csv"),
         Path("docs/prefecture_search_design_v0_1.md"),
         Path("schema/sqlite/admission_search_prefecture_schema_v0_1.sql"),
         Path("schema/prefecture/prefecture_taxonomy_v0_1.csv"),
@@ -178,10 +180,15 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
             root = Path(directory)
             prepare_unified_fixture(root)
 
-            result = SQLiteBuildPipeline(root).build()
+            result = SQLiteBuildPipeline(
+                root, build_timestamp_utc="2026-09-22T11:38:21Z"
+            ).build()
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
 
             self.assertTrue(result.database_path.is_file())
+            self.assertEqual(
+                manifest["build_timestamp_utc"], "2026-09-22T11:38:21Z"
+            )
             self.assertEqual(
                 result.row_counts,
                 {"admissions": 2, "coverage": 2, "research_requirements": 0},
@@ -339,7 +346,7 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
             orphan.update(
                 {
                     "source_dataset": "kokkoritsu",
-                    "source_version": "5.61",
+                    "source_version": "5.81",
                     "admission_id": "MISSING-1",
                     "university": "不存在大学",
                     "source_url": "https://example.test/orphan",
@@ -521,7 +528,7 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
             prepare_unified_fixture(root)
             crosswalk = (
                 root
-                / "schema/academic_field/academic_field_crosswalk_v0_1.csv"
+                / "schema/academic_field/academic_field_crosswalk_v0_2.csv"
             )
             crosswalk.write_text(
                 crosswalk.read_text(encoding="utf-8").replace(

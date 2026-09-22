@@ -295,13 +295,13 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
         all_rows = search_database(
             database, SearchCriteria(gpa_tenths=38, gpa_mode="all"), limit=0
         )
-        self.assertEqual(safe.summary.total_matched_rows, 743)
-        self.assertEqual(review.summary.total_matched_rows, 1450)
-        self.assertEqual(all_rows.summary.total_matched_rows, 5921)
-        self.assertEqual(all_rows.summary.gpa_safe_match_rows, 743)
-        self.assertEqual(all_rows.summary.gpa_safe_no_match_rows, 456)
-        self.assertEqual(all_rows.summary.gpa_conditional_review_rows, 707)
-        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4015)
+        self.assertEqual(safe.summary.total_matched_rows, 763)
+        self.assertEqual(review.summary.total_matched_rows, 1510)
+        self.assertEqual(all_rows.summary.total_matched_rows, 6411)
+        self.assertEqual(all_rows.summary.gpa_safe_match_rows, 763)
+        self.assertEqual(all_rows.summary.gpa_safe_no_match_rows, 495)
+        self.assertEqual(all_rows.summary.gpa_conditional_review_rows, 747)
+        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4406)
         self.assertEqual(sha256(database), before)
 
     def test_current_grade_requirement_counts_and_rikkyo_boundary(self) -> None:
@@ -318,8 +318,8 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
             ),
             limit=0,
         )
-        self.assertEqual(required.summary.total_matched_rows, 2286)
-        self.assertEqual(overall_38.summary.total_matched_rows, 833)
+        self.assertEqual(required.summary.total_matched_rows, 2373)
+        self.assertEqual(overall_38.summary.total_matched_rows, 871)
 
         base = {"university": ("立教大学",)}
         below = search_database(

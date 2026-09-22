@@ -113,11 +113,17 @@ class FreezePaths:
 
     @property
     def kokkoritsu_master(self) -> Path:
-        return self.repo_root / "data/canonical/kokkoritsu/master.csv"
+        return self.repo_root / (
+            "data/releases/kokkoritsu-v5.61/"
+            "kokkoritsu_early_admissions_2027_master_v5_61.csv"
+        )
 
     @property
     def shidai_master(self) -> Path:
-        return self.repo_root / "data/canonical/shidai/master.csv"
+        return self.repo_root / (
+            "data/releases/shidai-v0.97/"
+            "shidai_early_admissions_2027_master_v0_97.csv"
+        )
 
 
 def sha256(path: Path) -> str:

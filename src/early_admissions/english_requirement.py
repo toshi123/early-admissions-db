@@ -7,15 +7,18 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-ENGLISH_REQUIREMENT_CONTRACT_VERSION = "0.1"
+ENGLISH_REQUIREMENT_CONTRACT_VERSION = "0.2"
 ENGLISH_REQUIREMENT_SCHEMA_PATH = Path(
     "schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"
 )
 ENGLISH_REQUIREMENT_CROSSWALK_PATH = Path(
+    "schema/english_requirement/english_requirement_crosswalk_v0_2.csv"
+)
+ENGLISH_REQUIREMENT_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/english_requirement/english_requirement_crosswalk_v0_1.csv"
 )
 ENGLISH_REQUIREMENT_DESIGN_PATH = Path(
-    "docs/english_requirement_search_design_v0_1.md"
+    "docs/english_requirement_crosswalk_v0_2.md"
 )
 ENGLISH_REQUIREMENT_STATUSES = frozenset(
     {"required", "not_required", "review_required", "unknown", "not_applicable"}
@@ -47,7 +50,9 @@ class EnglishRequirementCrosswalk:
         self._rows = rows
 
     @classmethod
-    def load(cls, path: Path) -> "EnglishRequirementCrosswalk":
+    def load(
+        cls, path: Path, *, expected_version: str = ENGLISH_REQUIREMENT_CONTRACT_VERSION
+    ) -> "EnglishRequirementCrosswalk":
         rows: dict[str, tuple[str, str]] = {}
         with path.open("r", encoding="utf-8", newline="") as handle:
             reader = csv.DictReader(handle)
@@ -55,7 +60,7 @@ class EnglishRequirementCrosswalk:
             if reader.fieldnames != expected:
                 raise ValueError("English requirement crosswalk header mismatch.")
             for row in reader:
-                if row["contract_version"] != ENGLISH_REQUIREMENT_CONTRACT_VERSION:
+                if row["contract_version"] != expected_version:
                     raise ValueError("English requirement crosswalk version mismatch.")
                 raw = row["raw_value"]
                 status = row["requirement_status"]

@@ -4,7 +4,7 @@
   "title": "Early Admissions Site-data build manifest v0.2",
   "type": "object",
   "additionalProperties": false,
-  "required": ["artifact", "manifest_version", "site_data_schema_version", "builder_version", "build_timestamp_utc", "build_id", "publication", "input", "grade_requirement_search", "academic_field_v2", "sharding", "outputs", "counts", "size_report", "validation", "scope_boundary"],
+  "required": ["artifact", "manifest_version", "site_data_schema_version", "builder_version", "build_timestamp_utc", "build_id", "validation_profile", "review_required_counts", "publication", "input", "grade_requirement_search", "academic_field_v2", "sharding", "outputs", "counts", "size_report", "validation", "scope_boundary"],
   "properties": {
     "artifact": {"const": "early_admissions_site_data"},
     "manifest_version": {"const": "1"},
@@ -12,6 +12,11 @@
     "builder_version": {"type": "string"},
     "build_timestamp_utc": {"type": "string"},
     "build_id": {"type": "string", "pattern": "^[0-9a-f]{20}$"},
+    "validation_profile": {"enum": ["production", "candidate_audit"]},
+    "review_required_counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
     "publication": {"type": "object", "required": ["status", "atomic_directory_replacement"]},
     "input": {"type": "object", "required": ["sqlite_path", "sqlite_sha256", "sqlite_size_bytes", "sqlite_build_manifest_path", "sqlite_build_manifest_sha256", "sqlite_schema_version", "sqlite_builder_version", "unified_contract_version", "source_versions", "input_csv_sha256", "gpa_parser_contract_version", "grade_requirement_mapping_contract_version", "grade_requirement_crosswalk_sha256", "academic_field_mapping_contract_version", "academic_field_taxonomy_version", "academic_field_crosswalk_sha256", "academic_field_v2_mapping_contract_version", "academic_field_v2_taxonomy_version", "academic_field_v2_broad_taxonomy_sha256", "academic_field_v2_subcategory_taxonomy_sha256", "academic_field_v2_raw_crosswalk_sha256", "academic_field_v2_context_crosswalk_sha256", "academic_field_v2_compatibility_crosswalk_sha256", "english_requirement_parser_contract_version", "english_requirement_crosswalk_sha256", "prefecture_mapping_contract_version", "prefecture_taxonomy_version", "prefecture_crosswalk_sha256"]},
     "grade_requirement_search": {

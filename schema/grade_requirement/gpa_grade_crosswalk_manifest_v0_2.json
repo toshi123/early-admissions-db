@@ -1,0 +1,92 @@
+{
+  "artifact": "gpa_grade_exact_crosswalk_freeze",
+  "candidate_sources": {
+    "kokkoritsu": "5.81",
+    "shidai": "1.08"
+  },
+  "inputs": {
+    "candidate_masters": {
+      "kokkoritsu": {
+        "path": "sources/incoming/2026-09-22/kokkoritsu_v5_81/kokkoritsu_early_admissions_2027_master_v5_81.csv",
+        "sha256": "d77665c27c2a4deed8f85d73ba6c546fe24fad21ded6a28719d67e2f3b490d6b"
+      },
+      "shidai": {
+        "path": "sources/incoming/2026-09-22/shidai_v1_08/shidai_early_admissions_2027_master_v1_08.csv",
+        "sha256": "7062ae8afb09eabc9aa6118dc0fc44e6170037db8c1f069684b5cdbcd170ce0e"
+      }
+    },
+    "gpa_review_packet": {
+      "path": "validation/reports/update_20260922_v5_81_v1_08/gpa_new_values.csv",
+      "sha256": "987195410e730028c01307f703ce593edeafead0dbec544543a03688e5c3de9d"
+    },
+    "grade_review_packet": {
+      "path": "validation/reports/update_20260922_v5_81_v1_08/grade_requirement_new_values.csv",
+      "sha256": "7f56443a02198c95aee27ffd28d77baafcf78155f9994e8cf1bac3285b74c7f4"
+    },
+    "human_decisions": {
+      "path": "validation/reports/update_20260922_v5_81_v1_08/gpa_grade_human_review_decisions_v0_2.csv",
+      "rows": 63,
+      "sha256": "a9610e5acc0b3c6071c2a24a8a12bfe05b886601e8a5d1a3c0b63eb8e23fe438"
+    },
+    "previous_gpa_crosswalk": {
+      "path": "validation/reports/gpa_requirement_raw_value_audit_v0_1.csv",
+      "sha256": "d111046ce752c2c5ecc4585e1551811e125b23290d4daeb14e496f4fcee24563"
+    },
+    "previous_grade_crosswalk": {
+      "path": "schema/grade_requirement/grade_requirement_crosswalk_v0_1.csv",
+      "sha256": "9b09a7d8c91fb8837fb974c441e9975ed26a02fcb656684a7db304804859882c"
+    }
+  },
+  "matching_policy": "raw exact match only",
+  "operational_projection": {
+    "additional_without_safe_floor": "preserved in human decision artifact; projected as SQL NULL in the existing derived-layer contract",
+    "strict_gpa_safe_subset": "safe_simple_overall only; additional/no-floor rules remain non-definitive in the strict GPA layer"
+  },
+  "outputs": {
+    "gpa_crosswalk": {
+      "path": "validation/reports/gpa_requirement_raw_value_audit_v0_2.csv",
+      "rows": 617,
+      "sha256": "bc6a5416f4b4efe3ce86ed10947e52f556d2a370d6472a2397bd8dbb6c887ffe"
+    },
+    "grade_crosswalk": {
+      "path": "schema/grade_requirement/grade_requirement_crosswalk_v0_2.csv",
+      "rows": 616,
+      "sha256": "6095c2eebfa37a2a97359fa91f270e6a092bb77b06d23dad805a959710aa57c3"
+    }
+  },
+  "packet_correspondence": {
+    "mismatches": 0,
+    "rows": 63,
+    "status": "passed"
+  },
+  "previous_version": "0.1",
+  "review_source": "human review",
+  "reviewed_decision_counts": {
+    "grade_status": {
+      "not_required": 10,
+      "required": 35,
+      "review_required": 13,
+      "unknown": 5
+    },
+    "numeric_status": {
+      "ambiguous": 13,
+      "historical": 1,
+      "no_safe_overall_floor": 6,
+      "non_admission_numeric": 1,
+      "non_binding": 9,
+      "safe_overall_with_additional_conditions": 18,
+      "safe_simple_overall": 11,
+      "unknown": 4
+    },
+    "overall_floor": {
+      "3.5": 2,
+      "3.8": 8,
+      "4.0": 16,
+      "4.1": 2,
+      "4.3": 1,
+      "NULL": 34
+    }
+  },
+  "reviewed_on": "2026-09-22",
+  "version": "0.2"
+}

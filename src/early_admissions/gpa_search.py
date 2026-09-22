@@ -12,9 +12,13 @@ from typing import Any, Iterator, Mapping
 
 
 GPA_PARSER_CONTRACT_VERSION = "0.1"
+GPA_CROSSWALK_VERSION = "0.2"
 GPA_RESULT_MEANING = "overall GPA condition safely matched"
-GPA_AUDIT_PATH = Path(
+GPA_PREVIOUS_AUDIT_PATH = Path(
     "validation/reports/gpa_requirement_raw_value_audit_v0_1.csv"
+)
+GPA_AUDIT_PATH = Path(
+    "validation/reports/gpa_requirement_raw_value_audit_v0_2.csv"
 )
 GPA_SCHEMA_PATH = Path("schema/sqlite/admission_search_gpa_schema_v0_1.sql")
 GPA_DESIGN_PATH = Path("docs/gpa_search_design_v0_1.md")
@@ -114,7 +118,7 @@ class GPASearchResult:
 
 
 class GPACrosswalk:
-    """Exact raw-value allowlist produced by the reviewed v0.1 audit."""
+    """Exact raw-value allowlist produced by the reviewed v0.2 audit."""
 
     def __init__(self, rules: Mapping[str | None, GPARawRule]) -> None:
         self._rules = dict(rules)

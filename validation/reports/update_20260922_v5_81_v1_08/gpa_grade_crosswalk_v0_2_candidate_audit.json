@@ -1,0 +1,229 @@
+{
+  "artifact": "gpa_grade_crosswalk_v0_2_candidate_audit",
+  "candidate_affected_counts_after": {
+    "grade_status": {
+      "not_required": 368,
+      "required": 67,
+      "review_required": 128,
+      "unknown": 33
+    },
+    "numeric_status": {
+      "ambiguous": 128,
+      "historical": 21,
+      "no_safe_overall_floor": 6,
+      "non_admission_numeric": 28,
+      "non_binding": 340,
+      "safe_overall_with_additional_conditions": 38,
+      "safe_simple_overall": 23,
+      "unknown": 12
+    },
+    "overall_floor_tenths": {
+      "35": 15,
+      "38": 19,
+      "40": 24,
+      "41": 2,
+      "43": 1,
+      "NULL": 535
+    }
+  },
+  "crosswalks": {
+    "gpa_sha256": "bc6a5416f4b4efe3ce86ed10947e52f556d2a370d6472a2397bd8dbb6c887ffe",
+    "grade_sha256": "6095c2eebfa37a2a97359fa91f270e6a092bb77b06d23dad805a959710aa57c3",
+    "manifest_sha256": "c21ec28f62188eeec07379a6d61251f2e5727273ecf9605af91d6937fc03b7f9",
+    "new_version": "0.2",
+    "previous_version": "0.1"
+  },
+  "decision_counts_distinct_raw": {
+    "grade_status": {
+      "not_required": 10,
+      "required": 35,
+      "review_required": 13,
+      "unknown": 5
+    },
+    "numeric_status": {
+      "ambiguous": 13,
+      "historical": 1,
+      "no_safe_overall_floor": 6,
+      "non_admission_numeric": 1,
+      "non_binding": 9,
+      "safe_overall_with_additional_conditions": 18,
+      "safe_simple_overall": 11,
+      "unknown": 4
+    },
+    "overall_floor": {
+      "3.5": 2,
+      "3.8": 8,
+      "4.0": 16,
+      "4.1": 2,
+      "4.3": 1,
+      "NULL": 34
+    }
+  },
+  "exact_crosswalk_unmapped": {
+    "affected_admissions": {
+      "gpa_unmapped_after": 0,
+      "gpa_unmapped_before": 596,
+      "grade_unmapped_after": 0,
+      "grade_unmapped_before": 596
+    },
+    "all_candidate_admissions": {
+      "gpa_exact_unmapped_after": 0,
+      "gpa_exact_unmapped_before": 596,
+      "grade_unmapped_after": 0,
+      "grade_unmapped_before": 596
+    }
+  },
+  "packet_correspondence": {
+    "mismatches": 0,
+    "rows": 63,
+    "status": "passed"
+  },
+  "parser_statuses": {
+    "affected_after": {
+      "conditional_review": 44,
+      "historical_reference": 21,
+      "not_numeric": 368,
+      "parsed_safe": 23,
+      "unknown": 12,
+      "unparsed": 128
+    },
+    "affected_before": {
+      "historical_reference": 21,
+      "unparsed": 575
+    },
+    "all_candidate_after": {
+      "conditional_review": 747,
+      "historical_reference": 25,
+      "not_applicable": 1251,
+      "not_numeric": 2309,
+      "parsed_safe": 1258,
+      "unknown": 594,
+      "unparsed": 227
+    },
+    "all_candidate_before": {
+      "conditional_review": 703,
+      "historical_reference": 25,
+      "not_applicable": 1251,
+      "not_numeric": 1941,
+      "parsed_safe": 1235,
+      "unknown": 582,
+      "unparsed": 674
+    }
+  },
+  "profile": "candidate_audit_focused_gpa_grade",
+  "review_required": {
+    "affected_admissions": 128,
+    "distinct_raw_values": 13,
+    "raw_values": [
+      {
+        "candidate_admissions": 5,
+        "raw_value": "なし（数値基準の明示なし）",
+        "review_order": 8
+      },
+      {
+        "candidate_admissions": 1,
+        "raw_value": "アスリート：全体の学習成績の状況3.2以上。トップアスリート：学習成績による出願要件は設定しない。",
+        "review_order": 10
+      },
+      {
+        "candidate_admissions": 10,
+        "raw_value": "プログラム別の学力・履修要件による。",
+        "review_order": 11
+      },
+      {
+        "candidate_admissions": 7,
+        "raw_value": "プログラム別要件による。",
+        "review_order": 12
+      },
+      {
+        "candidate_admissions": 5,
+        "raw_value": "プログラム所定の学力要件による。",
+        "review_order": 13
+      },
+      {
+        "candidate_admissions": 2,
+        "raw_value": "プログラム所定要件による。",
+        "review_order": 14
+      },
+      {
+        "candidate_admissions": 28,
+        "raw_value": "一律の評定平均値基準なし。",
+        "review_order": 15
+      },
+      {
+        "candidate_admissions": 12,
+        "raw_value": "共通の一律評定基準は設けず、専攻・プログラム別の出願資格・能力条件を満たすこと。",
+        "review_order": 45
+      },
+      {
+        "candidate_admissions": 3,
+        "raw_value": "学科別推薦基準による。",
+        "review_order": 49
+      },
+      {
+        "candidate_admissions": 9,
+        "raw_value": "学類別出願要件による",
+        "review_order": 52
+      },
+      {
+        "candidate_admissions": 22,
+        "raw_value": "学類別要件あり（A-lympiad選抜では学習成績概評A又は指定教科4.3以上等）",
+        "review_order": 53
+      },
+      {
+        "candidate_admissions": 6,
+        "raw_value": "学類別要件を募集要項で確認",
+        "review_order": 54
+      },
+      {
+        "candidate_admissions": 18,
+        "raw_value": "指定校・学科別推薦基準による。",
+        "review_order": 56
+      }
+    ],
+    "review_orders": [
+      8,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      45,
+      49,
+      52,
+      53,
+      54,
+      56
+    ]
+  },
+  "rikkyo_2027_sci_03": {
+    "additional_grade_conditions": 1,
+    "english_requirement_status": "required",
+    "english_search_disposition": "safe_exact",
+    "grade_requirement_status": "required",
+    "overall_gpa_min_tenths": 38,
+    "overall_gpa_status": "safe_overall_with_additional_conditions",
+    "record_id": "RIKKYO-2027-SCI-03",
+    "review_order": 41,
+    "source_dataset": "shidai",
+    "source_version": "1.08",
+    "strict_gpa_min_tenths": null,
+    "strict_gpa_parse_status": "conditional_review"
+  },
+  "scope": {
+    "affected_admissions": 596,
+    "affected_by_dataset": {
+      "kokkoritsu": 479,
+      "shidai": 117
+    },
+    "candidate_admissions": 6411,
+    "candidate_sources": {
+      "kokkoritsu": "5.81",
+      "shidai": "1.08"
+    },
+    "full_sqlite_or_site_rebuild_performed": false,
+    "reviewed_distinct_raw_values": 63
+  },
+  "status": "passed"
+}

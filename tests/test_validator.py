@@ -38,8 +38,8 @@ def build_synthetic_repo(root: Path) -> dict[str, dict[str, object]]:
         Path("docs/unified_data_contract.md"),
         Path("docs/unified_field_mapping_v0_1.md"),
         Path("schema/unified/early_admissions_unified_schema_v0_1.json"),
-        Path("schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_61.json"),
-        Path("schema/shidai/shidai_early_admissions_schema_v0_97.json"),
+        Path("schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_81.json"),
+        Path("schema/shidai/shidai_early_admissions_schema_v1_08.json"),
     ]
     for rel_path in contract_paths:
         destination = root / rel_path
@@ -347,14 +347,14 @@ class CanonicalIntegrationTests(unittest.TestCase):
 
         expected_code_counts = {
             "RESEARCH_EXACT_DUPLICATE": 4,
-            "RESEARCH_REQUIRED_WITHOUT_CHILD": 51,
-            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 52,
-            "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 8,
-            "DETAIL_COMPLETENESS_UNMAPPED": 318,
+            "RESEARCH_REQUIRED_WITHOUT_CHILD": 45,
+            "RESEARCH_NOT_REQUIRED_WITH_CHILD": 55,
+            "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 10,
+            "DETAIL_COMPLETENESS_UNMAPPED": 767,
             "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
-            "PROVENANCE_URL_MISSING": 19,
+            "PROVENANCE_URL_MISSING": 55,
             "WHITESPACE_PADDING": 5,
-            "COMMON_TEST_FIELDS_DIFFER": 108,
+            "COMMON_TEST_FIELDS_DIFFER": 109,
             "COVERAGE_ZERO_MASTER_ROWS": 10,
         }
         for code, expected in expected_code_counts.items():
@@ -369,7 +369,7 @@ class CanonicalIntegrationTests(unittest.TestCase):
         self.assertEqual(
             result.metrics["crosswalks"]["kokkoritsu"]
             ["detail_completeness_status"]["unmapped"],
-            318,
+            767,
         )
         self.assertEqual(
             result.metrics["crosswalks"]["kokkoritsu"]

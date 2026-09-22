@@ -1,0 +1,244 @@
+contract_version,raw_value,requirement_status,review_note
+0.2,2024年4月以降受験の実用英語技能検定 英検CSEスコア1700以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,2024年4月以降受験の英検/英検S-CBT 2級以上,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,2024年4月以降受験の英検/英検S-CBT 2級以上、またはGTEC CBT 690点以上,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,2025年4月1日以降実施のTOEFL iBT又はIELTSアカデミック・モジュールを受験していること。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,A基準所定の英語資格・スコア要件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,CEFR A2-3相当の本学指定英語資格・検定試験。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,CEFR A2以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,CEFR A2以上。高水準資格保有者は小論文免除あり。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,CEFR B1以上は選択式出願要件の一つ。英語B1を満たさなくても他の出願要件③～⑤のいずれかで出願可能。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,CEFR B1相当以上の指定英語資格。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,CEFR B1相当以上の英語力。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,CEFR B1相当以上（例：英検2級、TEAP225、IELTS4.0、GTEC930等。要項の基準表による）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,CEFR B2相当以上の高度な英語能力を有することが望ましい。,not_required,Human-reviewed exact raw value; no runtime text inference.
+0.2,Cambridge English 120、英検準2級、GTEC 680、IELTS 4.0、TEAP 135、TEAP CBT 235、TOEFL iBT 42、TOEIC L&R/S&W 625以上等、募集要項所定の英語資格・検定成績（または高等学校長による同等力証明）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,IGSの所定英語能力要件を満たすこと。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,Japanese AまたはJapanese B（HL 5以上／SL 6以上）、English AまたはEnglish B（HL 4以上／SL 5以上）等、募集要項所定の言語要件を満たすこと。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,S基準所定の英語資格・スコア要件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TEAP225 / GTEC930 / 英検CSE1950 / Cambridge140 / TOEIC1150 / IELTS4.0 / TOEFL iBT42 以上のいずれか。4技能必須。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT 38 / TOEIC L&R+S&W 575 / TOEIC Bridge 148 / Cambridge 130 / GTEC 810 / IELTS 3.5 / TEAP 186 / 英検CSE 1728 以上のいずれか,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT 42 / TOEIC L&R+S&W 790 / TOEIC Bridge 170 / Cambridge 140 / GTEC 930 / IELTS 4.0 / TEAP 225 / 英検CSE 1980 以上のいずれか,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT 61以上、TOEIC(L&R)600以上、GTEC1140以上、英検準1級以上、IELTS Academic 5.0以上,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT 61以上、TOEIC(L&R)600以上、GTEC1140以上、英検準1級以上、IELTS Academic 5.0以上。加えてSATスコア又は数学検定準2級以上。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT 80以上またはIELTS Academic 6.0以上,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT 80相当以上、IELTS 6.0以上、IB English所定成績、MUET等のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT 83以上またはIELTS6.5以上,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT48、TOEIC L&R500、英検2級、GTEC1000、IELTS4.5以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT61、TOEIC L&R600、英検準1級、GTEC1140、IELTS5.0以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT、IELTS、TOEIC L&R、GTEC（CBT）、英検のいずれかの成績・合格証明を提出。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT、IELTS、英検等、募集要項指定の英語資格・検定成績を提出。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBT、TOEIC L&R+S&W、TOEIC Bridge、ケンブリッジ英語検定、GTEC、TEAP、IELTS、英検のいずれかのスコアを取得していること。公式ページ上で最低基準点の明示なし。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBTのスコア提出が必要。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL iBTスコア提出。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT又はIELTS Academicを2024-11-01〜2026-10-31に受験しスコア提出必須。最低点の明示なし。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT又はIELTSの所定スコア,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT旧61/新3.5、IELTS5.0、TOEIC4技能980、英検準1級、GTEC1040、TEAP295、Cambridge150以上のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT旧72/新4.0以上、TOEIC L&R785＋S&W310以上、IELTS5.5以上、英検CSE2304以上（準1級以上受験）のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT旧80/新4.5以上、Cambridge C1 Advanced以上、英検1級、国連英検B級、TOEIC L&R785以上、IELTS6.0、TEAP300（各分野70）以上のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEFL iBT（旧方式概ね80点相当／新方式4.5相当）、IELTS 6.0、TOEIC L&R概ね800、英検準1級以上等の指定基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL/IELTS/TOEIC/英検等の英語外部試験成績を提出（要項で指定された試験。得点基準の明示なし）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEFL/TOEIC/IELTS等の所定英語能力証明。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,TOEIC 450以上、TOEFL PBT/ITP 400以上またはiBT32以上、英検2級以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,TOEIC L&R 580以上、TOEFL iBT 60（2026-01-21以降は新形式3.5）以上、英検2級以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,Unknown（2027年度公式動的要項本文の英語資格条件を直接抽出できず、再監査対象）,unknown,原資料から安全に確定できない表現
+0.2,Unknown（2027年度募集要項の数値表を直接抽出できず再監査対象）,unknown,原資料から安全に確定できない表現
+0.2,Unknown（2027年度学校推薦型詳細募集要項で再確認）,unknown,原資料から安全に確定できない表現
+0.2,なし,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,なし（外部英語資格の出願要件なし）,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,グローバル・セミナー入試の募集要項所定の英語要件を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,ケンブリッジ英語検定、IELTS、TOEFL iBTのいずれかを利用。,review_required,「利用」のみで、必須提出か任意利用かを原値だけでは断定できない。
+0.2,ケンブリッジ英語検定、英検、GTEC、IELTS、TEAP、TOEFL iBT、TOEIC L&R＋S&Wのいずれかの4技能スコア提出が必須。得点へ換算。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し4技能スコアを提出。スコア下限は明示なし。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 または指定他言語資格（ドイツ語・フランス語・スペイン語・中国語・韓国語・ロシア語・タイ語・ベトナム語）。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格IIは英語・ドイツ語・フランス語・中国語・韓国語の上位資格条件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"ケンブリッジ英語検定・英検・GTEC・IELTS・TEAP・TOEFL iBTのいずれかを受験し、4技能スコアを提出。最低スコア指定なし。 資格Vは英語上位基準（ケンブリッジ160、英検2,300等）。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"コース別英語基準あり。例：通訳翻訳はケンブリッジ167、英検2,400、GTEC1,247、IELTS6.0、TEAP332、TOEFL旧80/新4.5以上。その他コースは段階的基準。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,一律の外部英語資格必須条件なし。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,個別の外部英語資格要件なし,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,全商簿記実務検定1級。簿記および財務会計Ⅰの履修要件あり。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,全志願者に所定の英語能力証明を求める。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,公式公開Webページでは外部英語資格の必須条件を確認できず。,unknown,原資料から安全に確定できない表現
+0.2,共通テスト外国語を利用,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,共通テスト外国語等（要項参照）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,出願区分に応じて英語資格・検定基準あり（要項概要p.174）。,review_required,外国語検定基準はあるが、英語を含むかを原値だけでは断定できない。
+0.2,出願要件②の資格選択肢の一つとして英検2級以上、GTEC930以上、TOEIC L&R400以上、TOEFL iBT36以上等（簿記・情報資格等でも代替可）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,出願要件となる高度資格・技能の例としてCEFR B2（英検準1級程度）以上。英語以外の資格・技能でも可。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,出願要件の選択肢として募集要項所定の英語資格基準を利用できる。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,出願要件の選択肢の一つとして、英検1級、TOEFL iBT 93以上（2026-01-20以前の試験）又は新スケールのバンドスコア5以上（2026-01-21以降）、IELTS Academic Overall 6.5以上。ドイツ語・フランス語・中国語資格や学部別の非語学資格でも代替可能。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,出願資格の選択肢の一つとして英検2級以上、TOEIC L&R 550以上、TOEIC S&W 240以上、TOEFL iBT 42以上。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,募集要項に定める外部英語能力試験の基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,募集要項所定の英語資格を有すること（英語による中等教育3年以上等の代替規定あり）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,医学科所定の英語外部試験要件あり。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,原則、英語4技能資格・検定でCEFR B2以上。ドイツ語・フランス語・スペイン語・中国語・朝鮮語のいずれかでCEFR B2以上を証明できる場合は、英語はCEFR B1以上。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,原則として英検2級相当以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,国内通常課程では外部英語資格の必須条件なし。海外教育課程ルートではTOEFL/TOEIC/IELTS基準を利用可。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外国語検定基準あり,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,外国語検定成績による加点あり。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外国語能力・活動実績等を評価資料として提出する場合あり。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外国語（英語）の学習成績の状況4.3以上、または2024-04-01以降に英検準2級以上を受験し所定CSEスコア（準2級～2級1728以上、準1級1980以上、1級2304以上）を取得。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外部検定試験利用制度あり（利用は任意）。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語能力試験の基準あり（Cambridge 150、英検CSE 2130、GTEC 1075、IELTS 4.5、TEAP 267、TEAP CBT 508、TOEFL iBT 56等）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外部英語試験スコア利用可（任意）。英検・GTEC・TEAP・IELTS等。試験当日の英語得点と比較し高い方を採用。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語試験利用制度あり。必須ではない。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語試験成績の提出が必須。英検、GTEC、IELTS、TOEFL iBT、TOEIC、TEAP等。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,外部英語資格の一律必須条件なし。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外部英語資格の一律必須条件なし。出願言語は日本語または英語。ドイツ語・フランス語能力も多面的能力の一つとして評価対象となり得る。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外部英語資格の一律必須条件は公式共通ページ上で確認できず。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格の一律必須条件は公開Web上で確認できず。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格の一律必須条件は公開Web本文で確認できず。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格の一律必須条件は共通ページ上で確認できず。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格の出願要件なし,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の出願要件なし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし。外国語の学習成績条件あり。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし。英語履修が必要。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし。英語科目の履修が必要。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし（パイロットコースは別方式のため今回対象外）。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件なし（指定資格は優遇対象になり得る）。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件はない。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件はない。学習成績条件として外国語4.0以上。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格の必須条件は公開済み2027年度入試ガイド上では確認されない（国際教養学部のみ別途外部英語検定スコア要件を明記）。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格の必須条件は簡易要項で明示なし。,unknown,原資料から安全に確定できない表現
+0.2,外部英語資格は一律必須ではない。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,外部英語資格は必須ではない。CEFR B1以上相当の英語外部試験成績は面接点への加点利用可。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格は必須ではない。学科によって保有する外国語検定試験のスコア・級の写しを提出可能。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格は必須ではない。第1次選考で外国語検定試験成績等を提出・評価する場合がある。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格・検定試験の成績提出が必要（募集要項所定の試験）,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,外部英語資格要件なし,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。A推薦の資格で出願する場合は英語の学習成績の状況4.3以上。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。大学入学共通テストでは外国語1科目を受験。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。大学入学共通テストの外国語1科目を利用。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。大学入学共通テスト指定科目に外国語を含む。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。最終選考では大学入学共通テストの英語を利用。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件なし。英語の学習成績の状況4.3以上が必要。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,外部英語資格要件の明示なし,unknown,原資料から安全に確定できない表現
+0.2,大学指定の外国語検定試験基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,大学指定の外国語検定試験基準を満たすこと（公開2027情報では英検2級相当等）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,大学指定の外国語検定試験基準を満たすこと（公開2027情報では英検準1級相当等）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,学科所定の英語外部試験基準あり。,review_required,言語資格または専攻適性条件であり、資格を使わない経路があり得る。
+0.2,学科指定の英語資格・検定試験基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,学部が指定する英語資格・検定試験の基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,学部所定の英語外部試験要件あり。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,学部指定の英語資格・検定試験基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,実用英語技能検定準2級以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,実用英語技能検定準2級以上等、本学指定の英語資格・検定基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,客観的な英語能力証明が必要。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,専攻・プログラム別に英語・ドイツ語・フランス語等の資格基準または専攻適性条件あり。,not_required,Human-reviewed exact raw value; no runtime text inference.
+0.2,必須ではない。評定基準の代替要件として英検CSE1728以上、TOEIC L&R400以上等を利用可。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,必須ではないが、英語資格・検定試験（英検CSE1980以上、GTEC930以上、IELTS4.0以上、TOEFL iBT42以上等）は書類審査で評価対象。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,必須の外部英語資格の一律数値基準なし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,必須の外部英語資格基準なし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,必須資格なし。英検2級以上又はGTEC（4技能）オフィシャルスコア930点以上で英語筆記試験を免除し満点扱い（証明書原本提出）。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,志望専攻・出願要件に応じ、外国語能力を示す資格・実績等の提出を求める。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,指定する外国語資格・検定試験のいずれか1つのスコア・結果を提出、またはIB取得見込み者はIB Predicted Scoreを提出。指定外国語試験は要項上、最低スコア条件なし。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,指定なし,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,指定英語資格・検定試験4技能 CEFR A2以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,指定英語資格・検定試験4技能でCEFR A2以上、または全体の学習成績の状況3.5以上。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,指定英語資格・検定試験を出願受付開始日から遡って2年以内に受験していること。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,指定英語資格（例：英検140以上、GTEC930以上、IELTS4.0以上、TOEFL iBT42以上等）または指定中国語資格。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,指定資格の一例として英検CSE1700以上、GTEC680以上（簿記・IT系資格でも代替可）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,指定資格の選択肢：英検準2級以上、GTEC680以上、TOEIC L&R375以上等（簿記・情報資格等でも可）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,"方式Iは英語基準（ケンブリッジ140、英検1,950等）または指定他言語資格。方式IIは英語の上位基準（ケンブリッジ150、英検2,125、GTEC1,065、IELTS4.5、TEAP267、TOEFL旧57/新3.5以上）。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,本学が指定する英語外部検定試験の受験が必要。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,本学が指定する英語資格・検定試験を受験していること（最低スコア基準の明示なし）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,本学指定の民間英語資格・検定を出願開始日から過去2年以内に受験し、CEFR B1以上相当のスコア又は等級が必要。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,本学指定の民間英語資格・検定を出願開始日から過去2年以内に受験し、成績提供が必要。募集要項上、一般枠のようなCEFR B1以上の最低基準は明示されていない。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,本学換算スコア50点以上（学科要件による）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,本学換算スコア50点以上（評定4.0未満の学力ルート等、学科要件による）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,東京大学指定の英語能力検定試験の結果提出が必要（Route Bは所定の英語による教育歴で免除可）。,review_required,学部によりTOEFL必須性が異なる複合原値。
+0.2,理学部・工学部・基礎工学部はTOEFL iBTスコア提出必須。理学部は所定最低スコアあり。その他は学部別試験で英語を課す場合あり。,review_required,出願資格に応じて英語試験要件があり、英語試験不要の経路があり得る。
+0.2,看護学科所定の英語外部試験要件あり。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,米国教育制度による出願等ではTOEFL iBT等、出願資格に応じた統一試験・英語試験要件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,航空操縦学専攻は所定の英語外部試験基準を満たす必要がある。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検1700以上、GTEC680以上、TEAP135以上、TEAP CBT235以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検1級、TOEFL iBT 100以上／総合バンド5.0以上、TOEIC 900以上、IELTS Academic 7.0以上等、または科学オリンピック等の好成績。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検1級・準1級・2級は加点対象（必須ではない）,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英検2級/CSE1950、TOEFL iBT 3.0(44)〔2026-01-21以降〕または42〔同日前〕、TOEIC L&R+S&W 790、IELTS 4.0、GTEC 930、TEAP 225、Cambridge 140のいずれか（全体3.5以上で資格利用する場合）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検2級以上、GTEC930点以上、TOEIC L&R/S&W 1150点以上、TOEFL iBT 3.0（バンド）/42（従来）以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検2級以上、TOEFL iBT 52点以上、またはTOEIC L&R 500点以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検2級以上、TOEIC520以上、TOEFL iBT48以上、英語スピーチコンテスト都道府県3位以内、1年以上の留学等のいずれか,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,"英検2級相当以上（CSE 1,980以上）または大学指定の同等外部資格基準",required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE 1950、TOEIC L&R＋S&W 790（L&R550・S&W240）、TOEFL iBT 42、IELTS 4.0、Cambridge B1 140、GTEC 930、TEAP 225、TEAP CBT 420のいずれか（2024年4月以降取得）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE 1950以上、TOEIC L&R 550以上、TOEFL iBT 42以上、IELTS 4.0以上、GTEC 930以上、TEAP 225以上、TEAP CBT 420以上のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英検CSE1700以上、GTEC680以上等（簿記・IT系資格でも代替可）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検CSE1700以上（準2級以上）、TOEIC L&R225以上＋S&W160以上、TEAP135以上、GTEC690以上、ケンブリッジ120以上等のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1728、GTEC680、TEAP135、ケンブリッジ120、IELTS3.5、TOEFL iBT34等のいずれか（評定条件との選択）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検CSE1728相当以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1825以上、GTEC805以上等（CEFR A2相当）,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1850以上、TOEIC L&R 480以上、TOEFL iBT 50以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1855相当以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1950、GTEC930、IELTS4.0、TEAP225、TOEFL iBT新3.0（旧42）、TOEIC4技能換算1150以上のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英検CSE1950、GTEC960、TOEFL iBT42、TOEIC L&R+S&W1150、Cambridge140、IELTS4.0、TEAP225、TEAP CBT420以上のいずれか。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1980 / TOEIC L&R550＋S&W240 / TOEFL iBT 42（2026-01-20以前）または3.0（2026-01-21以降）/ TEAP225 / IELTS4.0 / GTEC930 以上のいずれか。4技能等の所定条件あり。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE1980相当以上,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSEスコア2050以上、TOEIC L&R 500以上、またはTOEIC L&R/S&W 740以上等、募集要項所定の英語資格条件。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検CSE・TOEFL iBT・IELTS・TEAP・GTECのいずれかのスコア提出を推奨。出願基準スコアなし。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英検、TOEIC L&R、TOEFL iBT、IELTS Academic、GTEC等の外部英語試験成績を提出（募集要項所定の有効期間）。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検、TOEIC L&R、TOEFL iBT、IELTS、GTEC、TEAP等のいずれかのスコア提出。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英検、ケンブリッジ英語検定／Linguaskill、GTEC、IELTS、TEAP、TOEFL iBTのいずれかについて、要項所定の結果証明書を提出できること。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検・TOEFL iBT・TOEIC L&R・IELTS・Duolingo English Testのいずれかを受験し証明書提出。最低スコア指定なし。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検準1級以上、TOEFL iBTまたはIELTS Academic等、募集要項所定の英語資格基準を満たすこと。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検準1級以上、TOEFL iBT所定基準、TOEIC L&R 600点以上等の英語資格要件,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検準1級以上、TOEIC L&R730以上かつSpeaking130以上・Writing140以上、TOEFL iBT旧72/新3.5以上、TEAP300以上、IELTS5.5以上のいずれか。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英検準1級相当の英語資格、約1年間の海外高校留学、IB Diploma等、募集要項所定のいずれかの要件を満たす。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検準1級相当以上を基本要件とし、直近3年以上を英語で教育された場合の代替規定あり。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検準2級プラス/CSE1829以上、GTEC818以上等,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検準2級以上/全商英検2級以上等,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英検準2級以上等、実用数学技能検定2級以上、又は同等以上の資格のいずれか。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検準2級以上等、実用数学技能検定2級以上、日本農業技術検定3級以上、日商簿記2級以上、アグリマイスターシルバー以上等のいずれか。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英検準2級以上等、要項記載の資格のいずれか,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語4技能検定CEFR B1相当以上（例：英検2級以上等）,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語4技能資格・検定でCEFR B2以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語4技能資格・検定試験のスコア提出必須（Grade7〜12のうち5学年以上を英語で教育された者は免除）。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語4技能資格・検定試験の成績を選考に使用。英検CSE1980、TEAP225、TOEFL iBT42（旧尺度）/3（新尺度）、IELTS4.0、TOEIC L&R+S&W790、GTEC930、Cambridge140等を最低評価基準として使用。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語で学修するための所定英語能力証明。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語で行われる学士課程。英語能力検定結果が原則必要（英語による教育歴により免除あり）。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語による4年制学士課程のため所定の英語能力要件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語による学位プログラムのため所定の英語能力要件あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語による授業履修を前提とする秋季入学入試。詳細要件は2027年度募集要項公表後に最終確認。,unknown,英語授業前提だが2027年度の具体的な外部資格要件が未公表。
+0.2,英語による教育歴4年以上、又はTOEFL iBT 79相当以上 / IELTS 6.0以上 / Duolingo 110以上等。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語の学習成績の状況4.0以上、英検準1級以上、TOEIC L&R 650以上、TOEFL iBT新形式4点以上（旧形式72点以上）のいずれか。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語はTOEFL iBT旧61/新3.5以上、英検CSE等の指定基準あり。独・仏・中・西語でも出願可。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語はTOEFL iBT旧68/新4.0、英検準1級、国連英検B級、TOEIC4技能合計940、IELTS6.0、TEAP280、GTEC1180、Cambridge B2 First等。独・仏・中・西・朝鮮語にも指定基準あり。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語基準：ケンブリッジ120、英検1,700、GTEC930、IELTS4.0、TEAP135、TOEFL旧42/新3.0、TOEIC合算625以上。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新3.5、TOEIC合算1,560以上。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語基準：ケンブリッジ160、英検2,300、GTEC1,180、IELTS5.5、TEAP309、TOEFL旧72/新4.0以上、または指定ドイツ語・フランス語資格。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語外部検定活用方式あり。外部英語資格は一律必須ではない。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部試験スコアを英語得点として利用可能（必須要件ではない）。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部試験スコアレポート提出必須,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語外部試験利用で加点可。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部試験利用制度あり。基準スコアを満たす場合は合否判定で加点。外部英語資格は一律必須ではない。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部試験利用制度あり。基準スコアを満たす場合は合否判定で考慮。外部英語資格は一律必須ではない。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部試験結果（スコア）利用可。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部資格は任意提出。実用英語技能検定、GTEC等のスコア認定書写しを自己PRの一つとして書類審査の参考にする。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語外部資格は方式により書類審査加点対象。CEFR B1以上相当の資格等を利用する運用あり。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語学位プログラムの所定英語能力要件。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語検定等は出願必須ではないが、各種検定・資格試験の成績や活動実績を調査書評価に加算。,not_required,外部英語資格を必須としないことを完全一致で確認
+0.2,英語検定試験でCEFR B1以上。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語民間試験スコアを面接時の参考資料として提出。,required,外部英語資格・検定または得点の必須条件を完全一致で確認
+0.2,英語能力を証明する指定外部試験の公式スコア提出必須。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語能力証明書を提出。ただしIBDPでEnglish A履修済み/履修中なら任意。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語資格B,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語資格B+,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,"英語資格の受験・スコア提出が必須。さらに、英語上位基準（ケンブリッジ160、英検2,300等）またはドイツ語・フランス語・スペイン語・中国語・韓国語の指定資格を満たす。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC L&R＋2.5×S&W 合計1,150以上。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 またはTOEIC合算1,150以上。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ140、英検CSE 1,950、GTEC 930、IELTS 4.0、TEAP 225、TOEFL iBT旧42 / 新Overall 3.0以上のいずれか。 または指定他言語資格。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ146、英検CSE 2,067、GTEC 1,027、IELTS 4.5、TEAP 253、TOEFL iBT旧52 / 新Overall 3.5以上のいずれか。 または指定他言語資格。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"英語資格の基準あり：ケンブリッジ160、英検CSE 2,300、GTEC 1,180、IELTS 5.5、TEAP 309、TOEFL iBT旧72 / 新Overall 3.5以上のいずれか。 またはTOEIC合算1,560以上。",required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語資格・英語活動等の要件あり（募集要項参照）,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語資格基準あり（例：英検CSE2304以上、TOEFL iBT旧72/新4.0、IELTS5.5等）。,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語資格等の必須条件なし。,not_required,Human-reviewed exact raw value; no runtime text inference.
+0.2,英語資格要件AまたはB（学部・評定等により異なる）。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語資格（CEFR A2以上）または全国工業高等学校長協会ジュニアマイスター顕彰制度の区分表で資格・検定等のポイントを5ポイント以上。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,英語資格（CEFR A2以上）または建築系の所定資格・検定等で基準を満たすこと。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,要項確認,unknown,原資料から安全に確定できない表現
+0.2,評定3.5以上ルートでは、TOEIC L&R/S&W 1150以上、TOEFL iBT 42以上、TEAP 225以上、IELTS 4.0以上、GTEC 930以上、英検CSE 1950以上、Cambridge 140以上のいずれか。,review_required,代替・分岐・適用範囲等があり自動判定しない
+0.2,高水準の外国語検定基準あり,required,高水準の外国語検定基準あり。English search policyに従いrequired。
+0.2,高水準の英語資格基準あり,required,Human-reviewed exact raw value; no runtime text inference.
+0.2,"高英語基準：ケンブリッジ167、英検2,400、GTEC1,237、IELTS6.0、TEAP332、TOEFL旧80/新4.0、TOEIC合算1,660以上。",required,Human-reviewed exact raw value; no runtime text inference.

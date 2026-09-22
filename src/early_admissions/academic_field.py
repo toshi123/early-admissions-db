@@ -8,12 +8,15 @@ from pathlib import Path
 from typing import Iterator
 
 
-ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION = "0.1"
+ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION = "0.2"
 ACADEMIC_FIELD_TAXONOMY_VERSION = "0.1"
 ACADEMIC_FIELD_TAXONOMY_PATH = Path(
     "schema/academic_field/academic_field_taxonomy_v0_1.csv"
 )
 ACADEMIC_FIELD_CROSSWALK_PATH = Path(
+    "schema/academic_field/academic_field_crosswalk_v0_2.csv"
+)
+ACADEMIC_FIELD_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/academic_field/academic_field_crosswalk_v0_1.csv"
 )
 ACADEMIC_FIELD_SCHEMA_PATH = Path(
@@ -25,7 +28,7 @@ ACADEMIC_FIELD_TAXONOMY_SHA256 = (
     "f1f52d0282618eb5b22d3c420010718eb30f4ec14ad889dd574f218a5743a9f2"
 )
 ACADEMIC_FIELD_CROSSWALK_SHA256 = (
-    "8f2c8034395cf7ceebb9675b966d34b638b94cb50569bb90bc426091bac4e762"
+    "74162005e676a89c515a95d24bb78548df7ce6709fb04eb28c3ff14b57c99ab8"
 )
 
 FROZEN_MAPPING_STATUSES = frozenset({"single", "multi", "review_required"})
@@ -171,7 +174,11 @@ class AcademicFieldCrosswalk:
 
     @classmethod
     def load(
-        cls, path: Path, taxonomy: AcademicFieldTaxonomy
+        cls,
+        path: Path,
+        taxonomy: AcademicFieldTaxonomy,
+        *,
+        expected_version: str = ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION,
     ) -> "AcademicFieldCrosswalk":
         reader = _validated_csv_reader(path, CROSSWALK_HEADER)
         handle = reader._academic_field_handle  # type: ignore[attr-defined]
@@ -182,7 +189,7 @@ class AcademicFieldCrosswalk:
         grouped: dict[str, list[tuple[int, dict[str, str]]]] = {}
         raw_order: list[str] = []
         for line_number, row in enumerate(rows, start=2):
-            if row["mapping_contract_version"] != ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION:
+            if row["mapping_contract_version"] != expected_version:
                 raise AcademicFieldContractError(
                     f"Unexpected mapping contract version at {path}:{line_number}"
                 )
@@ -298,7 +305,9 @@ class AcademicFieldCrosswalk:
             raw_value=raw_value,
             mapping_status="unmapped",
             group_codes=(),
-            review_note="Exact raw value is absent from frozen crosswalk v0.1.",
+            review_note=(
+                "Exact raw value is absent from the active frozen academic-field crosswalk."
+            ),
         )
 
     def __len__(self) -> int:

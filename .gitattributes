@@ -1,0 +1,5 @@
+# Canonical and versioned source CSV bytes are authoritative. The source
+# validator reports leading/trailing whitespace without rewriting raw values.
+data/canonical/**/*.csv -whitespace
+data/releases/**/*.csv -whitespace
+sources/incoming/**/*.csv -whitespace

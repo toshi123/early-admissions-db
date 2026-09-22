@@ -13,11 +13,13 @@ from .academic_field import (
     ACADEMIC_FIELD_TAXONOMY_VERSION,
     GENERATED_MAPPING_STATUSES,
 )
-from .academic_field_v0_2 import MAPPING_VERSION as ACADEMIC_FIELD_V2_MAPPING_VERSION
-from .academic_field_v0_2 import TAXONOMY_VERSION as ACADEMIC_FIELD_V2_TAXONOMY_VERSION
+from .academic_field_v2 import (
+    MAPPING_VERSION as ACADEMIC_FIELD_V2_MAPPING_VERSION,
+    TAXONOMY_VERSION as ACADEMIC_FIELD_V2_TAXONOMY_VERSION,
+)
 from .gpa_search import GPA_PARSER_CONTRACT_VERSION
 from .grade_requirement import (
-    GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION,
+    GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS,
     GRADE_REQUIREMENT_STATUSES,
 )
 from .english_requirement import ENGLISH_REQUIREMENT_CONTRACT_VERSION
@@ -26,6 +28,15 @@ from .prefecture_search import PREFECTURE_MAPPING_CONTRACT_VERSION, PREFECTURE_T
 
 SEARCH_CONTRACT_VERSION = "0.1"
 GPA_MODES = frozenset({"safe", "review", "all"})
+SUPPORTED_ACADEMIC_FIELD_MAPPING_VERSIONS = frozenset(
+    {"0.1", ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION}
+)
+SUPPORTED_ACADEMIC_FIELD_V2_MAPPING_VERSIONS = frozenset(
+    {"0.2", ACADEMIC_FIELD_V2_MAPPING_VERSION}
+)
+SUPPORTED_ENGLISH_REQUIREMENT_VERSIONS = frozenset(
+    {"0.1", ENGLISH_REQUIREMENT_CONTRACT_VERSION}
+)
 
 # SQL identifiers are fixed by this module. User values are always bound parameters.
 MULTI_VALUE_FIELDS: tuple[str, ...] = (
@@ -323,19 +334,18 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         raise StructuredSearchError("SQLite database schema version is not 0.1.")
     if rows[0]["gpa_parser_contract_version"] != GPA_PARSER_CONTRACT_VERSION:
         raise StructuredSearchError("GPA parser contract version is incompatible.")
-    if (
-        rows[0]["grade_requirement_mapping_contract_version"]
-        != GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION
+    if rows[0]["grade_requirement_mapping_contract_version"] not in (
+        GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS
     ):
         raise StructuredSearchError("Grade-requirement contract version is incompatible.")
     if (
         rows[0]["academic_field_mapping_contract_version"]
-        != ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION
+        not in SUPPORTED_ACADEMIC_FIELD_MAPPING_VERSIONS
     ):
         raise StructuredSearchError(
             "Academic-field mapping contract version is incompatible."
         )
-    if rows[0]["english_requirement_parser_contract_version"] != ENGLISH_REQUIREMENT_CONTRACT_VERSION:
+    if rows[0]["english_requirement_parser_contract_version"] not in SUPPORTED_ENGLISH_REQUIREMENT_VERSIONS:
         raise StructuredSearchError("English-requirement contract version is incompatible.")
     if rows[0]["prefecture_mapping_contract_version"] != PREFECTURE_MAPPING_CONTRACT_VERSION or rows[0]["prefecture_taxonomy_version"] != PREFECTURE_TAXONOMY_VERSION:
         raise StructuredSearchError("Prefecture membership contract is incompatible.")
@@ -348,7 +358,7 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         )
     if (
         rows[0]["academic_field_v2_mapping_contract_version"]
-        != ACADEMIC_FIELD_V2_MAPPING_VERSION
+        not in SUPPORTED_ACADEMIC_FIELD_V2_MAPPING_VERSIONS
         or rows[0]["academic_field_v2_taxonomy_version"]
         != ACADEMIC_FIELD_V2_TAXONOMY_VERSION
     ):

@@ -1,0 +1,4 @@
+#!/usr/bin/env python3
+from early_admissions.english_academic_crosswalk_update import main
+
+raise SystemExit(main())

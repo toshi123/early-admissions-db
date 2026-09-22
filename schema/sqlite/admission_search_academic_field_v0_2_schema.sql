@@ -46,7 +46,7 @@ CREATE TABLE admission_search_academic_fields_v2 (
     context_mapping_effect TEXT NOT NULL
         CHECK (context_mapping_effect IN ('none', 'additive', 'authoritative')),
     mapping_contract_version TEXT NOT NULL
-        CHECK (mapping_contract_version = '0.2'),
+        CHECK (mapping_contract_version = '0.3'),
     taxonomy_version TEXT NOT NULL CHECK (taxonomy_version = '0.2'),
     review_note TEXT,
     CHECK (

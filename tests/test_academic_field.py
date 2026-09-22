@@ -33,7 +33,7 @@ class AcademicFieldCrosswalkTests(unittest.TestCase):
     def setUpClass(cls) -> None:
         cls.taxonomy = AcademicFieldTaxonomy.load(TAXONOMY_PATH)
         cls.crosswalk = AcademicFieldCrosswalk.load(
-            CROSSWALK_PATH, cls.taxonomy
+            CROSSWALK_PATH, cls.taxonomy, expected_version="0.1"
         )
 
     def test_freeze_regression_and_hashes(self) -> None:
@@ -101,11 +101,19 @@ class AcademicFieldCrosswalkTests(unittest.TestCase):
         self.assertEqual(null_mapping.mapping_status, "not_applicable")
         self.assertEqual(null_mapping.group_codes, ())
 
-    def test_current_unified_raw_vocabulary_equals_freeze(self) -> None:
-        with (
-            REPO_ROOT / "data/canonical/unified/master.csv"
-        ).open("r", encoding="utf-8", newline="") as handle:
-            values = {row["academic_field"] for row in csv.DictReader(handle)}
+    def test_v5_61_v0_97_raw_vocabulary_equals_historical_freeze(self) -> None:
+        values: set[str] = set()
+        paths = (
+            REPO_ROOT
+            / "data/releases/kokkoritsu-v5.61/"
+            "kokkoritsu_early_admissions_2027_master_v5_61.csv",
+            REPO_ROOT
+            / "data/releases/shidai-v0.97/"
+            "shidai_early_admissions_2027_master_v0_97.csv",
+        )
+        for path in paths:
+            with path.open("r", encoding="utf-8-sig", newline="") as handle:
+                values.update(row["academic_field"] for row in csv.DictReader(handle))
         self.assertNotIn("", values)
         self.assertEqual(values, set(self.crosswalk.by_raw_value))
 
@@ -119,7 +127,9 @@ class AcademicFieldCrosswalkTests(unittest.TestCase):
                 newline="",
             )
             with self.assertRaisesRegex(AcademicFieldContractError, "Unknown group"):
-                AcademicFieldCrosswalk.load(corrupted, self.taxonomy)
+                AcademicFieldCrosswalk.load(
+                    corrupted, self.taxonomy, expected_version="0.1"
+                )
 
 
 if __name__ == "__main__":

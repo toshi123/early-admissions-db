@@ -10,7 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 class EnglishRequirementTests(unittest.TestCase):
     def setUp(self) -> None:
         self.crosswalk = EnglishRequirementCrosswalk.load(
-            ROOT / "schema/english_requirement/english_requirement_crosswalk_v0_1.csv"
+            ROOT / "schema/english_requirement/english_requirement_crosswalk_v0_1.csv",
+            expected_version="0.1",
         )
 
     def test_exact_crosswalk_is_fail_closed(self) -> None:

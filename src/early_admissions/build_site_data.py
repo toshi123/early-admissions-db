@@ -15,6 +15,7 @@ from .site_data_builder import (
     SiteDataBuildError,
     SiteDataBuildPipeline,
 )
+from .validation_profile import PRODUCTION_PROFILE
 
 
 def default_repo_root() -> Path:
@@ -30,6 +31,21 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sqlite-manifest", type=Path, default=DEFAULT_SQLITE_MANIFEST)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--qa-report", type=Path, default=DEFAULT_QA_REPORT)
+    parser.add_argument(
+        "--validation-profile",
+        choices=("production", "candidate-audit"),
+        default=PRODUCTION_PROFILE,
+        help=(
+            "Validation policy (default: production). candidate-audit requires "
+            "a matching inspection-only SQLite input."
+        ),
+    )
+    parser.add_argument(
+        "--build-timestamp-utc",
+        help=(
+            "Optional deterministic UTC timestamp recorded in the Site-data manifest."
+        ),
+    )
     parser.add_argument("--quiet", action="store_true")
     return parser
 
@@ -43,12 +59,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             sqlite_manifest_path=args.sqlite_manifest,
             output_dir=args.output_dir,
             qa_report_path=args.qa_report,
+            validation_profile=args.validation_profile,
+            build_timestamp_utc=args.build_timestamp_utc,
         ).build()
     except (OSError, KeyError, TypeError, ValueError, SiteDataBuildError) as error:
         print(f"Site-data build failed: {error}", file=sys.stderr)
         return 1
     if not args.quiet:
         print("Site-data build status: passed")
+        print(f"Validation profile: {args.validation_profile}")
         print(f"Build ID: {result.build_id}")
         print(
             "Rows: "

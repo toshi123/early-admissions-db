@@ -39,10 +39,13 @@ from .academic_field_v2 import (
     ACADEMIC_FIELD_V2_RAW_PATH,
     ACADEMIC_FIELD_V2_SCHEMA_PATH,
     ACADEMIC_FIELD_V2_SUBCATEGORY_PATH,
+    MAPPING_VERSION as ACADEMIC_FIELD_V2_MAPPING_VERSION,
+    TAXONOMY_VERSION as ACADEMIC_FIELD_V2_TAXONOMY_VERSION,
     AcademicFieldV2Contract,
 )
 from .gpa_search import (
     GPA_AUDIT_PATH,
+    GPA_CROSSWALK_VERSION,
     GPA_DESIGN_PATH,
     GPA_PARSER_CONTRACT_VERSION,
     GPA_SCHEMA_PATH,
@@ -70,6 +73,12 @@ from .prefecture_search import (
     PREFECTURE_TAXONOMY_SHA256, PREFECTURE_TAXONOMY_VERSION,
     PrefectureCrosswalk, PrefectureTaxonomy,
 )
+from .validation_profile import (
+    CANDIDATE_AUDIT_PROFILE,
+    PRODUCTION_PROFILE,
+    normalize_validation_profile,
+    publication_status,
+)
 
 
 DEFAULT_OUTPUT_DIR = Path("data/derived/sqlite")
@@ -79,7 +88,7 @@ UNIFIED_MANIFEST = UNIFIED_DIR / "build_manifest.json"
 SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql")
 SQLITE_DESIGN = Path("docs/sqlite_design_v0_1.md")
 DATABASE_SCHEMA_VERSION = "0.1"
-BUILDER_VERSION = "0.7.0"
+BUILDER_VERSION = "0.8.0"
 GPA_REGRESSION_TENTHS = (30, 35, 38, 40, 45)
 
 TABLE_ORDER = ("master", "coverage", "research_requirements")
@@ -172,12 +181,27 @@ class SQLiteBuildPipeline:
         repo_root: Path | str,
         *,
         output_dir: Path | str = DEFAULT_OUTPUT_DIR,
+        validation_profile: str = PRODUCTION_PROFILE,
+        audit_review_counts: Mapping[str, int] | None = None,
+        build_timestamp_utc: str | None = None,
     ) -> None:
         self.repo_root = Path(repo_root).resolve()
         output_path = Path(output_dir)
         self.output_dir = (
             output_path if output_path.is_absolute() else self.repo_root / output_path
         )
+        self.validation_profile = normalize_validation_profile(validation_profile)
+        self.build_timestamp_utc = build_timestamp_utc
+        self.audit_review_counts = dict(audit_review_counts or {})
+        if self.validation_profile == PRODUCTION_PROFILE and self.audit_review_counts:
+            raise ValueError(
+                "audit_review_counts may only be supplied for candidate-audit builds."
+            )
+        if any(
+            not isinstance(value, int) or value < 0
+            for value in self.audit_review_counts.values()
+        ):
+            raise ValueError("audit_review_counts values must be non-negative integers.")
         self.database_path = self.output_dir / DATABASE_FILENAME
         self.input_dir = self.repo_root / UNIFIED_DIR
         self.input_manifest_path = self.repo_root / UNIFIED_MANIFEST
@@ -398,7 +422,14 @@ class SQLiteBuildPipeline:
                     connection, english_requirement_crosswalk
                 )
                 prefecture_build = self._load_prefecture_layer(connection, prefecture_taxonomy, prefecture_crosswalk)
-                built_at = utc_timestamp()
+                review_required_counts = self._collect_review_required_counts(
+                    gpa_build=gpa_build,
+                    grade_requirement_build=grade_requirement_build,
+                    academic_field_build=academic_field_build,
+                    academic_field_v2_build=academic_field_v2_build,
+                    english_requirement_build=english_requirement_build,
+                )
+                built_at = self.build_timestamp_utc or utc_timestamp()
                 self._insert_build_metadata(
                     connection,
                     inputs=inputs,
@@ -428,6 +459,7 @@ class SQLiteBuildPipeline:
                     capabilities=capabilities,
                     built_at=built_at,
                     source_versions=source_versions,
+                    review_required_counts=review_required_counts,
                 )
                 connection.commit()
                 connection.execute("ANALYZE")
@@ -462,6 +494,7 @@ class SQLiteBuildPipeline:
                     capabilities=capabilities,
                     built_at=built_at,
                     source_versions=source_versions,
+                    review_required_counts=review_required_counts,
                 )
                 validation["input_preflight"] = {
                     "status": "passed",
@@ -563,6 +596,7 @@ class SQLiteBuildPipeline:
                 validation=validation,
                 database_sha=database_sha,
                 database_size=database_size,
+                review_required_counts=review_required_counts,
             )
 
             publish_dir = work_root / "publish"
@@ -879,6 +913,7 @@ class SQLiteBuildPipeline:
         """
         parsed_rows: list[tuple[Any, ...]] = []
         classification_counts: Counter[str] = Counter()
+        parse_status_counts: Counter[str] = Counter()
         safe_minima: list[int] = []
         unparsed_record_ids: list[str] = []
         rows = connection.execute(
@@ -897,6 +932,7 @@ class SQLiteBuildPipeline:
                 fallback_previous_year=row["fallback_previous_year"],
             )
             classification_counts[result.numeric_safety_tier] += 1
+            parse_status_counts[result.parse_status] += 1
             if result.gpa_min_tenths is not None:
                 safe_minima.append(result.gpa_min_tenths)
             if result.parse_status == "unparsed" and len(unparsed_record_ids) < 10:
@@ -913,6 +949,7 @@ class SQLiteBuildPipeline:
         }
         return {
             "parser_contract_version": GPA_PARSER_CONTRACT_VERSION,
+            "crosswalk_version": GPA_CROSSWALK_VERSION,
             "crosswalk_distinct_raw_values": len(crosswalk),
             "classification_counts": {
                 tier: classification_counts.get(tier, 0)
@@ -922,6 +959,7 @@ class SQLiteBuildPipeline:
                     "do_not_numeric",
                 )
             },
+            "parse_status_counts": dict(sorted(parse_status_counts.items())),
             "safe_match_counts": match_counts,
             "rule_group_rows": 0,
             "clause_rows": 0,
@@ -1156,7 +1194,7 @@ class SQLiteBuildPipeline:
                     item.display_order,
                     item.description,
                     item.status,
-                    "0.2",
+                    ACADEMIC_FIELD_V2_TAXONOMY_VERSION,
                 )
                 for item in contract.broad_groups
             ),
@@ -1176,7 +1214,7 @@ class SQLiteBuildPipeline:
                     item.display_order,
                     item.description,
                     item.ui_status,
-                    "0.2",
+                    ACADEMIC_FIELD_V2_TAXONOMY_VERSION,
                 )
                 for item in contract.subcategories
             ),
@@ -1322,8 +1360,8 @@ class SQLiteBuildPipeline:
             "not_applicable",
         )
         return {
-            "taxonomy_version": "0.2",
-            "mapping_contract_version": "0.2",
+            "taxonomy_version": ACADEMIC_FIELD_V2_TAXONOMY_VERSION,
+            "mapping_contract_version": ACADEMIC_FIELD_V2_MAPPING_VERSION,
             "broad_taxonomy_rows": len(contract.broad_groups),
             "subcategory_taxonomy_rows": len(contract.subcategories),
             "raw_crosswalk_keys": len(contract.raw_mappings),
@@ -1444,8 +1482,59 @@ class SQLiteBuildPipeline:
         connection.executemany("INSERT INTO admission_search_prefecture_memberships VALUES (?, ?, ?, ?, ?)",children)
         return {"mapping_contract_version":PREFECTURE_MAPPING_CONTRACT_VERSION,"taxonomy_version":PREFECTURE_TAXONOMY_VERSION,"crosswalk_distinct_raw_values":len(crosswalk),"parent_rows":len(parents),"membership_rows":len(children),"classification_counts":{s:counts.get(s,0) for s in ("single","multi","review_required","unmapped","not_applicable")},"membership_counts":dict(sorted(memberships.items())),"raw_mismatch_rows":0}
 
-    @staticmethod
+    def _collect_review_required_counts(
+        self,
+        *,
+        gpa_build: Mapping[str, Any],
+        grade_requirement_build: Mapping[str, Any],
+        academic_field_build: Mapping[str, Any],
+        academic_field_v2_build: Mapping[str, Any],
+        english_requirement_build: Mapping[str, Any],
+    ) -> dict[str, int]:
+        measured = {
+            "gpa_unparsed_admissions": gpa_build["parse_status_counts"].get(
+                "unparsed", 0
+            ),
+            "grade_unmapped_admissions": grade_requirement_build[
+                "classification_counts"
+            ]["unmapped"],
+            "english_unmapped_admissions": english_requirement_build[
+                "classification_counts"
+            ]["unmapped"],
+            "academic_field_unmapped_admissions": academic_field_build[
+                "classification_counts"
+            ]["unmapped"],
+            "academic_field_v2_unmapped_admissions": academic_field_v2_build[
+                "unmapped"
+            ],
+        }
+        allowed_external = {
+            "gpa_new_unmapped_admissions",
+            "academic_field_context_review",
+        }
+        unknown = set(self.audit_review_counts).difference(
+            set(measured) | allowed_external
+        )
+        if unknown:
+            raise SQLiteBuildError(
+                "Unknown audit review count keys: " + ", ".join(sorted(unknown))
+            )
+        for key, expected in self.audit_review_counts.items():
+            if key in measured and measured[key] != expected:
+                raise SQLiteBuildError(
+                    f"Audit review count mismatch for {key}: "
+                    f"measured={measured[key]}, supplied={expected}."
+                )
+        measured["academic_field_context_review"] = self.audit_review_counts.get(
+            "academic_field_context_review", 0
+        )
+        measured["gpa_new_unmapped_admissions"] = self.audit_review_counts.get(
+            "gpa_new_unmapped_admissions", 0
+        )
+        return measured
+
     def _insert_build_metadata(
+        self,
         connection: sqlite3.Connection,
         *,
         inputs: Mapping[str, CSVInput],
@@ -1475,6 +1564,7 @@ class SQLiteBuildPipeline:
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
+        review_required_counts: Mapping[str, int],
     ) -> None:
         hashes = {TABLE_FILES[table]: inputs[table].sha256 for table in TABLE_ORDER}
         values = (
@@ -1484,6 +1574,8 @@ class SQLiteBuildPipeline:
             unified_manifest["schema_id"],
             built_at,
             BUILDER_VERSION,
+            self.validation_profile,
+            canonical_json(review_required_counts),
             capabilities.sqlite_version,
             int(capabilities.profile != "none"),
             capabilities.profile,
@@ -1568,6 +1660,7 @@ class SQLiteBuildPipeline:
             INSERT INTO build_metadata (
                 singleton_id, database_schema_version, unified_contract_version,
                 unified_schema_id, build_timestamp_utc, builder_version,
+                validation_profile, review_required_counts_json,
                 sqlite_library_version, fts5_enabled, fts_tokenizer,
                 source_versions_json, input_csv_sha256_json,
                 input_build_manifest_sha256, schema_sql_sha256,
@@ -1666,6 +1759,7 @@ class SQLiteBuildPipeline:
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
+        review_required_counts: Mapping[str, int],
     ) -> dict[str, Any]:
         counts = self._validate_counts(connection, inputs)
         relational = self._validate_relations(connection)
@@ -1720,11 +1814,20 @@ class SQLiteBuildPipeline:
             capabilities=capabilities,
             built_at=built_at,
             source_versions=source_versions,
+            review_required_counts=review_required_counts,
         )
         fts = self._validate_fts(connection, capabilities, counts["admissions"])
         structured_queries = self._validate_structured_queries(connection)
         return {
             "status": "passed",
+            "validation_profile": self.validation_profile,
+            "blocker_taxonomy": {
+                "technical_errors": "hard_error_in_all_profiles",
+                "reviewable_unmapped": (
+                    "hard_error_in_production_review_required_in_candidate_audit"
+                ),
+            },
+            "review_required_counts": dict(review_required_counts),
             "base_table_counts": counts,
             "logical_keys_and_relations": relational,
             "null_boolean_tristate_semantics": semantics,
@@ -2410,18 +2513,23 @@ class SQLiteBuildPipeline:
         version_mismatches = connection.execute(
             """
             SELECT COUNT(*) FROM admission_search_academic_fields_v2
-            WHERE mapping_contract_version <> '0.2'
-               OR taxonomy_version <> '0.2'
-            """
+            WHERE mapping_contract_version <> ?
+               OR taxonomy_version <> ?
+            """,
+            (
+                expected["mapping_contract_version"],
+                expected["taxonomy_version"],
+            ),
         ).fetchone()[0]
         taxonomy_version_mismatches = connection.execute(
             """
             SELECT
               (SELECT COUNT(*) FROM academic_field_v2_broad_taxonomy
-               WHERE taxonomy_version <> '0.2') +
+               WHERE taxonomy_version <> ?) +
               (SELECT COUNT(*) FROM academic_field_v2_subcategory_taxonomy
-               WHERE taxonomy_version <> '0.2')
-            """
+               WHERE taxonomy_version <> ?)
+            """,
+            (expected["taxonomy_version"], expected["taxonomy_version"]),
         ).fetchone()[0]
         broad_status_counts = {
             row[0]: row[1]
@@ -2691,8 +2799,8 @@ class SQLiteBuildPipeline:
             },
         }
 
-    @staticmethod
     def _validate_english_requirement_layer(
+        self,
         connection: sqlite3.Connection,
         admissions_rows: int,
         build: Mapping[str, Any],
@@ -2710,12 +2818,29 @@ class SQLiteBuildPipeline:
         statuses = dict(connection.execute(
             "SELECT requirement_status, COUNT(*) FROM admission_search_english_requirement GROUP BY requirement_status"
         ).fetchall())
-        if parent_rows != admissions_rows or raw_mismatch or statuses.get("unmapped", 0):
+        if parent_rows != admissions_rows or raw_mismatch:
             raise SQLiteBuildError("English requirement derived layer validation failed.")
+        unmapped_rows = statuses.get("unmapped", 0)
+        if self.validation_profile == PRODUCTION_PROFILE and unmapped_rows:
+            raise SQLiteBuildError(
+                "English requirement derived layer validation failed: "
+                f"production profile prohibits {unmapped_rows} unmapped rows."
+            )
         expected = build["classification_counts"]
         if any(statuses.get(key, 0) != value for key, value in expected.items()):
             raise SQLiteBuildError("English requirement classification counts changed.")
-        return {"status": "passed", "parent_rows": parent_rows, "raw_mismatch_rows": raw_mismatch, "classification_counts": expected}
+        return {
+            "status": (
+                "passed_with_review_required"
+                if unmapped_rows and self.validation_profile == CANDIDATE_AUDIT_PROFILE
+                else "passed"
+            ),
+            "severity": "review_required" if unmapped_rows else "none",
+            "parent_rows": parent_rows,
+            "raw_mismatch_rows": raw_mismatch,
+            "classification_counts": expected,
+            "search_semantics": "unmapped rows excluded from required/not_required",
+        }
 
     @staticmethod
     def _validate_grade_requirement_layer(
@@ -2863,8 +2988,8 @@ class SQLiteBuildPipeline:
             "quick_check": "ok",
         }
 
-    @staticmethod
     def _validate_metadata(
+        self,
         connection: sqlite3.Connection,
         *,
         inputs: Mapping[str, CSVInput],
@@ -2894,6 +3019,7 @@ class SQLiteBuildPipeline:
         capabilities: SQLiteCapabilities,
         built_at: str,
         source_versions: Mapping[str, str],
+        review_required_counts: Mapping[str, int],
     ) -> dict[str, Any]:
         rows = connection.execute("SELECT * FROM build_metadata").fetchall()
         if len(rows) != 1:
@@ -2909,6 +3035,10 @@ class SQLiteBuildPipeline:
             "unified_schema_id": unified_manifest["schema_id"],
             "build_timestamp_utc": built_at,
             "builder_version": BUILDER_VERSION,
+            "validation_profile": self.validation_profile,
+            "review_required_counts_json": canonical_json(
+                review_required_counts
+            ),
             "sqlite_library_version": capabilities.sqlite_version,
             "fts5_enabled": int(capabilities.profile != "none"),
             "fts_tokenizer": capabilities.profile,
@@ -3243,6 +3373,7 @@ class SQLiteBuildPipeline:
         validation: Mapping[str, Any],
         database_sha: str,
         database_size: int,
+        review_required_counts: Mapping[str, int],
     ) -> dict[str, Any]:
         return {
             "manifest_version": "1",
@@ -3252,6 +3383,8 @@ class SQLiteBuildPipeline:
             "unified_schema_id": unified_manifest["schema_id"],
             "builder_version": BUILDER_VERSION,
             "build_timestamp_utc": built_at,
+            "validation_profile": self.validation_profile,
+            "review_required_counts": dict(review_required_counts),
             "profile": {
                 "name": capabilities.profile,
                 **asdict(capabilities),
@@ -3342,7 +3475,8 @@ class SQLiteBuildPipeline:
             "prefecture_search": dict(prefecture_build),
             "validation": dict(validation),
             "publication": {
-                "status": "published_after_all_validations_passed",
+                "status": publication_status(self.validation_profile),
+                "production_ready": self.validation_profile == PRODUCTION_PROFILE,
                 "journal_mode": "delete",
                 "wal_sidecar": False,
                 "shm_sidecar": False,
@@ -3369,6 +3503,10 @@ class SQLiteBuildPipeline:
             "- Build status: `passed`",
             f"- Database schema version: `{manifest['database_schema_version']}`",
             f"- Unified contract version: `{manifest['unified_contract_version']}`",
+            f"- Validation profile: `{manifest['validation_profile']}`",
+            f"- Production ready: `{str(manifest['publication']['production_ready']).lower()}`",
+            "- Review-required counts: "
+            f"`{json.dumps(manifest['review_required_counts'], sort_keys=True)}`",
             f"- SQLite library version: `{profile['sqlite_version']}`",
             f"- STRICT support: `{str(profile['strict']).lower()}`",
             f"- FTS profile: `{profile['profile']}`",

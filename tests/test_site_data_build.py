@@ -59,7 +59,7 @@ class SiteDataBuildTests(unittest.TestCase):
             )
             self.assertTrue(kokkoritsu["academic_field_v2_broad_memberships"])
             self.assertEqual(
-                kokkoritsu["academic_field_v2_mapping_contract_version"], "0.2"
+                kokkoritsu["academic_field_v2_mapping_contract_version"], "0.3"
             )
             self.assertEqual(kokkoritsu["gpa_min_tenths"], 35)
             self.assertIn("selection_practical", kokkoritsu)
@@ -197,20 +197,20 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         cls.temporary.cleanup()
 
     def test_current_snapshot_counts_and_regressions(self) -> None:
-        self.assertEqual(self.manifest["counts"]["search_rows"], 5921)
-        self.assertEqual(self.manifest["counts"]["detail_records"], 5921)
-        self.assertEqual(self.manifest["counts"]["research_requirement_rows"], 437)
+        self.assertEqual(self.manifest["counts"]["search_rows"], 6411)
+        self.assertEqual(self.manifest["counts"]["detail_records"], 6411)
+        self.assertEqual(self.manifest["counts"]["research_requirement_rows"], 495)
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["gpa_safe_match_counts"],
-            {"3.0": 72, "3.5": 490, "3.8": 743, "4.0": 1124, "4.5": 1199},
+            {"3.0": 72, "3.5": 499, "3.8": 763, "4.0": 1175, "4.5": 1258},
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_mapping_statuses"],
-            {"single": 4069, "multi": 1833, "review_required": 19},
+            {"single": 4494, "multi": 1877, "review_required": 40},
         )
         self.assertEqual(
             sum(self.manifest["counts"]["academic_field_group_memberships"].values()),
-            7952,
+            8468,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["queries"], 25
@@ -218,39 +218,39 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         self.assertEqual(
             self.manifest["grade_requirement_search"]["classification_counts"],
             {
-                "required": 2286,
-                "not_required": 339,
-                "review_required": 1291,
-                "unknown": 1985,
-                "not_applicable": 20,
+                "required": 2373,
+                "not_required": 707,
+                "review_required": 1404,
+                "unknown": 1910,
+                "not_applicable": 17,
                 "unmapped": 0,
             },
         )
         self.assertEqual(
             self.manifest["grade_requirement_search"]["numeric_floor_rows"],
-            1329,
+            1422,
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_v2_broad_membership_rows"],
-            8275,
+            8903,
         )
         self.assertEqual(
             self.manifest["counts"][
                 "academic_field_v2_subcategory_membership_rows"
             ],
-            6880,
+            7261,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][
                 "academic_field_v2"
             ]["branch_query"]["rows"],
-            1796,
+            1862,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][
                 "academic_field_v2"
             ]["branch_frozen_logical_keys"],
-            "passed",
+            "not_applicable_nonfreeze_fixture",
         )
 
 

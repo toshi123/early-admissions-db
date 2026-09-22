@@ -17,7 +17,7 @@ CREATE TABLE admissions (
     source_dataset TEXT NOT NULL
         CHECK (source_dataset IN ('kokkoritsu', 'shidai')),
     source_version TEXT NOT NULL
-        CHECK (source_version IN ('5.61', '0.97')),
+        CHECK (source_version IN ('5.81', '1.08')),
     record_id TEXT NOT NULL CHECK (record_id <> ''),
     admission_year INTEGER NOT NULL CHECK (admission_year = 2027),
     institution_type TEXT NOT NULL
@@ -124,8 +124,8 @@ CREATE TABLE admissions (
 
     UNIQUE (source_dataset, source_version, record_id),
     CHECK (
-        (source_dataset = 'kokkoritsu' AND source_version = '5.61') OR
-        (source_dataset = 'shidai' AND source_version = '0.97')
+        (source_dataset = 'kokkoritsu' AND source_version = '5.81') OR
+        (source_dataset = 'shidai' AND source_version = '1.08')
     ),
     CHECK (
         (source_dataset = 'kokkoritsu' AND institution_type IN ('国立', '公立')) OR
@@ -138,7 +138,7 @@ CREATE TABLE coverage (
     source_dataset TEXT NOT NULL
         CHECK (source_dataset IN ('kokkoritsu', 'shidai')),
     source_version TEXT NOT NULL
-        CHECK (source_version IN ('5.61', '0.97')),
+        CHECK (source_version IN ('5.81', '1.08')),
     institution_type TEXT NOT NULL
         CHECK (institution_type IN ('国立', '公立', '私立')),
     university TEXT NOT NULL CHECK (university <> ''),
@@ -153,8 +153,8 @@ CREATE TABLE coverage (
 
     UNIQUE (source_dataset, source_version, institution_type, university),
     CHECK (
-        (source_dataset = 'kokkoritsu' AND source_version = '5.61') OR
-        (source_dataset = 'shidai' AND source_version = '0.97')
+        (source_dataset = 'kokkoritsu' AND source_version = '5.81') OR
+        (source_dataset = 'shidai' AND source_version = '1.08')
     ),
     CHECK (
         (source_dataset = 'kokkoritsu' AND institution_type IN ('国立', '公立')) OR
@@ -167,7 +167,7 @@ CREATE TABLE research_requirements (
     source_dataset TEXT NOT NULL
         CHECK (source_dataset IN ('kokkoritsu', 'shidai')),
     source_version TEXT NOT NULL
-        CHECK (source_version IN ('5.61', '0.97')),
+        CHECK (source_version IN ('5.81', '1.08')),
     admission_id TEXT NOT NULL CHECK (admission_id <> ''),
     university TEXT NOT NULL CHECK (university <> ''),
     faculty_school TEXT,
@@ -183,8 +183,8 @@ CREATE TABLE research_requirements (
     verified_on TEXT NOT NULL CHECK (verified_on <> ''),
 
     CHECK (
-        (source_dataset = 'kokkoritsu' AND source_version = '5.61') OR
-        (source_dataset = 'shidai' AND source_version = '0.97')
+        (source_dataset = 'kokkoritsu' AND source_version = '5.81') OR
+        (source_dataset = 'shidai' AND source_version = '1.08')
     ),
     FOREIGN KEY (source_dataset, source_version, admission_id)
         REFERENCES admissions (source_dataset, source_version, record_id)
@@ -204,6 +204,10 @@ CREATE TABLE build_metadata (
     unified_schema_id TEXT NOT NULL CHECK (unified_schema_id <> ''),
     build_timestamp_utc TEXT NOT NULL CHECK (build_timestamp_utc <> ''),
     builder_version TEXT NOT NULL CHECK (builder_version <> ''),
+    validation_profile TEXT NOT NULL
+        CHECK (validation_profile IN ('production', 'candidate_audit')),
+    review_required_counts_json TEXT NOT NULL
+        CHECK (review_required_counts_json <> ''),
     sqlite_library_version TEXT NOT NULL CHECK (sqlite_library_version <> ''),
     fts5_enabled INTEGER NOT NULL CHECK (fts5_enabled IN (0, 1)),
     fts_tokenizer TEXT NOT NULL
@@ -233,7 +237,7 @@ CREATE TABLE build_metadata (
             gpa_crosswalk_sha256 NOT GLOB '*[^0-9a-f]*'
         ),
     grade_requirement_mapping_contract_version TEXT NOT NULL
-        CHECK (grade_requirement_mapping_contract_version = '0.1'),
+        CHECK (grade_requirement_mapping_contract_version = '0.2'),
     grade_requirement_schema_sql_sha256 TEXT NOT NULL
         CHECK (
             length(grade_requirement_schema_sql_sha256) = 64 AND
@@ -253,7 +257,7 @@ CREATE TABLE build_metadata (
     grade_requirement_raw_mismatch_rows INTEGER NOT NULL
         CHECK (grade_requirement_raw_mismatch_rows = 0),
     academic_field_mapping_contract_version TEXT NOT NULL
-        CHECK (academic_field_mapping_contract_version = '0.1'),
+        CHECK (academic_field_mapping_contract_version = '0.2'),
     academic_field_taxonomy_version TEXT NOT NULL
         CHECK (academic_field_taxonomy_version = '0.1'),
     academic_field_schema_sql_sha256 TEXT NOT NULL
@@ -272,7 +276,7 @@ CREATE TABLE build_metadata (
             academic_field_crosswalk_sha256 NOT GLOB '*[^0-9a-f]*'
         ),
     english_requirement_parser_contract_version TEXT NOT NULL
-        CHECK (english_requirement_parser_contract_version = '0.1'),
+        CHECK (english_requirement_parser_contract_version = '0.2'),
     english_requirement_schema_sql_sha256 TEXT NOT NULL
         CHECK (length(english_requirement_schema_sql_sha256) = 64),
     english_requirement_crosswalk_sha256 TEXT NOT NULL
@@ -321,7 +325,7 @@ CREATE TABLE build_metadata (
     academic_field_raw_mismatch_rows INTEGER NOT NULL
         CHECK (academic_field_raw_mismatch_rows = 0),
     academic_field_v2_mapping_contract_version TEXT NOT NULL
-        CHECK (academic_field_v2_mapping_contract_version = '0.2'),
+        CHECK (academic_field_v2_mapping_contract_version = '0.3'),
     academic_field_v2_taxonomy_version TEXT NOT NULL
         CHECK (academic_field_v2_taxonomy_version = '0.2'),
     academic_field_v2_schema_sql_sha256 TEXT NOT NULL

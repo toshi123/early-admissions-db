@@ -89,7 +89,7 @@ class GPAParserTests(unittest.TestCase):
 
 
 class GPACurrentSnapshotRegressionTests(unittest.TestCase):
-    def test_current_5921_row_snapshot(self) -> None:
+    def test_current_6411_row_snapshot(self) -> None:
         parser = GPAParser(GPACrosswalk.load(REPO_ROOT / GPA_AUDIT_PATH))
         counts: Counter[str] = Counter()
         minima: list[int] = []
@@ -114,12 +114,12 @@ class GPACurrentSnapshotRegressionTests(unittest.TestCase):
         self.assertEqual(
             counts,
             Counter(
-                safe_numeric=1199,
-                conditional_numeric=707,
-                do_not_numeric=4015,
+                safe_numeric=1258,
+                conditional_numeric=747,
+                do_not_numeric=4406,
             ),
         )
-        expected = {30: 72, 35: 490, 38: 743, 40: 1124, 45: 1199}
+        expected = {30: 72, 35: 499, 38: 763, 40: 1175, 45: 1258}
         self.assertEqual(
             {value: sum(minimum <= value for minimum in minima) for value in expected},
             expected,

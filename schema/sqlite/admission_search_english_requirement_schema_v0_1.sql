@@ -17,7 +17,7 @@ CREATE TABLE admission_search_english_requirement (
         search_disposition IN ('safe_exact', 'review_required', 'not_searchable')
     ),
     parser_contract_version TEXT NOT NULL
-        CHECK (parser_contract_version = '0.1'),
+        CHECK (parser_contract_version = '0.2'),
     review_note TEXT,
     CHECK (raw_value IS NOT NULL OR (
         requirement_status = 'unknown' AND parse_status = 'missing'
