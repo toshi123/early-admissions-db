@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "capture-guide": "node scripts/capture-guide-screenshots.mjs",
     "dev": "node scripts/sync-site-data.mjs && vite --host 127.0.0.1",
     "build": "node scripts/sync-site-data.mjs && tsc -b && vite build",
     "test": "node scripts/sync-site-data.mjs && python3 scripts/export-search-oracle.py && vitest run",

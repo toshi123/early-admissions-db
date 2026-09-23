@@ -42,6 +42,12 @@ describe("DADS component contracts", () => {
     expect(css).toContain(".choice input:focus-visible");
   });
 
+  it("links the global navigation to the usage guide", () => {
+    expect(main).toContain('href="/guide" data-route');
+    expect(main).toContain('>使い方</a>');
+    expect(main).toContain('if (path === "/guide")');
+  });
+
   it("uses a native grade requirement checkbox with a dependent disabled input", () => {
     expect(main).toContain('id="grade-requirement" type="checkbox"');
     expect(main).toContain('id="overall-gpa"');

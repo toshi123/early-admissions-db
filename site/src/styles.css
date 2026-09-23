@@ -88,6 +88,34 @@ a:active { color: var(--orange-800); text-decoration-thickness: 1px; }
 footer { border-top: 1px solid var(--gray-420); padding: 1.5rem 1rem; color: var(--gray-700); font-size: .875rem; text-align: center; }
 h1, h2, h3 { color: var(--gray-900); line-height: 1.4; }
 
+.guide-page { max-width: 900px; }
+.guide-hero { padding-bottom: 1.5rem; border-bottom: 4px solid var(--blue-900); }
+.guide-hero h1 { margin: .25rem 0 .75rem; font-size: 2rem; }
+.guide-hero > p { max-width: 48rem; }
+.guide-kicker { margin: 0; color: var(--blue-1000); font-size: .875rem; font-weight: 700; }
+.guide-important { margin-top: 1rem; padding: 1rem; border-left: 6px solid var(--blue-900); background: var(--blue-50); }
+.guide-toc, .guide-rule { margin-top: 1.5rem; padding: 1.25rem; background: var(--gray-50); }
+.guide-toc h2, .guide-rule h2 { margin: 0 0 .75rem; font-size: 1.25rem; }
+.guide-toc ol { margin: 0; padding-left: 1.5rem; columns: 2; column-gap: 2rem; }
+.guide-toc li { margin-bottom: .5rem; break-inside: avoid; }
+.guide-rule { border-left: 6px solid var(--gray-420); }
+.guide-rule p:last-child { margin-bottom: 0; }
+.guide-section { margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-420); scroll-margin-top: 1rem; }
+.guide-section > h2 { margin: 0 0 .5rem; font-size: 1.5rem; }
+.guide-figure { margin: 1.25rem 0; }
+.guide-image-link { display: block; border: 1px solid var(--gray-420); background: var(--gray-50); }
+.guide-image-link:focus-visible { border-radius: 0; }
+.guide-figure img { display: block; width: 100%; height: auto; }
+.guide-figure figcaption { margin-top: .5rem; color: var(--gray-700); font-size: .8125rem; }
+.guide-steps { padding-left: 1.5rem; }
+.guide-steps li { margin-bottom: .5rem; padding-left: .25rem; }
+.guide-note { margin: 1rem 0; padding: 1rem; border-left: 6px solid #b78f00; background: #fbf5e0; }
+.guide-note p:first-child { margin-top: 0; }
+.guide-note p:last-child { margin-bottom: 0; }
+.guide-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.guide-image-grid .guide-figure { min-width: 0; margin-block: 1.25rem 0; }
+.guide-section code { overflow-wrap: anywhere; }
+
 .form-intro { margin-bottom: 1.5rem; }
 .form-intro h1, .results-summary h1 { margin: 0 0 .5rem; font-size: 2rem; }
 .form-intro p, .help { color: var(--gray-700); }
@@ -354,6 +382,9 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 @media (max-width: 620px) {
   .page { padding: 1.5rem .75rem 3rem; }
   .form-intro h1 { font-size: 1.625rem; }
+  .guide-hero h1 { font-size: 1.625rem; }
+  .guide-toc ol { columns: 1; }
+  .guide-image-grid { grid-template-columns: 1fr; }
   .check-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 .75rem; }
   .academic-field-branch-grid { grid-template-columns: 1fr; }
   .academic-subcategory-filter { margin-left: 1.25rem; }

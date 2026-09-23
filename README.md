@@ -153,6 +153,22 @@ npm test
 npm run build
 ```
 
+The in-site usage guide is available at `/guide`. Its screenshots are generated
+from the current UI and validated Site-data projection with the installed
+Chrome/Chromium browser. Regenerate all guide images and verify the two-row
+Excel example with:
+
+```bash
+cd site
+npm run capture-guide
+```
+
+The command starts an isolated local Vite server and temporary browser profile;
+it does not change canonical data or the browser's existing saved candidates.
+Set `GUIDE_CHROME_PATH` only when Chrome/Chromium is installed outside the
+standard locations, or `GUIDE_BASE_URL` to capture from an already running
+local server.
+
 Each command that needs data synchronizes the current projection into ignored
 `site/public/site-data/`; the deployable but ignored build is `site/dist/`.
 Implementation and local QA details are in

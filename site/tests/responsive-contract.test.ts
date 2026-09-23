@@ -39,6 +39,13 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".form-actions .button { width: 100%; }");
   });
 
+  it("keeps guide images and its table of contents within the mobile viewport", () => {
+    expect(css).toContain(".guide-figure img { display: block; width: 100%; height: auto; }");
+    expect(css).toContain(".guide-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))");
+    expect(css).toContain(".guide-toc ol { columns: 1; }");
+    expect(css).toContain(".guide-image-grid { grid-template-columns: 1fr; }");
+  });
+
   it("keeps Broad groups responsive and their dynamic children visibly nested", () => {
     expect(css).toContain(".academic-field-branch-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))");
     expect(css).toContain(".academic-subcategory-filter {");

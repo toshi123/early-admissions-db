@@ -7,6 +7,7 @@ import { loadDetail, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
 import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
+import { guidePage } from "./guide-page";
 import {
   canonicalSearchQuery,
   detailReturnTarget,
@@ -69,7 +70,7 @@ const header = () => {
   const path = location.pathname.replace(/\/+$/, "") || "/";
   const searchCurrent = path === "/search" || path === "/results" || path.startsWith("/admissions/");
   const aboutCurrent = path === "/about/data";
-  return `<header class="site-header"><div class="site-header__inner"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav aria-label="主要ナビゲーション"><ul class="global-nav"><li><a id="header-search-link" class="global-nav__link" href="${headerSearchHref(path, applied)}" data-route${searchCurrent ? ' aria-current="page"' : ""}>検索</a></li><li><a class="global-nav__link" href="/candidates" data-route${path === "/candidates" ? ' aria-current="page"' : ""}>候補リスト<span id="candidate-count">（${candidates.store.items.length}）</span></a></li><li><a class="global-nav__link" href="/about/data" data-route${aboutCurrent ? ' aria-current="page"' : ""}>データについて</a></li></ul></nav></div></header><p id="candidate-storage-warning" class="storage-notice" role="status"${candidates.store.warning ? "" : " hidden"}>${escapeHtml(candidates.store.warning)}</p>`;
+  return `<header class="site-header"><div class="site-header__inner"><a class="brand" href="/search" data-route><strong>2027年度 早期入試検索</strong></a><nav aria-label="主要ナビゲーション"><ul class="global-nav"><li><a id="header-search-link" class="global-nav__link" href="${headerSearchHref(path, applied)}" data-route${searchCurrent ? ' aria-current="page"' : ""}>検索</a></li><li><a class="global-nav__link" href="/candidates" data-route${path === "/candidates" ? ' aria-current="page"' : ""}>候補リスト<span id="candidate-count">（${candidates.store.items.length}）</span></a></li><li><a class="global-nav__link" href="/guide" data-route${path === "/guide" ? ' aria-current="page"' : ""}>使い方</a></li><li><a class="global-nav__link" href="/about/data" data-route${aboutCurrent ? ' aria-current="page"' : ""}>データについて</a></li></ul></nav></div></header><p id="candidate-storage-warning" class="storage-notice" role="status"${candidates.store.warning ? "" : " hidden"}>${escapeHtml(candidates.store.warning)}</p>`;
 };
 const footer = () => `<footer>候補の絞り込み用です。出願前に最新の公式資料を必ず確認してください。</footer>`;
 const selected = (field: string, value: string) => (
@@ -457,6 +458,12 @@ async function route(replace = false): Promise<void> {
     floatingLiveCount = null;
     candidates.expanded = expandedUniversitiesFromHistory({ expandedUniversities: history.state?.candidateExpandedUniversities });
     app.innerHTML = `${header()}${candidates.page()}${footer()}`;
+    return;
+  }
+  if (path === "/guide") {
+    floatingLiveCount?.disconnect();
+    floatingLiveCount = null;
+    app.innerHTML = `${header()}${guidePage()}${footer()}`;
     return;
   }
   if (path === "/about/data") { aboutPage(); return; }
