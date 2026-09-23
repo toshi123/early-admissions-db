@@ -16,6 +16,8 @@ site/public/site-data/
 site/public/third-party-notices.txt
 site/coverage/
 site/.vite/
+site/.sites-checkout/
+site/.sites-runtime/
 site/tests/generated/
 site/*.tsbuildinfo
 
