@@ -81,6 +81,7 @@ a:active { color: var(--orange-800); text-decoration-thickness: 1px; }
 .global-nav__link[aria-current="page"] { color: var(--blue-1000); }
 .global-nav__link[aria-current="page"]::after { position: absolute; inset: auto 0 0; border-bottom: 4px solid var(--blue-900); content: ""; }
 .global-nav__link:focus-visible { background: var(--yellow-300); }
+.nav-label--mobile { display: none; }
 
 .page { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.2rem 4rem; }
 .search-page, .results-page, .candidates-page { max-width: 780px; }
@@ -355,8 +356,11 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
   .site-header__inner { min-height: auto; padding: .75rem .75rem 0; flex-direction: column; align-items: flex-start; gap: .25rem; }
   .brand { max-width: none; font-size: .875rem; line-height: 1.4; }
   .site-header nav, .global-nav { width: 100%; }
-  .global-nav { flex-wrap: wrap; }
-  .global-nav__link:any-link { min-height: 48px; padding: .75rem .625rem; font-size: .875rem; }
+  .global-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .global-nav li { min-width: 0; }
+  .global-nav__link:any-link { min-width: 0; width: 100%; min-height: 48px; padding: .75rem .25rem; justify-content: center; font-size: .875rem; }
+  .nav-label--desktop { display: none; }
+  .nav-label--mobile { display: inline; }
 }
 @media (max-width: 1260px) {
   .page--with-floating-actions { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }

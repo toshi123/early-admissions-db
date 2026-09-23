@@ -48,6 +48,15 @@ describe("DADS component contracts", () => {
     expect(main).toContain('if (path === "/guide")');
   });
 
+  it("keeps formal desktop labels and accessible names beside mobile short labels", () => {
+    expect(main).toContain('<span class="nav-label--desktop">候補リスト</span>');
+    expect(main).toContain('<span class="nav-label--mobile" aria-hidden="true">候補</span>');
+    expect(main).toContain('aria-label="候補リスト（${candidates.store.items.length}件）"');
+    expect(main).toContain('<span class="nav-label--desktop">データについて</span>');
+    expect(main).toContain('<span class="nav-label--mobile" aria-hidden="true">データ</span>');
+    expect(main).toContain('aria-label="データについて"');
+  });
+
   it("uses a native grade requirement checkbox with a dependent disabled input", () => {
     expect(main).toContain('id="grade-requirement" type="checkbox"');
     expect(main).toContain('id="overall-gpa"');

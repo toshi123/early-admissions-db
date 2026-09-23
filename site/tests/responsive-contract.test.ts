@@ -34,7 +34,12 @@ describe("responsive search and compact results contract", () => {
   });
 
   it("keeps mobile navigation and search controls compact without hiding labels", () => {
-    expect(css).toContain(".global-nav__link:any-link { min-height: 48px");
+    expect(css).toContain(".global-nav__link:any-link { min-width: 0; width: 100%; min-height: 48px");
+    expect(css).toContain(".global-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }");
+    expect(css).toContain(".global-nav li { min-width: 0; }");
+    expect(css).toContain("width: 100%; min-height: 48px; padding: .75rem .25rem; justify-content: center");
+    expect(css).toContain(".nav-label--desktop { display: none; }");
+    expect(css).toContain(".nav-label--mobile { display: inline; }");
     expect(css).toContain(".check-grid { grid-template-columns: repeat(2, minmax(0, 1fr))");
     expect(css).toContain(".form-actions .button { width: 100%; }");
   });

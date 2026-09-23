@@ -101,13 +101,15 @@ describe("candidate persistence", () => {
 describe("candidate controls and export selection", () => {
   it("synchronizes result/detail buttons and header count from one store", () => {
     const row = candidateRow();
-    document.body.innerHTML = `<span id="candidate-count"></span>${candidateButton(row)}${candidateButton(row)}`;
+    document.body.innerHTML = `<a id="candidate-link"><span id="candidate-count"></span></a>${candidateButton(row)}${candidateButton(row)}`;
     const store = new CandidateStore(localStorage);
     store.subscribe(() => syncCandidateControls(document, new Set(store.items.map(candidateKey)), store.warning));
     store.add(row);
     expect(document.querySelector("#candidate-count")?.textContent).toBe("（1）");
+    expect(document.querySelector("#candidate-link")?.getAttribute("aria-label")).toBe("候補リスト（1件）");
     expect([...document.querySelectorAll("button")].every((b) => b.textContent === "候補から外す" && b.getAttribute("aria-pressed") === "true")).toBe(true);
     store.remove(candidateKey(row));
+    expect(document.querySelector("#candidate-link")?.getAttribute("aria-label")).toBe("候補リスト（0件）");
     expect([...document.querySelectorAll("button")].every((b) => b.textContent === "候補に追加")).toBe(true);
   });
 

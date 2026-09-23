@@ -17,6 +17,8 @@ export function syncCandidateControls(root: ParentNode, keys: ReadonlySet<string
   });
   const count = root.querySelector("#candidate-count");
   if (count) count.textContent = `（${keys.size.toLocaleString("ja-JP")}）`;
+  const candidateLink = root.querySelector<HTMLElement>("#candidate-link");
+  if (candidateLink) candidateLink.setAttribute("aria-label", `候補リスト（${keys.size.toLocaleString("ja-JP")}件）`);
   const notice = root.querySelector<HTMLElement>("#candidate-storage-warning");
   if (notice) { notice.textContent = warning; notice.hidden = !warning; }
 }
