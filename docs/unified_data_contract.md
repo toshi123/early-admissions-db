@@ -268,3 +268,11 @@ This proposal does not:
 - define a search ranking or user-interface display policy.
 
 Those actions require later implementation and, where facts are affected, a separately authorized source-data review.
+
+## 14. v0.2 特殊選抜フラグ
+
+2026-09-28 のSchema改訂で、Masterに `international_baccalaureate_flag`、`private_foreign_student_flag`、`returnee_flag`、`regional_quota_flag` の4列を正式追加する。source CSVでは `Yes / No`、Unifiedではbooleanとして保持し、4項目は相互排他的ではない。
+
+`regional_quota_flag` は地域枠・県内枠・地域推薦等として募集枠そのものが地域区分された募集単位を表し、本人居住地・高校所在地・卒業後勤務義務等の地域要件とは別概念とする。単なる地域条件から地域枠フラグを推定しない。
+
+検索UIでは4項目を既定でOFFとし、通常検索では4フラグのいずれかがtrueの募集単位を除外する。ユーザーが個別オプションをONにした場合のみ、対応フラグがtrueの募集単位を通常結果へ追加する。
