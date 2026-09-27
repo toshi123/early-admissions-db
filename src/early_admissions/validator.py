@@ -68,18 +68,18 @@ SOURCE_CONFIG = {
     "kokkoritsu": {
         "canonical_dir": Path("data/canonical/kokkoritsu"),
         "schema": Path(
-            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_81.json"
+            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_82.json"
         ),
     },
     "shidai": {
         "canonical_dir": Path("data/canonical/shidai"),
         "schema": Path(
-            "schema/shidai/shidai_early_admissions_schema_v1_08.json"
+            "schema/shidai/shidai_early_admissions_schema_v1_09.json"
         ),
     },
 }
 
-CONTRACT_PATH = Path("schema/unified/early_admissions_unified_schema_v0_1.json")
+CONTRACT_PATH = Path("schema/unified/early_admissions_unified_schema_v0_2.json")
 CONTRACT_DOCUMENTS = (
     Path("docs/unified_data_contract.md"),
     Path("docs/unified_field_mapping_v0_1.md"),
@@ -101,7 +101,18 @@ TRISTATE_FIELDS = (
     "selection_common_test",
 )
 
-BOOLEAN_FIELDS = ("stem_flag", "fallback_previous_year")
+SPECIAL_SELECTION_FLAG_FIELDS = (
+    "international_baccalaureate_flag",
+    "private_foreign_student_flag",
+    "returnee_flag",
+    "regional_quota_flag",
+)
+
+BOOLEAN_FIELDS = (
+    "stem_flag",
+    "fallback_previous_year",
+    *SPECIAL_SELECTION_FLAG_FIELDS,
+)
 
 MASTER_DATE_FIELDS = (
     "application_start",
@@ -712,6 +723,19 @@ class ReadOnlyValidator:
                 required=False,
             )
             self._validate_institution_type(dataset, "master", row, record_id)
+
+            for field_name in SPECIAL_SELECTION_FLAG_FIELDS:
+                if not values.get(field_name, ""):
+                    self._issue(
+                        "REQUIRED_VALUE_MISSING",
+                        "error",
+                        dataset,
+                        "master",
+                        row,
+                        f"Required special-selection flag {field_name} is blank.",
+                        record_id=record_id,
+                        field_name=field_name,
+                    )
 
             for field_name in BOOLEAN_FIELDS:
                 value = values.get(field_name, "")
