@@ -1,0 +1,51 @@
+{
+  "version": "0.1",
+  "purpose": "Operational university-level re-audit ledger for 2027 coverage completeness. Canonical coverage is updated only after re-audit completion.",
+  "canonical": false,
+  "columns": [
+    "source_dataset",
+    "institution_type",
+    "university",
+    "baseline_research_status",
+    "baseline_master_rows",
+    "reaudit_status",
+    "official_system_checked",
+    "capacity_table_checked",
+    "schedule_checked",
+    "guideline_index_checked",
+    "master_compared",
+    "kawai_crosscheck",
+    "missing_candidate_count",
+    "ambiguous_candidate_count",
+    "obsolete_candidate_count",
+    "update_queue_open_count",
+    "last_audited_on",
+    "notes"
+  ],
+  "grain": "1 row = 1 university in canonical Coverage",
+  "enums": {
+    "reaudit_status": [
+      "未再監査",
+      "再監査中",
+      "追加確認待ち",
+      "要項公開待ち",
+      "再監査済"
+    ],
+    "checklist_status": [
+      "未実施",
+      "一部実施",
+      "実施済",
+      "実施不能"
+    ]
+  },
+  "completion_rule": [
+    "official admissions system checked",
+    "capacity table checked",
+    "admissions schedule checked",
+    "guideline index checked",
+    "official system compared with Master",
+    "missing candidates resolved",
+    "external cross-check completed or reason recorded",
+    "all unpublished official documents registered in UpdateQueue"
+  ]
+}
