@@ -68,18 +68,18 @@ SOURCE_CONFIG = {
     "kokkoritsu": {
         "canonical_dir": Path("data/canonical/kokkoritsu"),
         "schema": Path(
-            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_82.json"
+            "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_83.json"
         ),
     },
     "shidai": {
         "canonical_dir": Path("data/canonical/shidai"),
         "schema": Path(
-            "schema/shidai/shidai_early_admissions_schema_v1_09.json"
+            "schema/shidai/shidai_early_admissions_schema_v1_10.json"
         ),
     },
 }
 
-CONTRACT_PATH = Path("schema/unified/early_admissions_unified_schema_v0_2.json")
+CONTRACT_PATH = Path("schema/unified/early_admissions_unified_schema_v0_3.json")
 CONTRACT_DOCUMENTS = (
     Path("docs/unified_data_contract.md"),
     Path("docs/unified_field_mapping_v0_1.md"),
@@ -106,6 +106,7 @@ SPECIAL_SELECTION_FLAG_FIELDS = (
     "private_foreign_student_flag",
     "returnee_flag",
     "regional_quota_flag",
+    "adult_selection_flag",
 )
 
 BOOLEAN_FIELDS = (
