@@ -622,7 +622,7 @@
           "then": {
             "properties": {
               "source_version": {
-                "const": "5.81"
+                "const": "5.82"
               }
             }
           }
@@ -641,7 +641,7 @@
           "then": {
             "properties": {
               "source_version": {
-                "const": "1.08"
+                "const": "1.09"
               }
             }
           }
@@ -650,8 +650,8 @@
     },
     "sourceVersion": {
       "enum": [
-        "5.81",
-        "1.08"
+        "5.82",
+        "1.09"
       ]
     },
     "triState": {
