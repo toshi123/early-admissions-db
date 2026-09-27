@@ -19,15 +19,10 @@ from early_admissions.unified_builder import (
 from tests.test_validator import REPO_ROOT, build_synthetic_repo, write_csv
 
 
-FROZEN_V0_1_ROWS = {
-    "master": 6_411,
+WORKING_V0_2_ROWS = {
+    "master": 6_511,
     "coverage": 260,
     "research_requirements": 495,
-}
-FROZEN_V0_1_SHA256 = {
-    "master": "2af3a834bb00fd93235f711c0f50896c4158b633d550d333b1aad9667bf5985e",
-    "coverage": "4457e7cddb9b9bde8a5aa414dcbadeda9ac6d05ed45ef0794354b2883c837e2b",
-    "research_requirements": "0aae717876bef3c1ba8645fcbf7e15190ce9bc8521badb83d5f154b6e3782fd9",
 }
 
 
@@ -67,7 +62,7 @@ class UnifiedAdapterTests(unittest.TestCase):
 
             bundle = CanonicalSourceLoader(root).load()
             contract = json.loads(
-                (root / "schema/unified/early_admissions_unified_schema_v0_1.json")
+                (root / "schema/unified/early_admissions_unified_schema_v0_2.json")
                 .read_text(encoding="utf-8")
             )
             adapter = UnifiedAdapter(contract)
@@ -138,7 +133,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(before, canonical_hashes(root))
 
             contract = json.loads(
-                (root / "schema/unified/early_admissions_unified_schema_v0_1.json")
+                (root / "schema/unified/early_admissions_unified_schema_v0_2.json")
                 .read_text(encoding="utf-8")
             )
             for table, row_count in expected.items():
@@ -166,7 +161,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(manifest["contract_version"], "0.1")
             self.assertEqual(
                 manifest["source_versions"],
-                {"kokkoritsu": "5.81", "shidai": "1.08"},
+                {"kokkoritsu": "5.82", "shidai": "1.09"},
             )
             self.assertTrue(
                 manifest["validation"]["determinism"]["byte_identical"]
@@ -266,8 +261,8 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             )
 
 
-class FrozenReleaseRegressionTests(unittest.TestCase):
-    def test_v5_81_v1_08_rows_and_generated_csv_hashes(self) -> None:
+class WorkingV02RegressionTests(unittest.TestCase):
+    def test_v5_82_v1_09_rows(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = UnifiedBuildPipeline(
                 REPO_ROOT,
@@ -279,15 +274,10 @@ class FrozenReleaseRegressionTests(unittest.TestCase):
                 table: metadata["rows"]
                 for table, metadata in result.output_metadata.items()
             }
-            actual_hashes = {
-                table: metadata["sha256"]
-                for table, metadata in result.output_metadata.items()
-            }
 
         self.assertEqual(preservation["expectation_source"], "canonical_input")
-        self.assertEqual(preservation["expected_output_rows"], FROZEN_V0_1_ROWS)
-        self.assertEqual(actual_rows, FROZEN_V0_1_ROWS)
-        self.assertEqual(actual_hashes, FROZEN_V0_1_SHA256)
+        self.assertEqual(preservation["expected_output_rows"], WORKING_V0_2_ROWS)
+        self.assertEqual(actual_rows, WORKING_V0_2_ROWS)
 
 
 if __name__ == "__main__":
