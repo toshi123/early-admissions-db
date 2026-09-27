@@ -17,8 +17,8 @@
 
 | Table | Rows | Bytes | SHA-256 |
 |---|---:|---:|---|
-| master | 6511 | 12349762 | `0fdaef0ea27932da7d064538a28f64d590b266ae7843baa405bd5dbe89d2c380` |
-| coverage | 260 | 150508 | `09cf0fb9a7a0ee4180fc87b69222d41bf82b9df259be64a1a257a4be5b7d39fc` |
+| master | 6526 | 12376984 | `17d0e155257fa6ffc6f354a68aac74d3212f423a3ea2d8e898a91178485b006c` |
+| coverage | 260 | 150388 | `5e45e4fe7e32dcb6120eb28606cee0296cd814c060cfb7b22af9e1346aeb38d4` |
 | research_requirements | 495 | 234228 | `4187d01258c83e035fc49fc29238980481bf652d29031077e1a2c1733791a6ba` |
 
 ## Validation gates
