@@ -1,7 +1,7 @@
 # Unified dataset v0.1 build summary
 
 - Build status: `passed`
-- Contract/schema version: `0.1`
+- Contract/schema version: `0.2`
 - Canonical source mode: read-only
 - Determinism: two builds were byte-identical
 - Serialization: UTF-8, LF, no BOM
@@ -10,20 +10,20 @@
 
 | Dataset | Version |
 |---|---|
-| kokkoritsu | `5.81` |
-| shidai | `1.08` |
+| kokkoritsu | `5.82` |
+| shidai | `1.09` |
 
 ## Output tables
 
 | Table | Rows | Bytes | SHA-256 |
 |---|---:|---:|---|
-| master | 6411 | 12001153 | `2af3a834bb00fd93235f711c0f50896c4158b633d550d333b1aad9667bf5985e` |
-| coverage | 260 | 150535 | `4457e7cddb9b9bde8a5aa414dcbadeda9ac6d05ed45ef0794354b2883c837e2b` |
-| research_requirements | 495 | 234228 | `0aae717876bef3c1ba8645fcbf7e15190ce9bc8521badb83d5f154b6e3782fd9` |
+| master | 6511 | 12349762 | `0fdaef0ea27932da7d064538a28f64d590b266ae7843baa405bd5dbe89d2c380` |
+| coverage | 260 | 150508 | `09cf0fb9a7a0ee4180fc87b69222d41bf82b9df259be64a1a257a4be5b7d39fc` |
+| research_requirements | 495 | 234228 | `4187d01258c83e035fc49fc29238980481bf652d29031077e1a2c1733791a6ba` |
 
 ## Validation gates
 
-- Source canonical validator: errors=0, warnings=1167, informational=3292
+- Source canonical validator: errors=0, warnings=1167, informational=3464
 - Unified JSON Schema validation: passed
 - Unified Master PK / ResearchRequirements FK / Coverage: passed
 - Source-to-output row preservation: passed
