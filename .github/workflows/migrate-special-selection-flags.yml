@@ -1,6 +1,7 @@
 name: one-shot special-selection migration
 # retry-after-v0.2-source-version-fix
 # retry-after-lossless-boolean-fix
+# retry-after-shell-wrapper-fix
 
 on:
   push:
@@ -30,8 +31,8 @@ jobs:
       - name: Validate source and unified build
         run: |
           python -m unittest tests.test_validator tests.test_unified_build
-          python scripts/validate_operations
-          python scripts/build_unified
+          bash scripts/validate_operations
+          sh scripts/build_unified
       - name: Commit migration result
         run: |
           git config user.name "early-admissions-bot"
