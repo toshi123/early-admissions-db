@@ -1,0 +1,74 @@
+{
+  "version": "0.1-pilot",
+  "canonical": false,
+  "purpose": "Pilot staging for four candidate search fields before Master schema freeze.",
+  "grain": "1 row = one existing canonical Master record selected for schema pilot",
+  "columns": [
+    "source_dataset",
+    "record_id",
+    "university",
+    "faculty_school",
+    "department",
+    "selection_name",
+    "slot_type",
+    "enrollment_procedure_deadline",
+    "enrollment_procedure_detail",
+    "graduation_eligibility_status",
+    "years_since_graduation_max",
+    "graduation_eligibility_detail",
+    "regional_requirement_status",
+    "regional_requirement_detail",
+    "gender_requirement",
+    "gender_requirement_detail",
+    "guideline_url",
+    "reviewed_on",
+    "pilot_status",
+    "notes"
+  ],
+  "candidate_fields": {
+    "enrollment_procedure": [
+      "enrollment_procedure_deadline",
+      "enrollment_procedure_detail"
+    ],
+    "graduation": [
+      "graduation_eligibility_status",
+      "years_since_graduation_max",
+      "graduation_eligibility_detail"
+    ],
+    "regional": [
+      "regional_requirement_status",
+      "regional_requirement_detail"
+    ],
+    "gender": [
+      "gender_requirement",
+      "gender_requirement_detail"
+    ]
+  },
+  "enums": {
+    "graduation_eligibility_status": [
+      "現役のみ",
+      "既卒可",
+      "その他",
+      "不明"
+    ],
+    "regional_requirement_status": [
+      "Yes",
+      "No",
+      "Unknown"
+    ],
+    "gender_requirement": [
+      "制限なし",
+      "女性",
+      "男性",
+      "その他",
+      "不明"
+    ]
+  },
+  "policy": [
+    "Candidate-only; do not expose on public Site or canonical Master yet.",
+    "Preserve existing human-readable eligibility text while testing normalized values.",
+    "Do not infer years_since_graduation_max unless the official source gives a safely computable limit.",
+    "Regional detail may contain multiple dimensions (school location, residence, origin, post-graduation service); retain raw meaning until taxonomy stabilizes.",
+    "Enrollment procedure deadlines must be collected from current-year official documents."
+  ]
+}
