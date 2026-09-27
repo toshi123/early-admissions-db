@@ -269,10 +269,12 @@ This proposal does not:
 
 Those actions require later implementation and, where facts are affected, a separately authorized source-data review.
 
-## 14. v0.2 特殊選抜フラグ
+## 14. v0.3 特殊選抜フラグ
 
-2026-09-28 のSchema改訂で、Masterに `international_baccalaureate_flag`、`private_foreign_student_flag`、`returnee_flag`、`regional_quota_flag` の4列を正式追加する。source CSVでは `Yes / No`、Unifiedではbooleanとして保持し、4項目は相互排他的ではない。
+2026-09-28 のSchema改訂で、Masterに `international_baccalaureate_flag`、`private_foreign_student_flag`、`returnee_flag`、`regional_quota_flag`、`adult_selection_flag` の5列を正式追加する。source CSVでは `Yes / No`、Unifiedではbooleanとして保持し、5項目は相互排他的ではない。
 
 `regional_quota_flag` は地域枠・県内枠・地域推薦等として募集枠そのものが地域区分された募集単位を表し、本人居住地・高校所在地・卒業後勤務義務等の地域要件とは別概念とする。単なる地域条件から地域枠フラグを推定しない。
 
-検索UIでは4項目を既定でOFFとし、通常検索では4フラグのいずれかがtrueの募集単位を除外する。ユーザーが個別オプションをONにした場合のみ、対応フラグがtrueの募集単位を通常結果へ追加する。
+`adult_selection_flag` は大学公式に社会人入試・社会人選抜等として独立募集される募集単位を表す。年齢、在職歴、職歴等が出願資格に含まれるだけでは `Yes` としない。
+
+検索UIでは5項目を既定でOFFとし、通常検索では5フラグのいずれかがtrueの募集単位を除外する。ユーザーが個別オプションをONにした場合のみ、対応フラグがtrueの募集単位を通常結果へ追加する。
