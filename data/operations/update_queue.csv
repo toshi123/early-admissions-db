@@ -1,13 +1,13 @@
 queue_id,institution_type,university,faculty_school,selection_name,document_type,publication_status,release_expected_text,release_expected_from,release_expected_to,release_schedule_url,last_checked_on,next_check_on,actual_release_on,action_status,related_record_id,notes
 UQ-2027-0001,国立,小樽商科大学,,学校推薦型選抜（昼間）,募集要項,公開予定,2026年10月上旬（予定）,2026-10-01,2026-10-10,https://nyushi.otaru-uc.ac.jp/examination/guideline/,2026-09-27,2026-10-01,,待機,,2026-09-27公式ページで10月上旬公表予定を確認。
 UQ-2027-0002,国立,北見工業大学,,学校推薦型選抜,募集要項,公開予定,2026年10月上旬,2026-10-01,2026-10-10,https://koho5.office.kitami-it.ac.jp/admission/undergraduate-admissions/,2026-09-17,2026-10-01,,待機,,canonical Coverageに詳細募集要項10月上旬公表後再確認と記録済み。
-UQ-2027-0003,国立,一橋大学,,外国学校出身者選抜,募集要項,公開済,2026年9月下旬頃,2026-09-21,2026-09-30,https://juken.hit-u.ac.jp/admission/info/guidelines/,2026-09-27,,2026-09-25,更新必要,,2026-09-25の大学公式NEWSで2027年度募集要項公開を確認。canonicalへの詳細反映待ち。
+UQ-2027-0003,国立,一橋大学,,外国学校出身者選抜,募集要項,公開済,2026年9月下旬頃,2026-09-21,2026-09-30,https://juken.hit-u.ac.jp/admission/info/guidelines/,2026-09-27,,2026-09-25,更新中,,2026-09-25公開済。学校推薦型5行＋外国学校出身者4行のcanonical詳細照合中。
 UQ-2027-0004,国立,宇都宮大学,,総合型選抜B・D,募集要項,公開予定,2026年10月中旬,2026-10-11,2026-10-20,https://admission.utsunomiya-u.ac.jp/entrance-exam-info/faculty-entrance-exam/,2026-09-22,2026-10-11,,待機,,canonical Coverageに詳細募集要項10月中旬待ちと記録済み。
 UQ-2027-0005,国立,埼玉大学,教養学部・工学部,帰国生徒選抜,募集要項,公開予定,2026年11月公表予定,2026-11-01,2026-11-30,https://www.saitama-u.ac.jp/entrance/,2026-09-22,2026-11-01,,待機,,canonical Coverageに詳細募集要項11月公表後に最終再監査と記録済み。
 UQ-2027-0006,国立,東北大学,,AO入試Ⅲ期,募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://admissions.tohoku.ac.jp/ja/entrance-info/undergraduate-info/ao/,2026-09-22,2026-11-21,,待機,,canonical Coverageで既存AOⅢ期21行の2027詳細要項待ち。
 UQ-2027-0007,国立,新潟大学,,帰国生徒特別選抜,募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://www.niigata-u.ac.jp/admissions/faculty/recommendation/,2026-09-22,2026-11-21,,待機,,canonical Coverageに詳細学生募集要項11月下旬待ちと記録済み。
 UQ-2027-0008,国立,大阪大学,,帰国生徒特別入試,学生募集要項,公開予定,2026年9月下旬ごろ,2026-09-21,2026-09-30,https://www.osaka-u.ac.jp/ja/admissions/faculty/returnee,2026-09-27,2026-09-30,,確認時期到来,,9/27公式ページでなお9月下旬ごろ公表予定。
-UQ-2027-0009,国立,山口大学,,学校推薦型選抜（医学部医学科以外）,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.yamaguchi-u.ac.jp/nyushi/yoko/suisen/index.html,2026-09-27,,2026-09-25,更新必要,,大学公式新着で2026-09-25掲載を確認。
+UQ-2027-0009,国立,山口大学,,学校推薦型選抜（医学部医学科以外）,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.yamaguchi-u.ac.jp/nyushi/yoko/suisen/index.html,2026-09-27,,2026-09-25,更新中,,2026-09-25公開済。医学科以外の学校推薦型35行のcanonical詳細照合中。医学科は別Queueで11月下旬待機。
 UQ-2027-0010,国立,山口大学,医学部医学科,学校推薦型選抜Ⅱ,学生募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://www.yamaguchi-u.ac.jp/nyushi/yoko/index.html,2026-09-27,2026-11-21,,待機,,医学部医学科は11月下旬公表予定。
 UQ-2027-0011,国立,徳島大学,,学校推薦型選抜Ⅰ,学生募集要項,公開予定,2026年9月下旬,2026-09-21,2026-09-30,https://www.tokushima-u.ac.jp/admission/admission/senbatsuyoko.html,2026-09-27,2026-09-30,,確認時期到来,,9/27公式一覧でなお9月下旬公表予定。
 UQ-2027-0012,国立,徳島大学,,総合型選抜（大学入学共通テストを課す）,学生募集要項,公開予定,2026年9月下旬,2026-09-21,2026-09-30,https://www.tokushima-u.ac.jp/admission/admission/senbatsuyoko.html,2026-09-27,2026-09-30,,確認時期到来,,9/27公式一覧でなお9月下旬公表予定。
@@ -16,8 +16,8 @@ UQ-2027-0014,国立,徳島大学,,総合型選抜（大学入学共通テスト�
 UQ-2027-0015,国立,九州工業大学,,総合型選抜Ⅱ,学生募集要項,公開予定,2026年10月下旬,2026-10-21,2026-10-31,https://www.kyutech.ac.jp/examination,2026-09-22,2026-10-21,,待機,,canonical Coverageの公式再監査記録に10月下旬公表予定。IB専用は現ポリシー対象外のためQueue対象外。
 UQ-2027-0016,国立,熊本大学,,帰国生徒入試,学生募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://www.kumamoto-u.ac.jp/nyuushi/gakubunyushi/gakuseibosyuyoukoutou,2026-09-22,2026-11-21,,待機,,canonical Coverageの公式再監査記録に11月下旬待ち。
 UQ-2027-0017,国立,宮崎大学,,学校推薦型選抜・総合型選抜（未公開分）,学生募集要項,公開予定,2026年9月下旬,2026-09-21,2026-09-30,https://www.miyazaki-u.ac.jp/exam/department-exam/Internet-apply.html,2026-09-27,2026-09-30,,確認時期到来,,9/27公式WEB出願ページでは令和9年度は総合型選抜Ⅰのみ掲載。Coverage上の残り20行は詳細要項待ち。
-UQ-2027-0018,国立,鹿児島大学,,総合型選抜（自己推薦型選抜）,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.kagoshima-u.ac.jp/exam/youkou.html,2026-09-27,,2026-09-25,更新必要,,大学公式で2026-09-25公表を確認。
-UQ-2027-0019,国立,鹿児島大学,,学校推薦型選抜Ⅱ,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.kagoshima-u.ac.jp/exam/youkou.html,2026-09-27,,2026-09-25,更新必要,,大学公式で2026-09-25公表を確認。
+UQ-2027-0018,国立,鹿児島大学,,総合型選抜（自己推薦型選抜）,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.kagoshima-u.ac.jp/exam/youkou.html,2026-09-27,,2026-09-25,更新中,,2026-09-25公開済。総合型選抜（自己推薦型）12行のcanonical詳細照合中。
+UQ-2027-0019,国立,鹿児島大学,,学校推薦型選抜Ⅱ,学生募集要項,公開済,2026年9月下旬,2026-09-21,2026-09-30,https://www.kagoshima-u.ac.jp/exam/youkou.html,2026-09-27,,2026-09-25,更新中,,2026-09-25公開済。学校推薦型選抜Ⅱ32行のcanonical詳細照合中。
 UQ-2027-0020,国立,琉球大学,,学校推薦型選抜Ⅰ,学生募集要項,公開予定,2026年9月,2026-09-01,2026-09-30,https://www.u-ryukyu.ac.jp/admissions/recruitment/,2026-09-27,2026-09-30,,確認時期到来,,9/27公式一覧は公表時期を2026年9月とするが、個別ページは令和8年度版のまま。
 UQ-2027-0021,国立,琉球大学,,学校推薦型選抜Ⅱ,学生募集要項,公開予定,2026年9月,2026-09-01,2026-09-30,https://www.u-ryukyu.ac.jp/admissions/recruitment/,2026-09-27,2026-09-30,,確認時期到来,,9/27公式一覧は公表時期を2026年9月とするが、個別ページは令和8年度版のまま。
 UQ-2027-0022,公立,山形県立米沢栄養大学,,学校推薦型選抜,学生募集要項,公開予定,2026年10月上旬,2026-10-01,2026-10-10,https://www.u.yone.ac.jp/exam/,2026-09-20,2026-10-01,,待機,,canonical Coverageで10月上旬頃公表予定。
