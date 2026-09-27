@@ -209,14 +209,14 @@ def upsert_queue():
     header, rows = read_csv(UPDATE_QUEUE)
     additions = [
         {
-            "queue_id":"UQ-2027-0040","institution_type":"国立","university":"東京藝術大学","faculty_school":"美術学部",
+            "queue_id":"UQ-2027-0038","institution_type":"国立","university":"東京藝術大学","faculty_school":"美術学部",
             "selection_name":"私費外国人留学生入試","document_type":"学生募集要項","publication_status":"公開予定",
             "release_expected_text":"2026年11月下旬","release_expected_from":"2026-11-21","release_expected_to":"2026-11-30",
             "release_schedule_url":FINE_PAGE,"last_checked_on":"2026-09-28","next_check_on":"2026-11-21","actual_release_on":"",
             "action_status":"待機","related_record_id":"","notes":"2027入学者選抜要項で美術学部8募集単位を確認。詳細は美術学部学生募集要項公開後に再監査。"
         },
         {
-            "queue_id":"UQ-2027-0040","institution_type":"国立","university":"東京藝術大学","faculty_school":"美術学部",
+            "queue_id":"UQ-2027-0039","institution_type":"国立","university":"東京藝術大学","faculty_school":"美術学部",
             "selection_name":"帰国生徒選抜","document_type":"学生募集要項","publication_status":"公開予定",
             "release_expected_text":"2026年11月下旬","release_expected_from":"2026-11-21","release_expected_to":"2026-11-30",
             "release_schedule_url":FINE_PAGE,"last_checked_on":"2026-09-28","next_check_on":"2026-11-21","actual_release_on":"",
@@ -248,8 +248,8 @@ def update_corrections():
         "existing_master_rows":3,
         "existing_groups":[{"selection_name":"音楽学部SSP（飛び入学）","units":3}],
         "missing_selection_groups":[
-            {"selection_name":"私費外国人留学生入試","confirmed_units":15,"apply_status":"applied_partial","update_queue_ids":["UQ-2027-0040","UQ-2027-0040"]},
-            {"selection_name":"帰国生徒選抜","confirmed_units":5,"apply_status":"applied_partial","update_queue_id":"UQ-2027-0040"},
+            {"selection_name":"私費外国人留学生入試","confirmed_units":15,"apply_status":"applied_partial","update_queue_ids":["UQ-2027-0038","UQ-2027-0040"]},
+            {"selection_name":"帰国生徒選抜","confirmed_units":5,"apply_status":"applied_partial","update_queue_id":"UQ-2027-0039"},
             {"selection_name":"外国教育課程出身者特別入試","confirmed_units":7,"apply_status":"applied_partial","update_queue_id":"UQ-2027-0040"}
         ],
         "confirmed_missing_units_total":27,
