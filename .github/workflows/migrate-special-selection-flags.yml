@@ -1,5 +1,6 @@
 name: one-shot special-selection migration
 # retry-after-v0.2-source-version-fix
+# retry-after-lossless-boolean-fix
 
 on:
   push:
