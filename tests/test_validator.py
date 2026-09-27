@@ -37,9 +37,9 @@ def build_synthetic_repo(root: Path) -> dict[str, dict[str, object]]:
     contract_paths = [
         Path("docs/unified_data_contract.md"),
         Path("docs/unified_field_mapping_v0_1.md"),
-        Path("schema/unified/early_admissions_unified_schema_v0_2.json"),
-        Path("schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_82.json"),
-        Path("schema/shidai/shidai_early_admissions_schema_v1_09.json"),
+        Path("schema/unified/early_admissions_unified_schema_v0_3.json"),
+        Path("schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_83.json"),
+        Path("schema/shidai/shidai_early_admissions_schema_v1_10.json"),
     ]
     for rel_path in contract_paths:
         destination = root / rel_path
@@ -85,6 +85,7 @@ def build_synthetic_repo(root: Path) -> dict[str, dict[str, object]]:
                 "private_foreign_student_flag": "No",
                 "returnee_flag": "No",
                 "regional_quota_flag": "No",
+                "adult_selection_flag": "No",
             }
         )
         for field in (
