@@ -44,7 +44,14 @@ INTEGER_FIELDS = {
     "research_requirements": set(),
 }
 BOOLEAN_FIELDS = {
-    "master": {"stem_flag", "fallback_previous_year"},
+    "master": {
+        "stem_flag",
+        "fallback_previous_year",
+        "international_baccalaureate_flag",
+        "private_foreign_student_flag",
+        "returnee_flag",
+        "regional_quota_flag",
+    },
     "coverage": set(),
     "research_requirements": set(),
 }
