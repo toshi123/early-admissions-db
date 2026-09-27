@@ -66,7 +66,7 @@ class UnifiedAdapterTests(unittest.TestCase):
                 .read_text(encoding="utf-8")
             )
             adapter = UnifiedAdapter(contract)
-            record = adapter.adapt_master(master, "kokkoritsu", "5.81")
+            record = adapter.adapt_master(master, "kokkoritsu", "5.82")
 
             self.assertEqual(record["common_test_required"], "Conditional")
             self.assertEqual(record["research_activity_level_status"], "unmapped")
@@ -158,7 +158,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(research_rows[0], research_rows[1])
 
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(manifest["contract_version"], "0.1")
+            self.assertEqual(manifest["contract_version"], "0.2")
             self.assertEqual(
                 manifest["source_versions"],
                 {"kokkoritsu": "5.82", "shidai": "1.09"},
