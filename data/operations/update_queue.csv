@@ -1,0 +1,8 @@
+queue_id,institution_type,university,faculty_school,selection_name,document_type,publication_status,release_expected_text,release_expected_from,release_expected_to,release_schedule_url,last_checked_on,next_check_on,actual_release_on,action_status,related_record_id,notes
+UQ-2027-0001,国立,小樽商科大学,,学校推薦型選抜（昼間）,募集要項,公開予定,2026年10月上旬（予定）,2026-10-01,2026-10-10,https://nyushi.otaru-uc.ac.jp/examination/guideline/,2026-09-27,2026-10-01,,待機,,2026-09-27公式ページで10月上旬公表予定を確認。
+UQ-2027-0002,国立,北見工業大学,,学校推薦型選抜,募集要項,公開予定,2026年10月上旬,2026-10-01,2026-10-10,https://koho5.office.kitami-it.ac.jp/admission/undergraduate-admissions/,2026-09-17,2026-10-01,,待機,,canonical Coverageに詳細募集要項10月上旬公表後再確認と記録済み。
+UQ-2027-0003,国立,一橋大学,,外国学校出身者選抜,募集要項,公開済,2026年9月下旬頃,2026-09-21,2026-09-30,https://juken.hit-u.ac.jp/admission/info/guidelines/,2026-09-27,,2026-09-25,更新必要,,2026-09-25の大学公式NEWSで2027年度募集要項公開を確認。canonicalへの詳細反映待ち。
+UQ-2027-0004,国立,宇都宮大学,,総合型選抜B・D,募集要項,公開予定,2026年10月中旬,2026-10-11,2026-10-20,https://admission.utsunomiya-u.ac.jp/entrance-exam-info/faculty-entrance-exam/,2026-09-22,2026-10-11,,待機,,canonical Coverageに詳細募集要項10月中旬待ちと記録済み。
+UQ-2027-0005,国立,埼玉大学,教養学部・工学部,帰国生徒選抜,募集要項,公開予定,2026年11月公表予定,2026-11-01,2026-11-30,https://www.saitama-u.ac.jp/entrance/,2026-09-22,2026-11-01,,待機,,canonical Coverageに詳細募集要項11月公表後に最終再監査と記録済み。
+UQ-2027-0006,国立,東北大学,,AO入試Ⅲ期,募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://admissions.tohoku.ac.jp/ja/entrance-info/undergraduate-info/ao/,2026-09-22,2026-11-21,,待機,,canonical Coverageで既存AOⅢ期21行の2027詳細要項待ち。
+UQ-2027-0007,国立,新潟大学,,帰国生徒特別選抜,募集要項,公開予定,2026年11月下旬,2026-11-21,2026-11-30,https://www.niigata-u.ac.jp/admissions/faculty/recommendation/,2026-09-22,2026-11-21,,待機,,canonical Coverageに詳細学生募集要項11月下旬待ちと記録済み。
