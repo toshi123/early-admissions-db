@@ -17,13 +17,13 @@
 
 | Table | Rows | Bytes | SHA-256 |
 |---|---:|---:|---|
-| master | 6569 | 12496688 | `0f527b664ee45351e48fa1982e83cda820003b1394221cb81f5a9d05e9bf1d90` |
-| coverage | 260 | 150295 | `d6b4c5444844af2097366ae3f3690035df07d264f8b721fabe43d6a937add58c` |
+| master | 6585 | 12540190 | `85f42bec7b1f2a19e8ce319c0335308dd1759654eb2bdff340b21486269c3af8` |
+| coverage | 260 | 150562 | `cbbda71b0bc62e53ba53a069ff665c4ed8a63793e03fc4cee7a2fec07db18a92` |
 | research_requirements | 495 | 234228 | `f39fd7e58451350f2cc39aca8bf25567dbc951a103f7fea256890ab0434bcdb0` |
 
 ## Validation gates
 
-- Source canonical validator: errors=0, warnings=1167, informational=3472
+- Source canonical validator: errors=0, warnings=1183, informational=3472
 - Unified JSON Schema validation: passed
 - Unified Master PK / ResearchRequirements FK / Coverage: passed
 - Source-to-output row preservation: passed

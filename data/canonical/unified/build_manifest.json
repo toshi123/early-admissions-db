@@ -14,15 +14,15 @@
           "columns": 10,
           "path": "data/canonical/kokkoritsu/coverage.csv",
           "rows": 187,
-          "sha256": "c11d6ae53f7c1a9860f68c4bd7cec27e15cee59879660e364c0f324232c51f6f",
-          "size_bytes": 96562
+          "sha256": "8a5a90549554b6ff4cb2792c36f312f349e294bb4502cc1083c6f1c5b49fbcdc",
+          "size_bytes": 96829
         },
         "master": {
           "columns": 80,
           "path": "data/canonical/kokkoritsu/master.csv",
-          "rows": 4169,
-          "sha256": "727051a8121a9539d8f0e6582c93ae8e2996a1def7614d2ac2360d5e115d9683",
-          "size_bytes": 7056498
+          "rows": 4185,
+          "sha256": "320eafafe3fa310de1cb72e6a656c30a5dcf2d09992950af20e6c29e434e1145",
+          "size_bytes": 7099216
         },
         "research_requirements": {
           "columns": 13,
@@ -94,15 +94,15 @@
       "columns": 12,
       "path": "data/canonical/unified/coverage.csv",
       "rows": 260,
-      "sha256": "d6b4c5444844af2097366ae3f3690035df07d264f8b721fabe43d6a937add58c",
-      "size_bytes": 150295
+      "sha256": "cbbda71b0bc62e53ba53a069ff665c4ed8a63793e03fc4cee7a2fec07db18a92",
+      "size_bytes": 150562
     },
     "master": {
       "columns": 84,
       "path": "data/canonical/unified/master.csv",
-      "rows": 6569,
-      "sha256": "0f527b664ee45351e48fa1982e83cda820003b1394221cb81f5a9d05e9bf1d90",
-      "size_bytes": 12496688
+      "rows": 6585,
+      "sha256": "85f42bec7b1f2a19e8ce319c0335308dd1759654eb2bdff340b21486269c3af8",
+      "size_bytes": 12540190
     },
     "research_requirements": {
       "columns": 15,
@@ -130,8 +130,8 @@
       "builds_compared": 2,
       "byte_identical": true,
       "sha256": {
-        "coverage": "d6b4c5444844af2097366ae3f3690035df07d264f8b721fabe43d6a937add58c",
-        "master": "0f527b664ee45351e48fa1982e83cda820003b1394221cb81f5a9d05e9bf1d90",
+        "coverage": "cbbda71b0bc62e53ba53a069ff665c4ed8a63793e03fc4cee7a2fec07db18a92",
+        "master": "85f42bec7b1f2a19e8ce319c0335308dd1759654eb2bdff340b21486269c3af8",
         "research_requirements": "f39fd7e58451350f2cc39aca8bf25567dbc951a103f7fea256890ab0434bcdb0"
       },
       "status": "passed"
@@ -199,9 +199,9 @@
         },
         "DETAIL_COMPLETENESS_UNMAPPED": {
           "by_dataset": {
-            "kokkoritsu": 767
+            "kokkoritsu": 783
           },
-          "count": 767,
+          "count": 783,
           "representative_record_ids": [
             "NWU-2027-PICASO-01",
             "NWU-2027-PICASO-02",
@@ -317,7 +317,7 @@
             "COVERAGE_ZERO_MASTER_ROWS": 8,
             "DATE_RAW_PARTIAL": 1240,
             "DATE_RAW_UNPARSED": 159,
-            "DETAIL_COMPLETENESS_UNMAPPED": 767,
+            "DETAIL_COMPLETENESS_UNMAPPED": 783,
             "PROVENANCE_URL_MISSING": 55,
             "RESEARCH_ACTIVITY_LEVEL_UNMAPPED": 281,
             "RESEARCH_DENORMALIZED_FIELD_MISMATCH": 8,
@@ -328,9 +328,9 @@
           "by_severity": {
             "error": 0,
             "informational": 1532,
-            "warning": 1149
+            "warning": 1165
           },
-          "total": 2681
+          "total": 2697
         },
         "shidai": {
           "by_code": {
@@ -353,10 +353,10 @@
       "by_severity": {
         "error": 0,
         "informational": 3472,
-        "warning": 1167
+        "warning": 1183
       },
       "status": "passed_with_findings",
-      "total_issues": 4639
+      "total_issues": 4655
     },
     "status": "passed",
     "unified": {
@@ -364,7 +364,7 @@
         "status": "passed",
         "validated_rows": {
           "coverage": 260,
-          "master": 6569,
+          "master": 6585,
           "research_requirements": 495
         }
       },
@@ -388,17 +388,17 @@
         "expectation_source": "canonical_input",
         "expected_output_rows": {
           "coverage": 260,
-          "master": 6569,
+          "master": 6585,
           "research_requirements": 495
         },
         "input_rows": {
           "coverage": 260,
-          "master": 6569,
+          "master": 6585,
           "research_requirements": 495
         },
         "output_rows": {
           "coverage": 260,
-          "master": 6569,
+          "master": 6585,
           "research_requirements": 495
         },
         "status": "passed"
@@ -417,7 +417,7 @@
             "shidai": 73
           },
           "master": {
-            "kokkoritsu": 4169,
+            "kokkoritsu": 4185,
             "shidai": 2400
           },
           "research_requirements": {
