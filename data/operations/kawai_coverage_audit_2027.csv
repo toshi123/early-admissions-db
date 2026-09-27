@@ -23,7 +23,7 @@ kokkoritsu,国立,東京海洋大学,1152,2027,2027,監査中,未判定,未確�
 kokkoritsu,国立,お茶の水女子大学,1110,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1110/recommend/exam_rec,https://search.keinet.ne.jp/1110/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Masterの推薦8＋新フンボルト13等との照合中。帰国生12行はKawai主要推薦/総合型の対象外。
 kokkoritsu,国立,電気通信大学,1115,2026,2027,一部照合,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1115/recommend/exam_rec,https://search.keinet.ne.jp/1115/recommend/exam_ao,Kei-Net総合型は2027、推薦は2026。Masterの総合型4行側を2027照合対象とする。
 kokkoritsu,国立,一橋大学,1165,2027,ページなし/未確認,照合済・欠落候補なし,なし,不要,2026-09-27,https://search.keinet.ne.jp/1165/recommend/exam_rec,https://search.keinet.ne.jp/1165/recommend/exam_ao,Kei-Net 2027学校推薦型5学部とMasterの学校推薦型5行が対応。外国学校出身者4行はKei-Net対象外。
-kokkoritsu,国立,政策研究大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,国立,政策研究大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,国立,茨城大学,1075,2026,2026,河合未更新・保留,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1075/recommend/exam_rec,https://search.keinet.ne.jp/1075/recommend/exam_ao,Kei-Net推薦・総合型とも2026年度表示のため2027比較は保留。
 kokkoritsu,国立,筑波大学,1085,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1085/recommend/exam_rec,https://search.keinet.ne.jp/1085/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Masterの推薦・AC入試等との意味対応を精査中。
 kokkoritsu,国立,筑波技術大学,1080,2027,2027,照合済・欠落候補なし,なし,不要,2026-09-27,https://search.keinet.ne.jp/1080/recommend/exam_rec,https://search.keinet.ne.jp/1080/recommend/exam_ao,Kei-Net 2027の推薦・総合型の障害区分/学部系統はMaster 14行の構成と対応。Kawai起点のmissing candidateなし。
@@ -32,7 +32,7 @@ kokkoritsu,国立,群馬大学,1095,2027,2027,監査中,未判定,未確認,2026
 kokkoritsu,国立,埼玉大学,1100,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1100/recommend/exam_rec,https://search.keinet.ne.jp/1100/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Master 43行との意味対応を精査中。
 kokkoritsu,国立,千葉大学,1105,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1105/recommend/exam_rec,https://search.keinet.ne.jp/1105/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Master 55行との意味対応を精査中。
 kokkoritsu,国立,横浜国立大学,1170,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1170/recommend/exam_rec,https://search.keinet.ne.jp/1170/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Masterの対象内推薦・総合型との意味対応を精査中。
-kokkoritsu,国立,総合研究大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,国立,総合研究大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,国立,新潟大学,1180,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1180/recommend/exam_rec,https://search.keinet.ne.jp/1180/recommend/exam_ao,Kei-Net推薦・総合型とも2027。河合変更点の教育学部総合型新設はMasterの NU-2027-AO-EDU-INQUIRY として既収録を確認。残りの意味対応を精査中。
 kokkoritsu,国立,長岡技術科学大学,1175,2027,ページなし/未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1175/recommend/exam_rec,https://search.keinet.ne.jp/1175/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Master 6行（専門系5＋普通/理数系1）との意味対応を精査中。
 kokkoritsu,国立,上越教育大学,1185,2027,ページなし/未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1185/recommend/exam_rec,https://search.keinet.ne.jp/1185/recommend/exam_ao,Kei-Net学校推薦型ページを確認。総合型ページは直接確認できず、Master 3行との比較を継続。
@@ -40,7 +40,7 @@ kokkoritsu,国立,山梨大学,1215,2027,未確認,監査中,未判定,未確認
 kokkoritsu,国立,信州大学,1225,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1225/recommend/exam_rec,https://search.keinet.ne.jp/1225/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,国立,富山大学,1190,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1190/recommend/exam_rec,https://search.keinet.ne.jp/1190/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Masterとの意味対応を精査中。
 kokkoritsu,国立,金沢大学,1200,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1200/recommend/exam_rec,https://search.keinet.ne.jp/1200/recommend/exam_ao,Kei-Net学校推薦型2027を確認。総合型側とMasterの意味対応を継続。
-kokkoritsu,国立,北陸先端科学技術大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,国立,北陸先端科学技術大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,国立,福井大学,1205,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1205/recommend/exam_rec,https://search.keinet.ne.jp/1205/recommend/exam_ao,Kei-Net推薦・総合型とも2027。Masterとの意味対応を精査中。
 kokkoritsu,国立,静岡大学,1230,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1230/recommend/exam_rec,https://search.keinet.ne.jp/1230/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,国立,浜松医科大学,1235,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1235/recommend/exam_rec,https://search.keinet.ne.jp/1235/recommend/exam_ao,Kei-Net学校推薦型2027を確認。総合型有無を含めMasterと照合中。
@@ -61,7 +61,7 @@ kokkoritsu,国立,兵庫教育大学,1320,2027,2027,監査中,未判定,未確�
 kokkoritsu,国立,神戸大学,1310,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1310/recommend/exam_rec,https://search.keinet.ne.jp/1310/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Master 29行（志特別・総合型・推薦）との意味対応を精査中。
 kokkoritsu,国立,奈良教育大学,1325,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1325/recommend/exam_rec,https://search.keinet.ne.jp/1325/recommend/exam_ao,Kei-Net総合型2027を確認。Master 41行との意味対応を精査中。
 kokkoritsu,国立,奈良女子大学,1330,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1330/recommend/exam_rec,https://search.keinet.ne.jp/1330/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Master 34行（高大接続・探究Q・推薦）との意味対応を精査中。
-kokkoritsu,国立,奈良先端科学技術大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,国立,奈良先端科学技術大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,国立,和歌山大学,1335,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1335/recommend/exam_rec,https://search.keinet.ne.jp/1335/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Master 12行との意味対応を精査中。
 kokkoritsu,国立,鳥取大学,1340,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1340/recommend/exam_rec,https://search.keinet.ne.jp/1340/recommend/exam_ao,Kei-Net総合型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,国立,島根大学,1345,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1345/recommend/exam_rec,https://search.keinet.ne.jp/1345/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。女子枠を含めMasterとの意味対応を精査中。
@@ -83,7 +83,7 @@ kokkoritsu,国立,大分大学,1445,2027,2027,監査中,未判定,未確認,2026
 kokkoritsu,国立,宮崎大学,1455,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1455/recommend/exam_rec,https://search.keinet.ne.jp/1455/recommend/exam_ao,Kei-Net総合型2027を確認。Masterとの意味対応を精査中。未公開分は別Queueで管理。
 kokkoritsu,国立,鹿児島大学,1465,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1465/recommend/exam_rec,https://search.keinet.ne.jp/1465/recommend/exam_ao,Kei-Net総合型2027を確認。Masterとの意味対応を精査中。自己推薦・推薦Ⅱ詳細更新は別Queueで進行。
 kokkoritsu,国立,鹿屋体育大学,1470,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1470/recommend/exam_rec,https://search.keinet.ne.jp/1470/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。
-kokkoritsu,国立,琉球大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,国立,琉球大学,1475,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1475/recommend/exam_rec,https://search.keinet.ne.jp/1475/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。推薦詳細公開待ちは別Queue管理。
 kokkoritsu,公立,札幌医科大学,1505,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1505/recommend/exam_rec,https://search.keinet.ne.jp/1505/recommend/exam_ao,Kei-Net学校推薦型2027を確認。医学科特別枠等をMasterと精査中。
 kokkoritsu,公立,釧路公立大学,1510,未確認,ページなし/未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1510/recommend/exam_rec,https://search.keinet.ne.jp/1510/recommend/exam_ao,Kei-Net入試結果では推薦A/B/Cを確認できるが2027詳細ページの年度確認待ち。
 kokkoritsu,公立,公立はこだて未来大学,1507,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1507/recommend/exam_rec,https://search.keinet.ne.jp/1507/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。はこだて枠等をMasterと精査中。
@@ -112,7 +112,7 @@ kokkoritsu,公立,前橋工科大学,1523,2027,2027,監査中,未判定,未確�
 kokkoritsu,公立,埼玉県立大学,1526,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1526/recommend/exam_rec,https://search.keinet.ne.jp/1526/recommend/exam_ao,Kei-Net学校推薦型2027を確認。保健医療福祉各学科をMasterと精査中。
 kokkoritsu,公立,千葉県立保健医療大学,1528,2027,ページなし/未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1528/recommend/exam_rec,https://search.keinet.ne.jp/1528/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,公立,東京都立大学,1532,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1532/recommend/exam_rec,https://search.keinet.ne.jp/1532/recommend/exam_ao,Kei-Net総合型2027を確認。Masterの各種総合型との意味対応を精査中。
-kokkoritsu,公立,東京都立産業技術大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,東京都立産業技術大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,公立,神奈川県立保健福祉大学,1542,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1542/recommend/exam_rec,https://search.keinet.ne.jp/1542/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,公立,横浜市立大学,1540,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1540/recommend/exam_rec,https://search.keinet.ne.jp/1540/recommend/exam_ao,Kei-Net総合型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,公立,川崎市立看護大学,1541,2027,ページなし/未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1541/recommend/exam_rec,https://search.keinet.ne.jp/1541/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Masterとの意味対応を精査中。
@@ -134,12 +134,12 @@ kokkoritsu,公立,公立小松大学,1548,2027,未確認,監査中,未判定,未
 kokkoritsu,公立,福井県立大学,1555,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1555/recommend/exam_rec,https://search.keinet.ne.jp/1555/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,公立,敦賀市立看護大学,1556,2026,未確認,河合未更新・保留,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1556/recommend/exam_rec,https://search.keinet.ne.jp/1556/recommend/exam_ao,Kei-Net学校推薦型は2026年度表示のため2027 Coverage判定には使わず保留。
 kokkoritsu,公立,岐阜県立看護大学,1564,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1564/recommend/exam_rec,https://search.keinet.ne.jp/1564/recommend/exam_ao,Kei-Net学校推薦型2027を確認。詳細要項待ちは別Queue管理。
-kokkoritsu,公立,情報科学芸術大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,情報科学芸術大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
 kokkoritsu,公立,岐阜薬科大学,1565,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1565/recommend/exam_rec,https://search.keinet.ne.jp/1565/recommend/exam_ao,Kei-Net学校推薦型2027を確認。詳細要項待ちは別Queue管理。
 kokkoritsu,公立,静岡県立大学,1570,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1570/recommend/exam_rec,https://search.keinet.ne.jp/1570/recommend/exam_ao,Kei-Net学校推薦型2027を確認。共テ利用推薦詳細待ちは別Queue管理。
 kokkoritsu,公立,静岡文化芸術大学,1571,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1571/recommend/exam_rec,https://search.keinet.ne.jp/1571/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Masterとの意味対応を精査中。
-kokkoritsu,公立,静岡社会健康医学大学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
-kokkoritsu,公立,静岡県立農林環境専門職大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,静岡社会健康医学大学院大学,,未確認,未確認,対象外,未判定,不要,2026-09-27,,,学部入試を持たない大学院大学のためKawai Coverage監査対象外。
+kokkoritsu,公立,静岡県立農林環境専門職大学,1572,2026,未確認,河合未更新・保留,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1572/recommend/exam_rec,https://search.keinet.ne.jp/1572/recommend/exam_ao,大学一般ページは2027だが、Kei-Net推薦型結果・確認可能情報は2026まで。2027 Coverage判定は保留。
 kokkoritsu,公立,愛知県立大学,1575,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1575/recommend/exam_rec,https://search.keinet.ne.jp/1575/recommend/exam_ao,Kei-Net学校推薦型2027を確認。未公開推薦/総合型は別Queue管理。
 kokkoritsu,公立,愛知県立芸術大学,1580,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1580/recommend/exam_rec,https://search.keinet.ne.jp/1580/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。音楽推薦・美術総合型等をMasterと精査中。
 kokkoritsu,公立,名古屋市立大学,1585,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1585/recommend/exam_rec,https://search.keinet.ne.jp/1585/recommend/exam_ao,Kei-Net学校推薦型2027を確認。B系・地域枠等の詳細待ちは別Queue管理。
@@ -159,18 +159,18 @@ kokkoritsu,公立,奈良県立大学,1640,2027,未確認,監査中,未判定,未
 kokkoritsu,公立,和歌山県立医科大学,1645,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1645/recommend/exam_rec,https://search.keinet.ne.jp/1645/recommend/exam_ao,Kei-Net学校推薦型2027を確認。一般県内/県民医療枠等をMasterと精査中。詳細要項待ちは別Queue管理。
 kokkoritsu,公立,公立鳥取環境大学,1646,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1646/recommend/exam_rec,https://search.keinet.ne.jp/1646/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Ⅰ型の地域枠/専門高校枠等をMasterと精査中。
 kokkoritsu,公立,島根県立大学,1647,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1647/recommend/exam_rec,https://search.keinet.ne.jp/1647/recommend/exam_ao,Kei-Net学校推薦型2027を確認。地域条件・プレゼン等を含めMasterと精査中。
-kokkoritsu,公立,岡山県立大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,岡山県立大学,1648,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1648/recommend/exam_rec,https://search.keinet.ne.jp/1648/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Master 14行との意味対応を精査中。
 kokkoritsu,公立,新見公立大学,1649,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1649/recommend/exam_rec,https://search.keinet.ne.jp/1649/recommend/exam_ao,Kei-Net学校推薦型2027および2027変更点を確認。地域優先枠、共テなしへの変更をMasterと精査中。
 kokkoritsu,公立,県立広島大学,1656,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1656/recommend/exam_rec,https://search.keinet.ne.jp/1656/recommend/exam_ao,Kei-Net学校推薦型2027を確認。県内/全国枠・プレゼン等をMasterと精査中。
 kokkoritsu,公立,叡啓大学,1660,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1660/recommend/exam_rec,https://search.keinet.ne.jp/1660/recommend/exam_ao,Kei-Net総合型2027を確認。専願枠等をMasterと精査中。
 kokkoritsu,公立,広島市立大学,1658,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1658/recommend/exam_rec,https://search.keinet.ne.jp/1658/recommend/exam_ao,Kei-Net総合型2027を確認。国際学部等をMasterと精査中。
 kokkoritsu,公立,尾道市立大学,1653,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1653/recommend/exam_rec,https://search.keinet.ne.jp/1653/recommend/exam_ao,Kei-Net学校推薦型2027を確認。Masterとの意味対応を精査中。
 kokkoritsu,公立,福山市立大学,1659,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1659/recommend/exam_rec,https://search.keinet.ne.jp/1659/recommend/exam_ao,Kei-Net学校推薦型2027を確認。地域枠/全国枠をMasterと精査中。
-kokkoritsu,公立,山口県立大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,山口県立大学,1663,2026/表示混在,2027,一部照合,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1663/recommend/exam_rec,https://search.keinet.ne.jp/1663/recommend/exam_ao,Kei-Net総合型2027・変更点2027を確認。推薦ページ本文は2026表示が残るため推薦側は保留。2027新設の看護栄養学部総合型はMasterに看護/栄養とも既収録を確認。
 kokkoritsu,公立,下関市立大学,1665,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1665/recommend/exam_rec,https://search.keinet.ne.jp/1665/recommend/exam_ao,Kei-Net学校推薦型2027を確認。一部前年度情報注記があるため方式存在のみ候補に使用し、Masterと精査中。
 kokkoritsu,公立,山陽小野田市立山口東京理科大学,1661,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1661/recommend/exam_rec,https://search.keinet.ne.jp/1661/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。地域/全国枠・総合型Ⅰ等をMasterと精査中。
 kokkoritsu,公立,周南公立大学,1666,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1666/recommend/exam_rec,https://search.keinet.ne.jp/1666/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。全国枠・総合型をMasterと精査中。
-kokkoritsu,公立,香川県立保健医療大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,香川県立保健医療大学,1667,2026,未確認,河合未更新・保留,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1667/recommend/exam_rec,https://search.keinet.ne.jp/1667/recommend/exam_ao,Kei-Net学校推薦型本文は2026年度表示のため2027 Coverage判定には使わず保留。
 kokkoritsu,公立,愛媛県立医療技術大学,1668,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1668/recommend/exam_rec,https://search.keinet.ne.jp/1668/recommend/exam_ao,Kei-Net学校推薦型2027を確認。地域条件を含めMasterと精査中。
 kokkoritsu,公立,高知県立大学,1670,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1670/recommend/exam_rec,https://search.keinet.ne.jp/1670/recommend/exam_ao,Kei-Net学校推薦型2027を確認。県内/全国枠等をMasterと精査中。
 kokkoritsu,公立,高知工科大学,1671,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1671/recommend/exam_rec,https://search.keinet.ne.jp/1671/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。一般/県内枠等をMasterと精査中。
@@ -185,7 +185,7 @@ kokkoritsu,公立,宮崎県立看護大学,1704,2027,未確認,監査中,未判�
 kokkoritsu,公立,宮崎公立大学,1703,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1703/recommend/exam_rec,https://search.keinet.ne.jp/1703/recommend/exam_ao,Kei-Net学校推薦型2027を確認。学校推薦型Ⅰ等をMasterと精査中。
 kokkoritsu,公立,沖縄県立芸術大学,1705,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1705/recommend/exam_rec,https://search.keinet.ne.jp/1705/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。県内枠・総合型等をMasterと精査中。
 kokkoritsu,公立,沖縄県立看護大学,1706,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1706/recommend/exam_rec,https://search.keinet.ne.jp/1706/recommend/exam_ao,Kei-Net学校推薦型2027を確認。離島・過疎地域推薦等をMasterと精査中。
-kokkoritsu,公立,名桜大学,,未確認,未確認,未監査,未判定,未確認,,,,
+kokkoritsu,公立,名桜大学,1710,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1710/recommend/exam_rec,https://search.keinet.ne.jp/1710/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。一般/地域枠、看護地域枠等をMasterと精査中。
 shidai,,早稲田大学,,未確認,未確認,未監査,未判定,未確認,,,,
 shidai,,慶應義塾大学,,未確認,未確認,未監査,未判定,未確認,,,,
 shidai,,上智大学,,未確認,未確認,未監査,未判定,未確認,,,,
