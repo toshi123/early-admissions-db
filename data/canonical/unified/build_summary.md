@@ -1,7 +1,7 @@
 # Unified dataset v0.1 build summary
 
 - Build status: `passed`
-- Contract/schema version: `0.2`
+- Contract/schema version: `0.3`
 - Canonical source mode: read-only
 - Determinism: two builds were byte-identical
 - Serialization: UTF-8, LF, no BOM
@@ -10,16 +10,16 @@
 
 | Dataset | Version |
 |---|---|
-| kokkoritsu | `5.82` |
-| shidai | `1.09` |
+| kokkoritsu | `5.83` |
+| shidai | `1.10` |
 
 ## Output tables
 
 | Table | Rows | Bytes | SHA-256 |
 |---|---:|---:|---|
-| master | 6526 | 12376984 | `17d0e155257fa6ffc6f354a68aac74d3212f423a3ea2d8e898a91178485b006c` |
-| coverage | 260 | 150388 | `5e45e4fe7e32dcb6120eb28606cee0296cd814c060cfb7b22af9e1346aeb38d4` |
-| research_requirements | 495 | 234228 | `4187d01258c83e035fc49fc29238980481bf652d29031077e1a2c1733791a6ba` |
+| master | 6553 | 12460004 | `add5dbf7b650296980ee1718eb004279c85786ae86164e8aa45fce7f197e9468` |
+| coverage | 260 | 150363 | `ec1fbe59ad1218401b8a4ca4b65f381c50c45ffb0b48322a36a688ba1b1f2254` |
+| research_requirements | 495 | 234228 | `f39fd7e58451350f2cc39aca8bf25567dbc951a103f7fea256890ab0434bcdb0` |
 
 ## Validation gates
 

@@ -1,6 +1,6 @@
 {
   "artifact": "early_admissions_unified",
-  "contract_version": "0.2",
+  "contract_version": "0.3",
   "excluded_artifacts": [
     "SQLite",
     "JSON search index",
@@ -14,15 +14,15 @@
           "columns": 10,
           "path": "data/canonical/kokkoritsu/coverage.csv",
           "rows": 187,
-          "sha256": "4f9696f7eb46f465662c33d0d94d4d2524de429b88acb739a5a96b311d84dda4",
-          "size_bytes": 96655
+          "sha256": "49dd2dd80d1a082c64589039afcba5c2d84809faaabde8bb008ee73e8edcaf5c",
+          "size_bytes": 96630
         },
         "master": {
-          "columns": 79,
+          "columns": 80,
           "path": "data/canonical/kokkoritsu/master.csv",
-          "rows": 4126,
-          "sha256": "c226d70b5ee5f207f2605161c495ed095b92cb887bd38396fd3967e6ebb5d3cd",
-          "size_bytes": 6965626
+          "rows": 4153,
+          "sha256": "51f233487ac0a674c31896d48b3aa34dfe73cad59c4801ef09f8214154eee3e3",
+          "size_bytes": 7020566
         },
         "research_requirements": {
           "columns": 13,
@@ -41,11 +41,11 @@
           "size_bytes": 50061
         },
         "master": {
-          "columns": 79,
+          "columns": 80,
           "path": "data/canonical/shidai/master.csv",
           "rows": 2400,
-          "sha256": "1a0735629316fcc4fc0ecc8423b86873c89fd4b5c090ca6ef06e839965cebaed",
-          "size_bytes": 5130435
+          "sha256": "f1cf41daa7265e7b0426a6f4fd8d76cc857c75e2b94398ed4c324a7093baab46",
+          "size_bytes": 5137656
         },
         "research_requirements": {
           "columns": 13,
@@ -59,32 +59,32 @@
     "contract": {
       "docs/unified_data_contract.md": {
         "path": "docs/unified_data_contract.md",
-        "sha256": "9327512c6e3a9ad3003407933c32c518949322eddd1c056d103214ea1b957f1e",
-        "size_bytes": 13688
+        "sha256": "033aa83d05d66940ea5b05d801c1ba7d6df75bc3318d17ab4ced2047ca3aff92",
+        "size_bytes": 13940
       },
       "docs/unified_field_mapping_v0_1.md": {
         "path": "docs/unified_field_mapping_v0_1.md",
-        "sha256": "114122ceb104e56b43a9cbeedb3c9196c2c658af0ae1f2580a7aad7f2d05784c",
-        "size_bytes": 15913
+        "sha256": "8ed275fa563a66cc60ab8ff373785333356ed1871563fb106fa8ff2b2324c7ae",
+        "size_bytes": 15973
       },
-      "schema/unified/early_admissions_unified_schema_v0_2.json": {
-        "path": "schema/unified/early_admissions_unified_schema_v0_2.json",
-        "sha256": "c4fb5c6e9b2f470b4dcf582533bdbacf4e892059f9485468ecd0eedcb8cc7205",
-        "size_bytes": 25107
+      "schema/unified/early_admissions_unified_schema_v0_3.json": {
+        "path": "schema/unified/early_admissions_unified_schema_v0_3.json",
+        "sha256": "3ced26fc142f5bf1956d3ef8089f17c6c6fbba8f1bfd07ffbdc10852eec298ed",
+        "size_bytes": 25461
       }
     },
     "source_schemas": {
       "kokkoritsu": {
-        "path": "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_82.json",
-        "sha256": "6dcd411efdeebb6ace6c37d006c21723f01721bf0764af53663501336a7e7076",
-        "size_bytes": 17223,
-        "version": "5.82"
+        "path": "schema/kokkoritsu/kokkoritsu_early_admissions_schema_v5_83.json",
+        "sha256": "bf02704f4b2ce4e01330ad8d80db843788528afb2485b93e8a693659f962781c",
+        "size_bytes": 17661,
+        "version": "5.83"
       },
       "shidai": {
-        "path": "schema/shidai/shidai_early_admissions_schema_v1_09.json",
-        "sha256": "b1ca19f4cfd7b7e6e404fbf29606afd6aa140c554d65dc23ece9c2992e47e6eb",
-        "size_bytes": 18908,
-        "version": "1.09"
+        "path": "schema/shidai/shidai_early_admissions_schema_v1_10.json",
+        "sha256": "6f95d29b88affe60a59ecdf39dcb2c68e1996820579771dd14b4e665a530f1bd",
+        "size_bytes": 19346,
+        "version": "1.10"
       }
     }
   },
@@ -94,25 +94,25 @@
       "columns": 12,
       "path": "data/canonical/unified/coverage.csv",
       "rows": 260,
-      "sha256": "5e45e4fe7e32dcb6120eb28606cee0296cd814c060cfb7b22af9e1346aeb38d4",
-      "size_bytes": 150388
+      "sha256": "ec1fbe59ad1218401b8a4ca4b65f381c50c45ffb0b48322a36a688ba1b1f2254",
+      "size_bytes": 150363
     },
     "master": {
-      "columns": 83,
+      "columns": 84,
       "path": "data/canonical/unified/master.csv",
-      "rows": 6526,
-      "sha256": "17d0e155257fa6ffc6f354a68aac74d3212f423a3ea2d8e898a91178485b006c",
-      "size_bytes": 12376984
+      "rows": 6553,
+      "sha256": "add5dbf7b650296980ee1718eb004279c85786ae86164e8aa45fce7f197e9468",
+      "size_bytes": 12460004
     },
     "research_requirements": {
       "columns": 15,
       "path": "data/canonical/unified/research_requirements.csv",
       "rows": 495,
-      "sha256": "4187d01258c83e035fc49fc29238980481bf652d29031077e1a2c1733791a6ba",
+      "sha256": "f39fd7e58451350f2cc39aca8bf25567dbc951a103f7fea256890ab0434bcdb0",
       "size_bytes": 234228
     }
   },
-  "schema_id": "urn:early-admissions:unified-schema:0.2",
+  "schema_id": "urn:early-admissions:unified-schema:0.3",
   "serialization": {
     "csv_bom": false,
     "csv_encoding": "UTF-8",
@@ -121,8 +121,8 @@
     "row_order": "kokkoritsu source order, then shidai source order"
   },
   "source_versions": {
-    "kokkoritsu": "5.82",
-    "shidai": "1.09"
+    "kokkoritsu": "5.83",
+    "shidai": "1.10"
   },
   "validation": {
     "canonical_sources_unchanged_during_build": true,
@@ -130,9 +130,9 @@
       "builds_compared": 2,
       "byte_identical": true,
       "sha256": {
-        "coverage": "5e45e4fe7e32dcb6120eb28606cee0296cd814c060cfb7b22af9e1346aeb38d4",
-        "master": "17d0e155257fa6ffc6f354a68aac74d3212f423a3ea2d8e898a91178485b006c",
-        "research_requirements": "4187d01258c83e035fc49fc29238980481bf652d29031077e1a2c1733791a6ba"
+        "coverage": "ec1fbe59ad1218401b8a4ca4b65f381c50c45ffb0b48322a36a688ba1b1f2254",
+        "master": "add5dbf7b650296980ee1718eb004279c85786ae86164e8aa45fce7f197e9468",
+        "research_requirements": "f39fd7e58451350f2cc39aca8bf25567dbc951a103f7fea256890ab0434bcdb0"
       },
       "status": "passed"
     },
@@ -364,7 +364,7 @@
         "status": "passed",
         "validated_rows": {
           "coverage": 260,
-          "master": 6526,
+          "master": 6553,
           "research_requirements": 495
         }
       },
@@ -388,17 +388,17 @@
         "expectation_source": "canonical_input",
         "expected_output_rows": {
           "coverage": 260,
-          "master": 6526,
+          "master": 6553,
           "research_requirements": 495
         },
         "input_rows": {
           "coverage": 260,
-          "master": 6526,
+          "master": 6553,
           "research_requirements": 495
         },
         "output_rows": {
           "coverage": 260,
-          "master": 6526,
+          "master": 6553,
           "research_requirements": 495
         },
         "status": "passed"
@@ -417,7 +417,7 @@
             "shidai": 73
           },
           "master": {
-            "kokkoritsu": 4126,
+            "kokkoritsu": 4153,
             "shidai": 2400
           },
           "research_requirements": {
