@@ -19,7 +19,7 @@ from early_admissions.unified_builder import (
 from tests.test_validator import REPO_ROOT, build_synthetic_repo, write_csv
 
 
-WORKING_V0_2_ROWS = {
+WORKING_V0_3_ROWS = {
     "master": 6_526,
     "coverage": 260,
     "research_requirements": 495,
@@ -62,11 +62,11 @@ class UnifiedAdapterTests(unittest.TestCase):
 
             bundle = CanonicalSourceLoader(root).load()
             contract = json.loads(
-                (root / "schema/unified/early_admissions_unified_schema_v0_2.json")
+                (root / "schema/unified/early_admissions_unified_schema_v0_3.json")
                 .read_text(encoding="utf-8")
             )
             adapter = UnifiedAdapter(contract)
-            record = adapter.adapt_master(master, "kokkoritsu", "5.82")
+            record = adapter.adapt_master(master, "kokkoritsu", "5.83")
 
             self.assertEqual(record["common_test_required"], "Conditional")
             self.assertEqual(record["research_activity_level_status"], "unmapped")
@@ -133,7 +133,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(before, canonical_hashes(root))
 
             contract = json.loads(
-                (root / "schema/unified/early_admissions_unified_schema_v0_2.json")
+                (root / "schema/unified/early_admissions_unified_schema_v0_3.json")
                 .read_text(encoding="utf-8")
             )
             for table, row_count in expected.items():
@@ -158,10 +158,10 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             self.assertEqual(research_rows[0], research_rows[1])
 
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(manifest["contract_version"], "0.2")
+            self.assertEqual(manifest["contract_version"], "0.3")
             self.assertEqual(
                 manifest["source_versions"],
-                {"kokkoritsu": "5.82", "shidai": "1.09"},
+                {"kokkoritsu": "5.83", "shidai": "1.10"},
             )
             self.assertTrue(
                 manifest["validation"]["determinism"]["byte_identical"]
@@ -261,8 +261,8 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
             )
 
 
-class WorkingV02RegressionTests(unittest.TestCase):
-    def test_v5_82_v1_09_rows(self) -> None:
+class WorkingV03RegressionTests(unittest.TestCase):
+    def test_v5_83_v1_10_rows(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = UnifiedBuildPipeline(
                 REPO_ROOT,
