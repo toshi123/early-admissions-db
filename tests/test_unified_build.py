@@ -276,8 +276,8 @@ class WorkingV03RegressionTests(unittest.TestCase):
             }
 
         self.assertEqual(preservation["expectation_source"], "canonical_input")
-        self.assertEqual(preservation["expected_output_rows"], WORKING_V0_2_ROWS)
-        self.assertEqual(actual_rows, WORKING_V0_2_ROWS)
+        self.assertEqual(preservation["expected_output_rows"], WORKING_V0_3_ROWS)
+        self.assertEqual(actual_rows, WORKING_V0_3_ROWS)
 
 
 if __name__ == "__main__":
