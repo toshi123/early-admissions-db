@@ -20,7 +20,7 @@ from tests.test_validator import REPO_ROOT, build_synthetic_repo, write_csv
 
 
 WORKING_V0_2_ROWS = {
-    "master": 6_511,
+    "master": 6_526,
     "coverage": 260,
     "research_requirements": 495,
 }
