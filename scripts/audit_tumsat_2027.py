@@ -176,6 +176,7 @@ def main():
             and re.match(r"^TUMSAT-2027-(?:E-|PFI-)", r.get("record_id", ""))
         )
     ]
+    base_after_generated_removal = len(rows)
     adults = restore_adult_rows(header)
     pfi = [pfi_row(header, *x) for x in PFI]
     rows.extend(adults + pfi)
@@ -321,7 +322,7 @@ def main():
 
     ids = [r["record_id"] for r in rows]
     tumsat = [r for r in rows if r.get("university") == "東京海洋大学"]
-    assert len(rows) == before + 16
+    assert len(rows) == base_after_generated_removal + 16
     assert len(ids) == len(set(ids))
     assert len(tumsat) == 50
     assert sum(r.get("adult_selection_flag") == "Yes" for r in tumsat) == 8
