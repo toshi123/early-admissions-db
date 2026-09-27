@@ -261,7 +261,7 @@ The original field remains present and unchanged. A date prefix followed by time
 | Child FK does not resolve | error | Do not publish the affected unified artifact as valid |
 | Exact duplicate child rows | warning | Preserve multiplicity; do not silently deduplicate |
 
-## v0.2 special-selection flags
+## v0.3 special-selection flags
 
 | Source field | Unified field | Mapping |
 |---|---|---|
@@ -269,5 +269,6 @@ The original field remains present and unchanged. A date prefix followed by time
 | `private_foreign_student_flag` | same | Yes→true / No→false |
 | `returnee_flag` | same | Yes→true / No→false |
 | `regional_quota_flag` | same | Yes→true / No→false |
+| `adult_selection_flag` | same | Yes→true / No→false |
 
 These flags identify the application-unit type. They are independent and are not inferred from eligibility text alone.
