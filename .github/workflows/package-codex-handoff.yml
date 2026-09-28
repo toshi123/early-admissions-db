@@ -1,0 +1,64 @@
+name: package Codex handoff
+
+on:
+  push:
+    branches:
+      - reaudit-2027-v0.1
+    paths:
+      - .github/workflows/package-codex-handoff.yml
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: reaudit-2027-v0.1
+          fetch-depth: 1
+      - name: Prepare handoff manifest
+        run: |
+          mkdir -p handoff_meta
+          cat > handoff_meta/HANDOFF.md <<'EOF'
+          # 2027 Early Admissions DB — Codex handoff
+
+          Branch: reaudit-2027-v0.1
+          Date: 2026-09-28
+
+          Included:
+          - canonical CSVs (kokkoritsu / shidai)
+          - operations CSV/JSONL ledgers
+          - current schema JSON files
+          - project docs
+          - scripts / src / tests
+          - AGENTS.md / README.md / pyproject.toml
+
+          Current One University state:
+          - Hitotsubashi University: 13 Master rows
+          - recommendation 5
+          - foreign-school-background 4 (returnee_flag=Yes)
+          - private-foreign-student 4
+          - UpdateQueue open: UQ-2027-0003, UQ-2027-0043, UQ-2027-0044
+          - status: 追加確認待ち
+          EOF
+          git rev-parse HEAD > handoff_meta/HEAD_COMMIT.txt
+      - name: Upload Codex handoff bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: early-admissions-codex-handoff-2026-09-28
+          if-no-files-found: error
+          retention-days: 30
+          path: |
+            AGENTS.md
+            README.md
+            pyproject.toml
+            data/canonical/**
+            data/operations/**
+            schema/**
+            docs/**
+            scripts/**
+            src/**
+            tests/**
+            handoff_meta/**
