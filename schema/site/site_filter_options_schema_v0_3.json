@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:early-admissions:site-filter-options:0.3",
+  "title": "Early Admissions Site filter options v0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "site_data_schema_version",
+    "build_id",
+    "universities",
+    "institution_types",
+    "prefectures",
+    "academic_field_groups",
+    "academic_field_mapping_statuses",
+    "raw_academic_fields",
+    "academic_field_v2_broad_groups",
+    "academic_field_v2_subcategories",
+    "selection_categories",
+    "exclusive_enrollment_statuses",
+    "school_recommendation_required",
+    "academic_record_required",
+    "common_test_required",
+    "research_requirement_required",
+    "research_activity_level_status",
+    "english_requirement_statuses",
+    "prefecture_memberships",
+    "selection_method_values"
+  ],
+  "properties": {
+    "site_data_schema_version": {
+      "const": "0.3"
+    },
+    "build_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{20}$"
+    },
+    "universities": {
+      "$ref": "#/$defs/options"
+    },
+    "institution_types": {
+      "$ref": "#/$defs/options"
+    },
+    "prefectures": {
+      "$ref": "#/$defs/options"
+    },
+    "academic_field_mapping_statuses": {
+      "$ref": "#/$defs/options"
+    },
+    "raw_academic_fields": {
+      "$ref": "#/$defs/options"
+    },
+    "selection_categories": {
+      "$ref": "#/$defs/options"
+    },
+    "exclusive_enrollment_statuses": {
+      "$ref": "#/$defs/options"
+    },
+    "school_recommendation_required": {
+      "$ref": "#/$defs/options"
+    },
+    "academic_record_required": {
+      "$ref": "#/$defs/options"
+    },
+    "common_test_required": {
+      "$ref": "#/$defs/options"
+    },
+    "research_requirement_required": {
+      "$ref": "#/$defs/options"
+    },
+    "research_activity_level_status": {
+      "$ref": "#/$defs/options"
+    },
+    "english_requirement_statuses": {
+      "$ref": "#/$defs/options"
+    },
+    "prefecture_memberships": {
+      "type": "array",
+      "minItems": 47,
+      "maxItems": 47,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "value",
+          "display_label",
+          "region",
+          "display_order",
+          "unfiltered_count"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "display_label": {
+            "type": "string"
+          },
+          "region": {
+            "type": "string"
+          },
+          "display_order": {
+            "type": "integer"
+          },
+          "unfiltered_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "academic_field_groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "value",
+          "display_label",
+          "description",
+          "display_order",
+          "unfiltered_count"
+        ],
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "display_label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "display_order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unfiltered_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "academic_field_v2_broad_groups": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "group_code",
+          "display_label_ja",
+          "ui_section",
+          "display_order",
+          "unfiltered_count"
+        ],
+        "properties": {
+          "group_code": {
+            "type": "string"
+          },
+          "display_label_ja": {
+            "type": "string"
+          },
+          "ui_section": {
+            "type": "string"
+          },
+          "display_order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unfiltered_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "academic_field_v2_subcategories": {
+      "type": "array",
+      "minItems": 89,
+      "maxItems": 89,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subcategory_code",
+          "display_label_ja",
+          "parent_group_code",
+          "display_order",
+          "ui_status",
+          "unfiltered_count"
+        ],
+        "properties": {
+          "subcategory_code": {
+            "type": "string"
+          },
+          "display_label_ja": {
+            "type": "string"
+          },
+          "parent_group_code": {
+            "type": "string"
+          },
+          "display_order": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "ui_status": {
+            "enum": [
+              "primary",
+              "secondary",
+              "hidden"
+            ]
+          },
+          "unfiltered_count": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "selection_method_values": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "selection_interview",
+        "selection_oral_exam",
+        "selection_presentation",
+        "selection_essay",
+        "selection_written_exam",
+        "selection_common_test"
+      ],
+      "properties": {
+        "selection_interview": {
+          "$ref": "#/$defs/options"
+        },
+        "selection_oral_exam": {
+          "$ref": "#/$defs/options"
+        },
+        "selection_presentation": {
+          "$ref": "#/$defs/options"
+        },
+        "selection_essay": {
+          "$ref": "#/$defs/options"
+        },
+        "selection_written_exam": {
+          "$ref": "#/$defs/options"
+        },
+        "selection_common_test": {
+          "$ref": "#/$defs/options"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "options": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/option"
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value",
+        "display_label",
+        "unfiltered_count"
+      ],
+      "properties": {
+        "value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "display_label": {
+          "type": "string"
+        },
+        "unfiltered_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

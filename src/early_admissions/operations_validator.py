@@ -7,6 +7,8 @@ from datetime import date
 from pathlib import Path
 from typing import Iterable
 
+from .public_discovery_builder import INPUT_PATH, PublicDiscoveryError, validate_publication_registry
+
 QUEUE_COLUMNS = [
     "queue_id", "institution_type", "university", "faculty_school", "selection_name",
     "document_type", "publication_status", "release_expected_text",
@@ -129,6 +131,12 @@ def validate_operations(root: Path) -> list[str]:
     for key, n in ledger_counts.items():
         if n and open_counts.get(key, 0) != n:
             errors.append(f"open queue count mismatch for {key}: ledger={n} actual={open_counts.get(key, 0)}")
+
+    if (root / INPUT_PATH).exists():
+        try:
+            validate_publication_registry(root)
+        except (OSError, ValueError, PublicDiscoveryError) as error:
+            errors.append(f"provisional publication registry: {error}")
 
     return errors
 

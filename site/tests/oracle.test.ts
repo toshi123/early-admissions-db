@@ -4,9 +4,10 @@ import { describe, expect, it } from "vitest";
 import { logicalKey, searchRows } from "../src/search";
 import type { SearchRequest, SearchRow } from "../src/types";
 
-const manifest = JSON.parse(readFileSync(join(process.cwd(), "public/site-data/build_manifest.json"), "utf8"));
+const dataRoot = process.env.SITE_DATA_DIR ?? join(process.cwd(), "public/site-data");
+const manifest = JSON.parse(readFileSync(join(dataRoot, "build_manifest.json"), "utf8"));
 const rows = manifest.outputs.artifacts.filter((item: { kind: string }) => item.kind === "search_shard").flatMap((item: { path: string }) => {
-  const payload = JSON.parse(readFileSync(join(process.cwd(), `public/site-data/${item.path}`), "utf8"));
+  const payload = JSON.parse(readFileSync(join(dataRoot, item.path), "utf8"));
   expect(payload.build_id).toBe(manifest.build_id);
   return payload.rows as SearchRow[];
 });

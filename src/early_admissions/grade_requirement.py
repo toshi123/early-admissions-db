@@ -7,13 +7,13 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION = "0.2"
-GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS = frozenset({"0.1", "0.2"})
+GRADE_REQUIREMENT_MAPPING_CONTRACT_VERSION = "0.3"
+GRADE_REQUIREMENT_SUPPORTED_MAPPING_CONTRACT_VERSIONS = frozenset({"0.1", "0.2", "0.3"})
 GRADE_REQUIREMENT_SCHEMA_PATH = Path(
-    "schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql"
+    "schema/sqlite/admission_search_grade_requirement_schema_v0_2.sql"
 )
 GRADE_REQUIREMENT_CROSSWALK_PATH = Path(
-    "schema/grade_requirement/grade_requirement_crosswalk_v0_2.csv"
+    "schema/grade_requirement/grade_requirement_crosswalk_v0_3.csv"
 )
 GRADE_REQUIREMENT_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/grade_requirement/grade_requirement_crosswalk_v0_1.csv"

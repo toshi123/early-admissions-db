@@ -39,7 +39,7 @@ class AcademicFieldV2ContractTests(unittest.TestCase):
             self.assertEqual(actual, expected)
         self.assertEqual(len(self.contract.broad_groups), 30)
         self.assertEqual(len(self.contract.subcategories), 89)
-        self.assertEqual(len(self.contract.raw_mappings), 487)
+        self.assertEqual(len(self.contract.raw_mappings), 489)
         self.assertEqual(len(self.contract.context_mappings), 789)
 
     def test_exact_raw_multi_and_no_substring_inference(self) -> None:
@@ -480,10 +480,10 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.database = (
-            REPO_ROOT / "data/derived/sqlite/early_admissions_2027.sqlite"
+            REPO_ROOT / "data/derived/sqlite/v0_2_candidate/early_admissions_2027.sqlite"
         )
         cls.manifest = json.loads(
-            (REPO_ROOT / "data/derived/sqlite/build_manifest.json").read_text(
+            (REPO_ROOT / "data/derived/sqlite/v0_2_candidate/build_manifest.json").read_text(
                 encoding="utf-8"
             )
         )
@@ -492,48 +492,48 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
         layer = self.manifest["academic_field_v2"]
         self.assertEqual(layer["broad_taxonomy_rows"], 30)
         self.assertEqual(layer["subcategory_taxonomy_rows"], 89)
-        self.assertEqual(layer["parent_rows"], 6411)
+        self.assertEqual(layer["parent_rows"], 6592)
         self.assertEqual(layer["raw_crosswalk_keys"], 487)
         self.assertEqual(layer["raw_crosswalk_rows"], 860)
         self.assertEqual(layer["context_crosswalk_tuples"], 789)
         self.assertEqual(layer["context_crosswalk_rows"], 941)
-        self.assertEqual(layer["raw_only_mapping_admissions"], 4832)
-        self.assertEqual(layer["context_consulted_admissions"], 1579)
-        self.assertEqual(layer["context_effect_admissions"], 1568)
+        self.assertEqual(layer["raw_only_mapping_admissions"], 4999)
+        self.assertEqual(layer["context_consulted_admissions"], 1593)
+        self.assertEqual(layer["context_effect_admissions"], 1582)
         self.assertEqual(
             layer["broad_mapping_status_counts"],
             {
-                "single": 4224,
-                "multi": 2176,
+                "single": 4377,
+                "multi": 2199,
                 "review_required": 11,
-                "unmapped": 0,
+                "unmapped": 5,
                 "not_applicable": 0,
             },
         )
         self.assertEqual(
             layer["subcategory_mapping_status_counts"],
             {
-                "single": 3661,
-                "multi": 1656,
-                "none": 1083,
+                "single": 3809,
+                "multi": 1675,
+                "none": 1092,
                 "review_required": 11,
-                "unmapped": 0,
+                "unmapped": 5,
                 "not_applicable": 0,
             },
         )
         self.assertEqual(layer["raw_mismatch_rows"], 0)
         self.assertEqual(layer["validation_status"], "passed")
 
-    def test_representative_production_queries(self) -> None:
+    def test_representative_candidate_queries(self) -> None:
         for group_code, expected in (
-            ("law_politics_policy", 114),
-            ("economics", 173),
-            ("business_commerce", 191),
-            ("psychology", 31),
-            ("languages", 197),
-            ("natural_sciences", 762),
-            ("engineering", 1696),
-            ("information", 892),
+            ("law_politics_policy", 117),
+            ("economics", 174),
+            ("business_commerce", 194),
+            ("psychology", 32),
+            ("languages", 198),
+            ("natural_sciences", 770),
+            ("engineering", 1709),
+            ("information", 899),
         ):
             with self.subTest(group_code=group_code):
                 result = search_database(
@@ -547,13 +547,13 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
                 )
                 self.assertEqual(result.summary.total_matched_rows, expected)
         for group_code, subcategory, expected in (
-            ("law_politics_policy", "law", 73),
-            ("economics", "economics_general", 169),
-            ("business_commerce", "management", 183),
-            ("psychology", "psychology_general", 25),
-            ("natural_sciences", "mathematics_statistics", 113),
-            ("natural_sciences", "physics", 93),
-            ("engineering", "mechanical", 335),
+            ("law_politics_policy", "law", 74),
+            ("economics", "economics_general", 170),
+            ("business_commerce", "management", 186),
+            ("psychology", "psychology_general", 26),
+            ("natural_sciences", "mathematics_statistics", 114),
+            ("natural_sciences", "physics", 94),
+            ("engineering", "mechanical", 337),
             ("nursing_health", "nursing", 286),
         ):
             with self.subTest(subcategory=subcategory):

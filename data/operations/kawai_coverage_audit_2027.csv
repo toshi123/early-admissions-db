@@ -1,4 +1,4 @@
-source_dataset,institution_type,university,kawai_university_id,kawai_rec_year,kawai_ao_year,kawai_crosscheck_status,missing_candidate_status,official_confirmation_status,last_checked_on,kawai_rec_url,kawai_ao_url,notes
+﻿source_dataset,institution_type,university,kawai_university_id,kawai_rec_year,kawai_ao_year,kawai_crosscheck_status,missing_candidate_status,official_confirmation_status,last_checked_on,kawai_rec_url,kawai_ao_url,notes
 kokkoritsu,国立,北海道大学,1025,ページなし/未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1025/recommend/exam_rec,https://search.keinet.ne.jp/1025/recommend/exam_ao,Kei-Net総合型2027を確認。フロンティア入試のMaster対応を精査中。
 kokkoritsu,国立,北海道教育大学,1030,2027,2027,欠落候補あり・公式確認済,あり,確認済（存在）,2026-09-27,https://search.keinet.ne.jp/1030/recommend/exam_rec,https://search.keinet.ne.jp/1030/recommend/exam_ao,Kei-Net 2027に学校推薦型および総合型（教員養成特別入試等）を確認。現Masterは総合型4行のみ。大学公式2027資料でも学校推薦型・教員養成特別入試の存在を確認済み。詳細募集単位抽出が必要。
 kokkoritsu,国立,室蘭工業大学,1035,2026,2026,河合未更新・保留,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1035/recommend/exam_rec,https://search.keinet.ne.jp/1035/recommend/exam_ao,Kei-Netは推薦・総合型とも昨年度2026情報のため2027差分判定には使用しない。
@@ -186,76 +186,76 @@ kokkoritsu,公立,宮崎公立大学,1703,2027,未確認,監査中,未判定,未
 kokkoritsu,公立,沖縄県立芸術大学,1705,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1705/recommend/exam_rec,https://search.keinet.ne.jp/1705/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。県内枠・総合型等をMasterと精査中。
 kokkoritsu,公立,沖縄県立看護大学,1706,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1706/recommend/exam_rec,https://search.keinet.ne.jp/1706/recommend/exam_ao,Kei-Net学校推薦型2027を確認。離島・過疎地域推薦等をMasterと精査中。
 kokkoritsu,公立,名桜大学,1710,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/1710/recommend/exam_rec,https://search.keinet.ne.jp/1710/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。一般/地域枠、看護地域枠等をMasterと精査中。
-shidai,,早稲田大学,2293,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2293/recommend/exam_rec,https://search.keinet.ne.jp/2293/recommend/exam_ao,Kei-Net総合型2027を確認。地域探究・貢献等をMasterと精査中。
-shidai,,慶應義塾大学,2210,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2210/recommend/exam_rec,https://search.keinet.ne.jp/2210/recommend/exam_ao,Kei-Net総合型2027を確認。自主応募・FIT等をMasterと精査中。
+shidai,,早稲田大学,2293,データなし,2027,一部実施,候補あり・公式単位未確定,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2293/recommend/exam_rec,https://search.keinet.ne.jp/2293/recommend/exam_ao,公式2027要項とKei-Net AO2027を照合。Kei-Net学校推薦型ページはデータなし。地域探究・貢献や既存24行外の学部別候補は公式要項で確認継続。
+shidai,,慶應義塾大学,2210,対象外,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と候補範囲を照合,2026-09-28,https://search.keinet.ne.jp/2210/recommend/exam_ao,https://search.keinet.ne.jp/2210/recommend/exam_rec,Kei-Net AO 2027と公式入試制度一覧を照合。現Master12行は文学・法・理工・SFC夏秋AO・看護医療を収録。公式一覧とKei-NetはSFC春AOおよび冬AO（GIGA）も掲示。出願時の学部・プログラム単位と必要書類・日程を当年度要項で確定後に追加する。
 shidai,,上智大学,2221,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2221/recommend/exam_rec,https://search.keinet.ne.jp/2221/recommend/exam_ao,Kei-Net学校推薦型2027を確認。公募制等をMasterと精査中。
-shidai,,東京理科大学,2262,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2262/recommend/exam_rec,https://search.keinet.ne.jp/2262/recommend/exam_ao,Kei-Net総合型2027を確認。英語資格検定＋特定教科評価等をMasterと精査中。
-shidai,,明治大学,2286,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2286/recommend/exam_rec,https://search.keinet.ne.jp/2286/recommend/exam_ao,Kei-Net総合型2027を確認。自己推薦特別等をMasterと精査中。
-shidai,,青山学院大学,2200,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2200/recommend/exam_rec,https://search.keinet.ne.jp/2200/recommend/exam_ao,Kei-Net総合型2027を確認。自己推薦等をMasterと精査中。
+shidai,私立,東京理科大学,2262,未確認,2027,一部照合,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2262/recommend/exam_rec,https://search.keinet.ne.jp/2262/recommend/exam_ao,Kei-Net AO2027を確認。個別特別選抜は公式要項で存在確認。Kei-Netのみで網羅・出願単位確定しない。
+shidai,,明治大学,2286,ページなし/未確認,2027,一部照合,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2286/recommend/exam_rec,https://search.keinet.ne.jp/2286/recommend/exam_ao,Kei-Net AO2027を照合。推薦ページはデータなし。公式全学スポーツ特別等の未収録候補をUQ-0078へ。
+shidai,,青山学院大学,2200,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2200/recommend/exam_rec,https://search.keinet.ne.jp/2200/recommend/exam_ao,総合型・推薦2027をクロスチェック。自己推薦/理工系女子特別以外の候補を公式要項と照合継続。
 shidai,,立教大学,2290,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2290/recommend/exam_rec,https://search.keinet.ne.jp/2290/recommend/exam_ao,Kei-Net総合型2027を確認。自由選抜等をMasterと精査中。
 shidai,,中央大学,2242,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2242/recommend/exam_rec,https://search.keinet.ne.jp/2242/recommend/exam_ao,Kei-Net総合型2027を確認。スポーツ推薦等を含む構成をMasterと精査中。
-shidai,,法政大学,2279,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2279/recommend/exam_rec,https://search.keinet.ne.jp/2279/recommend/exam_ao,Kei-Net総合型2027を確認。自己推薦等をMasterと精査中。
-shidai,,学習院大学,2204,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2204/recommend/exam_rec,https://search.keinet.ne.jp/2204/recommend/exam_ao,Kei-Net総合型2027を確認。AO等をMasterと精査中。
-shidai,,成蹊大学,2228,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2228/recommend/exam_rec,https://search.keinet.ne.jp/2228/recommend/exam_ao,Kei-Net総合型2027を確認。自己推薦型・2027名称変更/新方式をMasterと精査中。
-shidai,,日本大学,2267,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2267/recommend/exam_rec,https://search.keinet.ne.jp/2267/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。学部数が多いため方式単位でMasterと精査中。
-shidai,,東洋大学,2265,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2265/recommend/exam_rec,https://search.keinet.ne.jp/2265/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Masterとの意味対応を精査中。
-shidai,,東海大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,芝浦工業大学,2219,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2219/recommend/exam_rec,https://search.keinet.ne.jp/2219/recommend/exam_ao,Kei-Net総合型2027を確認。工学部総合型等をMasterと精査中。
-shidai,,工学院大学,2212,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2212/recommend/exam_rec,https://search.keinet.ne.jp/2212/recommend/exam_ao,Kei-Net総合型2027を確認。自己推薦型・探究成果活用型等をMasterと精査中。
-shidai,,東京電機大学,2259,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2259/recommend/exam_rec,https://search.keinet.ne.jp/2259/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。公募・とんがりAO等をMasterと精査中。
-shidai,,東京都市大学,2282,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2282/recommend/exam_rec,https://search.keinet.ne.jp/2282/recommend/exam_ao,Kei-Net学校推薦型2027を確認。一部前年度情報注記があるため値は使わず方式存在のみMasterと照合中。
-shidai,,東京工科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,東京工芸大学,2297,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2297/recommend/exam_rec,https://search.keinet.ne.jp/2297/recommend/exam_ao,Kei-Net学校推薦型2027を確認。公募併願/特待等をMasterと精査中。
-shidai,,東京農業大学,2260,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2260/recommend/exam_rec,https://search.keinet.ne.jp/2260/recommend/exam_ao,Kei-Net学校推薦型2027を確認。公募制等をMaster 100行と精査中。
-shidai,,北里大学,2205,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2205/recommend/exam_rec,https://search.keinet.ne.jp/2205/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。理・獣医・医療系を含めMaster 41行と精査中。
-shidai,,東邦大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,日本獣医生命科学大学,2271,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2271/recommend/exam_rec,https://search.keinet.ne.jp/2271/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。獣医一般公募・獣医保健看護総合型等をMasterと精査中。
-shidai,,東京薬科大学,2261,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2261/recommend/exam_rec,https://search.keinet.ne.jp/2261/recommend/exam_ao,Kei-Net総合型2027を確認。生命科学部総合型等をMasterと精査中。
-shidai,,明治薬科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,星薬科大学,2280,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2280/recommend/exam_rec,https://search.keinet.ne.jp/2280/recommend/exam_ao,Kei-Net学校推薦型2027を確認。A/B方式をMaster 3行と精査中。
-shidai,,昭和薬科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,武蔵野大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,私立,法政大学,2279,未確認,2027,一部実施,候補あり・公式確認済,一部確認,2026-09-28,https://search.keinet.ne.jp/2279/recommend/exam_rec,https://search.keinet.ne.jp/2279/recommend/exam_ao,Kei-Net総合型2027に自己推薦等を確認し既存候補と照合。学校推薦型ページは「データなし」。社会人RSP・留学生制度のクロスチェック範囲外/未掲載。
+shidai,,学習院大学,2204,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と全件対応中,2026-09-28,https://search.keinet.ne.jp/2204/recommend/exam_rec,https://search.keinet.ne.jp/2204/recommend/exam_ao,公式AO/公募推薦の2027学部別募集要項公開を確認。現Master4行は理学部公募推薦のみ。Kei-Net AOは哲学科（思想史系/美術史系選択）、国際社会科学科、国際文化交流学部を掲載し、Kei-Net推薦は文学・法・経済等も掲載。各公式要項の志願単位と書類・要件を全件整理するまで追加保留。
+shidai,,成蹊大学,2228,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と候補範囲を照合,2026-09-28,https://search.keinet.ne.jp/2228/recommend/exam_ao,https://search.keinet.ne.jp/2228/recommend/exam_rec,公式2027要項・重要告知とKei-Net AO 2027を照合。公式は総合型基礎学力型の実施中止、募集人員の一般選抜への振替、自己推薦型等の要項修正を告知。現Master1行は理工学部自己推薦型のみ。自己推薦型の学部・学科別の実出願単位、特別受験各区分と要項改訂の行反映を確定するまで追加保留。
+shidai,,日本大学,2267,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と候補範囲を照合,2026-09-28,https://search.keinet.ne.jp/2267/recommend/exam_ao,https://search.keinet.ne.jp/2267/recommend/exam_rec,公式2027学校推薦型選抜ページ・学部別要項とKei-Net AO/推薦2027を照合。現Master98行は医学・薬学・理工・生産工・工・生物資源の6学部。公式ページとKei-Netには法・文理・経済・商・芸術・国際関係・危機管理・スポーツ科学・歯学等の選抜候補もある。学部別の方式・学科・出願票の単位を確定するまで未収録候補を追加保留。
+shidai,,東洋大学,2265,2027,2027,実施済,候補あり・公式単位確認中,一部公式確認,2026-09-28,https://search.keinet.ne.jp/2265/recommend/exam_rec,https://search.keinet.ne.jp/2265/recommend/exam_ao,2027 Kei-Net総合型・学校推薦型を閲覧。特殊選抜の対象単位確定には公式個別要項を優先。
+shidai,,東海大学,2245,2027,2027,実施済,候補あり・公式単位確認中,一部公式確認,2026-09-28,https://search.keinet.ne.jp/2245/recommend/exam_rec,https://search.keinet.ne.jp/2245/recommend/exam_ao,2027 Kei-Net総合型・学校推薦型を閲覧。留学生一般選抜は公式資料で確認し、Kei-Netは既存AO/推薦の候補照合のみ。
+shidai,,芝浦工業大学,2219,未確認,2027,照合済・欠落候補なし,なし（2027掲載範囲照合済）,公式資料とクロスチェック済,2026-09-29,https://search.keinet.ne.jp/2219/recommend/exam_rec,https://search.keinet.ne.jp/2219/recommend/exam_ao,Kei-Net総合型2027を照合。Kei-Netで集約された募集表示より公式課程別募集単位を優先。
+shidai,,工学院大学,2212,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と全件対応中,2026-09-28,https://search.keinet.ne.jp/2212/recommend/exam_rec,https://search.keinet.ne.jp/2212/recommend/exam_ao,公式2027募集要項・インターネット出願案内およびKei-Net AO/推薦2027を照合。Master25行は自己推薦・探究成果・総合評価等を収録。公式出願サイトは海外帰国生徒、IB、外国人留学生、指定校等も掲示し、公開済要項間の全区分および学部内複数志望の扱いの照合が残る。詳細確定まで追加保留。
+shidai,,東京電機大学,2259,2027,2027,実施済,候補あり・公式単位確認中,一部公式確認,2026-09-28,https://search.keinet.ne.jp/2259/recommend/exam_rec,https://search.keinet.ne.jp/2259/recommend/exam_ao,2027 Kei-Net総合型・学校推薦型を閲覧し、既存AO/公募の候補範囲と照合。はたらく学生・留学生等の特別方式網羅には使用しない。
+shidai,私立,東京都市大学,2282,2027,2027,一部照合,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2282/recommend/exam_rec,https://search.keinet.ne.jp/2282/recommend/exam_ao,Kei-Net推薦/総合型2027を確認。推薦ページに前年度情報注記あり。公式特別選抜単位は追確認。
+shidai,,東京工科大学,2251,2027,2027,欠落候補あり・公式確認済,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2251/recommend/exam_rec,https://search.keinet.ne.jp/2251/recommend/exam_ao,Kei-Net推薦2027で学科別公募単位を照合。公式留学生要項で8単位を確認しMasterへ追加。公募14行の公式詳細値はUQ-0081。
+shidai,,東京工芸大学,2297,2027,2027,実施済,候補あり・公式単位確認中,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2297/recommend/exam_rec,https://search.keinet.ne.jp/2297/recommend/exam_ao,AO・推薦ページを閲覧。Artsの全特殊方式網羅は確認できず候補レベル、AO表示年度は明示未確認。 外部DBはクロスチェック専用でcanonicalへ直接転記しない。
+shidai,,東京農業大学,2260,2027,2027,実施済,候補あり・公式単位確認中,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2260/recommend/exam_rec,https://search.keinet.ne.jp/2260/recommend/exam_ao,AO・推薦ページを閲覧し候補照合。ページ上の対象年度明示を確認できない情報は採用せず、公式2027要項を正本とした。 外部DBはクロスチェック専用でcanonicalへ直接転記しない。
+shidai,,北里大学,2205,2027,2027,実施済,候補あり・公式単位確認中,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2205/recommend/exam_rec,https://search.keinet.ne.jp/2205/recommend/exam_ao,AO・推薦ページを閲覧し候補照合。特別選抜の網羅性は公式特別要項で補完。 外部DBはクロスチェック専用でcanonicalへ直接転記しない。
+shidai,,東邦大学,2264,2027,2027,実施済,候補あり・公式単位確認中,公式資料を基準に候補照合済,2026-09-28,,,AO・推薦ページを閲覧。社会人・地域枠の2027詳細は当該ページで独立確認できず、公式2027各学部要項を基準に照合。 外部DBはクロスチェック専用でcanonicalへ直接転記しない。
+shidai,,日本獣医生命科学大学,2271,2027,2027,実施済,候補あり・公式単位確認中,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2271/recommend/exam_rec,https://search.keinet.ne.jp/2271/recommend/exam_ao,Kei-Net AO・推薦2027を公式選抜要項候補と照合済み。指定校/社会人/帰国生/IB/学士・編入の完全性は公式要項で確認継続。 外部DBはクロスチェック専用でcanonicalへ直接転記しない。
+shidai,私立,東京薬科大学,2261,2027,2027,一部照合,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2261/recommend/exam_rec,https://search.keinet.ne.jp/2261/recommend/exam_ao,Kei-Net推薦/総合型2027を確認。薬学部2件は公式資料で反映、生命科学部社会人は要出願単位確認。
+shidai,,明治薬科大学,2288,ページなし/未確認,ページなし/未確認,河合未更新・保留,なし,不要,2026-09-28,https://search.keinet.ne.jp/2288/recommend/exam_rec,https://search.keinet.ne.jp/2288/recommend/exam_ao,Kei-Netは過年度入試結果のみで現年度2027詳細が未掲載。canonical追加は大学公式資料で確認。
+shidai,,星薬科大学,2280,2027,ページなし/未確認,照合済・欠落候補なし,なし,確認済（不存在）,2026-09-28,https://search.keinet.ne.jp/2280/recommend/exam_rec,https://search.keinet.ne.jp/2280/recommend/exam_ao,Kei-Net推薦2027を公式A/B方式と照合。
+shidai,,昭和薬科大学,2225,ページなし/未確認,ページなし/未確認,河合未更新・保留,未判定,未確認,2026-09-28,https://search.keinet.ne.jp/2225/recommend/exam_rec,https://search.keinet.ne.jp/2225/recommend/exam_ao,Kei-Net一般2027情報および推薦型の過年度結果を確認。現年度推薦要件ページは取得できず、当年度クロスチェック未完了。
+shidai,,武蔵野大学,2285,2027,2027,実施済,候補あり・公式単位確認中,一部公式確認,2026-09-28,https://search.keinet.ne.jp/2285/recommend/exam_rec,https://search.keinet.ne.jp/2285/recommend/exam_ao,2027 Kei-Net総合型を閲覧し既存総合型の候補照合。帰国生・社会人・IBの方式別網羅には使用しない。
 shidai,,創価大学,2234,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2234/recommend/exam_rec,https://search.keinet.ne.jp/2234/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。スポーツ推薦・PASCAL等をMasterと精査中。
-shidai,,玉川大学,2240,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2240/recommend/exam_rec,https://search.keinet.ne.jp/2240/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。多数方式をMaster 72行と精査中。
-shidai,,明星大学,2289,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2289/recommend/exam_rec,https://search.keinet.ne.jp/2289/recommend/exam_ao,Kei-Net総合型2027を確認。総合評価型等をMaster 21行と精査中。
-shidai,,帝京大学,2244,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2244/recommend/exam_rec,https://search.keinet.ne.jp/2244/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。対象学部をMaster 58行と精査中。
-shidai,,帝京平成大学,2182,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2182/recommend/exam_rec,https://search.keinet.ne.jp/2182/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。Master 63行との意味対応を精査中。
-shidai,,杏林大学,2208,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2208/recommend/exam_rec,https://search.keinet.ne.jp/2208/recommend/exam_ao,Kei-Net学校推薦型2027を確認。保健学部等の対象範囲をMasterと精査中。
-shidai,,順天堂大学,2220,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2220/recommend/exam_rec,https://search.keinet.ne.jp/2220/recommend/exam_ao,Kei-Net学校推薦型2027を確認。薬学・看護・医療系をMaster 23行と精査中。
-shidai,,東京慈恵会医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,日本医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,昭和医科大学,2223,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2223/recommend/exam_rec,https://search.keinet.ne.jp/2223/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。医学・歯・薬・保健医療をMaster 32行と精査中。
-shidai,,東京医科大学,2246,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2246/recommend/exam_rec,https://search.keinet.ne.jp/2246/recommend/exam_ao,Kei-Net学校推薦型2027を確認。一般公募・ブロック枠等をMasterと精査中。
-shidai,,東京女子医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,聖路加国際大学,2232,2027,未確認,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2232/recommend/exam_rec,https://search.keinet.ne.jp/2232/recommend/exam_ao,Kei-Net学校推薦型2027を確認。公募制をMasterと精査中。
-shidai,,日本赤十字看護大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,私立,玉川大学,2240,2027,2027,実施済,候補照合中,一部確認,2026-09-28,https://search.keinet.ne.jp/2240/recommend/exam_rec,https://search.keinet.ne.jp/2240/recommend/exam_ao,Kei-Net総合型・学校推薦型の2027詳細を確認し、対象Master72行の既存方式を照合。帰国者・社会人は公式出願単位未確定のためクロスチェック保留。
+shidai,,明星大学,2289,未確認,2027,一部照合,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2289/recommend/exam_rec,https://search.keinet.ne.jp/2289/recommend/exam_ao,Kei-Net AO2027で未収録候補。公式指定校要項は対象校限定のため一般公開なし。UQ-0077。
+shidai,,帝京大学,2244,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と全件対応中,2026-09-28,https://search.keinet.ne.jp/2244/recommend/exam_rec,https://search.keinet.ne.jp/2244/recommend/exam_ao,公式2027要項ページ・受験ガイドとKei-Net AO/推薦2027を照合。現Master58行は医学・薬学・理工・医療技術の一部のみ。公式資料・Kei-Netには経済・法・文・外国語・教育・福岡医療技術等の総合型/推薦候補がある。出願単位、コース別区分、第二志望制度を学部別要項で確定するまで追加保留。
+shidai,,帝京平成大学,2182,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と候補範囲を照合,2026-09-28,https://search.keinet.ne.jp/2182/recommend/exam_ao,https://search.keinet.ne.jp/2182/recommend/exam_rec,Kei-Netの2027総合型・推薦ページと公式入学者選抜要項を照合。現Master63行は薬学、ヒューマンケア、健康メディカル、健康医療スポーツ、共創の5学部。公式2027ページは人文社会学部を含む6学部を掲示し、Kei-Netにも各学科の選抜情報がある。人文社会学部の対象方式および選択肢・第2/第3希望を公式Web出願と要項で確定するまで追加保留。
+shidai,,杏林大学,2208,2027,2027,欠落候補あり・公式確認待ち,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2208/recommend/exam_rec,https://search.keinet.ne.jp/2208/recommend/exam_ao,Kei-Net AO/推薦2027を現Masterとクロスチェック。公式2027要項上の留学生・地域枠候補は出願単位照合中。
+shidai,,順天堂大学,2220,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2220/recommend/exam_rec,https://search.keinet.ne.jp/2220/recommend/exam_ao,総合型・推薦2027をクロスチェック。公式資料で既存6学部外にも選抜候補を確認。
+shidai,私立,東京慈恵会医科大学,,ページなし/未確認,ページなし/未確認,河合未更新・保留,未判定,未確認,2026-09-28,,,今回の検索で大学IDおよびKei-Net推薦/総合型ページを確定できず。外部クロスチェック未。
+shidai,,日本医科大学,,対象外/Passnavi 2027,対象外/Benesse 2027,実施済,なし（2区分照合）,公式2027と整合,2026-09-28,https://passnavi.obunsha.co.jp/univ/2940/suisen/,https://manabi.benesse.ne.jp/daigaku/school/3300/nyushi/gokaku-happyo/,Kei-Net大学別AO/推薦情報は確認できず。外部DBとして旺文社パスナビ2027推薦型とBenesse 2027入試日程を照合。総合型10名、学校推薦型（公募/指定校計50名）、日程は公式と一致。詳細要項を優先。
+shidai,,昭和医科大学,2223,2027,2027,照合済・欠落候補なし,なし,確認済（不存在）,2026-09-28,https://search.keinet.ne.jp/2223/recommend/exam_rec,https://search.keinet.ne.jp/2223/recommend/exam_ao,Kei-Net AO・推薦2027を公式再編後の学部/専攻単位と照合。
+shidai,,東京医科大学,2246,2027,2027,欠落候補あり・公式確認済,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2246/recommend/exam_rec,https://search.keinet.ne.jp/2246/recommend/exam_ao,Kei-Net AO/推薦2027を照合。看護社会人選抜はKei-Net表示範囲外で、公式募集要項で確認し追加。
+shidai,,東京女子医科大学,2255,2027,2027,照合済・欠落候補なし,なし,確認済（不存在）,2026-09-28,https://search.keinet.ne.jp/2255/recommend/exam_rec,https://search.keinet.ne.jp/2255/recommend/exam_ao,Kei-Net AO/推薦2027と公式医学・看護要項、Master8単位を照合。
+shidai,,聖路加国際大学,2232,2027,2027,一部照合,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2232/recommend/exam_rec,https://search.keinet.ne.jp/2232/recommend/exam_ao,Kei-Netで2027 AO・学校推薦の候補情報を確認。公式詳細本文が403取得制限のため公式出願単位の確認は未完了。
+shidai,,日本赤十字看護大学,2274,2027,2027,実施済,なし（Master10行照合済）,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2274/recommend/exam_rec,https://search.keinet.ne.jp/2274/recommend/exam_ao,公式2027要項をBenesse2027（公募・赤十字特別）および東進2027日程と照合。Kei-Netは2026年度結果のみ確認できたため現年度の外部照合には使用せず。
 shidai,,神奈川大学,2306,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2306/recommend/exam_rec,https://search.keinet.ne.jp/2306/recommend/exam_ao,Kei-Net総合型2027を確認。2027新設の総合評価型・適性検査型をMasterと重点照合中。
 shidai,,神奈川工科大学,2305,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2305/recommend/exam_rec,https://search.keinet.ne.jp/2305/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。一般公募・適性検査型等をMasterと精査中。
-shidai,,湘南工科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,関東学院大学,2307,未確認,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2307/recommend/exam_rec,https://search.keinet.ne.jp/2307/recommend/exam_ao,Kei-Net総合型2027を確認。既存Master 100行とのCoverage照合を開始。9/24課題更新は別Queueで完了済み。
-shidai,,麻布大学,2304,2027,2027,監査中,未判定,未確認,2026-09-27,https://search.keinet.ne.jp/2304/recommend/exam_rec,https://search.keinet.ne.jp/2304/recommend/exam_ao,Kei-Net推薦・総合型2027を確認。獣医公募・地域枠・総合型等をMasterと精査中。
-shidai,,横浜薬科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,湘南医療大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,聖マリアンナ医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,私立,湘南工科大学,2310,未確認,未確認,一部実施,候補あり・公式確認済,一部確認,2026-09-28,https://search.keinet.ne.jp/2310/recommend/exam_rec,https://search.keinet.ne.jp/2310/recommend/exam_ao,Kei-Net 2027学科改組・専攻新設ページを確認したが、外国人留学生選抜/推薦/総合型のroute-specific cross-checkは未。
+shidai,,関東学院大学,2307,未確認,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2307/recommend/exam_rec,https://search.keinet.ne.jp/2307/recommend/exam_ao,総合型2027の方式・学部候補をクロスチェック。既存の理工・情報・建築環境・看護範囲外候補あり。
+shidai,,麻布大学,2304,2027,2027,実施済,候補あり・公式確認中,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2304/recommend/exam_rec,https://search.keinet.ne.jp/2304/recommend/exam_ao,Kei-Net総合型・学校推薦型2027を確認。公式要項の公募推薦、総合型および獣医学科地域枠等と既存21行の掲載範囲を照合。帰国生等は公式詳細要項で追加候補を確認。
+shidai,,横浜薬科大学,2323,未確認,未確認,一部照合,候補あり・公式単位確認中,一部公式確認,2026-09-28,,,Kei-Net 2027一般選抜情報を確認。2027総合型・推薦のルート別ページは今回取得できず、第三者DBクロスチェック未完了。
+shidai,私立,湘南医療大学,2341,未確認,未確認,未実施,候補照合中,一部確認,2026-09-28,https://search.keinet.ne.jp/2341/recommend/exam_rec,https://search.keinet.ne.jp/2341/recommend/exam_ao,2027一般ボーダー情報のみ参照。推薦・総合型の個別2027ページは取得不能のためroute cross-check未。
+shidai,,聖マリアンナ医科大学,2314,2027,未確認,照合済・欠落候補なし,なし（2027掲載範囲照合済）,公式資料とクロスチェック済,2026-09-29,https://search.keinet.ne.jp/2314/recommend/exam_rec,,2027推薦ページで公募・神奈川県地域枠を照合。公式2027要項の2募集単位と整合。
 shidai,,千葉工業大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,東京情報大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,麗澤大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,城西国際大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,国際医療福祉大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,私立,東京情報大学,2184,2026,2027,河合未更新・保留,あり,確認済（存在）,2026-09-28,https://search.keinet.ne.jp/2184/recommend/exam_rec,https://search.keinet.ne.jp/2184/recommend/exam_ao,AOは結果のみ、推薦は2026年度。2027帰国生/社会人は公式確認・反映。外国人留学生候補はQueue。
+shidai,,麗澤大学,2187,未確認,未確認,実施不能,候補あり・公式確認中,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2187/recommend/exam_rec,https://search.keinet.ne.jp/2187/recommend/exam_ao,Kei-Net推薦・総合型ページはいずれも「学校推薦型・総合型選抜は入試結果のみ掲載」。2027年の外部クロスチェックはBenesse大学検索を利用し、工学部中心の既存Masterと公式全学部の募集候補を照合。
+shidai,,城西国際大学,2175,2027,2027,実施済,候補多数・全件単位化未了,公式確認継続,2026-09-28,https://search.keinet.ne.jp/2175/recommend/exam_rec,https://search.keinet.ne.jp/2175/recommend/exam_ao,Kei-Net総合型・学校推薦型2027を確認。公式募集要項との対応候補を探索したが、全学部/コース×期×選抜型の分解未了。
+shidai,,国際医療福祉大学,2125,2027,2027,実施済,候補あり・公式照合中,一部公式確認,2026-09-28,https://search.keinet.ne.jp/2125/recommend/exam_rec,https://search.keinet.ne.jp/2125/recommend/exam_ao,Kei-Net 2027 AO/推薦を確認。関東圏以外の募集候補もあるため候補探索に限り、Kei-Netのみでcanonical確定しない。
 shidai,,千葉科学大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,城西大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,日本薬科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,埼玉医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,埼玉工業大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,日本工業大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,,城西大学,2152,2027未掲載,2027,一部実施,候補あり・全学部照合中,公式確認継続,2026-09-28,https://search.keinet.ne.jp/2152/recommend/exam_rec,https://search.keinet.ne.jp/2152/recommend/exam_ao,Kei-Net AO 2027は確認、学校推薦型ページは2027データなし。AOは第三者クロスチェックのみ。
+shidai,,日本薬科大学,2168,2027,2027,実施済,候補あり・公式単位未確定,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2168/recommend/exam_rec,https://search.keinet.ne.jp/2168/recommend/exam_ao,公式2027募集要項とBenesse2027/パスナビAOをクロスチェック。Kei-Netは閲覧可能な入試結果が2026年度までで、現年度照合はBenesse/パスナビを使用。
+shidai,,埼玉医科大学,2150,2027,2027,実施済,1候補を公式確認し追加,公式で追加確認,2026-09-28,https://search.keinet.ne.jp/2150/recommend/exam_rec,https://search.keinet.ne.jp/2150/recommend/exam_ao,Kei-Net総合型・学校推薦型2027を確認。医学部帰国生選抜は公式要項で詳細確認しMasterへ反映。
+shidai,,埼玉工業大学,2149,未確認,未確認,一部照合,推薦候補照合、総合型未確認,2027推薦は公式/パスナビ一致; AO詳細未照合,2026-09-28,https://search.keinet.ne.jp/2149/recommend/exam_rec,https://search.keinet.ne.jp/2149/recommend/exam_ao,Kei-Netの現行2027 AO/推薦ページは確認できず。旺文社パスナビ学校推薦型2027掲載の学部学科・日程候補を公式ページと照合。パスナビ総合型は昨年度データ表示のため今年度照合には使用せず。Kei-Netの2027 AO/推薦の該当データを今回確認できず、外部DB cross-check未完了。公式2027ページでは総合型1〜5期・奨学生型・推薦が両学部全学科対象。現Master24行は工学部年内枠のみ。4・5期と人間社会学部を含むWeb出願単位、選抜種別ごとの学科指定、書類・要件を公式募集要項と入力画面で確定する。
+shidai,,日本工業大学,2157,2027,2027,実施済,候補あり・公式単位未確定,公式資料を基準に候補照合済,2026-09-28,https://search.keinet.ne.jp/2157/recommend/exam_rec,https://search.keinet.ne.jp/2157/recommend/exam_ao,公式2027ページとBenesse2027 AO/推薦情報を照合。Kei-Net AOは2026年度表示、推薦は入試結果のみである点も確認。
 shidai,,ものつくり大学,,未確認,未確認,未監査,未判定,未確認,,,,
 shidai,,立正大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,自治医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,獨協医科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,酪農学園大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,岡山理科大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,関西大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,関西学院大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,,自治医科大学,2122,2027,2027,照合済・欠落候補なし,なし（2027掲載範囲照合済）,公式資料とクロスチェック済,2026-09-29,https://search.keinet.ne.jp/2122/recommend/exam_rec,https://search.keinet.ne.jp/2122/recommend/exam_ao,Kei-Net推薦・総合型2027を候補クロスチェック。公式の県別単位・日程・募集枠を基準に照合。
+shidai,私立,獨協医科大学,2123,2027,2027,実施済,候補照合中,一部確認,2026-09-28,https://search.keinet.ne.jp/2123/recommend/exam_rec,https://search.keinet.ne.jp/2123/recommend/exam_ao,Kei-Net総合型「総合型(3)」および公募（地域特別枠）10名の2027情報を確認し、公式既存2行と照合。指定校制度は学校通知のため未照合。
+shidai,,酪農学園大学,2014,2027,2027,照合済・欠落候補なし,なし（2027掲載範囲照合済）,公式資料とクロスチェック済,2026-09-29,https://search.keinet.ne.jp/2014/recommend/exam_rec,https://search.keinet.ne.jp/2014/recommend/exam_ao,Kei-Net総合型・推薦2027を公開型Master候補とのクロスチェックに使用。
+shidai,,岡山理科大学,2614,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,公式要項と全件対応中,2026-09-28,https://search.keinet.ne.jp/2614/recommend/exam_rec,https://search.keinet.ne.jp/2614/recommend/exam_ao,公式2027入試ページおよびKei-Net AO/推薦2027を確認。現Master10行は獣医学部に限定。Kei-Netは教育学部等、総合評価方式・オープンキャンパス利用方式・特別推薦・推薦A/B等を掲載。公式方式別ページと出願時の学科・併願選択を全件確定するまで追加保留。
+shidai,,関西大学,2533,2027,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2533/recommend/exam_rec,https://search.keinet.ne.jp/2533/recommend/exam_ao,総合型・学校推薦型2027をクロスチェック。既存Masterは理系重点等の一部範囲。
+shidai,,関西学院大学,2558,未確認,2027,欠落候補あり・公式確認待ち,候補あり・公式単位未確定,一部公式確認,2026-09-29,https://search.keinet.ne.jp/2558/recommend/exam_rec,https://search.keinet.ne.jp/2558/recommend/exam_ao,総合型2027をクロスチェック。全学部候補に対しMasterは理系4学部の3方式。
 shidai,,同志社大学,,未確認,未確認,未監査,未判定,未確認,,,,
 shidai,,立命館大学,,未確認,未確認,未監査,未判定,未確認,,,,
-shidai,,国際基督教大学,,未確認,未確認,未監査,未判定,未確認,,,,
+shidai,,国際基督教大学,2214,対象外,2027,実施済,なし（3区分照合）,公式2027と一致,2026-09-28,https://search.keinet.ne.jp/2214/recommend/exam_rec,https://search.keinet.ne.jp/2214/recommend/exam_ao,Kei-Net総合型2027ページを確認。英語外部試験利用・理数探究利用・IBDP利用の3区分の範囲を照合。

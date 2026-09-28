@@ -9,7 +9,8 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
 
 
-SITE_DATA_SCHEMA_VERSION = "0.2"
+SITE_DATA_SCHEMA_VERSION = "0.3"
+SUPPORTED_SITE_DATA_SCHEMA_VERSIONS = frozenset({"0.2", "0.3"})
 GPA_MODES = frozenset({"safe", "review", "all"})
 LOGICAL_KEY_FIELDS = ("source_dataset", "source_version", "record_id")
 MULTI_VALUE_FIELDS = (
@@ -34,7 +35,7 @@ MULTI_VALUE_FIELDS = (
 
 
 class SiteSearchError(RuntimeError):
-    """Raised when a static projection or search request violates v0.2."""
+    """Raised when a static projection or search request violates v0.3."""
 
 
 @dataclass(frozen=True)
@@ -324,7 +325,7 @@ def load_search_rows(output_dir: Path) -> tuple[Mapping[str, Any], ...]:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
         raise SiteSearchError(f"Cannot read Site-data manifest: {error}") from error
-    if manifest.get("site_data_schema_version") != SITE_DATA_SCHEMA_VERSION:
+    if manifest.get("site_data_schema_version") not in SUPPORTED_SITE_DATA_SCHEMA_VERSIONS:
         raise SiteSearchError("Site-data schema version mismatch.")
     build_id = manifest.get("build_id")
     artifacts = manifest.get("outputs", {}).get("artifacts", [])
@@ -353,6 +354,8 @@ def load_search_rows(output_dir: Path) -> tuple[Mapping[str, Any], ...]:
             raise SiteSearchError(f"Invalid search shard JSON: {item['path']}") from error
         if payload.get("build_id") != build_id:
             raise SiteSearchError(f"Search shard build ID mismatch: {item['path']}")
+        if payload.get("site_data_schema_version") != manifest["site_data_schema_version"]:
+            raise SiteSearchError(f"Search shard schema version mismatch: {item['path']}")
         rows.extend(payload.get("rows", []))
     expected = manifest["counts"]["search_rows"]
     keys = [logical_key(row) for row in rows]

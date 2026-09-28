@@ -1,4 +1,4 @@
-"""CLI entry point for the Site-data projection v0.2 build."""
+"""CLI entry point for the Site-data projection v0.3 build."""
 
 from __future__ import annotations
 
@@ -16,6 +16,7 @@ from .site_data_builder import (
     SiteDataBuildPipeline,
 )
 from .validation_profile import PRODUCTION_PROFILE
+from .public_discovery_builder import build_public_discovery, PublicDiscoveryError
 
 
 def default_repo_root() -> Path:
@@ -24,7 +25,7 @@ def default_repo_root() -> Path:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Build validated static Site-data v0.2 from SQLite."
+        description="Build validated static Site-data v0.3 from SQLite."
     )
     parser.add_argument("--repo-root", type=Path, default=default_repo_root())
     parser.add_argument("--database", type=Path, default=DEFAULT_DATABASE)
@@ -62,7 +63,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             validation_profile=args.validation_profile,
             build_timestamp_utc=args.build_timestamp_utc,
         ).build()
-    except (OSError, KeyError, TypeError, ValueError, SiteDataBuildError) as error:
+        discovery = build_public_discovery(args.repo_root, args.database, result.output_dir)
+    except (OSError, KeyError, TypeError, ValueError, SiteDataBuildError, PublicDiscoveryError) as error:
         print(f"Site-data build failed: {error}", file=sys.stderr)
         return 1
     if not args.quiet:
@@ -82,6 +84,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         print(f"Manifest: {result.manifest_path} (sha256={result.manifest_sha256})")
         print(f"QA report: {result.qa_report_path}")
+        print(f"Public discovery: {discovery['published_rows']} provisional records")
     return 0
 
 

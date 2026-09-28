@@ -32,7 +32,7 @@ class GradeRequirementCrosswalkTests(unittest.TestCase):
             audit = list(csv.DictReader(handle))
         non_null = [row for row in audit if row["primary_class"] != "null"]
         self.assertEqual(len(non_null), 553)
-        self.assertEqual(len(self.crosswalk), 616)
+        self.assertEqual(len(self.crosswalk), 622)
         self.assertFalse(
             [
                 row["raw_value"]

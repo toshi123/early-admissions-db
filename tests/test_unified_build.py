@@ -20,7 +20,7 @@ from tests.test_validator import REPO_ROOT, build_synthetic_repo, write_csv
 
 
 WORKING_V0_3_ROWS = {
-    "master": 6_592,
+    "master": 6_699,
     "coverage": 260,
     "research_requirements": 495,
 }
@@ -262,7 +262,7 @@ class UnifiedBuildPipelineTests(unittest.TestCase):
 
 
 class WorkingV03RegressionTests(unittest.TestCase):
-    def test_v5_83_v1_10_rows(self) -> None:
+    def test_v5_83_v1_10_batch6_rows(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             result = UnifiedBuildPipeline(
                 REPO_ROOT,

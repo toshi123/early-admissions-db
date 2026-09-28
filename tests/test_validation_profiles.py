@@ -217,7 +217,7 @@ class ValidationProfileTests(unittest.TestCase):
             with self.subTest(profile=profile), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 prepare_profile_fixture(root)
-                schema = root / "schema/sqlite/early_admissions_sqlite_schema_v0_1.sql"
+                schema = root / "schema/sqlite/early_admissions_sqlite_schema_v0_3.sql"
                 schema.write_text("THIS IS NOT SQL;\n", encoding="utf-8")
                 with self.assertRaises(SQLiteBuildError):
                     SQLiteBuildPipeline(root, validation_profile=profile).build()

@@ -1,4 +1,4 @@
-"""Command-line entry point for the SQLite v0.1 derived build."""
+"""Command-line entry point for the SQLite v0.2 derived build."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def default_repo_root() -> Path:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Build and validate the SQLite v0.1 artifact from unified CSVs."
+        description="Build and validate the SQLite v0.3 artifact from unified CSVs."
     )
     parser.add_argument(
         "--repo-root",

@@ -1,4 +1,4 @@
-"""Build and validate the SQLite v0.1 derived artifact from unified CSVs."""
+"""Build and validate the SQLite v0.3 derived artifact from unified CSVs."""
 
 from __future__ import annotations
 
@@ -85,10 +85,10 @@ DEFAULT_OUTPUT_DIR = Path("data/derived/sqlite")
 DATABASE_FILENAME = "early_admissions_2027.sqlite"
 UNIFIED_DIR = Path("data/canonical/unified")
 UNIFIED_MANIFEST = UNIFIED_DIR / "build_manifest.json"
-SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql")
-SQLITE_DESIGN = Path("docs/sqlite_design_v0_1.md")
-DATABASE_SCHEMA_VERSION = "0.1"
-BUILDER_VERSION = "0.8.0"
+SQLITE_SCHEMA = Path("schema/sqlite/early_admissions_sqlite_schema_v0_3.sql")
+SQLITE_DESIGN = Path("docs/sqlite_design_v0_3.md")
+DATABASE_SCHEMA_VERSION = "0.3"
+BUILDER_VERSION = "0.9.0"
 GPA_REGRESSION_TENTHS = (30, 35, 38, 40, 45)
 
 TABLE_ORDER = ("master", "coverage", "research_requirements")
@@ -113,7 +113,15 @@ INTEGER_FIELDS = {
     "research_requirements": set(),
 }
 BOOLEAN_FIELDS = {
-    "master": {"stem_flag", "fallback_previous_year"},
+    "master": {
+        "stem_flag",
+        "international_baccalaureate_flag",
+        "private_foreign_student_flag",
+        "returnee_flag",
+        "regional_quota_flag",
+        "adult_selection_flag",
+        "fallback_previous_year",
+    },
     "coverage": set(),
     "research_requirements": set(),
 }
@@ -659,8 +667,11 @@ class SQLiteBuildPipeline:
             raise SQLiteBuildError(f"Invalid unified build manifest: {error}") from error
         if manifest.get("artifact") != "early_admissions_unified":
             raise SQLiteBuildError("Unified manifest artifact identifier is invalid.")
-        if manifest.get("contract_version") != "0.1":
-            raise SQLiteBuildError("Unified manifest contract_version is not 0.1.")
+        if manifest.get("contract_version") != "0.3":
+            raise SQLiteBuildError(
+                "Unified manifest contract_version must be 0.3 for SQLite "
+                f"schema v0.2; got {manifest.get('contract_version')!r}."
+            )
         if manifest.get("validation", {}).get("status") != "passed":
             raise SQLiteBuildError("Unified manifest validation status is not passed.")
 
@@ -3498,7 +3509,7 @@ class SQLiteBuildPipeline:
         academic_field_v2 = manifest["academic_field_v2"]
         prefecture = manifest["prefecture_search"]
         lines = [
-            "# Early Admissions SQLite v0.1 build summary",
+            "# Early Admissions SQLite v0.2 build summary",
             "",
             "- Build status: `passed`",
             f"- Database schema version: `{manifest['database_schema_version']}`",

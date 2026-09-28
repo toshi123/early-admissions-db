@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:early-admissions:site-search-row:0.3",
+  "title": "Early Admissions Site search row v0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "source_dataset",
+    "source_version",
+    "record_id",
+    "institution_type",
+    "university",
+    "prefecture",
+    "prefecture_raw",
+    "prefecture_mapping_status",
+    "prefecture_memberships",
+    "faculty_school",
+    "department",
+    "selection_category",
+    "selection_name",
+    "slot_type",
+    "capacity",
+    "academic_field",
+    "stem_flag",
+    "academic_field_mapping_status",
+    "academic_field_groups",
+    "academic_field_mapping_contract_version",
+    "academic_field_v2_broad_mapping_status",
+    "academic_field_v2_subcategory_mapping_status",
+    "academic_field_v2_broad_memberships",
+    "academic_field_v2_subcategory_memberships",
+    "academic_field_v2_mapping_contract_version",
+    "academic_field_v2_taxonomy_version",
+    "exclusive_enrollment_status",
+    "school_recommendation_required",
+    "academic_record_required",
+    "common_test_required",
+    "research_requirement_required",
+    "research_activity_level_status",
+    "selection_interview",
+    "selection_oral_exam",
+    "selection_presentation",
+    "selection_essay",
+    "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
+    "selection_common_test",
+    "gpa_requirement",
+    "english_requirement",
+    "english_requirement_status",
+    "english_requirement_parse_status",
+    "english_requirement_search_disposition",
+    "gpa_parse_status",
+    "gpa_search_disposition",
+    "gpa_min_tenths",
+    "gpa_min_inclusive",
+    "gpa_max_tenths",
+    "gpa_max_inclusive",
+    "gpa_source_value_status",
+    "grade_requirement_status",
+    "overall_gpa_min_tenths",
+    "overall_gpa_min_inclusive",
+    "overall_gpa_status",
+    "additional_grade_conditions",
+    "application_start",
+    "application_end",
+    "fallback_previous_year",
+    "information_year",
+    "publication_status",
+    "detail_path"
+  ],
+  "properties": {
+    "source_dataset": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "record_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "institution_type": {
+      "type": "string"
+    },
+    "university": {
+      "type": "string"
+    },
+    "prefecture": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prefecture_raw": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "prefecture_mapping_status": {
+      "enum": [
+        "single",
+        "multi",
+        "review_required",
+        "unmapped",
+        "not_applicable"
+      ]
+    },
+    "prefecture_memberships": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "faculty_school": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "department": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "slot_type": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "capacity": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "academic_field": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "stem_flag": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "academic_field_mapping_status": {
+      "enum": [
+        "single",
+        "multi",
+        "review_required",
+        "unmapped",
+        "not_applicable"
+      ]
+    },
+    "academic_field_groups": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "academic_field_mapping_contract_version": {
+      "enum": [
+        "0.1",
+        "0.2",
+        "0.3"
+      ]
+    },
+    "academic_field_v2_broad_mapping_status": {
+      "enum": [
+        "single",
+        "multi",
+        "review_required",
+        "unmapped",
+        "not_applicable"
+      ]
+    },
+    "academic_field_v2_subcategory_mapping_status": {
+      "enum": [
+        "single",
+        "multi",
+        "none",
+        "review_required",
+        "unmapped",
+        "not_applicable"
+      ]
+    },
+    "academic_field_v2_broad_memberships": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "academic_field_v2_subcategory_memberships": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "academic_field_v2_mapping_contract_version": {
+      "enum": [
+        "0.2",
+        "0.3",
+        "0.4"
+      ]
+    },
+    "academic_field_v2_taxonomy_version": {
+      "const": "0.2"
+    },
+    "exclusive_enrollment_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "school_recommendation_required": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "academic_record_required": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "common_test_required": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "research_requirement_required": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "research_activity_level_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_interview": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_oral_exam": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_presentation": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_essay": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_written_exam": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_practical": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_group_discussion": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_aptitude_test": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "selection_common_test": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "gpa_requirement": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "english_requirement": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "english_requirement_status": {
+      "enum": [
+        "required",
+        "not_required",
+        "review_required",
+        "unknown",
+        "not_applicable",
+        "unmapped"
+      ]
+    },
+    "english_requirement_parse_status": {
+      "enum": [
+        "exact_crosswalk",
+        "missing",
+        "unmapped"
+      ]
+    },
+    "english_requirement_search_disposition": {
+      "enum": [
+        "safe_exact",
+        "review_required",
+        "not_searchable"
+      ]
+    },
+    "gpa_parse_status": {
+      "type": "string"
+    },
+    "gpa_search_disposition": {
+      "enum": [
+        "safe_numeric",
+        "review_required",
+        "not_searchable"
+      ]
+    },
+    "gpa_min_tenths": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 50
+    },
+    "gpa_min_inclusive": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "gpa_max_tenths": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 50
+    },
+    "gpa_max_inclusive": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "gpa_source_value_status": {
+      "type": "string"
+    },
+    "grade_requirement_status": {
+      "enum": [
+        "required",
+        "not_required",
+        "review_required",
+        "unknown",
+        "not_applicable",
+        "unmapped"
+      ]
+    },
+    "overall_gpa_min_tenths": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 50
+    },
+    "overall_gpa_min_inclusive": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "overall_gpa_status": {
+      "enum": [
+        "safe_simple_overall",
+        "safe_overall_with_additional_conditions",
+        "no_safe_overall_floor",
+        "historical",
+        "non_binding",
+        "non_admission_numeric",
+        "ambiguous",
+        "unknown",
+        "not_applicable",
+        "unmapped"
+      ]
+    },
+    "additional_grade_conditions": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "application_start": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "application_end": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "fallback_previous_year": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "information_year": {
+      "type": [
+        "integer",
+        "null"
+      ]
+    },
+    "publication_status": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "detail_path": {
+      "type": "string",
+      "pattern": "^assets/[0-9a-f]{20}/details/details-[0-9]{3,}\\.json$"
+    }
+  }
+}

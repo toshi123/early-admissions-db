@@ -8,19 +8,19 @@ from pathlib import Path
 from typing import Iterator
 
 
-ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION = "0.2"
+ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION = "0.3"
 ACADEMIC_FIELD_TAXONOMY_VERSION = "0.1"
 ACADEMIC_FIELD_TAXONOMY_PATH = Path(
     "schema/academic_field/academic_field_taxonomy_v0_1.csv"
 )
 ACADEMIC_FIELD_CROSSWALK_PATH = Path(
-    "schema/academic_field/academic_field_crosswalk_v0_2.csv"
+    "schema/academic_field/academic_field_crosswalk_v0_3.csv"
 )
 ACADEMIC_FIELD_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/academic_field/academic_field_crosswalk_v0_1.csv"
 )
 ACADEMIC_FIELD_SCHEMA_PATH = Path(
-    "schema/sqlite/admission_search_academic_field_schema_v0_1.sql"
+    "schema/sqlite/admission_search_academic_field_schema_v0_2.sql"
 )
 ACADEMIC_FIELD_DESIGN_PATH = Path("docs/academic_field_search_design_v0_1.md")
 ACADEMIC_FIELD_FREEZE_PATH = Path("docs/academic_field_mapping_freeze_v0_1.md")
@@ -28,7 +28,7 @@ ACADEMIC_FIELD_TAXONOMY_SHA256 = (
     "f1f52d0282618eb5b22d3c420010718eb30f4ec14ad889dd574f218a5743a9f2"
 )
 ACADEMIC_FIELD_CROSSWALK_SHA256 = (
-    "74162005e676a89c515a95d24bb78548df7ce6709fb04eb28c3ff14b57c99ab8"
+    "e5c174194434e8a65f751a53e1c5ce8757736844cddfad681f5d30b31580197b"
 )
 
 FROZEN_MAPPING_STATUSES = frozenset({"single", "multi", "review_required"})

@@ -24,12 +24,12 @@ from .academic_field_v0_2 import (
 )
 
 
-MAPPING_VERSION = "0.3"
+MAPPING_VERSION = "0.4"
 TAXONOMY_VERSION = "0.2"
 
 
 ACADEMIC_FIELD_V2_SCHEMA_PATH = Path(
-    "schema/sqlite/admission_search_academic_field_v0_2_schema.sql"
+    "schema/sqlite/admission_search_academic_field_v0_3_schema.sql"
 )
 ACADEMIC_FIELD_V2_DESIGN_PATH = Path(
     "docs/academic_field_crosswalk_v0_3.md"
@@ -47,10 +47,10 @@ ACADEMIC_FIELD_V2_SUBCATEGORY_PATH = Path(
     "schema/academic_field/v0_2/academic_field_subcategory_taxonomy_v0_2.csv"
 )
 ACADEMIC_FIELD_V2_RAW_PATH = Path(
-    "schema/academic_field/v0_3/academic_field_raw_crosswalk_v0_3.csv"
+    "schema/academic_field/v0_4/academic_field_raw_crosswalk_v0_4.csv"
 )
 ACADEMIC_FIELD_V2_CONTEXT_PATH = Path(
-    "schema/academic_field/v0_3/academic_field_context_crosswalk_v0_3.csv"
+    "schema/academic_field/v0_4/academic_field_context_crosswalk_v0_4.csv"
 )
 ACADEMIC_FIELD_V2_COMPATIBILITY_PATH = Path(
     "schema/academic_field/v0_2/academic_field_v0_1_to_v0_2_crosswalk.csv"
@@ -64,10 +64,10 @@ ACADEMIC_FIELD_V2_FROZEN_SHA256: Mapping[Path, str] = {
         "9813972ec7698cd923fbbfb9bbee16bff7af12b371f23f5e733f6d391b92576e"
     ),
     ACADEMIC_FIELD_V2_RAW_PATH: (
-        "e59a29c0bfadd5a4e633d2cf64ec9f2a2ae1b969b8a6302d6f2886a5a5a01a7b"
+        "f79e8a4b14cff99eb92a06f47f27aa4d06e4bbe51960fbb73a17225cf550d68c"
     ),
     ACADEMIC_FIELD_V2_CONTEXT_PATH: (
-        "12eaf7a9e4870f5bf7c2381445abc007c5e00f3be5f601ad9198c60a14e0a5a8"
+        "764673a1cc3aff882879bd74a87cfe550115065bffb41627412abc93b9178c05"
     ),
     ACADEMIC_FIELD_V2_COMPATIBILITY_PATH: (
         "55d3cbeebb0af7d6bcab6bb5b975616413ff8f5591cf3cab03089559913f92d7"

@@ -12,7 +12,7 @@ export interface ArtifactReceipt {
 export interface SiteManifest {
   artifact: string;
   manifest_version: string;
-  site_data_schema_version: "0.2";
+  site_data_schema_version: "0.3";
   build_id: string;
   build_timestamp_utc: string;
   builder_version: string;
@@ -79,7 +79,7 @@ export interface SearchRow {
   academic_field_v2_subcategory_mapping_status: string;
   academic_field_v2_broad_memberships: string[];
   academic_field_v2_subcategory_memberships: string[];
-  academic_field_v2_mapping_contract_version: "0.2" | "0.3";
+  academic_field_v2_mapping_contract_version: "0.2" | "0.3" | "0.4";
   academic_field_v2_taxonomy_version: "0.2";
   exclusive_enrollment_status: Nullable<string>;
   school_recommendation_required: Nullable<string>;
@@ -122,6 +122,26 @@ export interface SearchRow {
   gpa_derived_status?: GpaDerivedStatus;
 }
 
+export type ProvisionalStatus = "details_pending" | "previous_year_reference" | "publication_pending";
+export interface ProvisionalAdmission {
+  provisional_id: string;
+  university: string;
+  institution_type: "国立" | "公立" | "私立";
+  faculty_school: string | null;
+  selection_name: string;
+  information_year: 2027;
+  public_status: ProvisionalStatus;
+  known_scope: string;
+  known_detail: string;
+  unknown_detail: string;
+  official_source_url: string;
+  previous_year_source_url: string | null;
+  previous_year_detail: string | null;
+  release_expected_text: string | null;
+  verified_on: string;
+  related_update_queue_id: string | null;
+}
+
 export interface OptionValue {
   value: Nullable<string>;
   display_label: string;
@@ -153,7 +173,7 @@ export interface AcademicFieldV2SubcategoryOption {
 }
 
 export interface FilterOptions {
-  site_data_schema_version: "0.2";
+  site_data_schema_version: "0.3";
   build_id: string;
   universities: OptionValue[];
   institution_types: OptionValue[];
@@ -236,9 +256,15 @@ export interface SearchSummary {
 export interface SearchResult { rows: SearchRow[]; summary: SearchSummary; }
 
 export interface DetailRecord {
-  site_data_schema_version: "0.2";
+  site_data_schema_version: "0.3";
   identity: { source_dataset: string; source_version: string; record_id: string };
-  admission: Record<string, Scalar>;
+  admission: Record<string, Scalar> & {
+    international_baccalaureate_flag: boolean;
+    private_foreign_student_flag: boolean;
+    returnee_flag: boolean;
+    regional_quota_flag: boolean;
+    adult_selection_flag: boolean;
+  };
   gpa_derived: Record<string, Scalar>;
   grade_requirement_derived: Record<string, Scalar>;
   academic_field_derived: Record<string, Scalar | Array<Record<string, Scalar>>>;

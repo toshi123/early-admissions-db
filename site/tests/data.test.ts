@@ -10,7 +10,7 @@ beforeEach(() => { resetDataCacheForTests(); vi.restoreAllMocks(); });
 describe("Site-data protections", () => {
   it("reuses verified detail shards during export while retaining exact identity checks", async () => {
     const row = candidateRow({ detail_path: "detail.json" });
-    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.2", details: [candidateDetail(row)] }));
+    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.3", details: [candidateDetail(row)] }));
     const manifest = { build_id: "test", outputs: { artifacts: [{ kind: "detail_shard", path: "detail.json", size_bytes: bytes.byteLength, sha256: createHash("sha256").update(bytes).digest("hex") }] } } as SiteManifest;
     vi.stubGlobal("fetch", vi.fn(async () => new Response(bytes)));
     const cache: DetailCache = new Map();
@@ -22,7 +22,7 @@ describe("Site-data protections", () => {
 
   it("never retains failed integrity checks in the export-scoped detail cache", async () => {
     const row = candidateRow({ detail_path: "detail.json" });
-    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.2", details: [candidateDetail(row)] }));
+    const bytes = new TextEncoder().encode(JSON.stringify({ build_id: "test", site_data_schema_version: "0.3", details: [candidateDetail(row)] }));
     const manifest = { build_id: "test", outputs: { artifacts: [{ kind: "detail_shard", path: "detail.json", size_bytes: bytes.byteLength, sha256: createHash("sha256").update(bytes).digest("hex") }] } } as SiteManifest;
     vi.stubGlobal("fetch", vi.fn().mockResolvedValueOnce(new Response("corrupt")).mockResolvedValueOnce(new Response(bytes)));
     const cache: DetailCache = new Map();
@@ -32,7 +32,7 @@ describe("Site-data protections", () => {
   });
 
   it("rejects manifest build-ID mismatch or failed validation", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ artifact: "early_admissions_site_data", site_data_schema_version: "0.2", build_id: "bad", validation: { status: "failed" }, outputs: { artifacts: [] } }))));
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ artifact: "early_admissions_site_data", site_data_schema_version: "0.3", build_id: "bad", validation: { status: "failed" }, outputs: { artifacts: [] } }))));
     await expect(loadManifest()).rejects.toBeInstanceOf(SiteDataError);
   });
 
@@ -42,10 +42,10 @@ describe("Site-data protections", () => {
   });
 
   it("rejects an asset from another build ID", async () => {
-    const bytes = new TextEncoder().encode(JSON.stringify({ site_data_schema_version: "0.2", build_id: "bbbbbbbbbbbbbbbbbbbb" }));
+    const bytes = new TextEncoder().encode(JSON.stringify({ site_data_schema_version: "0.3", build_id: "bbbbbbbbbbbbbbbbbbbb" }));
     const sha256 = createHash("sha256").update(bytes).digest("hex");
     const validManifest = {
-      artifact: "early_admissions_site_data", site_data_schema_version: "0.2", build_id: "aaaaaaaaaaaaaaaaaaaa",
+      artifact: "early_admissions_site_data", site_data_schema_version: "0.3", build_id: "aaaaaaaaaaaaaaaaaaaa",
       validation: { status: "passed" }, counts: { search_rows: 0 },
       outputs: { artifacts: [{ kind: "filter_options", path: "filter.json", size_bytes: bytes.byteLength, sha256, record_count: 0 }] },
     };

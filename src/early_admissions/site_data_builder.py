@@ -41,17 +41,17 @@ from .validation_profile import (
 )
 
 
-SITE_DATA_SCHEMA_VERSION = "0.2"
-SITE_DATA_BUILDER_VERSION = "0.7.0"
+SITE_DATA_SCHEMA_VERSION = "0.3"
+SITE_DATA_BUILDER_VERSION = "0.8.0"
 DEFAULT_DATABASE = Path("data/derived/sqlite/early_admissions_2027.sqlite")
 DEFAULT_SQLITE_MANIFEST = Path("data/derived/sqlite/build_manifest.json")
-DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_2")
+DEFAULT_OUTPUT_DIR = Path("data/derived/site/v0_3")
 DEFAULT_QA_REPORT = Path("validation/reports/academic_field_v0_2_site_qa.md")
 SCHEMA_PATHS = {
-    "manifest": Path("schema/site/site_data_manifest_schema_v0_2.json"),
-    "search": Path("schema/site/site_search_row_schema_v0_2.json"),
-    "detail": Path("schema/site/site_detail_schema_v0_2.json"),
-    "filters": Path("schema/site/site_filter_options_schema_v0_2.json"),
+    "manifest": Path("schema/site/site_data_manifest_schema_v0_3.json"),
+    "search": Path("schema/site/site_search_row_schema_v0_3.json"),
+    "detail": Path("schema/site/site_detail_schema_v0_4.json"),
+    "filters": Path("schema/site/site_filter_options_schema_v0_3.json"),
 }
 SEARCH_TARGET_BYTES = 1_250_000
 DETAIL_TARGET_BYTES = 256_000
@@ -393,8 +393,10 @@ class SiteDataBuildPipeline:
             raise SiteDataBuildError("SQLite SHA-256 does not match its build manifest.")
         if output.get("size_bytes") != self.database.stat().st_size:
             raise SiteDataBuildError("SQLite size does not match its build manifest.")
-        if manifest.get("database_schema_version") != "0.1":
+        if manifest.get("database_schema_version") != "0.3":
             raise SiteDataBuildError("SQLite manifest schema version mismatch.")
+        if manifest.get("unified_contract_version") != "0.3":
+            raise SiteDataBuildError("SQLite manifest Unified contract version mismatch.")
         input_profile = normalize_validation_profile(
             str(manifest.get("validation_profile", PRODUCTION_PROFILE))
         )
@@ -594,6 +596,14 @@ class SiteDataBuildPipeline:
             admission["fallback_previous_year"] = _bool_value(
                 admission["fallback_previous_year"], "fallback_previous_year"
             )
+            for field in (
+                "international_baccalaureate_flag",
+                "private_foreign_student_flag",
+                "returnee_flag",
+                "regional_quota_flag",
+                "adult_selection_flag",
+            ):
+                admission[field] = _bool_value(admission[field], field)
             for field in (
                 "gpa_min_inclusive",
                 "gpa_max_inclusive",

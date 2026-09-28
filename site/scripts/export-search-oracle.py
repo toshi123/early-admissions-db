@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import argparse
 import sys
 from dataclasses import asdict
 from pathlib import Path
@@ -23,7 +24,14 @@ from early_admissions.site_search import (  # noqa: E402
 
 
 def main() -> None:
-    rows = load_search_rows(REPOSITORY_ROOT / "data" / "derived" / "site" / "v0_2")
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--site-data-dir",
+        type=Path,
+        default=REPOSITORY_ROOT / "data" / "derived" / "site" / "v0_3",
+    )
+    args = parser.parse_args()
+    rows = load_search_rows(args.site_data_dir)
     cases: list[dict[str, object]] = []
     for spec in QA_SPECS:
         criteria = asdict(spec.criteria)

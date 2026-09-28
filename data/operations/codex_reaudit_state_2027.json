@@ -1,0 +1,387 @@
+{
+  "batch_number": 26,
+  "last_completed_at": "2026-09-29",
+  "last_successful_commit": "e8963d1",
+  "completed_universities": [
+    "一橋大学",
+    "東京農工大学",
+    "北海道大学",
+    "室蘭工業大学",
+    "旭川医科大学",
+    "帯広畜産大学（帰国生・社会人・IB反映、私費外国人選抜は詳細要項未公表）",
+    "弘前大学",
+    "岩手大学",
+    "宮城教育大学",
+    "秋田大学",
+    "山形大学",
+    "福島大学",
+    "東京大学",
+    "東京外国語大学",
+    "東京科学大学",
+    "東京学芸大学（既存133行照合。帰国生・私費外国人の詳細要項は10月上旬公開待ち）",
+    "東京海洋大学（Master50行照合。私費外国人詳細要項は12月上旬公開待ち）",
+    "東京藝術大学（Master30行照合。美術・音楽詳細要項は11月下旬～12月上旬公開待ち）",
+    "東北大学（AOⅢ期21行は11月下旬詳細要項公開待ち。AOⅡ・他既存体系の公式一覧を確認）",
+    "横浜国立大学（YGEP-N1都市科学部3単位追加。経済・経営・理工の詳細要項待ち）",
+    "浜松医科大学（公式詳細要項の海外教育プログラム特別入試2・看護社会人1単位を追加）",
+    "滋賀医科大学（既存4募集単位照合、地元医療枠フラグ是正）",
+    "滋賀大学（既存30行照合）",
+    "神戸大学",
+    "福井大学",
+    "福岡教育大学",
+    "筑波技術大学（社会人選抜6単位追加）",
+    "群馬大学（学校推薦型の実出願枠7単位追加）",
+    "総合研究大学院大学（学士課程募集なし・対象外確認）",
+    "筑波大学（公開済み選抜体系と現Master60行照合、詳細精査残あり）",
+    "茨城大学（公開済みAO/推薦照合、私費外国人選抜詳細要項は公開待ち）",
+    "国際医療福祉大学（既存41行照合、成田・福岡等の候補確認を継続）",
+    "国際基督教大学（総合型3区分を公式・Kei-Net照合）",
+    "城西国際大学（2027要項公開確認、全学募集単位照合継続）",
+    "城西大学（既存46行照合、全学対象候補の確認継続）",
+    "埼玉医科大学（医学部帰国生選抜1行追加、Master25行）",
+    "埼玉工業大学（Master照合・2027公式情報/Kei-Net候補確認、未確定単位はUpdateQueue）",
+    "学習院大学（Master照合・2027公式情報/Kei-Net候補確認、未確定単位はUpdateQueue）",
+    "岡山理科大学（Master照合・2027公式情報/Kei-Net候補確認、未確定単位はUpdateQueue）",
+    "工学院大学（Master照合・2027公式情報/Kei-Net候補確認、未確定単位はUpdateQueue）",
+    "帝京大学（Master照合・2027公式情報/Kei-Net候補確認、未確定単位はUpdateQueue）",
+    "日本医科大学（医療健康科学部 看護学科：総合型・公募推薦2区分を公式/外部DB照合、既存Master2行一致）",
+    "帝京平成大学（公式・外部DB・Master候補照合、未確定単位をUpdateQueue）",
+    "慶應義塾大学（公式・外部DB・Master候補照合、未確定単位をUpdateQueue）",
+    "成蹊大学（公式・外部DB・Master候補照合、未確定単位をUpdateQueue）",
+    "日本大学（公式・外部DB・Master候補照合、未確定単位をUpdateQueue）",
+    "日本工業大学（Master96行の2027方式を公式・Benesse照合、追加候補はUQ-2027-0073）",
+    "日本獣医生命科学大学（Master9行を公式・Kei-Net照合、追加候補はUQ-2027-0074）",
+    "日本薬科大学（Master30行を公式・Benesse/パスナビ照合、追加候補はUQ-2027-0075）",
+    "日本赤十字看護大学（Master10行を2027公式・Benesse/東進照合）",
+    "早稲田大学（Master24行を公式・Kei-Net AO2027照合、追加候補はUQ-2027-0076）",
+    "明星大学（理系総合型既存21行照合、全学候補は追加確認待ち）",
+    "明治大学（既存27行照合、スポーツ特別等は追加確認待ち）",
+    "明治薬科大学（社会人・帰国生4行追加、Master7行）",
+    "星薬科大学（学校推薦型3行照合）",
+    "昭和医科大学（2027再編後32行照合）",
+    "昭和薬科大学（Master1行照合）",
+    "東京医科大学（看護社会人選抜1行追加、Master10行）",
+    "東京女子医科大学（Master8行照合）",
+    "東京工科大学（私費外国人留学生8行追加、Master44行）",
+    "東京工芸大学（工学部Master16行照合。芸術学部2027候補は出願単位全件確定までUQ-2027-0082）",
+    "東京農業大学（Master100行照合。社会人・私費外国人・帰国生候補をUQ-2027-0083）",
+    "北里大学（Master41行照合。地域枠・帰国生・社会人等の特別選抜候補をUQ-2027-0084）",
+    "東邦大学（既存22行照合、薬学・看護・健康科学の社会人選抜3単位を追加。医学部地域枠は認可待ち）",
+    "日本獣医生命科学大学（Master9行照合。UQ-2027-0074の特別選抜・学士/編入確認を継続）",
+    "東京情報大学（帰国生・社会人各1行追加、外国人留学生詳細はUQ-2027-0086）",
+    "東京慈恵会医科大学（看護学校推薦型1行を維持、個別要項公開確認をUQ-2027-0087）",
+    "東京理科大学（公式2027特別選抜4方式の出願単位全件照合をUQ-2027-0088）",
+    "東京薬科大学（薬学部社会人・帰国生各1行追加、生命科学部社会人単位はUQ-2027-0089）",
+    "東京都市大学（公式2027特別選抜の学科別出願単位をUQ-2027-0090）",
+    "東京電機大学（Master37行を公式2027一覧/日程・Kei-Net推薦/総合型で照合。未収録のはたらく学生・留学生・社会人は出願単位詳細確認中。）",
+    "東洋大学（Master75行を公式2027方式一覧・Kei-Net推薦/総合型で照合。留学生/帰国生/IB/社会人等の現Master外方式は出願単位確認中。）",
+    "東海大学（Master65行を公式2027要項/Kei-Net推薦/総合型で照合。留学生一般選抜の学部別単位確認中。）",
+    "横浜薬科大学（Master14行と公式令和9年度日程を照合。留学生Ⅰ/Ⅱ期の学科別単位確認中。Kei-Netルート別照合未了。）",
+    "武蔵野大学（Master12行と公式2027方式一覧/Kei-Net総合型を照合。帰国生/社会人/IBの出願単位確認中。）",
+    "湘南工科大学（外国人留学生入試16単位追加、8専攻×前後期）",
+    "法政大学（社会人RSP 1単位追加、Master26行）",
+    "神奈川大学（2027公式体系・Master照合、external DB cross-check済、未確定選抜はUQ-2027-0100）",
+    "神奈川工科大学（2027公式体系・Master照合、external DB cross-check済、未確定選抜はUQ-2027-0101）",
+    "立命館大学（2027公式体系・Master照合、external DB cross-check済、未確定選抜はUQ-2027-0102）",
+    "立教大学（2027公式体系・Master照合、external DB cross-check済、未確定選抜はUQ-2027-0103）",
+    "立正大学（2027公式体系・Master照合、external DB cross-check済、未確定選抜はUQ-2027-0104）",
+    "聖マリアンナ医科大学",
+    "聖路加国際大学（公式詳細資料の取得制約により要確認を継続）",
+    "自治医科大学",
+    "芝浦工業大学",
+    "酪農学園大学",
+    "関東学院大学（既収録範囲を公式/Kei-Net照合、全学の未収録候補をUpdateQueueへ）",
+    "関西大学（既収録範囲を公式/Kei-Net照合、全学の未収録候補をUpdateQueueへ）",
+    "関西学院大学（既収録範囲を公式/Kei-Net照合、全学の未収録候補をUpdateQueueへ）",
+    "青山学院大学（既収録範囲を公式/Kei-Net照合、全学の未収録候補をUpdateQueueへ）",
+    "順天堂大学（既収録範囲を公式/Kei-Net照合、全学の未収録候補をUpdateQueueへ）",
+    "麗澤大学（工学部19行を照合、全学部選抜候補はUQ-2027-0111）",
+    "麻布大学（獣医・生命環境科学系21行を照合、帰国生等候補はUQ-2027-0112）"
+  ],
+  "deferred_universities": [
+    "小樽商科大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010100）",
+    "北見工業大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010101）",
+    "東北大学（AO入試Ⅲ期の詳細確認）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010102）",
+    "熊本大学（学校推薦型I/II詳細・帰国生徒入試）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010103）",
+    "琉球大学（学校推薦I/II・社会人・帰国生・私費外国人留学生）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010104）",
+    "茨城大学（私費外国人留学生選抜）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010105）",
+    "国際医療福祉大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010106）",
+    "城西国際大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010107）",
+    "城西大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010108）",
+    "埼玉工業大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010109）",
+    "学習院大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010110）",
+    "岡山理科大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010111）",
+    "工学院大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010112）",
+    "帝京大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010113）",
+    "帝京平成大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010114）",
+    "慶應義塾大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010115）",
+    "成蹊大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010116）",
+    "日本大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010117）",
+    "日本工業大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010118）",
+    "日本獣医生命科学大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010119）",
+    "日本薬科大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010120）",
+    "早稲田大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010121）",
+    "杏林大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010122）",
+    "東京工科大学（公募推薦残件）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010123）",
+    "東京工芸大学（芸術学部）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010124）",
+    "東京農業大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010125）",
+    "北里大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010126）",
+    "東邦大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010127）",
+    "日本獣医生命科学大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-010128）",
+    "東京情報大学（外国人留学生選抜）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010129）",
+    "東京慈恵会医科大学（看護学校推薦型の詳細）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010130）",
+    "東京理科大学（外国人留学生・帰国生・IB・社会人選抜）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010131）",
+    "東京薬科大学（生命科学部社会人選抜）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010132）",
+    "東京都市大学（帰国生・留学生・社会人・IB選抜）（canonical未変更、出願単位/要項確認待ち。UQ-2027-010133）",
+    "湘南医療大学（指定校型の校別資料・出願単位待ち、UQ-2027-0097）",
+    "獨協医科大学（指定校/指定校地域枠は校別資料と臨時定員認可待ち、UQ-2027-0098）",
+    "玉川大学（帰国者・社会人方式の対象学科/実出願単位照合待ち、UQ-2027-0099）",
+    "法政大学（私費外国人留学生の学部別実出願単位・Web入力確認待ち、UQ-2027-0096）",
+    "神奈川大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-0100）",
+    "神奈川工科大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-0101）",
+    "立命館大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-0102）",
+    "立教大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-0103）",
+    "立正大学（canonical未変更、出願単位/要項確認待ち。UQ-2027-0104）",
+    "聖路加国際大学：公式2027詳細要項ページがHTTP 403で、Kei-Net候補だけではactual application unitを確定できないためUQ-2027-0105で再確認",
+    "関東学院大学：2027公開選抜のうち既収録範囲外候補あり。実出願単位・願書入力確認をUQ-2027-106で継続",
+    "関西大学：2027公開選抜のうち既収録範囲外候補あり。実出願単位・願書入力確認をUQ-2027-107で継続",
+    "関西学院大学：2027公開選抜のうち既収録範囲外候補あり。実出願単位・願書入力確認をUQ-2027-108で継続",
+    "青山学院大学：2027公開選抜のうち既収録範囲外候補あり。実出願単位・願書入力確認をUQ-2027-109で継続",
+    "順天堂大学：2027公開選抜のうち既収録範囲外候補あり。実出願単位・願書入力確認をUQ-2027-110で継続",
+    "麗澤大学：公式全学部の候補選抜について願書上の学科選択・出願単位を確定しUQ-2027-0111で継続",
+    "麻布大学：公式2027要項の帰国生・外国人・学士特別等について学科別出願単位/重複確認をUQ-2027-0112で継続"
+  ],
+  "discussion_required": false,
+  "discussion_issue": "",
+  "next_university": "",
+  "last_validation": {
+    "date": "2026-09-29",
+    "batch": 26,
+    "status": "completed with Site production build and acceptance audit incomplete",
+    "canonical_validation": "PASS; errors=0; warnings=1238; informational=3552",
+    "operations_validation": "PASS",
+    "unified": "PASS; Master=6699; Coverage=260; ResearchRequirements=495; deterministic=true",
+    "sqlite": "PASS; production; admissions=6699; coverage=260; research_requirements=495",
+    "site_data": "PASS; production; build_id=6a63b267596ce85693b4; search=6699; details=6699; research=495",
+    "python_tests": "PASS; 149 tests; 140 subtests",
+    "site_tests": "PASS; 16 files; 158 tests; run directly against current derived site data after sync wrapper ENOTEMPTY failure",
+    "site_production_build": "INCOMPLETE; TypeScript compile passed; Vite public copy stalled at approx 67 MB in Dropbox and /tmp output; stopped",
+    "production_acceptance": "INCOMPLETE; run stopped during baseline tree receipt hash after 60 seconds; previously known v5.74 superseded CSV missing",
+    "diff_check": "PASS; canonical Master and ResearchRequirements unchanged in batch 26"
+  },
+  "in_progress_university": "",
+  "in_progress_stage": "",
+  "working_tree_commit_note": "Batch 20: Added 2 official Tokyo University of Information Sciences returnee/adult units and 2 Tokyo University of Pharmacy and Life Sciences Pharmacy adult/returnee units; incomplete special-route actual application units queued UQ-2027-0086..0090. Unified/SQLite/Site and all tests passed. Production acceptance remains limited by absent legacy v5.74 comparison CSV.",
+  "completed_batches": [
+    {
+      "batch": 9,
+      "universities": [
+        "豊橋技術科学大学",
+        "金沢大学",
+        "長岡技術科学大学",
+        "長崎大学",
+        "電気通信大学"
+      ],
+      "canonical_changes": 0,
+      "notes": "Existing audited candidate units reconfirmed; no new official evidence justified changing canonical rows. Kanazawa and UEC retain open official publication gates. External DB status is university-specific in the batch report."
+    },
+    {
+      "batch": 10,
+      "universities": [
+        "静岡大学",
+        "香川大学",
+        "高知大学",
+        "鳥取大学",
+        "鳴門教育大学"
+      ],
+      "canonical_changes": 0,
+      "tottori_open_candidates": 8,
+      "notes": "Current published official material matched existing rows except Tottori recommendation II candidate list; specific official detailed guidelines not verified, so no canonical additions. Queue UQ-2027-0058."
+    },
+    {
+      "batch": 11,
+      "universities": [
+        "鹿児島大学",
+        "鹿屋体育大学",
+        "ものつくり大学",
+        "上智大学",
+        "中央大学"
+      ],
+      "canonical_changes": 0,
+      "notes": "Batch 11 official/Kei-Net cross-check operations recorded. Kagoshima detailed 2027 source is public but complete 66-row field refresh is in progress (UQ-2027-0018/0019 remain open); NIFS existing Master 5 rows reconciled; IOT 44 rows official 2027 schedule confirmed and Kei-Net relevant route page unavailable (external cross-check 未); Sophia 30 and Chuo 52 existing official scope cross-checked to Kei-Net 2027. Batch builds/tests run; production acceptance limited by missing v5.74 comparison CSV."
+    },
+    {
+      "batch": 12,
+      "universities": [
+        "創価大学",
+        "北里大学",
+        "千葉工業大学",
+        "千葉科学大学",
+        "同志社大学"
+      ],
+      "canonical_changes": 0,
+      "notes": "Official 2027 route/material cross-check and per-university external DB status recorded. No canonical rows were changed. Soka and Doshisha have open detail/scope confirmation queues UQ-2027-0059/0060; Kitasato and Chiba Institute existing rows matched; Chiba Science existing sports selection confirmed but no usable 2027 Kei-Net cross-check page was available. Batch builds/tests passed; production acceptance remains limited by missing v5.74 comparison CSV."
+    },
+    {
+      "batch": 13,
+      "universities": [
+        "国際医療福祉大学",
+        "国際基督教大学",
+        "城西国際大学",
+        "城西大学",
+        "埼玉医科大学"
+      ],
+      "canonical_changes": {
+        "added": 1,
+        "modified": 0
+      },
+      "notes": "External DB cross-check performed for all five universities (status per university in report). Saitama Medical University independent 2027 returnee selection was confirmed and added (SAIMED-2027-MED-RETURN). ICU three comprehensive-selection routes matched existing rows. IUHW, JIU, and Josai retain verified broader-scope/detail follow-up candidates in UQ-2027-0061/0062/0063; no speculative rows were added. Canonical/operations validation, Unified, SQLite, Site, Python and Site tests passed; production acceptance remains blocked only by absent v5.74 comparison CSV."
+    },
+    {
+      "batch": 15,
+      "universities": [
+        "帝京平成大学",
+        "慶應義塾大学",
+        "成蹊大学",
+        "日本医科大学",
+        "日本大学"
+      ],
+      "canonical_changes": 0,
+      "notes": "Batch 15 report records official and external DB cross-check for all five. NMS existing 2 rows reconfirmed; THU, Keio, Seikei and Nihon broader candidates remain in UQ-2027-0069/0070/0071/0072 until official application units and details are established. Canonical/operations validation, Unified/SQLite/Site builds and Python/Site tests passed; production acceptance cannot run to completion because the known v5.74 comparison CSV is absent."
+    },
+    {
+      "batch": 16,
+      "universities": [
+        "日本工業大学",
+        "日本獣医生命科学大学",
+        "日本薬科大学",
+        "日本赤十字看護大学",
+        "早稲田大学"
+      ],
+      "canonical_changes": 0,
+      "notes": "JRCNU existing 10 application units reconfirmed to official 2027 detail; NIT, NVLU, NPU and Waseda broader official candidates remain in UQ-2027-0073..0076 pending exact application-unit/detail confirmation. Third-party cross-check status and dataset limitations are explicit per university in batch report. Canonical/operations validation, Unified/SQLite/Site builds, Python and Site tests passed. Production acceptance stops at known absent v5.74 comparison CSV."
+    },
+    {
+      "batch": 17,
+      "universities": [
+        "明星大学",
+        "明治大学",
+        "明治薬科大学",
+        "星薬科大学",
+        "昭和医科大学"
+      ],
+      "canonical_changes": {
+        "added": 4,
+        "modified": 0
+      },
+      "notes": "Meiji Pharmaceutical official 2027 special selection: social/adult and returnee pathways by each of two departments, four confirmed application units added. Meisei and Meiji official broader selection candidates remain in UQ-2027-0077/0078. Hoshi 3 and Showa Medical 32 existing units reconfirmed. External DB cross-check outcomes documented per university. Canonical/operations validation, Unified/SQLite/Site, Python/Site tests pass. Acceptance limited by missing legacy v5.74 source CSV."
+    },
+    {
+      "batch": 18,
+      "universities": [
+        "昭和薬科大学",
+        "杏林大学",
+        "東京医科大学",
+        "東京女子医科大学",
+        "東京工科大学"
+      ],
+      "canonical_changes": {
+        "added": 9,
+        "modified": 0
+      },
+      "notes": "Tokyo Medical nursing social/adult 1 confirmed unit and Tokyo Tech foreign-student 8 confirmed units added. Kyorin foreign/region candidates and Tokyo Tech public recommendation detail remain queued. External cross-check is explicitly reported per university. All canonical/operations validation, Unified/SQLite/Site builds, Python and Site tests passed. Production acceptance remains limited by absent legacy v5.74 comparison CSV."
+    },
+    {
+      "batch": 19,
+      "universities": [
+        "東京工芸大学",
+        "東京農業大学",
+        "北里大学",
+        "東邦大学",
+        "日本獣医生命科学大学"
+      ],
+      "canonical_changes": {
+        "added": 3,
+        "modified": 0
+      },
+      "notes": "Toho social/adult selection for Pharmacy, Nursing, Health Sciences added from official 2027 materials. Other universities retain unresolved official application-unit candidates in UQ-2027-0082/0083/0084/0074; Toho regional quotas remain under approval in UQ-2027-0085. External DB cross-check status recorded per university. Canonical/operations validation, Unified deterministic build, SQLite, Site data, Python 149 and Site 158 tests passed. Production acceptance limited by absent legacy v5.74 comparison CSV."
+    },
+    {
+      "batch": 20,
+      "universities": [
+        "東京情報大学",
+        "東京慈恵会医科大学",
+        "東京理科大学",
+        "東京薬科大学",
+        "東京都市大学"
+      ],
+      "canonical_changes": {
+        "added": 4,
+        "modified": 0
+      },
+      "notes": "Officially confirmed TUIS returnee/adult units (2) and Toyaku Pharmacy adult/returnee units (2) added. Other confirmed special-route candidates remain queued until actual application units/details are resolved: UQ-2027-0086..0090. External cross-check recorded per university. Unified/SQLite/Site, Python149, Site158 passed. Production acceptance limited by absent legacy v5.74 CSV."
+    },
+    {
+      "batch_number": 22,
+      "completed_on": "2026-09-28",
+      "universities": [
+        "法政大学",
+        "湘南医療大学",
+        "湘南工科大学",
+        "獨協医科大学",
+        "玉川大学"
+      ],
+      "report": "validation/reports/batch_22_20260928.md",
+      "notes": "法政RSP 1行、湘南工科大学外国人留学生8専攻×2期16行を追加。指定校・留学生等の未確定範囲はUQ-2027-0096～0099に登録。external DB cross-check実施状況は学校別レポート参照。"
+    },
+    {
+      "batch_number": 23,
+      "completed_on": "2026-09-28",
+      "universities": [
+        "神奈川大学",
+        "神奈川工科大学",
+        "立命館大学",
+        "立教大学",
+        "立正大学"
+      ],
+      "report": "validation/reports/batch_23_20260928.md",
+      "notes": "5校の公式体系・Master照合とKei-Netクロスチェックを実施。canonical追加/修正なし。未確定系統をUQ-2027-0100～0104に登録。"
+    },
+    {
+      "batch_number": 24,
+      "completed_on": "2026-09-29",
+      "universities": [
+        "聖マリアンナ医科大学",
+        "聖路加国際大学",
+        "自治医科大学",
+        "芝浦工業大学",
+        "酪農学園大学"
+      ],
+      "report": "validation/reports/batch_24_20260929.md",
+      "notes": "4大学は公式資料とMasterを照合しcanonical追加/修正なし。聖路加国際大学は公式詳細本文取得制約をoperations/UQ-2027-0105に記録。5校全てKei-Netクロスチェック済。"
+    },
+    {
+      "batch_number": 25,
+      "completed_on": "2026-09-29",
+      "universities": [
+        "関東学院大学",
+        "関西大学",
+        "関西学院大学",
+        "青山学院大学",
+        "順天堂大学"
+      ],
+      "report": "validation/reports/batch_25_20260929.md",
+      "notes": "5校で既存Master範囲を公式資料・Kei-Netで照合。大学ごとの未収録候補範囲をUQ-2027-0106～0110に記録。canonical追加/修正なし。"
+    },
+    {
+      "batch_number": 26,
+      "completed_on": "2026-09-29",
+      "universities": [
+        "麗澤大学",
+        "麻布大学"
+      ],
+      "report": "validation/reports/batch_26_20260929.md",
+      "notes": "Coverage台帳の最終2大学を公式・外部資料で照合。各大学の既収録範囲外候補をUQ-2027-0111/0112に登録しcanonicalは維持。現在のcoverage ledgerの全大学を巡回済み。"
+    }
+  ]
+}

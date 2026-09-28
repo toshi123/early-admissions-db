@@ -3,7 +3,7 @@ import { syncBroadSubcategoryVisibility, visibleSubcategories } from "./academic
 import { CandidateStore, browserCandidateStorage, candidateKey } from "./candidates";
 import { detailCandidateAction } from "./candidate-controls";
 import { CandidateView } from "./candidate-view";
-import { loadDetail, loadSearchData, SiteDataError } from "./data";
+import { loadDetail, loadPublicDiscovery, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
 import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
@@ -16,6 +16,7 @@ import {
   rememberLastSearch,
 } from "./last-search-state";
 import { submitSearchNavigation } from "./navigation";
+import { discoverProvisional, hasUnverifiedFilters, provisionalCard } from "./public-discovery";
 import { emptyRequest, searchRows } from "./search";
 import {
   evaluateSearchDraft,
@@ -35,6 +36,7 @@ import {
 import type {
   DetailRecord,
   FilterOptions,
+  ProvisionalAdmission,
   SearchRequest,
   SearchResult,
   SearchRow,
@@ -49,6 +51,7 @@ import { registerSearchTools } from "./webmcp";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 let rows: SearchRow[] = [];
+let provisionalRows: ProvisionalAdmission[] = [];
 let options: FilterOptions;
 let manifest: SiteManifest;
 let applied = emptyRequest();
@@ -241,6 +244,11 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   error.textContent = evaluation.errors.join(" ");
   const result = liveSearchResult(rows, evaluation);
   const presentation = liveSummaryPresentation(result);
+  if (result) {
+    const pending = discoverProvisional(provisionalRows, evaluation.request).length;
+    presentation.liveText = `確定済み募集単位 ${result.summary.total_matched_rows.toLocaleString("ja-JP")}件 ／ 詳細確認中 ${pending.toLocaleString("ja-JP")}件`;
+    presentation.floatingText = `確定 ${result.summary.total_matched_rows.toLocaleString("ja-JP")}件・確認中 ${pending.toLocaleString("ja-JP")}件`;
+  }
   const live = document.querySelector<HTMLOutputElement>("#live-summary")!;
   live.textContent = presentation.liveText;
   floatingLiveCount?.update(presentation.floatingText, presentation.invalid);
@@ -377,6 +385,10 @@ function resultsPage(warnings: string[]): void {
   floatingLiveCount = null;
   rememberLastSearch(applied);
   currentResult = searchRows(rows, applied);
+  const discovered = discoverProvisional(provisionalRows, applied);
+  const provisionalMarkup = discovered.length
+    ? `<section class="provisional-results" aria-label="大学公式情報で確認した暫定掲載の選抜"><h2>実施確認済み・公表待ちの選抜</h2><p class="help">${discovered.length.toLocaleString("ja-JP")}件の選抜情報があります。募集単位・詳細条件が未確定のため、確定済み募集単位の件数とは分けて表示します。</p><div class="results" role="list">${discovered.map((record) => provisionalCard(record, hasUnverifiedFilters(applied))).join("")}</div></section>`
+    : "";
   const universityGroups = groupAdmissionsByUniversity(currentResult.rows);
   const pages = Math.max(1, Math.ceil(universityGroups.length / UNIVERSITY_GROUP_PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
@@ -390,7 +402,7 @@ function resultsPage(warnings: string[]): void {
   const next = applied.page < pages
     ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
-  app.innerHTML = `${header()}<main id="main" class="page results-page page--with-floating-actions"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main><nav class="floating-navigation floating-navigation--results" aria-label="検索結果の操作"><a class="button button--outline floating-navigation__action" href="/search${query ? `?${query}` : ""}" data-route data-start-at-top><span aria-hidden="true">←</span> 検索条件を変更</a></nav>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page results-page page--with-floating-actions"><section class="results-summary"><h1>検索結果</h1><p class="result-count">確定済み募集単位 ${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学 ／ 詳細確認中 ${discovered.length.toLocaleString("ja-JP")}件</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}${provisionalMarkup}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : `<section class="empty"><h2>確定済み募集単位はありません</h2><p>${discovered.length ? "詳細確認中の選抜情報を上に表示しています。" : "条件を減らすか、大学公式資料も確認してください。"}</p></section>`}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main><nav class="floating-navigation floating-navigation--results" aria-label="検索結果の操作"><a class="button button--outline floating-navigation__action" href="/search${query ? `?${query}` : ""}" data-route data-start-at-top><span aria-hidden="true">←</span> 検索条件を変更</a></nav>${footer()}`;
   candidates.sync();
 }
 
@@ -442,7 +454,7 @@ async function detailPage(parts: string[]): Promise<void> {
 function aboutPage(): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
-  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定条件の有無と、安全に確認できる全体評定の下限を分けて検索します。科目別・分岐等の追加条件は原文で確認してください。英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の30分類と詳細分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する確定済み募集単位と、大学公式情報で実施を確認した詳細確認中の選抜を表示します。後者は詳細条件への適合を判定していません。検索結果にないことだけで、選抜が存在しないとは判断できません。</p><p>出願資格・条件充足・合格可能性は大学公式資料で確認してください。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の30分類と詳細分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>確定済み募集単位：${manifest.counts.search_rows.toLocaleString("ja-JP")}件 ／ 詳細確認中：${provisionalRows.length.toLocaleString("ja-JP")}件</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
@@ -582,6 +594,12 @@ try {
   rows = loaded.rows;
   options = loaded.options;
   manifest = loaded.manifest;
+  provisionalRows = await loadPublicDiscovery(manifest);
+  for (const provisional of provisionalRows) {
+    if (!options.universities.some((item) => item.value === provisional.university)) {
+      options.universities.push({ value: provisional.university, display_label: provisional.university, unfiltered_count: 0 });
+    }
+  }
   candidates.rows = new Map(rows.map((row) => [candidateKey(row), row]));
   candidates.manifest = manifest;
   for (const group of options.academic_field_groups) groupLabels.set(group.value, group.display_label);
