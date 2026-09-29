@@ -297,11 +297,11 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
         )
         self.assertEqual(safe.summary.total_matched_rows, 763)
         self.assertEqual(review.summary.total_matched_rows, 1510)
-        self.assertEqual(all_rows.summary.total_matched_rows, 6592)
+        self.assertEqual(all_rows.summary.total_matched_rows, 6699)
         self.assertEqual(all_rows.summary.gpa_safe_match_rows, 763)
         self.assertEqual(all_rows.summary.gpa_safe_no_match_rows, 495)
         self.assertEqual(all_rows.summary.gpa_conditional_review_rows, 747)
-        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4587)
+        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4694)
         self.assertEqual(sha256(database), before)
 
     def test_current_grade_requirement_counts_and_rikkyo_boundary(self) -> None:

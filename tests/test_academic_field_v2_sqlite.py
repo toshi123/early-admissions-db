@@ -492,32 +492,32 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
         layer = self.manifest["academic_field_v2"]
         self.assertEqual(layer["broad_taxonomy_rows"], 30)
         self.assertEqual(layer["subcategory_taxonomy_rows"], 89)
-        self.assertEqual(layer["parent_rows"], 6592)
-        self.assertEqual(layer["raw_crosswalk_keys"], 487)
-        self.assertEqual(layer["raw_crosswalk_rows"], 860)
+        self.assertEqual(layer["parent_rows"], 6699)
+        self.assertEqual(layer["raw_crosswalk_keys"], 489)
+        self.assertEqual(layer["raw_crosswalk_rows"], 862)
         self.assertEqual(layer["context_crosswalk_tuples"], 789)
         self.assertEqual(layer["context_crosswalk_rows"], 941)
-        self.assertEqual(layer["raw_only_mapping_admissions"], 4999)
-        self.assertEqual(layer["context_consulted_admissions"], 1593)
-        self.assertEqual(layer["context_effect_admissions"], 1582)
+        self.assertEqual(layer["raw_only_mapping_admissions"], 5086)
+        self.assertEqual(layer["context_consulted_admissions"], 1613)
+        self.assertEqual(layer["context_effect_admissions"], 1602)
         self.assertEqual(
             layer["broad_mapping_status_counts"],
             {
-                "single": 4377,
-                "multi": 2199,
-                "review_required": 11,
-                "unmapped": 5,
+                "single": 4442,
+                "multi": 2238,
+                "review_required": 16,
+                "unmapped": 3,
                 "not_applicable": 0,
             },
         )
         self.assertEqual(
             layer["subcategory_mapping_status_counts"],
             {
-                "single": 3809,
-                "multi": 1675,
-                "none": 1092,
-                "review_required": 11,
-                "unmapped": 5,
+                "single": 3870,
+                "multi": 1686,
+                "none": 1124,
+                "review_required": 16,
+                "unmapped": 3,
                 "not_applicable": 0,
             },
         )
@@ -526,14 +526,14 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
 
     def test_representative_candidate_queries(self) -> None:
         for group_code, expected in (
-            ("law_politics_policy", 117),
-            ("economics", 174),
+            ("law_politics_policy", 118),
+            ("economics", 175),
             ("business_commerce", 194),
             ("psychology", 32),
             ("languages", 198),
-            ("natural_sciences", 770),
-            ("engineering", 1709),
-            ("information", 899),
+            ("natural_sciences", 798),
+            ("engineering", 1746),
+            ("information", 917),
         ):
             with self.subTest(group_code=group_code):
                 result = search_database(
@@ -547,14 +547,14 @@ class CurrentAcademicFieldV2SQLiteRegressionTests(unittest.TestCase):
                 )
                 self.assertEqual(result.summary.total_matched_rows, expected)
         for group_code, subcategory, expected in (
-            ("law_politics_policy", "law", 74),
-            ("economics", "economics_general", 170),
+            ("law_politics_policy", "law", 75),
+            ("economics", "economics_general", 171),
             ("business_commerce", "management", 186),
             ("psychology", "psychology_general", 26),
-            ("natural_sciences", "mathematics_statistics", 114),
-            ("natural_sciences", "physics", 94),
-            ("engineering", "mechanical", 337),
-            ("nursing_health", "nursing", 286),
+            ("natural_sciences", "mathematics_statistics", 115),
+            ("natural_sciences", "physics", 95),
+            ("engineering", "mechanical", 341),
+            ("nursing_health", "nursing", 297),
         ):
             with self.subTest(subcategory=subcategory):
                 result = search_database(

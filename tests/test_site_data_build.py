@@ -255,8 +255,8 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         self.assertEqual(self.manifest["site_data_schema_version"], "0.3")
         self.assertEqual(self.manifest["validation_profile"], "candidate_audit")
         self.assertFalse(self.manifest["publication"]["production_ready"])
-        self.assertEqual(self.manifest["counts"]["search_rows"], 6592)
-        self.assertEqual(self.manifest["counts"]["detail_records"], 6592)
+        self.assertEqual(self.manifest["counts"]["search_rows"], 6699)
+        self.assertEqual(self.manifest["counts"]["detail_records"], 6699)
         self.assertEqual(self.manifest["counts"]["research_requirement_rows"], 495)
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["gpa_safe_match_counts"],
@@ -264,11 +264,11 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_mapping_statuses"],
-            {"single": 4656, "multi": 1891, "review_required": 40, "unmapped": 5},
+            {"single": 4721, "multi": 1930, "review_required": 45, "unmapped": 3},
         )
         self.assertEqual(
             sum(self.manifest["counts"]["academic_field_group_memberships"].values()),
-            8658,
+            8801,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["queries"], 25
@@ -277,11 +277,11 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
             self.manifest["grade_requirement_search"]["classification_counts"],
             {
                 "required": 2373,
-                "not_required": 707,
-                "review_required": 1427,
-                "unknown": 1937,
+                "not_required": 711,
+                "review_required": 1508,
+                "unknown": 2043,
                 "not_applicable": 17,
-                "unmapped": 131,
+                "unmapped": 47,
             },
         )
         self.assertEqual(
@@ -290,19 +290,19 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_v2_broad_membership_rows"],
-            9108,
+            9251,
         )
         self.assertEqual(
             self.manifest["counts"][
                 "academic_field_v2_subcategory_membership_rows"
             ],
-            7455,
+            7538,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][
                 "academic_field_v2"
             ]["branch_query"]["rows"],
-            1877,
+            1916,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][
