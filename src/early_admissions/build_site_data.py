@@ -17,6 +17,7 @@ from .site_data_builder import (
 )
 from .validation_profile import PRODUCTION_PROFILE
 from .public_discovery_builder import build_public_discovery, PublicDiscoveryError
+from .site_special_index import build_special_index
 
 
 def default_repo_root() -> Path:
@@ -64,6 +65,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             build_timestamp_utc=args.build_timestamp_utc,
         ).build()
         discovery = build_public_discovery(args.repo_root, args.database, result.output_dir)
+        database = args.database if args.database.is_absolute() else args.repo_root / args.database
+        special_index = build_special_index(database, result.output_dir)
     except (OSError, KeyError, TypeError, ValueError, SiteDataBuildError, PublicDiscoveryError) as error:
         print(f"Site-data build failed: {error}", file=sys.stderr)
         return 1
@@ -85,6 +88,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         print(f"Manifest: {result.manifest_path} (sha256={result.manifest_sha256})")
         print(f"QA report: {result.qa_report_path}")
         print(f"Public discovery: {discovery['published_rows']} provisional records")
+        print(f"Special selection index: {special_index['rows']} confirmed records")
     return 0
 
 

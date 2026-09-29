@@ -44,6 +44,16 @@ describe("responsive search and compact results contract", () => {
     expect(css).toContain(".form-actions .button { width: 100%; }");
   });
 
+  it("keeps the actual search submit in a safe-area mobile bottom bar", () => {
+    const mobileCss = css.slice(css.indexOf("@media (max-width: 620px) {"));
+    expect(mobileCss).toContain(".search-page { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }");
+    expect(mobileCss).toContain(".search-page + footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }");
+    expect(mobileCss).toContain(".submit-action {\n    position: fixed;");
+    expect(mobileCss).toContain("inset: auto 0 0;");
+    expect(mobileCss).toContain("padding: .625rem .75rem calc(.625rem + env(safe-area-inset-bottom));");
+    expect(mobileCss).toContain("background: #fff;");
+  });
+
   it("keeps guide images and its table of contents within the mobile viewport", () => {
     expect(css).toContain(".guide-figure img { display: block; width: 100%; height: auto; }");
     expect(css).toContain(".guide-image-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr))");

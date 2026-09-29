@@ -1,4 +1,4 @@
-import { emptyRequest, MULTI_FIELDS } from "./search";
+import { emptyRequest, MULTI_FIELDS, validIsoDate } from "./search";
 import type { FilterOptions, MultiField, SearchRequest } from "./types";
 
 const PARAMS = new Set<string>([
@@ -14,6 +14,8 @@ const PARAMS = new Set<string>([
   "overall_gpa_query",
   "academic_field_v2",
   "academic_subfield_v2",
+  "selection_family", "special_filter", "applicant_gpa", "deadline_on_or_after",
+  "applicant_gpa_query", "deadline_query",
 ]);
 
 export interface SearchUrlState {
@@ -22,6 +24,8 @@ export interface SearchUrlState {
   universityQuery: string;
   gpaQuery: string;
   overallGpaQuery: string;
+  applicantGpaQuery: string;
+  deadlineQuery: string;
 }
 
 function allowedValues(options: FilterOptions): Record<MultiField, Set<string>> {
@@ -53,6 +57,15 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
   const request = emptyRequest();
   const warnings: string[] = [];
   const allowed = allowedValues(options);
+  const families = params.getAll("selection_family");
+  if (families.length) {
+    request.selection_families = [...new Set(families.filter((value): value is "recommendation" | "comprehensive" => value === "recommendation" || value === "comprehensive"))];
+    if (families.some((value) => value !== "recommendation" && value !== "comprehensive" && value !== "none")) warnings.push("未対応の選抜方式指定を無視しました。");
+  }
+  const special = params.getAll("special_filter");
+  const validSpecial = ["returnee_flag", "international_baccalaureate_flag", "private_foreign_student_flag", "adult_selection_flag"] as const;
+  request.special_filters = [...new Set(special.filter((value): value is typeof validSpecial[number] => validSpecial.includes(value as typeof validSpecial[number])))];
+  if (special.some((value) => !validSpecial.includes(value as typeof validSpecial[number]))) warnings.push("未対応の特別選抜指定を無視しました。");
   for (const key of new Set(params.keys())) if (!PARAMS.has(key)) warnings.push(`未対応のパラメータ「${key}」を無視しました。`);
   for (const field of MULTI_FIELDS) {
     for (const value of params.getAll(field)) {
@@ -126,6 +139,16 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
       request.overall_gpa_tenths = Math.round(Number(overallGpa) * 10);
     } else warnings.push("全体評定は0.0〜5.0、小数1桁で指定してください。");
   }
+  const applicantGpa = params.get("applicant_gpa");
+  if (applicantGpa !== null) {
+    if (/^(?:[0-4](?:\.\d)?|5(?:\.0)?)$/.test(applicantGpa)) request.applicant_gpa_tenths = Math.round(Number(applicantGpa) * 10);
+    else warnings.push("あなたの評定平均は0.0〜5.0、小数1桁で指定してください。");
+  }
+  const deadline = params.get("deadline_on_or_after");
+  if (deadline !== null) {
+    if (validIsoDate(deadline)) request.deadline_on_or_after = deadline;
+    else warnings.push("出願締切日は有効な日付で指定してください。");
+  }
   const page = params.get("page");
   if (page !== null && /^\d+$/.test(page) && Number(page) > 0) request.page = Number(page);
   else if (page !== null) warnings.push("ページ指定を無視しました。");
@@ -138,11 +161,18 @@ export function parseSearchParams(params: URLSearchParams, options: FilterOption
       ? ""
       : (request.overall_gpa_tenths / 10).toFixed(1)
   );
-  return { request, warnings, universityQuery, gpaQuery, overallGpaQuery };
+  return { request, warnings, universityQuery, gpaQuery, overallGpaQuery,
+    applicantGpaQuery: params.get("applicant_gpa_query") ?? (request.applicant_gpa_tenths === null ? "" : (request.applicant_gpa_tenths / 10).toFixed(1)),
+    deadlineQuery: params.get("deadline_query") ?? request.deadline_on_or_after ?? "" };
 }
 
 export function serializeRequest(request: SearchRequest): URLSearchParams {
   const params = new URLSearchParams();
+  if (request.selection_families.length !== 2) {
+    for (const family of request.selection_families) params.append("selection_family", family);
+    if (!request.selection_families.length) params.append("selection_family", "none");
+  }
+  for (const filter of request.special_filters) params.append("special_filter", filter);
   for (const field of MULTI_FIELDS) for (const value of request[field]) params.append(field, value);
   const seenBroad = new Set<string>();
   for (const branch of request.academic_field_v2_branches) {
@@ -170,6 +200,8 @@ export function serializeRequest(request: SearchRequest): URLSearchParams {
       params.set("overall_gpa", (request.overall_gpa_tenths / 10).toFixed(1));
     }
   }
+  if (request.applicant_gpa_tenths !== null) params.set("applicant_gpa", (request.applicant_gpa_tenths / 10).toFixed(1));
+  if (request.deadline_on_or_after !== null) params.set("deadline_on_or_after", request.deadline_on_or_after);
   if (request.page > 1) params.set("page", String(request.page));
   return params;
 }
@@ -179,6 +211,8 @@ export function serializeSearchFormState(
   universityQuery: string,
   gpaQuery: string,
   overallGpaQuery: string,
+  applicantGpaQuery = "",
+  deadlineQuery = "",
 ): URLSearchParams {
   const params = serializeRequest(request);
   if (universityQuery && request.university[0] !== universityQuery) {
@@ -194,5 +228,8 @@ export function serializeSearchFormState(
   if (overallGpaQuery && canonicalOverallGpa !== overallGpaQuery) {
     params.set("overall_gpa_query", overallGpaQuery);
   }
+  const canonicalApplicant = request.applicant_gpa_tenths === null ? "" : (request.applicant_gpa_tenths / 10).toFixed(1);
+  if (applicantGpaQuery && canonicalApplicant !== applicantGpaQuery) params.set("applicant_gpa_query", applicantGpaQuery);
+  if (deadlineQuery && deadlineQuery !== request.deadline_on_or_after) params.set("deadline_query", deadlineQuery);
   return params;
 }

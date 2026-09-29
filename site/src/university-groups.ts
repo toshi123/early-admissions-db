@@ -1,12 +1,42 @@
 import { escapeHtml } from "./display";
 import { compactResultCard } from "./search-ui";
-import type { SearchRow } from "./types";
+import type { ProvisionalAdmission, SearchRequest, SearchRow } from "./types";
+import { hasUnverifiedFilters, provisionalCard } from "./public-discovery";
 
 export const UNIVERSITY_GROUP_PAGE_SIZE = 15;
 
 export interface UniversityAdmissionGroup {
   university: string;
   admissions: SearchRow[];
+}
+
+export interface PublicUniversityGroup extends UniversityAdmissionGroup {
+  provisional: ProvisionalAdmission[];
+}
+
+export function groupPublicAdmissionsByUniversity(rows: SearchRow[], provisional: ProvisionalAdmission[]): PublicUniversityGroup[] {
+  const groups = groupAdmissionsByUniversity(rows).map((group) => ({ ...group, provisional: [] as ProvisionalAdmission[] }));
+  const byUniversity = new Map(groups.map((group) => [group.university, group]));
+  for (const record of provisional) {
+    let group = byUniversity.get(record.university);
+    if (!group) {
+      group = { university: record.university, admissions: [], provisional: [] };
+      groups.push(group);
+      byUniversity.set(record.university, group);
+    }
+    group.provisional.push(record);
+  }
+  return groups;
+}
+
+export function publicUniversityGroupMarkup(group: PublicUniversityGroup, globalIndex: number,
+  expanded: boolean, request: SearchRequest): string {
+  const content = [
+    ...group.admissions.map((row) => compactResultCard(row, request.gpa_tenths !== null, false)),
+    ...group.provisional.map((record) => provisionalCard(record, hasUnverifiedFilters(request), request)),
+  ].join("");
+  return universityDisclosureMarkup(group.university, group.admissions.length + group.provisional.length,
+    globalIndex, expanded, content);
 }
 
 export function admissionLogicalKey(row: SearchRow): string {
@@ -28,11 +58,11 @@ export function groupAdmissionsByUniversity(rows: SearchRow[]): UniversityAdmiss
   return groups;
 }
 
-export function paginateUniversityGroups(
-  groups: UniversityAdmissionGroup[],
+export function paginateUniversityGroups<T extends UniversityAdmissionGroup>(
+  groups: T[],
   page: number,
   pageSize = UNIVERSITY_GROUP_PAGE_SIZE,
-): UniversityAdmissionGroup[] {
+): T[] {
   const start = (Math.max(1, page) - 1) * pageSize;
   return groups.slice(start, start + pageSize);
 }

@@ -57,12 +57,14 @@ describe("DADS component contracts", () => {
     expect(main).toContain('aria-label="データについて"');
   });
 
-  it("uses a native grade requirement checkbox with a dependent disabled input", () => {
+  it("shows applicant grade and retains the legacy dependent checkbox", () => {
+    expect(main).toContain('for="applicant-gpa">あなたの評定平均');
+    expect(main).toContain('id="applicant-gpa"');
     expect(main).toContain('id="grade-requirement" type="checkbox"');
     expect(main).toContain('id="overall-gpa"');
     expect(main).toContain('applied.grade_requirement_status === "required" ? "" : "disabled"');
-    expect(main).toContain("評定を出願条件として求める入試を検索します");
-    expect(main).toContain("全体評定について安全に数値判定できるものだけを絞り込みます");
+    expect(main).toContain("入力した値で評定条件を満たす選抜を表示します");
+    expect(main).toContain("数値だけで判定できない条件は別途表示します");
   });
 
   it("keeps the university field an exact-selection ARIA combobox", () => {
@@ -76,6 +78,20 @@ describe("DADS component contracts", () => {
     expect(main).toContain('<details id="prefecture-details" class="disclosure">');
     expect(main).toContain("10. 都道府県で絞り込む");
     expect(css).toContain(".disclosure summary:focus-visible");
+  });
+
+  it("uses the same rotating disclosure icon for special admissions and prefectures", () => {
+    const icon = (id: string) => main.match(new RegExp(`<details id="${id}"[^>]*><summary>(<svg[^]*?<\\/svg>)`))?.[1];
+    expect(icon("special-details")).toBeTruthy();
+    expect(icon("special-details")).toBe(icon("prefecture-details"));
+    expect(css).toContain(".disclosure[open] .disclosure__icon { rotate: 180deg; }");
+  });
+
+  it("keeps the labelled deadline picker without a today shortcut", () => {
+    expect(main).toContain('for="deadline-on-or-after">出願締切が指定日以降');
+    expect(main).toContain('id="deadline-on-or-after" class="text-input" type="date"');
+    expect(main).not.toContain("deadline-today");
+    expect(main).not.toContain("今日以降");
   });
 
   it("gives buttons DADS focus treatment and practical target sizing", () => {

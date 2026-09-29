@@ -1,4 +1,4 @@
-import type { GpaDerivedStatus, MultiField, SearchRequest, SearchResult, SearchRow } from "./types";
+import type { GpaDerivedStatus, MultiField, SearchRequest, SearchResult, SearchRow, SpecialFilter } from "./types";
 
 export const MULTI_FIELDS: MultiField[] = [
   "university", "institution_type", "prefecture", "academic_field", "academic_field_group",
@@ -15,8 +15,44 @@ export function emptyRequest(): SearchRequest {
   return Object.assign(Object.fromEntries(MULTI_FIELDS.map((field) => [field, []])), {
     academic_field_v2_branches: [],
     stem_flag: null, gpa_tenths: null, gpa_mode: "all",
-    grade_requirement_status: null, overall_gpa_tenths: null, page: 1,
+    grade_requirement_status: null, overall_gpa_tenths: null,
+    applicant_gpa_tenths: null, deadline_on_or_after: null,
+    selection_families: ["recommendation", "comprehensive"], special_filters: [], page: 1,
   }) as unknown as SearchRequest;
+}
+
+export function selectionFamily(category: string | null): "recommendation" | "comprehensive" | "other" {
+  if (category?.startsWith("学校推薦型")) return "recommendation";
+  if (category?.startsWith("総合型")) return "comprehensive";
+  return "other";
+}
+
+export function specialSelectionMatch(row: SearchRow, selected: SpecialFilter[]): boolean {
+  const flags = row.special_flags;
+  if (selected.length) return selected.some((name) => flags?.[name] === true);
+  return !flags || !Object.values(flags).some(Boolean);
+}
+
+export function deadlineStatus(row: SearchRow, date: string | null): "match" | "unknown" | "exclude" {
+  if (!date) return "match";
+  if (row.fallback_previous_year || !row.application_end || !/^\d{4}-\d{2}-\d{2}$/.test(row.application_end)) return "unknown";
+  return row.application_end >= date ? "match" : "exclude";
+}
+
+export function validIsoDate(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+export function applicantGradeStatus(row: SearchRow, value: number | null): "match" | "unknown" | "exclude" {
+  if (value === null) return "match";
+  if (row.fallback_previous_year) return "unknown";
+  if (row.grade_requirement_status === "not_required" || row.grade_requirement_status === "not_applicable") return "match";
+  if (row.grade_requirement_status !== "required" || row.overall_gpa_status !== "safe_simple_overall" ||
+      row.additional_grade_conditions !== false || row.overall_gpa_min_tenths === null) return "unknown";
+  return value > row.overall_gpa_min_tenths ||
+    (value === row.overall_gpa_min_tenths && row.overall_gpa_min_inclusive === true) ? "match" : "exclude";
 }
 
 export function safeGpaMatch(row: SearchRow, value: number): boolean {
@@ -41,6 +77,10 @@ export function gpaStatus(row: SearchRow, value: number | null): GpaDerivedStatu
 }
 
 function matches(row: SearchRow, request: SearchRequest): boolean {
+  // Frozen v0.3 oracle requests predate the public UI selection controls.
+  if (request.special_filters && !specialSelectionMatch(row, request.special_filters)) return false;
+  if (request.selection_families && request.special_filters && !request.special_filters.length &&
+      !request.selection_families.includes(selectionFamily(row.selection_category) as "recommendation" | "comprehensive")) return false;
   for (const field of MULTI_FIELDS) {
     const values = request[field];
     if (!values.length) continue;
@@ -79,6 +119,8 @@ function matches(row: SearchRow, request: SearchRequest): boolean {
       && row.overall_gpa_min_inclusive !== true
     ) return false;
   }
+  if (deadlineStatus(row, request.deadline_on_or_after ?? null) === "exclude") return false;
+  if (applicantGradeStatus(row, request.applicant_gpa_tenths ?? null) === "exclude") return false;
   return true;
 }
 
@@ -88,6 +130,9 @@ const sortFields: Array<keyof SearchRow> = [
 ];
 
 export function searchRows(rows: SearchRow[], request: SearchRequest): SearchResult {
+  if (request.selection_families && request.special_filters && !request.selection_families.length && !request.special_filters.length) throw new Error("少なくとも1つ選抜方式を選択してください");
+  if (request.deadline_on_or_after != null && !validIsoDate(request.deadline_on_or_after)) throw new Error("出願締切日の指定が不正です");
+  if (request.applicant_gpa_tenths != null && (request.applicant_gpa_tenths < 0 || request.applicant_gpa_tenths > 50)) throw new Error("あなたの評定平均が範囲外です");
   if (request.gpa_tenths !== null && (request.gpa_tenths < 0 || request.gpa_tenths > 50)) throw new Error("GPA範囲が不正です");
   if (request.grade_requirement_status !== null && request.grade_requirement_status !== "required") throw new Error("評定条件指定が不正です");
   if (request.overall_gpa_tenths !== null && (request.grade_requirement_status !== "required" || request.overall_gpa_tenths < 0 || request.overall_gpa_tenths > 50)) throw new Error("全体評定指定が不正です");
@@ -97,7 +142,9 @@ export function searchRows(rows: SearchRow[], request: SearchRequest): SearchRes
       if (compared) return compared;
     }
     return 0;
-  }).map((row) => ({ ...row, gpa_derived_status: gpaStatus(row, request.gpa_tenths) }));
+  }).map((row) => ({ ...row, gpa_derived_status: gpaStatus(row, request.gpa_tenths),
+    deadline_filter_status: request.deadline_on_or_after ? deadlineStatus(row, request.deadline_on_or_after) as "match" | "unknown" : undefined,
+    applicant_grade_status: request.applicant_gpa_tenths != null ? applicantGradeStatus(row, request.applicant_gpa_tenths) as "match" | "unknown" : undefined }));
   const statuses = matched.map((row) => row.gpa_derived_status);
   const sources: Record<string, number> = {};
   for (const row of matched) sources[row.source_dataset] = (sources[row.source_dataset] ?? 0) + 1;

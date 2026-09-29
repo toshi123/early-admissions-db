@@ -120,7 +120,19 @@ export interface SearchRow {
   publication_status: Nullable<string>;
   detail_path: string;
   gpa_derived_status?: GpaDerivedStatus;
+  special_flags?: SpecialSelectionFlags;
+  deadline_filter_status?: "match" | "unknown";
+  applicant_grade_status?: "match" | "unknown";
 }
+
+export interface SpecialSelectionFlags {
+  returnee_flag: boolean;
+  international_baccalaureate_flag: boolean;
+  private_foreign_student_flag: boolean;
+  adult_selection_flag: boolean;
+}
+export type SpecialFilter = keyof SpecialSelectionFlags;
+export type SelectionFamily = "recommendation" | "comprehensive" | "other";
 
 export type ProvisionalStatus = "details_pending" | "previous_year_reference" | "publication_pending";
 export interface ProvisionalAdmission {
@@ -129,6 +141,8 @@ export interface ProvisionalAdmission {
   institution_type: "国立" | "公立" | "私立";
   faculty_school: string | null;
   selection_name: string;
+  selection_family: SelectionFamily;
+  special_filter_tag: "none" | "returnee" | "international_baccalaureate" | "private_foreign_student" | "adult" | "unclassified_international";
   information_year: 2027;
   public_status: ProvisionalStatus;
   known_scope: string;
@@ -232,6 +246,10 @@ export interface SearchRequest {
   gpa_mode: "safe" | "review" | "all";
   grade_requirement_status: "required" | null;
   overall_gpa_tenths: number | null;
+  applicant_gpa_tenths: number | null;
+  deadline_on_or_after: string | null;
+  selection_families: Array<"recommendation" | "comprehensive">;
+  special_filters: SpecialFilter[];
   page: number;
 }
 

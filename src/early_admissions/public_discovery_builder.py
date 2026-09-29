@@ -17,9 +17,9 @@ from urllib.parse import urlparse
 from jsonschema import Draft202012Validator, FormatChecker
 
 
-SCHEMA_VERSION = "0.1"
-INPUT_PATH = Path("data/publication/provisional_admissions_2027.csv")
-SCHEMA_PATH = Path("schema/publication/provisional_admissions_schema_v0_1.json")
+SCHEMA_VERSION = "0.2"
+INPUT_PATH = Path("data/publication/provisional_admissions_2027_v0_2.csv")
+SCHEMA_PATH = Path("schema/publication/provisional_admissions_schema_v0_2.json")
 QUEUE_PATH = Path("data/operations/update_queue.csv")
 OUTPUT_NAME = "provisional_admissions.json"
 MANIFEST_NAME = "public_discovery_manifest.json"
@@ -54,7 +54,7 @@ def validate_publication_registry(root: Path) -> list[dict[str, object]]:
     expected = list(schema["required"])
     fields, raw_rows = _read_csv(source)
     if fields != expected:
-        raise PublicDiscoveryError("provisional registry header differs from v0.1 schema")
+        raise PublicDiscoveryError("provisional registry header differs from v0.2 schema")
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
     queue_fields, queue_rows = _read_csv(root / QUEUE_PATH)
     if "queue_id" not in queue_fields:

@@ -70,6 +70,20 @@ describe("URL state and explicit display semantics", () => {
     expect(old.request.grade_requirement_status).toBeNull();
   });
 
+  it("round-trips public selection, applicant grade, and deadline without changing legacy GPA URLs", () => {
+    const parsed = parseSearchParams(new URLSearchParams(
+      "selection_family=recommendation&special_filter=returnee_flag&special_filter=international_baccalaureate_flag&applicant_gpa=3.8&deadline_on_or_after=2026-10-01",
+    ), options);
+    expect(parsed.warnings).toEqual([]);
+    expect(parsed.request.selection_families).toEqual(["recommendation"]);
+    expect(parsed.request.special_filters).toEqual(["returnee_flag", "international_baccalaureate_flag"]);
+    expect(parsed.request.applicant_gpa_tenths).toBe(38);
+    expect(parsed.request.deadline_on_or_after).toBe("2026-10-01");
+    expect(parseSearchParams(serializeRequest(parsed.request), options).request).toEqual(parsed.request);
+    expect(parseSearchParams(new URLSearchParams(), options).request.special_filters).toEqual([]);
+    expect(parseSearchParams(new URLSearchParams(), options).request.selection_families).toEqual(["recommendation", "comprehensive"]);
+  });
+
   it("fails closed for invalid or orphaned overall GPA URL state", () => {
     const orphaned = parseSearchParams(new URLSearchParams("overall_gpa=3.8"), options);
     expect(orphaned.request.overall_gpa_tenths).toBeNull();

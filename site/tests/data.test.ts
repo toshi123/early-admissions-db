@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createHash } from "node:crypto";
-import { loadDetail, loadManifest, loadSearchData, resetDataCacheForTests, SiteDataError } from "../src/data";
+import { loadDetail, loadManifest, loadSearchData, loadSpecialSelectionIndex, resetDataCacheForTests, SiteDataError } from "../src/data";
 import type { SearchRow, SiteManifest } from "../src/types";
 import type { DetailCache } from "../src/data";
 import { candidateDetail, candidateRow } from "./candidate-fixtures";
@@ -52,5 +52,13 @@ describe("Site-data protections", () => {
     let call = 0;
     vi.stubGlobal("fetch", vi.fn(async () => call++ === 0 ? new Response(JSON.stringify(validManifest)) : new Response(bytes)));
     await expect(loadSearchData()).rejects.toThrow("build ID");
+  });
+
+  it("rejects a special-selection index from a different SQLite input", async () => {
+    const site = { input: { sqlite_sha256: "a".repeat(64) }, counts: { search_rows: 1 } } as SiteManifest;
+    const manifest = { artifact: "early_admissions_special_selection_manifest", schema_version: "0.1",
+      sqlite_sha256: "b".repeat(64), rows: 1, output: { path: "special_selection_index.json" } };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(manifest))));
+    await expect(loadSpecialSelectionIndex(site)).rejects.toThrow("入力DB");
   });
 });
