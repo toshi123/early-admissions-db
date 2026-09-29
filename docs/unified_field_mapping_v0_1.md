@@ -260,3 +260,15 @@ The original field remains present and unchanged. A date prefix followed by time
 | Parent `Unknown` or `null`, any child count | informational only if useful | No inferred flag value |
 | Child FK does not resolve | error | Do not publish the affected unified artifact as valid |
 | Exact duplicate child rows | warning | Preserve multiplicity; do not silently deduplicate |
+
+## v0.3 special-selection flags
+
+| Source field | Unified field | Mapping |
+|---|---|---|
+| `international_baccalaureate_flag` | same | Yes→true / No→false |
+| `private_foreign_student_flag` | same | Yes→true / No→false |
+| `returnee_flag` | same | Yes→true / No→false |
+| `regional_quota_flag` | same | Yes→true / No→false |
+| `adult_selection_flag` | same | Yes→true / No→false |
+
+These flags identify the application-unit type. They are independent and are not inferred from eligibility text alone.

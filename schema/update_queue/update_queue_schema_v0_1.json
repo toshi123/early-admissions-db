@@ -1,0 +1,50 @@
+{
+  "version": "0.1",
+  "purpose": "Operational queue for unpublished or newly published official admissions documents. Not canonical admissions data.",
+  "canonical": false,
+  "columns": [
+    "queue_id",
+    "institution_type",
+    "university",
+    "faculty_school",
+    "selection_name",
+    "document_type",
+    "publication_status",
+    "release_expected_text",
+    "release_expected_from",
+    "release_expected_to",
+    "release_schedule_url",
+    "last_checked_on",
+    "next_check_on",
+    "actual_release_on",
+    "action_status",
+    "related_record_id",
+    "notes"
+  ],
+  "primary_key": "queue_id",
+  "enums": {
+    "publication_status": [
+      "公開済",
+      "一部公開",
+      "未公開",
+      "公開予定",
+      "不明"
+    ],
+    "action_status": [
+      "待機",
+      "確認時期到来",
+      "更新必要",
+      "更新中",
+      "完了"
+    ]
+  },
+  "normalization_rules": {
+    "dates": "YYYY-MM-DD",
+    "early_month": "01-10",
+    "mid_month": "11-20",
+    "late_month": "21-end_of_month",
+    "whole_month": "01-end_of_month",
+    "preserve_official_release_wording_in": "release_expected_text",
+    "official_sources_only_for_release_schedule": true
+  }
+}

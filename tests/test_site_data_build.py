@@ -3,9 +3,11 @@ from __future__ import annotations
 import hashlib
 import json
 import shutil
+import sqlite3
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Mapping
 
 from early_admissions.site_data_builder import SiteDataBuildError, SiteDataBuildPipeline
 from early_admissions.site_search import SiteSearchError, load_search_rows
@@ -19,8 +21,18 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def prepare_site_fixture(root: Path, *, duplicate_children: bool = False) -> Path:
-    prepare_unified_fixture(root, duplicate_children=duplicate_children, gpa_requirement="3.5以上")
+def prepare_site_fixture(
+    root: Path,
+    *,
+    duplicate_children: bool = False,
+    master_overrides_by_dataset: Mapping[str, Mapping[str, str]] | None = None,
+) -> Path:
+    prepare_unified_fixture(
+        root,
+        duplicate_children=duplicate_children,
+        gpa_requirement="3.5以上",
+        master_overrides_by_dataset=master_overrides_by_dataset,
+    )
     destination = root / "schema/site"
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(REPO_ROOT / "schema/site", destination)
@@ -38,6 +50,49 @@ def load_all_details(output: Path) -> list[dict[str, object]]:
 
 
 class SiteDataBuildTests(unittest.TestCase):
+    def test_special_selection_flags_survive_unified_sqlite_and_site(self) -> None:
+        flags = (
+            "international_baccalaureate_flag",
+            "private_foreign_student_flag",
+            "returnee_flag",
+            "regional_quota_flag",
+            "adult_selection_flag",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            database = prepare_site_fixture(
+                root,
+                master_overrides_by_dataset={
+                    "kokkoritsu": {field: "Yes" for field in flags},
+                },
+            )
+            with sqlite3.connect(database) as connection:
+                columns = [row[1] for row in connection.execute("PRAGMA table_info(admissions)")]
+                values = connection.execute(
+                    "SELECT " + ", ".join(flags)
+                    + " FROM admissions WHERE source_dataset = 'kokkoritsu'"
+                ).fetchone()
+            self.assertEqual([field for field in columns if field in flags], list(flags))
+            self.assertEqual(values, (1, 1, 1, 1, 1))
+            result = SiteDataBuildPipeline(root).build()
+            details = load_all_details(result.output_dir)
+            kokkoritsu = next(
+                detail for detail in details
+                if detail["identity"]["source_dataset"] == "kokkoritsu"
+            )
+            shidai = next(
+                detail for detail in details
+                if detail["identity"]["source_dataset"] == "shidai"
+            )
+            self.assertEqual(
+                {field: kokkoritsu["admission"][field] for field in flags},
+                {field: True for field in flags},
+            )
+            self.assertEqual(
+                {field: shidai["admission"][field] for field in flags},
+                {field: False for field in flags},
+            )
+
     def test_successful_build_preserves_rows_raw_nulls_and_booleans(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -59,7 +114,7 @@ class SiteDataBuildTests(unittest.TestCase):
             )
             self.assertTrue(kokkoritsu["academic_field_v2_broad_memberships"])
             self.assertEqual(
-                kokkoritsu["academic_field_v2_mapping_contract_version"], "0.3"
+                kokkoritsu["academic_field_v2_mapping_contract_version"], "0.4"
             )
             self.assertEqual(kokkoritsu["gpa_min_tenths"], 35)
             self.assertIn("selection_practical", kokkoritsu)
@@ -124,6 +179,17 @@ class SiteDataBuildTests(unittest.TestCase):
             with self.assertRaisesRegex(SiteDataBuildError, "schema version"):
                 SiteDataBuildPipeline(root).build()
 
+    def test_unified_contract_version_mismatch_is_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepare_site_fixture(root)
+            path = root / "data/derived/sqlite/build_manifest.json"
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+            manifest["unified_contract_version"] = "0.1"
+            path.write_text(json.dumps(manifest), encoding="utf-8")
+            with self.assertRaisesRegex(SiteDataBuildError, "Unified contract"):
+                SiteDataBuildPipeline(root).build()
+
     def test_deterministic_build_excluding_timestamp(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -180,25 +246,17 @@ class SiteDataBuildTests(unittest.TestCase):
 class CurrentSiteDataRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        cls.temporary = tempfile.TemporaryDirectory()
-        temporary = Path(cls.temporary.name)
-        cls.result = SiteDataBuildPipeline(
-            REPO_ROOT,
-            output_dir=temporary / "site",
-            qa_report_path=temporary / "qa.md",
-            build_timestamp_utc="2026-09-20T00:00:00Z",
-        ).build()
+        cls.output_dir = REPO_ROOT / "data/derived/site/v0_3_candidate"
         cls.manifest = json.loads(
-            cls.result.manifest_path.read_text(encoding="utf-8")
+            (cls.output_dir / "build_manifest.json").read_text(encoding="utf-8")
         )
 
-    @classmethod
-    def tearDownClass(cls) -> None:
-        cls.temporary.cleanup()
-
     def test_current_snapshot_counts_and_regressions(self) -> None:
-        self.assertEqual(self.manifest["counts"]["search_rows"], 6411)
-        self.assertEqual(self.manifest["counts"]["detail_records"], 6411)
+        self.assertEqual(self.manifest["site_data_schema_version"], "0.3")
+        self.assertEqual(self.manifest["validation_profile"], "candidate_audit")
+        self.assertFalse(self.manifest["publication"]["production_ready"])
+        self.assertEqual(self.manifest["counts"]["search_rows"], 6699)
+        self.assertEqual(self.manifest["counts"]["detail_records"], 6699)
         self.assertEqual(self.manifest["counts"]["research_requirement_rows"], 495)
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["gpa_safe_match_counts"],
@@ -206,11 +264,11 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_mapping_statuses"],
-            {"single": 4494, "multi": 1877, "review_required": 40},
+            {"single": 4721, "multi": 1930, "review_required": 45, "unmapped": 3},
         )
         self.assertEqual(
             sum(self.manifest["counts"]["academic_field_group_memberships"].values()),
-            8468,
+            8801,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"]["queries"], 25
@@ -219,11 +277,11 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
             self.manifest["grade_requirement_search"]["classification_counts"],
             {
                 "required": 2373,
-                "not_required": 707,
-                "review_required": 1404,
-                "unknown": 1910,
+                "not_required": 711,
+                "review_required": 1508,
+                "unknown": 2043,
                 "not_applicable": 17,
-                "unmapped": 0,
+                "unmapped": 47,
             },
         )
         self.assertEqual(
@@ -232,19 +290,19 @@ class CurrentSiteDataRegressionTests(unittest.TestCase):
         )
         self.assertEqual(
             self.manifest["counts"]["academic_field_v2_broad_membership_rows"],
-            8903,
+            9251,
         )
         self.assertEqual(
             self.manifest["counts"][
                 "academic_field_v2_subcategory_membership_rows"
             ],
-            7261,
+            7538,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][
                 "academic_field_v2"
             ]["branch_query"]["rows"],
-            1862,
+            1916,
         )
         self.assertEqual(
             self.manifest["validation"]["search_equivalence"][

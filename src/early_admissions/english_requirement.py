@@ -7,12 +7,12 @@ from dataclasses import dataclass
 from pathlib import Path
 
 
-ENGLISH_REQUIREMENT_CONTRACT_VERSION = "0.2"
+ENGLISH_REQUIREMENT_CONTRACT_VERSION = "0.3"
 ENGLISH_REQUIREMENT_SCHEMA_PATH = Path(
-    "schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"
+    "schema/sqlite/admission_search_english_requirement_schema_v0_2.sql"
 )
 ENGLISH_REQUIREMENT_CROSSWALK_PATH = Path(
-    "schema/english_requirement/english_requirement_crosswalk_v0_2.csv"
+    "schema/english_requirement/english_requirement_crosswalk_v0_5.csv"
 )
 ENGLISH_REQUIREMENT_PREVIOUS_CROSSWALK_PATH = Path(
     "schema/english_requirement/english_requirement_crosswalk_v0_1.csv"

@@ -3,7 +3,7 @@ import { syncBroadSubcategoryVisibility, visibleSubcategories } from "./academic
 import { CandidateStore, browserCandidateStorage, candidateKey } from "./candidates";
 import { detailCandidateAction } from "./candidate-controls";
 import { CandidateView } from "./candidate-view";
-import { loadDetail, loadSearchData, SiteDataError } from "./data";
+import { loadDetail, loadPublicDiscovery, loadSearchData, SiteDataError } from "./data";
 import { displayValue, escapeHtml, safeExternalLink } from "./display";
 import { inValueOrder } from "./form-options";
 import { bindFloatingLiveCount, type FloatingLiveCountController } from "./floating-live-count";
@@ -16,6 +16,7 @@ import {
   rememberLastSearch,
 } from "./last-search-state";
 import { submitSearchNavigation } from "./navigation";
+import { discoverProvisional, provisionalCountLabel } from "./public-discovery";
 import { emptyRequest, searchRows } from "./search";
 import {
   evaluateSearchDraft,
@@ -25,16 +26,17 @@ import {
 } from "./search-ui";
 import {
   expandedUniversitiesFromHistory,
-  groupAdmissionsByUniversity,
+  groupPublicAdmissionsByUniversity,
   paginateUniversityGroups,
   toggleExpandedUniversity,
   UNIVERSITY_GROUP_PAGE_SIZE,
-  universityGroupMarkup,
+  publicUniversityGroupMarkup,
   universityResultsHistoryState,
 } from "./university-groups";
 import type {
   DetailRecord,
   FilterOptions,
+  ProvisionalAdmission,
   SearchRequest,
   SearchResult,
   SearchRow,
@@ -49,6 +51,7 @@ import { registerSearchTools } from "./webmcp";
 
 const app = document.querySelector<HTMLDivElement>("#app")!;
 let rows: SearchRow[] = [];
+let provisionalRows: ProvisionalAdmission[] = [];
 let options: FilterOptions;
 let manifest: SiteManifest;
 let applied = emptyRequest();
@@ -56,6 +59,8 @@ let currentResult: SearchResult = searchRows([], applied);
 let universityQuery = "";
 let gpaQuery = "";
 let overallGpaQuery = "";
+let applicantGpaQuery = "";
+let deadlineQuery = "";
 let cleanupWebMcp: () => void = () => undefined;
 let floatingLiveCount: FloatingLiveCountController | null = null;
 let expandedUniversities = new Set<string>();
@@ -144,15 +149,18 @@ function searchForm(): string {
     <fieldset><legend>1. 大学名</legend><label class="input-label" for="university-input">大学名を入力</label><div class="university-combobox"><input id="university-input" class="text-input" type="text" value="${escapeHtml(universityQuery)}" autocomplete="off" role="combobox" aria-autocomplete="list" aria-controls="university-suggestions" aria-expanded="false" placeholder="大学名の一部を入力"><div id="university-suggestions" class="suggestions" role="listbox" hidden></div></div><p class="help">表示された候補から1校を選択してください。</p></fieldset>
     <fieldset><legend>2. 学問分野</legend><p class="help">複数選択可。選んだ分野は、必要に応じて「さらに絞る」ことができます。</p>${academicFieldV2Controls()}${applied.academic_field_group.length ? `<div class="notice legacy-academic-filter"><strong>旧学問分野条件が適用されています：</strong> ${escapeHtml(applied.academic_field_group.map((value) => groupLabels.get(value) ?? value).join("、"))}</div>` : ""}</fieldset>
     <fieldset><legend>3. 大学種別</legend>${checks("institution_type", institutionTypes)}</fieldset>
+    <fieldset><legend>選抜方式</legend><p class="help">学校推薦型選抜と総合型選抜を初期状態で検索します。両方を外す場合は、特別選抜を1つ以上選んでください。</p><div class="check-grid"><label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="selection_family" value="recommendation" ${applied.selection_families.includes("recommendation") ? "checked" : ""}></span><span class="choice__label">学校推薦型選抜</span></label><label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="selection_family" value="comprehensive" ${applied.selection_families.includes("comprehensive") ? "checked" : ""}></span><span class="choice__label">総合型選抜</span></label></div></fieldset>
+    <fieldset class="prefecture-fieldset"><details id="special-details" class="disclosure" ${applied.special_filters.length ? "open" : ""}><summary><svg class="disclosure__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentcolor"/><circle class="disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor"/><path class="disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas"/></svg><span>特別選抜を探す <span class="selected-count">${applied.special_filters.length ? `（${applied.special_filters.length}件選択）` : "（初期状態では対象外）"}</span></span></summary><p class="help">チェックした種類のいずれかに該当する選抜を表示します。選択中は上の選抜方式より特別選抜の指定を優先します。</p><div class="check-grid">${([ ["returnee_flag", "帰国生"], ["international_baccalaureate_flag", "IB"], ["private_foreign_student_flag", "私費外国人留学生"], ["adult_selection_flag", "社会人"] ] as const).map(([value,label]) => `<label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="special_filter" value="${value}" ${applied.special_filters.includes(value) ? "checked" : ""}></span><span class="choice__label">${label}</span></label>`).join("")}</div></details></fieldset>
     <fieldset><legend>4. 専願・併願</legend>${checks("exclusive_enrollment_status", exclusive, { 不明: "不明・記載確認できず" })}</fieldset>
     <fieldset><legend>5. 共通テスト</legend>${radios("common_test_required", [["", "指定なし"], ["Yes", "あり"], ["No", "なし"]])}</fieldset>
     <fieldset><legend>6. 研究業績</legend>${radios("research_requirement_required", [["", "指定なし"], ["Yes", "必要"], ["No", "必要なし"]])}</fieldset>
     <fieldset><legend>7. 英語資格</legend>${radios("english_requirement_status", [["", "指定なし"], ["required", "必要"], ["not_required", "必要なし"]])}</fieldset>
     <fieldset><legend>8. 試験内容</legend><p class="help">複数選ぶと、すべて実施する入試に絞ります。</p><div class="check-grid">${methods.map(([field, label]) => `<label class="choice choice--checkbox"><span class="choice__control"><input type="checkbox" name="${field}" value="Yes" ${selected(field, "Yes") ? "checked" : ""}></span><span class="choice__label">${label}</span></label>`).join("")}</div></fieldset>
-    <fieldset><legend>9. 評定</legend><label class="choice choice--checkbox"><span class="choice__control"><input id="grade-requirement" type="checkbox" name="grade_requirement" value="required" ${applied.grade_requirement_status === "required" ? "checked" : ""}></span><span class="choice__label">評定条件あり</span></label><p class="help">評定を出願条件として求める入試を検索します。</p><div class="nested-filter"><label class="input-label" for="overall-gpa">全体評定でさらに絞り込む（任意）</label><div class="grade-input-row"><input id="overall-gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(overallGpaQuery)}" placeholder="例：3.8" ${applied.grade_requirement_status === "required" ? "" : "disabled"}><span aria-hidden="true">以上</span></div><p class="help">全体評定について安全に数値判定できるものだけを絞り込みます。</p></div>${applied.gpa_tenths !== null ? `<p class="notice">旧形式の評定安全照合 ${(applied.gpa_tenths / 10).toFixed(1)} がこの共有URLに適用されています。</p>` : ""}</fieldset>
+    <fieldset><legend>9. 評定</legend><label class="input-label" for="applicant-gpa">あなたの評定平均</label><div class="grade-input-row"><input id="applicant-gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(applicantGpaQuery)}" placeholder="例：3.8"></div><p class="help">入力した値で評定条件を満たす選抜を表示します。例：3.8なら評定3.8以上、3.5以上が対象です。※科目別条件など、数値だけで判定できない条件は別途表示します。</p><details class="disclosure"><summary>評定条件ありの選抜に絞る（詳細）</summary><label class="choice choice--checkbox"><span class="choice__control"><input id="grade-requirement" type="checkbox" name="grade_requirement" value="required" ${applied.grade_requirement_status === "required" ? "checked" : ""}></span><span class="choice__label">評定条件あり</span></label><div class="nested-filter"><label class="input-label" for="overall-gpa">旧形式の全体評定条件</label><div class="grade-input-row"><input id="overall-gpa" class="text-input" type="text" inputmode="decimal" value="${escapeHtml(overallGpaQuery)}" placeholder="例：3.8" ${applied.grade_requirement_status === "required" ? "" : "disabled"}></div></div></details>${applied.gpa_tenths !== null ? `<p class="notice">旧形式の評定安全照合 ${(applied.gpa_tenths / 10).toFixed(1)} がこの共有URLに適用されています。</p>` : ""}</fieldset>
+    <fieldset><legend>出願締切</legend><label class="input-label" for="deadline-on-or-after">出願締切が指定日以降</label><div class="date-filter-row"><input id="deadline-on-or-after" class="text-input" type="date" value="${escapeHtml(deadlineQuery)}"></div><p class="help">締切が未確認の選抜も、確認が必要なものとして結果に残します。</p></fieldset>
     <fieldset class="prefecture-fieldset"><details id="prefecture-details" class="disclosure"><summary><svg class="disclosure__icon" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="currentcolor"/><circle class="disclosure__icon-circle" cx="12" cy="12" r="8" fill="currentcolor"/><path class="disclosure__icon-triangle" d="M17 10H7L12 15L17 10Z" fill="Canvas"/></svg><span>10. 都道府県で絞り込む <span id="prefecture-count" class="selected-count"></span></span></summary><div class="prefecture-regions">${prefectures}</div><button id="clear-prefectures" class="button button--text" type="button">選択をクリア</button></details></fieldset>
     <div id="form-error" class="notice error" role="alert" hidden></div>
-    <div class="form-actions"><button class="button button--primary" type="submit">この条件で検索</button><button id="clear-form" class="button button--outline" type="button">条件をクリア</button></div>
+    <div class="form-actions"><div class="submit-action"><button class="button button--primary" type="submit">この条件で検索</button></div><button id="clear-form" class="button button--outline" type="button">条件をクリア</button></div>
   </form>`;
 }
 
@@ -161,6 +169,8 @@ function readBaseForm(): SearchRequest {
   const request = emptyRequest();
   request.gpa_tenths = applied.gpa_tenths;
   request.gpa_mode = applied.gpa_mode;
+  request.selection_families = [...form.querySelectorAll<HTMLInputElement>('input[name="selection_family"]:checked')].map((input) => input.value as "recommendation" | "comprehensive");
+  request.special_filters = [...form.querySelectorAll<HTMLInputElement>('input[name="special_filter"]:checked')].map((input) => input.value as SearchRequest["special_filters"][number]);
   request.academic_field_group = [...applied.academic_field_group];
   request.academic_field_mapping_status = [
     ...applied.academic_field_mapping_status,
@@ -225,22 +235,35 @@ function renderSuggestions(): void {
 function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   const input = document.querySelector<HTMLInputElement>("#university-input")!;
   const overallGpa = document.querySelector<HTMLInputElement>("#overall-gpa")!;
+  const applicantGpa = document.querySelector<HTMLInputElement>("#applicant-gpa")!;
+  const deadline = document.querySelector<HTMLInputElement>("#deadline-on-or-after")!;
   const base = readBaseForm();
   overallGpa.disabled = base.grade_requirement_status !== "required";
   if (overallGpa.disabled) overallGpa.value = "";
   const evaluation = evaluateSearchDraft(
-    base, options, input.value, overallGpa.value,
+    base, options, input.value, overallGpa.value, applicantGpa.value, deadline.value,
   );
   applied = evaluation.request;
   universityQuery = evaluation.universityQuery;
   overallGpaQuery = evaluation.overallGpaQuery;
+  applicantGpaQuery = evaluation.applicantGpaQuery;
+  deadlineQuery = evaluation.deadlineQuery;
   input.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("大学名")) ? "true" : "false");
   overallGpa.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("全体評定")) ? "true" : "false");
+  applicantGpa.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("あなたの評定")) ? "true" : "false");
+  deadline.setAttribute("aria-invalid", evaluation.errors.some((error) => error.startsWith("出願締切日")) ? "true" : "false");
   const error = document.querySelector<HTMLElement>("#form-error")!;
   error.hidden = evaluation.errors.length === 0;
   error.textContent = evaluation.errors.join(" ");
   const result = liveSearchResult(rows, evaluation);
   const presentation = liveSummaryPresentation(result);
+  if (result) {
+    const discovered = discoverProvisional(provisionalRows, evaluation.request, rows);
+    const pending = discovered.length;
+    const total = result.summary.total_matched_rows + pending;
+    presentation.liveText = `検索結果 ${total.toLocaleString("ja-JP")}件（確定済み募集単位 ${result.summary.total_matched_rows.toLocaleString("ja-JP")}件・${provisionalCountLabel(discovered)} ${pending.toLocaleString("ja-JP")}件）`;
+    presentation.floatingText = `検索結果 ${total.toLocaleString("ja-JP")}件`;
+  }
   const live = document.querySelector<HTMLOutputElement>("#live-summary")!;
   live.textContent = presentation.liveText;
   floatingLiveCount?.update(presentation.floatingText, presentation.invalid);
@@ -252,7 +275,7 @@ function refreshForm(syncUrl = true): ReturnType<typeof evaluateSearchDraft> {
   if (evaluation.errors.length === 0) rememberLastSearch(evaluation.request);
   if (syncUrl) {
     const query = serializeSearchFormState(
-      evaluation.request, universityQuery, gpaQuery, overallGpaQuery,
+      evaluation.request, universityQuery, gpaQuery, overallGpaQuery, applicantGpaQuery, deadlineQuery,
     ).toString();
     history.replaceState(history.state ?? {}, "", `/search${query ? `?${query}` : ""}`);
   }
@@ -317,6 +340,8 @@ function bindForm(): void {
     universityQuery = "";
     gpaQuery = "";
     overallGpaQuery = "";
+    applicantGpaQuery = "";
+    deadlineQuery = "";
     history.replaceState(history.state ?? {}, "", "/search");
     searchPage([]);
   });
@@ -349,6 +374,8 @@ function summaryText(): string {
     }).join(" または ")}`);
   }
   if (applied.institution_type.length) parts.push(`大学種別：${applied.institution_type.join("、")}`);
+  if (applied.special_filters.length) parts.push(`特別選抜：${applied.special_filters.map((flag) => ({returnee_flag:"帰国生",international_baccalaureate_flag:"IB",private_foreign_student_flag:"私費外国人留学生",adult_selection_flag:"社会人"})[flag]).join(" または ")}`);
+  else parts.push(`選抜方式：${applied.selection_families.map((family) => family === "recommendation" ? "学校推薦型" : "総合型").join("・")}`);
   if (applied.exclusive_enrollment_status.length) parts.push(`専願・併願：${applied.exclusive_enrollment_status.join("、")}`);
   if (applied.common_test_required.length) parts.push(`共通テスト：${applied.common_test_required[0] === "Yes" ? "あり" : "なし"}`);
   if (applied.research_requirement_required.length) parts.push(`研究業績：${applied.research_requirement_required[0] === "Yes" ? "必要" : "必要なし"}`);
@@ -368,6 +395,8 @@ function summaryText(): string {
       ? "評定条件：あり"
       : `評定条件：あり ／ 全体評定：${(applied.overall_gpa_tenths / 10).toFixed(1)}以上`);
   }
+  if (applied.applicant_gpa_tenths !== null) parts.push(`あなたの評定平均：${(applied.applicant_gpa_tenths / 10).toFixed(1)}`);
+  if (applied.deadline_on_or_after !== null) parts.push(`出願締切：${applied.deadline_on_or_after}以降`);
   if (applied.prefecture_membership.length) parts.push(`都道府県：${applied.prefecture_membership.join("、")}`);
   return parts.length ? parts.join(" ／ ") : "条件指定なし";
 }
@@ -377,7 +406,8 @@ function resultsPage(warnings: string[]): void {
   floatingLiveCount = null;
   rememberLastSearch(applied);
   currentResult = searchRows(rows, applied);
-  const universityGroups = groupAdmissionsByUniversity(currentResult.rows);
+  const discovered = discoverProvisional(provisionalRows, applied, rows);
+  const universityGroups = groupPublicAdmissionsByUniversity(currentResult.rows, discovered);
   const pages = Math.max(1, Math.ceil(universityGroups.length / UNIVERSITY_GROUP_PAGE_SIZE));
   if (applied.page > pages) applied.page = pages;
   rememberLastResults(applied);
@@ -390,7 +420,11 @@ function resultsPage(warnings: string[]): void {
   const next = applied.page < pages
     ? `<button class="button button--text" data-page="${applied.page + 1}">次のページ <span aria-hidden="true">→</span></button>`
     : '<span class="pagination__spacer" aria-hidden="true"></span>';
-  app.innerHTML = `${header()}<main id="main" class="page results-page page--with-floating-actions"><section class="results-summary"><h1>検索結果</h1><p class="result-count">${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${currentResult.summary.university_count.toLocaleString("ja-JP")}大学</p><p class="active-filter-summary">${escapeHtml(summaryText())}</p></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => universityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied.gpa_tenths !== null)).join("") : '<section class="empty"><h2>該当する入試がありません</h2><p>条件を減らして検索してください。</p></section>'}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main><nav class="floating-navigation floating-navigation--results" aria-label="検索結果の操作"><a class="button button--outline floating-navigation__action" href="/search${query ? `?${query}` : ""}" data-route data-start-at-top><span aria-hidden="true">←</span> 検索条件を変更</a></nav>${footer()}`;
+  const total = currentResult.summary.total_matched_rows + discovered.length;
+  const deadlineUnknown = currentResult.rows.filter((row) => row.deadline_filter_status === "unknown").length + (applied.deadline_on_or_after ? discovered.length : 0);
+  const gradeUnknown = currentResult.rows.filter((row) => row.applicant_grade_status === "unknown").length + (applied.applicant_gpa_tenths !== null ? discovered.length : 0);
+  const unknownNotice = [applied.deadline_on_or_after && deadlineUnknown ? `出願締切未確認 ${deadlineUnknown}件` : "", applied.applicant_gpa_tenths !== null && gradeUnknown ? `評定条件未確認・数値判定不能 ${gradeUnknown}件` : ""].filter(Boolean).join(" ／ ");
+  app.innerHTML = `${header()}<main id="main" class="page results-page page--with-floating-actions"><section class="results-summary"><h1>検索結果</h1><p class="result-count">検索結果 ${total.toLocaleString("ja-JP")}件（確定済み募集単位 ${currentResult.summary.total_matched_rows.toLocaleString("ja-JP")}件・${provisionalCountLabel(discovered)} ${discovered.length.toLocaleString("ja-JP")}件）</p>${unknownNotice ? `<p class="help">${unknownNotice}。未確認は条件不一致と扱っていません。</p>` : ""}<p class="active-filter-summary">${escapeHtml(summaryText())}</p></section>${warnings.map((warning) => `<div class="notice">${escapeHtml(warning)}</div>`).join("")}<div class="results university-results" role="list">${shown.length ? shown.map((group, index) => publicUniversityGroupMarkup(group, firstGroupIndex + index, expandedUniversities.has(group.university), applied)).join("") : `<section class="empty"><h2>該当する選抜はありません</h2><p>条件を減らすか、大学公式資料も確認してください。</p></section>`}</div>${pages > 1 ? `<nav class="pagination" aria-label="検索結果のページ">${previous}<span class="pagination__counter">${applied.page} / ${pages}</span>${next}</nav>` : ""}</main><nav class="floating-navigation floating-navigation--results" aria-label="検索結果の操作"><a class="button button--outline floating-navigation__action" href="/search${query ? `?${query}` : ""}" data-route data-start-at-top><span aria-hidden="true">←</span> 検索条件を変更</a></nav>${footer()}`;
   candidates.sync();
 }
 
@@ -442,7 +476,7 @@ async function detailPage(parts: string[]): Promise<void> {
 function aboutPage(): void {
   floatingLiveCount?.disconnect();
   floatingLiveCount = null;
-  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する候補を絞り込むためのもので、出願資格・条件充足・合格可能性を判定しません。</p><p>評定条件の有無と、安全に確認できる全体評定の下限を分けて検索します。科目別・分岐等の追加条件は原文で確認してください。英語資格は監査済みの完全一致表現だけを安全に検索します。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の30分類と詳細分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>件数：${manifest.counts.search_rows.toLocaleString("ja-JP")}</p></details></main>${footer()}`;
+  app.innerHTML = `${header()}<main id="main" class="page narrow about"><h1>データについて</h1><section><h2>検索結果の意味</h2><p>条件に一致する確定済み募集単位と、大学公式情報で実施を確認した詳細確認中の選抜を表示します。後者は詳細条件への適合を判定していません。検索結果にないことだけで、選抜が存在しないとは判断できません。</p><p>出願資格・条件充足・合格可能性は大学公式資料で確認してください。</p></section><section><h2>原文と不明値</h2><p>「なし」「不明」「未記録」は区別して保持しています。学問分野の30分類と詳細分類は検索用の派生分類です。</p></section><section><h2>候補リスト</h2><p>候補はこのブラウザの端末内に保存し、サーバーへ送信しません。アカウントや他の端末とは同期しません。選択した候補をCSV・Excelで出力できます。ブラウザのデータを削除すると保存した候補も削除されます。</p></section><details class="developer-details"><summary>データ版情報</summary><p>構築ID：${escapeHtml(manifest.build_id)}</p><p>確定済み募集単位：${manifest.counts.search_rows.toLocaleString("ja-JP")}件 ／ 詳細確認中：${provisionalRows.length.toLocaleString("ja-JP")}件</p></details></main>${footer()}`;
 }
 
 function dataError(message: string): void {
@@ -475,6 +509,8 @@ async function route(replace = false): Promise<void> {
     universityQuery = "";
     gpaQuery = "";
     overallGpaQuery = "";
+    applicantGpaQuery = "";
+    deadlineQuery = "";
     searchPage([]);
     return;
   }
@@ -487,6 +523,8 @@ async function route(replace = false): Promise<void> {
   universityQuery = parsed.universityQuery;
   gpaQuery = parsed.gpaQuery;
   overallGpaQuery = parsed.overallGpaQuery;
+  applicantGpaQuery = parsed.applicantGpaQuery;
+  deadlineQuery = parsed.deadlineQuery;
   if (replace && path === "/results") {
     const query = serializeRequest(applied).toString();
     history.replaceState({}, "", `/results${query ? `?${query}` : ""}`);
@@ -495,6 +533,11 @@ async function route(replace = false): Promise<void> {
     expandedUniversities.clear();
     searchPage(parsed.warnings);
   } else {
+    if (!applied.selection_families.length && !applied.special_filters.length) {
+      history.replaceState({}, "", `/search${location.search}`);
+      searchPage([...parsed.warnings, "少なくとも1つ選抜方式を選択してください。"]);
+      return;
+    }
     expandedUniversities = replace
       ? new Set()
       : expandedUniversitiesFromHistory(history.state);
@@ -582,6 +625,12 @@ try {
   rows = loaded.rows;
   options = loaded.options;
   manifest = loaded.manifest;
+  provisionalRows = await loadPublicDiscovery(manifest);
+  for (const provisional of provisionalRows) {
+    if (!options.universities.some((item) => item.value === provisional.university)) {
+      options.universities.push({ value: provisional.university, display_label: provisional.university, unfiltered_count: 0 });
+    }
+  }
   candidates.rows = new Map(rows.map((row) => [candidateKey(row), row]));
   candidates.manifest = manifest;
   for (const group of options.academic_field_groups) groupLabels.set(group.value, group.display_label);

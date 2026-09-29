@@ -385,6 +385,8 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
 }
 @media (max-width: 620px) {
   .page { padding: 1.5rem .75rem 3rem; }
+  .search-page { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
+  .search-page + footer { padding-bottom: calc(6rem + env(safe-area-inset-bottom)); }
   .form-intro h1 { font-size: 1.625rem; }
   .guide-hero h1 { font-size: 1.625rem; }
   .guide-toc ol { columns: 1; }
@@ -396,6 +398,15 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
   .prefecture-regions { margin-left: 0; }
   .form-actions { flex-direction: column; }
   .form-actions .button { width: 100%; }
+  .submit-action {
+    position: fixed;
+    z-index: 40;
+    inset: auto 0 0;
+    padding: .625rem .75rem calc(.625rem + env(safe-area-inset-bottom));
+    border-top: 1px solid var(--gray-420);
+    background: #fff;
+    box-shadow: 0 -2px 8px rgb(0 0 0 / 10%);
+  }
   .results-summary { padding-bottom: 1rem; }
   .university-disclosure__button { min-height: 52px; padding: .625rem .5rem; gap: .5rem; }
   .university-disclosure__name { font-size: 1rem; }
@@ -435,3 +446,12 @@ legend { padding: 0 .75rem 0 0; color: var(--gray-900); font-size: 1.125rem; fon
   .choice--checkbox input:checked::before { background: HighlightText; }
   .choice--radio input:checked::before { background: HighlightText; }
 }
+.provisional-results { margin-block: 2rem; }
+.provisional-results .results { display: grid; gap: 1rem; }
+.provisional-card { border-inline-start: 0.35rem solid var(--blue-900); background: #f7faff; }
+.provisional-status { color: var(--blue-1000); }
+.provisional-card .source-links { display: flex; flex-wrap: wrap; gap: 0.7rem; }
+.filter-unknown { padding: .45rem .7rem; background: var(--blue-50); border-inline-start: .2rem solid var(--blue-900); font-size: .9rem; }
+.date-filter-row { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
+.date-filter-row input { max-width: 16rem; }
+@media (max-width: 620px) { .date-filter-row input { width: 100%; } }

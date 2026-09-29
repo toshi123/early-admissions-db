@@ -44,7 +44,15 @@ INTEGER_FIELDS = {
     "research_requirements": set(),
 }
 BOOLEAN_FIELDS = {
-    "master": {"stem_flag", "fallback_previous_year"},
+    "master": {
+        "stem_flag",
+        "fallback_previous_year",
+        "international_baccalaureate_flag",
+        "private_foreign_student_flag",
+        "returnee_flag",
+        "regional_quota_flag",
+        "adult_selection_flag",
+    },
     "coverage": set(),
     "research_requirements": set(),
 }
@@ -360,6 +368,11 @@ class UnifiedBuildPipeline:
             "information_year",
             "stem_flag",
             "fallback_previous_year",
+            "international_baccalaureate_flag",
+            "private_foreign_student_flag",
+            "returnee_flag",
+            "regional_quota_flag",
+            "adult_selection_flag",
             "common_test_required",
             "research_activity_level",
             "detail_completeness",

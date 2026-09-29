@@ -1,0 +1,100 @@
+{
+  "baseline": "production_20270928_hokkaido_pfi",
+  "parent_baseline": "production_20270928_crosswalk_v0_3",
+  "reviewed_on": "2026-09-28",
+  "scope": {
+    "university": "北海道大学",
+    "selection": "私費外国人留学生（学部）入試",
+    "confirmed_application_units": 25,
+    "master_before": 49,
+    "master_after": 74,
+    "record_ids": [
+      "HU-2027-PFI-AGR",
+      "HU-2027-PFI-BIO",
+      "HU-2027-PFI-CHEM",
+      "HU-2027-PFI-DENT",
+      "HU-2027-PFI-EARTH",
+      "HU-2027-PFI-ECON",
+      "HU-2027-PFI-EDU",
+      "HU-2027-PFI-ENG-APP",
+      "HU-2027-PFI-ENG-ENV",
+      "HU-2027-PFI-ENG-INFO",
+      "HU-2027-PFI-ENG-MECH",
+      "HU-2027-PFI-FISH",
+      "HU-2027-PFI-LAB",
+      "HU-2027-PFI-LAW",
+      "HU-2027-PFI-LIT",
+      "HU-2027-PFI-MATH",
+      "HU-2027-PFI-MED",
+      "HU-2027-PFI-NURS",
+      "HU-2027-PFI-OT",
+      "HU-2027-PFI-PHARM",
+      "HU-2027-PFI-PHYS",
+      "HU-2027-PFI-POLY",
+      "HU-2027-PFI-PT",
+      "HU-2027-PFI-RAD",
+      "HU-2027-PFI-VET"
+    ]
+  },
+  "unit_grain": "募集要項p.1-2の学部・学科等別。理学6、医学6、工学4学科。工学コースは下位記載、農・薬・水産は学部単位。",
+  "evidence": {
+    "official_page": "https://www.hokudai.ac.jp/admission/faculty/intl-private/",
+    "guide": "https://www.hokudai.ac.jp/admission/shihi_admissionR09.pdf",
+    "organization_change_notice": "https://www.hokudai.ac.jp/admission/20260813_kaiso_henkou.pdf"
+  },
+  "flags": {
+    "private_foreign_student_flag": "Yes",
+    "international_baccalaureate_flag": "No",
+    "returnee_flag": "No",
+    "regional_quota_flag": "No",
+    "adult_selection_flag": "No",
+    "verified_across": [
+      "canonical",
+      "unified",
+      "sqlite",
+      "site_detail"
+    ]
+  },
+  "artifacts": {
+    "unified": {
+      "contract_version": "0.3",
+      "master_rows": 6617,
+      "master_sha256": "628955d83bb7811a1eaed133e77b721a659e45feaf58a1eacf65db939e6a6eee",
+      "coverage_rows": 260,
+      "research_requirements_rows": 495,
+      "deterministic": "2 builds byte-identical"
+    },
+    "sqlite": {
+      "schema_version": "0.3",
+      "production_ready": true,
+      "row_counts": {
+        "admissions": 6617,
+        "coverage": 260,
+        "research_requirements": 495
+      },
+      "database_sha256": "ffb56fd74cdf0b9a6f708b343e204c34506a4978e059633b03023025fb8726fc"
+    },
+    "site": {
+      "schema_version": "0.3",
+      "production_ready": true,
+      "build_id": "5ff40478c76689fe1aee",
+      "counts": {
+        "search_rows": 6617,
+        "detail_records": 6617,
+        "research_requirement_rows": 495
+      },
+      "manifest_sha256": "e8c905a446196bd6fe63b2a8c4edd9c035815c3de0de89adc4899db1eee6363b"
+    }
+  },
+  "tests": {
+    "python_unittest": "148 passed",
+    "site_vitest": "158 passed in 16 files",
+    "site_production_build": "passed"
+  },
+  "other_checks": {
+    "canonical_validate": "passed, errors=0",
+    "operations_validate": "passed",
+    "cross_layer_25_ids_and_flags": "passed"
+  },
+  "historical_update_acceptance_audit": "not_completed_missing_superseded_input:sources/incoming/2026-09-22/kokkoritsu_v5_74_superseded/kokkoritsu_early_admissions_2027_master_v5_74.csv"
+}

@@ -17,8 +17,9 @@ import {
 import { parseSearchParams } from "../src/url-state";
 import type { FilterOptions } from "../src/types";
 
-const manifest = JSON.parse(readFileSync(join(process.cwd(), "public/site-data/build_manifest.json"), "utf8")) as {build_id:string};
-const options = JSON.parse(readFileSync(join(process.cwd(), `public/site-data/assets/${manifest.build_id}/filter_options.json`), "utf8")) as FilterOptions;
+const dataRoot = process.env.SITE_DATA_DIR ?? join(process.cwd(), "public/site-data");
+const manifest = JSON.parse(readFileSync(join(dataRoot, "build_manifest.json"), "utf8")) as {build_id:string};
+const options = JSON.parse(readFileSync(join(dataRoot, `assets/${manifest.build_id}/filter_options.json`), "utf8")) as FilterOptions;
 
 class MemoryStorage implements SearchStateStorage {
   readonly values = new Map<string, string>();

@@ -283,7 +283,7 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
     def test_current_gpa_modes_and_read_only_hash(self) -> None:
         database = (
             REPO_ROOT
-            / "data/derived/sqlite/early_admissions_2027.sqlite"
+            / "data/derived/sqlite/v0_2_candidate/early_admissions_2027.sqlite"
         )
         before = sha256(database)
         safe = search_database(
@@ -297,15 +297,15 @@ class CurrentDatabaseSearchRegressionTests(unittest.TestCase):
         )
         self.assertEqual(safe.summary.total_matched_rows, 763)
         self.assertEqual(review.summary.total_matched_rows, 1510)
-        self.assertEqual(all_rows.summary.total_matched_rows, 6411)
+        self.assertEqual(all_rows.summary.total_matched_rows, 6699)
         self.assertEqual(all_rows.summary.gpa_safe_match_rows, 763)
         self.assertEqual(all_rows.summary.gpa_safe_no_match_rows, 495)
         self.assertEqual(all_rows.summary.gpa_conditional_review_rows, 747)
-        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4406)
+        self.assertEqual(all_rows.summary.gpa_not_numerically_evaluable_rows, 4694)
         self.assertEqual(sha256(database), before)
 
     def test_current_grade_requirement_counts_and_rikkyo_boundary(self) -> None:
-        database = REPO_ROOT / "data/derived/sqlite/early_admissions_2027.sqlite"
+        database = REPO_ROOT / "data/derived/sqlite/v0_2_candidate/early_admissions_2027.sqlite"
         required = search_database(
             database,
             SearchCriteria(grade_requirement_status="required"),

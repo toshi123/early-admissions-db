@@ -1,0 +1,44 @@
+{
+  "baseline": "production_20270928_crosswalk_v0_3",
+  "candidate_audit_sqlite_sha256": "a8e7cdb28275607ff0f7be07ffc887f1e5a9775295e0d4f6399a5adb54cc6946",
+  "deterministic_build": "276 of 276 artifact files byte-identical with fixed timestamps",
+  "flags": {
+    "adult_selection_flag": 12,
+    "international_baccalaureate_flag": 42,
+    "private_foreign_student_flag": 97,
+    "regional_quota_flag": 310,
+    "returnee_flag": 330
+  },
+  "production_ready": {
+    "site": true,
+    "sqlite": true
+  },
+  "row_counts": {
+    "admissions": 6592,
+    "coverage": 260,
+    "research_requirements": 495
+  },
+  "sha256": {
+    "data/derived/site/v0_3/build_manifest.json": "bdbb07593117e21c3890b0853dc689965f7a4f83e563d39d86cb8ed039a20e73",
+    "data/derived/sqlite/build_manifest.json": "041ff237c60c37d6cadef714ae2939888f717b32fda828c0f508b9b7edbf0f6a",
+    "data/derived/sqlite/early_admissions_2027.sqlite": "07b074e2b5a6371b8ee75ca6ca67dafaaddea36eb78de62191448e5a1410b551"
+  },
+  "site_counts": {
+    "detail_records": 6592,
+    "research_requirement_rows": 495,
+    "search_rows": 6592
+  },
+  "site_data_schema_version": "0.3",
+  "sqlite_schema_version": "0.3",
+  "test_receipts": {
+    "python": "148 passed",
+    "site": "158 passed in 16 files"
+  },
+  "unified_contract_version": "0.3",
+  "unmapped": {
+    "admission_search_academic_fields": 0,
+    "admission_search_academic_fields_v2": 0,
+    "admission_search_english_requirement": 0,
+    "admission_search_grade_requirements": 0
+  }
+}

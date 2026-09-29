@@ -1,0 +1,243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:early-admissions:site-data-manifest:0.3",
+  "title": "Early Admissions Site-data build manifest v0.3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifact",
+    "manifest_version",
+    "site_data_schema_version",
+    "builder_version",
+    "build_timestamp_utc",
+    "build_id",
+    "validation_profile",
+    "review_required_counts",
+    "publication",
+    "input",
+    "grade_requirement_search",
+    "academic_field_v2",
+    "sharding",
+    "outputs",
+    "counts",
+    "size_report",
+    "validation",
+    "scope_boundary"
+  ],
+  "properties": {
+    "artifact": {
+      "const": "early_admissions_site_data"
+    },
+    "manifest_version": {
+      "const": "1"
+    },
+    "site_data_schema_version": {
+      "const": "0.3"
+    },
+    "builder_version": {
+      "type": "string"
+    },
+    "build_timestamp_utc": {
+      "type": "string"
+    },
+    "build_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{20}$"
+    },
+    "validation_profile": {
+      "enum": [
+        "production",
+        "candidate_audit"
+      ]
+    },
+    "review_required_counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      }
+    },
+    "publication": {
+      "type": "object",
+      "required": [
+        "status",
+        "atomic_directory_replacement"
+      ]
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "sqlite_path",
+        "sqlite_sha256",
+        "sqlite_size_bytes",
+        "sqlite_build_manifest_path",
+        "sqlite_build_manifest_sha256",
+        "sqlite_schema_version",
+        "sqlite_builder_version",
+        "unified_contract_version",
+        "source_versions",
+        "input_csv_sha256",
+        "gpa_parser_contract_version",
+        "grade_requirement_mapping_contract_version",
+        "grade_requirement_crosswalk_sha256",
+        "academic_field_mapping_contract_version",
+        "academic_field_taxonomy_version",
+        "academic_field_crosswalk_sha256",
+        "academic_field_v2_mapping_contract_version",
+        "academic_field_v2_taxonomy_version",
+        "academic_field_v2_broad_taxonomy_sha256",
+        "academic_field_v2_subcategory_taxonomy_sha256",
+        "academic_field_v2_raw_crosswalk_sha256",
+        "academic_field_v2_context_crosswalk_sha256",
+        "academic_field_v2_compatibility_crosswalk_sha256",
+        "english_requirement_parser_contract_version",
+        "english_requirement_crosswalk_sha256",
+        "prefecture_mapping_contract_version",
+        "prefecture_taxonomy_version",
+        "prefecture_crosswalk_sha256"
+      ]
+    },
+    "grade_requirement_search": {
+      "type": "object",
+      "required": [
+        "mapping_contract_version",
+        "crosswalk_distinct_non_null_raw_values",
+        "audited_distinct_raw_classes",
+        "classification_counts",
+        "overall_status_counts",
+        "numeric_floor_rows",
+        "raw_mismatch_rows",
+        "representative_review_record_ids",
+        "representative_unmapped_record_ids"
+      ]
+    },
+    "academic_field_v2": {
+      "type": "object",
+      "required": [
+        "mapping_contract_version",
+        "taxonomy_version",
+        "broad_taxonomy_sha256",
+        "subcategory_taxonomy_sha256",
+        "raw_crosswalk_sha256",
+        "context_crosswalk_sha256",
+        "compatibility_crosswalk_sha256",
+        "broad_taxonomy_rows",
+        "subcategory_taxonomy_rows",
+        "broad_mapping_status_counts",
+        "subcategory_mapping_status_counts",
+        "broad_membership_counts",
+        "subcategory_membership_counts",
+        "broad_membership_rows",
+        "subcategory_membership_rows",
+        "broad_review_required",
+        "subcategory_review_required",
+        "unmapped",
+        "validation_status"
+      ]
+    },
+    "sharding": {
+      "type": "object",
+      "required": [
+        "algorithm",
+        "search_target_bytes",
+        "detail_target_bytes",
+        "search_shards",
+        "detail_shards"
+      ]
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifacts"
+      ],
+      "properties": {
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          }
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "search_rows",
+        "detail_records",
+        "research_requirement_rows",
+        "research_exact_duplicate_excess_rows",
+        "source_datasets",
+        "universities",
+        "fallback_rows",
+        "gpa_dispositions",
+        "grade_requirement_statuses",
+        "grade_requirement_overall_statuses",
+        "academic_field_mapping_statuses",
+        "academic_field_group_memberships",
+        "academic_field_v2_broad_mapping_statuses",
+        "academic_field_v2_subcategory_mapping_statuses",
+        "academic_field_v2_broad_memberships",
+        "academic_field_v2_subcategory_memberships",
+        "academic_field_v2_broad_membership_rows",
+        "academic_field_v2_subcategory_membership_rows",
+        "academic_field_v2_broad_coverage",
+        "academic_field_v2_subcategory_coverage"
+      ]
+    },
+    "size_report": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "status",
+        "search_equivalence"
+      ]
+    },
+    "scope_boundary": {
+      "type": "object",
+      "required": [
+        "generated",
+        "not_generated"
+      ]
+    }
+  },
+  "$defs": {
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "sha256",
+        "size_bytes",
+        "record_count"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "search_shard",
+            "detail_shard",
+            "filter_options"
+          ]
+        },
+        "path": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size_bytes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "record_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    }
+  }
+}

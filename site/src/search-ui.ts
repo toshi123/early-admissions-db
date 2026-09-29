@@ -1,6 +1,6 @@
 import { detailLink, displayValue, escapeHtml } from "./display";
 import { candidateButton } from "./candidate-controls";
-import { searchRows } from "./search";
+import { searchRows, validIsoDate } from "./search";
 import type { FilterOptions, SearchRequest, SearchResult, SearchRow } from "./types";
 
 export interface SearchDraftEvaluation {
@@ -8,6 +8,8 @@ export interface SearchDraftEvaluation {
   universityQuery: string;
   gpaQuery: string;
   overallGpaQuery: string;
+  applicantGpaQuery: string;
+  deadlineQuery: string;
   errors: string[];
 }
 
@@ -37,14 +39,19 @@ export function evaluateSearchDraft(
   options: FilterOptions,
   universityQuery: string,
   overallGpaQuery: string,
+  applicantGpaQuery = "",
+  deadlineQuery = "",
 ): SearchDraftEvaluation {
   const request: SearchRequest = {
     ...baseRequest,
     university: [],
     overall_gpa_tenths: null,
+    applicant_gpa_tenths: null,
+    deadline_on_or_after: null,
     page: 1,
   };
   const errors: string[] = [];
+  if (!request.selection_families.length && !request.special_filters.length) errors.push("少なくとも1つ選抜方式を選択してください。");
   const universities = new Set(options.universities.flatMap((item) => item.value === null ? [] : [item.value]));
   if (universityQuery) {
     if (universities.has(universityQuery)) request.university = [universityQuery];
@@ -59,7 +66,15 @@ export function evaluateSearchDraft(
       errors.push("全体評定は0.0〜5.0、小数1桁までで入力してください。");
     }
   }
-  return { request, universityQuery, gpaQuery: "", overallGpaQuery, errors };
+  if (applicantGpaQuery) {
+    if (GPA_PATTERN.test(applicantGpaQuery)) request.applicant_gpa_tenths = Math.round(Number(applicantGpaQuery) * 10);
+    else errors.push("あなたの評定平均は0.0〜5.0、小数1桁までで入力してください。");
+  }
+  if (deadlineQuery) {
+    if (validIsoDate(deadlineQuery)) request.deadline_on_or_after = deadlineQuery;
+    else errors.push("出願締切日は有効な日付で入力してください。");
+  }
+  return { request, universityQuery, gpaQuery: "", overallGpaQuery, applicantGpaQuery, deadlineQuery, errors };
 }
 
 export function liveSearchResult(
@@ -148,5 +163,9 @@ export function compactResultCard(
     ? `<strong>${selectionName}</strong>${category}`
     : `<strong><a class="admission-detail-link" href="${detailHref}" data-route>${selectionName}</a></strong>${category}`;
   const deadline = row.application_end === null ? "" : `<p class="application-end">出願終了：<span>${escapeHtml(row.application_end)}</span></p>`;
-  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="result-card__utility"><div class="result-chips" aria-label="選考方法・出願条件・専願併願">${chips.join("")}</div>${actions ?? candidateButton(row)}</div>${deadline}</article>`;
+  const unknowns = [
+    ...(row.deadline_filter_status === "unknown" ? ["出願締切を確認できていません。大学公式資料をご確認ください。"] : []),
+    ...(row.applicant_grade_status === "unknown" ? ["評定条件は未確認、または科目別条件などのため数値だけで判定できません。"] : []),
+  ];
+  return `<article class="result-card" role="listitem">${title}<p class="faculty-line">${displayValue(row.faculty_school)} ／ ${displayValue(row.department)}</p><p class="selection-line">${selection}</p><div class="result-card__utility"><div class="result-chips" aria-label="選考方法・出願条件・専願併願">${chips.join("")}</div>${actions ?? candidateButton(row)}</div>${deadline}${unknowns.map((text) => `<p class="filter-unknown">${text}</p>`).join("")}</article>`;
 }

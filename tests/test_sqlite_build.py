@@ -36,15 +36,21 @@ def prepare_unified_fixture(
 ) -> dict[str, dict[str, object]]:
     states = build_synthetic_repo(root)
     for relative in (
-        Path("docs/sqlite_design_v0_1.md"),
+        Path("docs/sqlite_design_v0_3.md"),
+        Path("docs/sqlite_design_v0_2.md"),
         Path("docs/gpa_search_design_v0_1.md"),
-        Path("schema/sqlite/early_admissions_sqlite_schema_v0_1.sql"),
+        Path("schema/sqlite/early_admissions_sqlite_schema_v0_3.sql"),
+        Path("schema/sqlite/early_admissions_sqlite_schema_v0_2.sql"),
         Path("schema/sqlite/admission_search_gpa_schema_v0_1.sql"),
         Path("docs/grade_requirement_search_design_v0_1.md"),
+        Path("schema/sqlite/admission_search_grade_requirement_schema_v0_2.sql"),
         Path("schema/sqlite/admission_search_grade_requirement_schema_v0_1.sql"),
+        Path("schema/grade_requirement/grade_requirement_crosswalk_v0_3.csv"),
         Path("schema/grade_requirement/grade_requirement_crosswalk_v0_2.csv"),
+        Path("schema/sqlite/admission_search_academic_field_schema_v0_2.sql"),
         Path("schema/sqlite/admission_search_academic_field_schema_v0_1.sql"),
         Path("schema/academic_field/academic_field_taxonomy_v0_1.csv"),
+        Path("schema/academic_field/academic_field_crosswalk_v0_3.csv"),
         Path("schema/academic_field/academic_field_crosswalk_v0_2.csv"),
         Path("validation/reports/gpa_requirement_raw_value_audit_v0_2.csv"),
         Path("docs/academic_field_search_design_v0_1.md"),
@@ -53,6 +59,7 @@ def prepare_unified_fixture(
         Path("docs/academic_field_crosswalk_v0_3.md"),
         Path("docs/academic_field_taxonomy_v0_2_freeze.md"),
         Path("validation/reports/academic_field_taxonomy_v0_2_audit.md"),
+        Path("schema/sqlite/admission_search_academic_field_v0_3_schema.sql"),
         Path("schema/sqlite/admission_search_academic_field_v0_2_schema.sql"),
         Path(
             "schema/academic_field/v0_2/"
@@ -62,10 +69,12 @@ def prepare_unified_fixture(
             "schema/academic_field/v0_2/"
             "academic_field_subcategory_taxonomy_v0_2.csv"
         ),
+        Path("schema/academic_field/v0_4/academic_field_raw_crosswalk_v0_4.csv"),
         Path(
             "schema/academic_field/v0_3/"
             "academic_field_raw_crosswalk_v0_3.csv"
         ),
+        Path("schema/academic_field/v0_4/academic_field_context_crosswalk_v0_4.csv"),
         Path(
             "schema/academic_field/v0_3/"
             "academic_field_context_crosswalk_v0_3.csv"
@@ -76,7 +85,10 @@ def prepare_unified_fixture(
         ),
         Path("docs/english_requirement_search_design_v0_1.md"),
         Path("docs/english_requirement_crosswalk_v0_2.md"),
+        Path("schema/sqlite/admission_search_english_requirement_schema_v0_2.sql"),
         Path("schema/sqlite/admission_search_english_requirement_schema_v0_1.sql"),
+        Path("schema/english_requirement/english_requirement_crosswalk_v0_4.csv"),
+        Path("schema/english_requirement/english_requirement_crosswalk_v0_5.csv"),
         Path("schema/english_requirement/english_requirement_crosswalk_v0_2.csv"),
         Path("docs/prefecture_search_design_v0_1.md"),
         Path("schema/sqlite/admission_search_prefecture_schema_v0_1.sql"),
@@ -175,6 +187,18 @@ def refresh_unified_manifest(root: Path) -> None:
 
 
 class SQLiteBuildPipelineTests(unittest.TestCase):
+    def test_previous_unified_contract_is_rejected_before_publication(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            prepare_unified_fixture(root)
+            path = root / "data/canonical/unified/build_manifest.json"
+            manifest = json.loads(path.read_text(encoding="utf-8"))
+            manifest["contract_version"] = "0.1"
+            path.write_text(json.dumps(manifest), encoding="utf-8")
+            with self.assertRaisesRegex(SQLiteBuildError, "must be 0.3"):
+                SQLiteBuildPipeline(root).build()
+            self.assertFalse((root / "data/derived/sqlite" / DATABASE_FILENAME).exists())
+
     def test_successful_build_and_query_plan_receipts(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -346,7 +370,7 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
             orphan.update(
                 {
                     "source_dataset": "kokkoritsu",
-                    "source_version": "5.81",
+                    "source_version": "5.83",
                     "admission_id": "MISSING-1",
                     "university": "不存在大学",
                     "source_url": "https://example.test/orphan",
@@ -528,7 +552,7 @@ class SQLiteBuildPipelineTests(unittest.TestCase):
             prepare_unified_fixture(root)
             crosswalk = (
                 root
-                / "schema/academic_field/academic_field_crosswalk_v0_2.csv"
+                / "schema/academic_field/academic_field_crosswalk_v0_3.csv"
             )
             crosswalk.write_text(
                 crosswalk.read_text(encoding="utf-8").replace(

@@ -1,0 +1,59 @@
+{
+  "version": "0.1",
+  "purpose": "University-level one-way external coverage audit: candidates present in Kawai Kei-Net but absent from Master are routed to official confirmation. Kawai values are never canonical facts.",
+  "canonical": false,
+  "grain": "1 row = 1 university in canonical Coverage",
+  "columns": [
+    "source_dataset",
+    "institution_type",
+    "university",
+    "kawai_university_id",
+    "kawai_rec_year",
+    "kawai_ao_year",
+    "kawai_crosscheck_status",
+    "missing_candidate_status",
+    "official_confirmation_status",
+    "last_checked_on",
+    "kawai_rec_url",
+    "kawai_ao_url",
+    "notes"
+  ],
+  "enums": {
+    "kawai_crosscheck_status": [
+      "未監査",
+      "監査中",
+      "一部照合",
+      "照合済・欠落候補なし",
+      "欠落候補あり・公式確認待ち",
+      "欠落候補あり・公式確認済",
+      "河合未更新・保留",
+      "対象外"
+    ],
+    "missing_candidate_status": [
+      "未判定",
+      "なし",
+      "あり"
+    ],
+    "official_confirmation_status": [
+      "未確認",
+      "確認済（存在）",
+      "確認済（不存在）",
+      "不要"
+    ],
+    "kawai_year_status": [
+      "未確認",
+      "2027",
+      "2026",
+      "2025",
+      "ページなし/未確認"
+    ]
+  },
+  "rules": [
+    "Kawai is discovery/cross-check only; never copy Kawai facts into canonical.",
+    "Only current 2027 Kawai pages can trigger a missing candidate.",
+    "Stale 2026/2025 Kawai pages are marked 河合未更新・保留, not missing.",
+    "A Kawai candidate absent from Master must be confirmed in current-year official university material before canonical insertion.",
+    "Absence from Kawai never implies that an existing Master row is excess.",
+    "Comparison unit is semantic faculty/department/selection, not raw row count."
+  ]
+}

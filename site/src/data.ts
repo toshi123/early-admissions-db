@@ -1,4 +1,4 @@
-import type { ArtifactReceipt, DetailRecord, FilterOptions, SearchRow, SiteManifest } from "./types";
+import type { ArtifactReceipt, DetailRecord, FilterOptions, ProvisionalAdmission, SearchRow, SiteManifest, SpecialSelectionFlags } from "./types";
 
 const DATA_ROOT = "/site-data";
 export class SiteDataError extends Error {}
@@ -39,7 +39,7 @@ async function fetchVerifiedJson<T>(receipt: ArtifactReceipt): Promise<{ value: 
 
 function assertManifest(value: unknown): asserts value is SiteManifest {
   const manifest = value as Partial<SiteManifest>;
-  if (manifest.artifact !== "early_admissions_site_data" || manifest.site_data_schema_version !== "0.2" ||
+  if (manifest.artifact !== "early_admissions_site_data" || manifest.site_data_schema_version !== "0.3" ||
     manifest.validation?.status !== "passed" || !/^[0-9a-f]{20}$/.test(manifest.build_id ?? "") ||
     !Array.isArray(manifest.outputs?.artifacts)) {
     throw new SiteDataError("対応していない、または未検証のSite-data manifestです。");
@@ -66,19 +66,26 @@ export async function loadSearchData() {
   const filterReceipt = manifest.outputs.artifacts.find((item) => item.kind === "filter_options");
   if (!filterReceipt) throw new SiteDataError("検索条件データが目録にありません。");
   const optionsResult = await fetchVerifiedJson<FilterOptions>(filterReceipt);
-  if (optionsResult.value.build_id !== manifest.build_id || optionsResult.value.site_data_schema_version !== "0.2") {
+  if (optionsResult.value.build_id !== manifest.build_id || optionsResult.value.site_data_schema_version !== "0.3") {
     throw new SiteDataError("検索条件データのbuild IDまたはschema versionが一致しません。");
   }
   const receipts = manifest.outputs.artifacts.filter((item) => item.kind === "search_shard");
   const payloads = await Promise.all(receipts.map((receipt) => fetchVerifiedJson<{
     build_id: string; site_data_schema_version: string; rows: SearchRow[];
   }>(receipt)));
-  if (payloads.some(({ value }) => value.build_id !== manifest.build_id || value.site_data_schema_version !== "0.2")) {
+  if (payloads.some(({ value }) => value.build_id !== manifest.build_id || value.site_data_schema_version !== "0.3")) {
     throw new SiteDataError("検索データのbuild IDまたはschema versionが一致しません。");
   }
   const prepared = performance.now();
   const rows = payloads.flatMap(({ value }) => value.rows);
   if (rows.length !== manifest.counts.search_rows) throw new SiteDataError("検索データの件数が目録と一致しません。");
+  const flags = await loadSpecialSelectionIndex(manifest);
+  if (flags.size !== rows.length) throw new SiteDataError("特殊選抜索引と検索データの件数が一致しません。");
+  for (const row of rows) {
+    const value = flags.get(JSON.stringify([row.source_dataset, row.source_version, row.record_id]));
+    if (!value) throw new SiteDataError("特殊選抜索引に検索行がありません。");
+    row.special_flags = value;
+  }
   const ready = performance.now();
   const metrics: LoadMetrics = {
     manifestFetchMs,
@@ -113,7 +120,7 @@ export async function loadDetail(
   }
   let payload: DetailPayload;
   try { payload = await pending; } catch (error) { cache?.delete(key); throw error; }
-  if (payload.build_id !== manifest.build_id || payload.site_data_schema_version !== "0.2") {
+  if (payload.build_id !== manifest.build_id || payload.site_data_schema_version !== "0.3") {
     cache?.delete(key);
     throw new SiteDataError("詳細データのbuild IDまたはschema versionが一致しません。");
   }
@@ -124,3 +131,58 @@ export async function loadDetail(
 }
 
 export function resetDataCacheForTests(): void { manifestCache = null; }
+
+export async function loadSpecialSelectionIndex(siteManifest: SiteManifest): Promise<Map<string, SpecialSelectionFlags>> {
+  const response = await fetch(`${DATA_ROOT}/special_selection_manifest.json`, { cache: "no-cache" });
+  if (!response.ok) throw new SiteDataError("特殊選抜索引の目録を取得できませんでした。");
+  const manifest = await response.json() as {
+    artifact: string; schema_version: string; build_id: string; sqlite_sha256: string;
+    rows: number; output: { path: string; sha256: string; size_bytes: number };
+  };
+  if (manifest.artifact !== "early_admissions_special_selection_manifest" || manifest.schema_version !== "0.1" ||
+    manifest.sqlite_sha256 !== siteManifest.input.sqlite_sha256 ||
+    manifest.output?.path !== "special_selection_index.json" || manifest.rows !== siteManifest.counts.search_rows) {
+    throw new SiteDataError("特殊選抜索引の版または入力DBがSite-dataと一致しません。");
+  }
+  const result = await fetchVerifiedJson<{ artifact: string; schema_version: string; build_id: string;
+    records: Array<{ source_dataset: string; source_version: string; record_id: string; flags: SpecialSelectionFlags }> }>({
+    ...manifest.output, kind: "filter_options", record_count: manifest.rows,
+  });
+  const payload = result.value;
+  if (payload.artifact !== "early_admissions_special_selection_index" || payload.schema_version !== "0.1" ||
+    payload.build_id !== manifest.build_id || !Array.isArray(payload.records) || payload.records.length !== manifest.rows) {
+    throw new SiteDataError("特殊選抜索引の内容が一致しません。");
+  }
+  const resultMap = new Map<string, SpecialSelectionFlags>();
+  const names: Array<keyof SpecialSelectionFlags> = ["returnee_flag", "international_baccalaureate_flag", "private_foreign_student_flag", "adult_selection_flag"];
+  for (const record of payload.records) {
+    const key = JSON.stringify([record.source_dataset, record.source_version, record.record_id]);
+    if (resultMap.has(key) || names.some((name) => typeof record.flags?.[name] !== "boolean")) {
+      throw new SiteDataError("特殊選抜索引に重複または不正なフラグがあります。");
+    }
+    resultMap.set(key, record.flags);
+  }
+  return resultMap;
+}
+
+export async function loadPublicDiscovery(siteManifest: SiteManifest): Promise<ProvisionalAdmission[]> {
+  const response = await fetch(`${DATA_ROOT}/public_discovery_manifest.json`, { cache: "no-cache" });
+  if (!response.ok) throw new SiteDataError("公開用の実施確認データ目録を取得できませんでした。");
+  const manifest = await response.json() as {
+    artifact: string; schema_version: string; build_id: string; sqlite_sha256: string;
+    published_rows: number; output: { path: string; sha256: string; size_bytes: number };
+  };
+  if (manifest.artifact !== "early_admissions_public_discovery_manifest" || manifest.schema_version !== "0.2" ||
+    manifest.sqlite_sha256 !== siteManifest.input.sqlite_sha256 || manifest.output?.path !== "provisional_admissions.json") {
+    throw new SiteDataError("実施確認データの版または入力DBがSite-dataと一致しません。");
+  }
+  const result = await fetchVerifiedJson<{ artifact: string; schema_version: string; build_id: string; records: ProvisionalAdmission[] }>({
+    ...manifest.output, kind: "filter_options", record_count: manifest.published_rows,
+  });
+  const payload = result.value;
+  if (payload.artifact !== "early_admissions_public_discovery" || payload.schema_version !== "0.2" ||
+    payload.build_id !== manifest.build_id || !Array.isArray(payload.records) || payload.records.length !== manifest.published_rows) {
+    throw new SiteDataError("実施確認データの件数またはbuild IDが一致しません。");
+  }
+  return payload.records;
+}

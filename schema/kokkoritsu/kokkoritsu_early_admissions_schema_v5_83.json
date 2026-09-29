@@ -1,0 +1,506 @@
+{
+  "version": "5.83",
+  "dataset": "kokkoritsu_early_admissions_2027",
+  "target_admission_year": 2027,
+  "grain": "1 row = one actual application unit / selection slot",
+  "canonical_data": {
+    "master": "kokkoritsu_early_admissions_2027_master_v5_81.csv",
+    "coverage": "kokkoritsu_early_admissions_2027_coverage_v5_81.csv",
+    "research_requirements": "kokkoritsu_early_admissions_2027_research_requirements_v5_81.csv",
+    "schema": "kokkoritsu_early_admissions_schema_v5_81.json"
+  },
+  "encoding": {
+    "csv": "UTF-8",
+    "json": "UTF-8"
+  },
+  "primary_key": "record_id",
+  "relationships": {
+    "ResearchRequirements": {
+      "foreign_key": "admission_id",
+      "references": "Master.record_id",
+      "relationship": "many-to-one"
+    }
+  },
+  "fallback_policy": {
+    "rule": "If 2027 official details are not yet published, show 2026 official data as reference only.",
+    "required_fields": [
+      "information_year",
+      "publication_status",
+      "fallback_previous_year",
+      "current_year_release_expected",
+      "previous_year_source_url",
+      "fallback_note"
+    ],
+    "display_rule": "Fallback rows must be visibly labeled '前年参考情報（2027年度は変更可能性あり）' and must never be mixed with confirmed 2027 data without a status label."
+  },
+  "exclusive_enrollment_policy": {
+    "definition": "合格した場合に、その大学・学部・学科へ入学することを出願時点で確約する必要がある入試を「専願」とする。",
+    "first_choice_only_is_not_sufficient": true,
+    "evidence_required": true,
+    "allowed_status": [
+      "専願",
+      "併願可",
+      "条件付き",
+      "不明"
+    ]
+  },
+  "academic_record_policy": {
+    "separate_from_gpa_requirement": true,
+    "required_field": "academic_record_required",
+    "type_field": "academic_record_type",
+    "detail_field": "academic_record_detail",
+    "official_document_name_preferred": true
+  },
+  "source_policy": {
+    "priority": [
+      "current-year official application guidelines",
+      "current-year official admissions webpage",
+      "current-year official schedule/selection outline",
+      "previous-year official application guidelines"
+    ],
+    "third_party_source_may_not_be_used_as_final_confirmation": true
+  },
+  "selection_flags": [
+    "selection_document_review",
+    "selection_interview",
+    "selection_oral_exam",
+    "selection_presentation",
+    "selection_essay",
+    "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
+    "selection_common_test"
+  ],
+  "school_nomination_fields": [
+    "school_nomination_limit",
+    "school_nomination_limit_total",
+    "school_nomination_limit_rule"
+  ],
+  "research_requirement_child_table": "ResearchRequirements",
+  "enum_definitions": {
+    "institution_type": [
+      "国立",
+      "公立",
+      "私立"
+    ],
+    "exclusive_enrollment_status": [
+      "専願",
+      "併願可",
+      "条件付き",
+      "不明"
+    ],
+    "academic_record_required": [
+      "Yes",
+      "No",
+      "Unknown"
+    ],
+    "coverage_research_status": [
+      "Master反映済・追加項目再監査済",
+      "Master反映済・追加項目再監査待ち",
+      "2027公式入口確認済・詳細抽出待ち",
+      "未調査",
+      "対象外"
+    ],
+    "fallback_previous_year": [
+      "Yes",
+      "No"
+    ],
+    "special_selection_flag": [
+      "Yes",
+      "No"
+    ]
+  },
+  "null_semantics": {
+    "No": "大学公式情報を確認した結果、その項目が存在しないことが確認できた。",
+    "Unknown_or_不明": "大学公式資料を確認したが判断できない、またはまだ十分に確認していない。",
+    "null_or_blank": "そのレコードでは項目が適用されない、または構造上値を持たない。未確認の代用として使用しない。"
+  },
+  "normalization_rules": {
+    "unknown_is_not_no": true,
+    "official_wording_preferred": true,
+    "date_format": "YYYY-MM-DD",
+    "master_column_order_is_fixed": true,
+    "excel_is_derived_view": true,
+    "csv_json_xlsx_generated_from_same_internal_dataset": true,
+    "fallback_previous_year_values": [
+      "Yes",
+      "No"
+    ],
+    "excel_in_canonical_freeze": false,
+    "special_selection_flags_required": true,
+    "special_selection_flag_values": [
+      "Yes",
+      "No"
+    ]
+  },
+  "detail_completeness_gate": {
+    "required_review_items": [
+      "eligibility_graduation",
+      "gpa_requirement",
+      "school_recommendation_required",
+      "school_nomination_limit / school_nomination_limit_total / school_nomination_limit_rule",
+      "exclusive_enrollment_status",
+      "exclusive_enrollment_evidence",
+      "academic_record_required",
+      "documents_summary",
+      "selection methods and flags",
+      "interview/oral exam/presentation/essay/written exam details where applicable",
+      "common_test_required / common_test_usage",
+      "application and result schedule",
+      "information_year / publication_status",
+      "official source URLs"
+    ],
+    "rule": "exclusive_enrollment_status and academic_record_required must be reviewed before a row is treated as fully detailed."
+  },
+  "field_definitions": {
+    "record_id": "募集単位を一意に識別する主キー。",
+    "exclusive_enrollment_status": "専願・併願を検索するための構造化区分。",
+    "exclusive_enrollment": "専願・併願に関する条件の人間可読な要約。",
+    "exclusive_enrollment_evidence": "専願・併願判定の根拠となった大学公式文言。",
+    "exclusive_enrollment_evidence_page": "根拠文言の掲載ページ。PDFの場合は原資料の印刷ページを優先。",
+    "exclusive_enrollment_evidence_url": "専願・併願判定根拠の大学公式URL。",
+    "gpa_requirement": "出願資格として必要な学習成績の状況・評定平均等。",
+    "academic_record_required": "調査書・成績証明書等の成績関係書類の提出要否。",
+    "academic_record_type": "必要となる成績関係書類の大学公式名称。",
+    "academic_record_detail": "成績関係書類についての特殊条件・補足。",
+    "documents_summary": "出願時の主要提出書類を人間が一覧できる要約。",
+    "international_baccalaureate_flag": "国際バカロレア（IB）を対象・利用する独立募集単位かを示す検索用フラグ。",
+    "private_foreign_student_flag": "私費外国人留学生選抜の募集単位かを示す検索用フラグ。",
+    "returnee_flag": "帰国生・帰国生徒等を対象とする募集単位かを示す検索用フラグ。",
+    "regional_quota_flag": "地域枠・県内枠・地域推薦等の募集単位かを示す検索用フラグ。地域条件そのものとは別。",
+    "adult_selection_flag": "社会人入試・社会人選抜の募集単位かを示す検索用フラグ。"
+  },
+  "master_columns": [
+    "record_id",
+    "admission_year",
+    "institution_type",
+    "university",
+    "prefecture",
+    "academic_field",
+    "stem_flag",
+    "faculty_school",
+    "department",
+    "selection_category",
+    "selection_name",
+    "slot_type",
+    "international_baccalaureate_flag",
+    "private_foreign_student_flag",
+    "returnee_flag",
+    "regional_quota_flag",
+    "adult_selection_flag",
+    "capacity",
+    "school_recommendation_required",
+    "school_nomination_limit",
+    "school_nomination_limit_total",
+    "school_nomination_limit_rule",
+    "exclusive_enrollment_status",
+    "exclusive_enrollment",
+    "exclusive_enrollment_evidence",
+    "exclusive_enrollment_evidence_page",
+    "exclusive_enrollment_evidence_url",
+    "eligibility_graduation",
+    "gpa_requirement",
+    "english_requirement",
+    "subject_prerequisites",
+    "common_test_required",
+    "common_test_usage",
+    "research_activity_level",
+    "research_requirement_required",
+    "research_activity_detail",
+    "research_requirement_summary",
+    "academic_record_required",
+    "academic_record_type",
+    "academic_record_detail",
+    "documents_summary",
+    "selection_process",
+    "selection_document_review",
+    "selection_interview",
+    "selection_oral_exam",
+    "selection_presentation",
+    "selection_essay",
+    "selection_written_exam",
+    "selection_practical",
+    "selection_group_discussion",
+    "selection_aptitude_test",
+    "selection_common_test",
+    "interview_detail",
+    "oral_exam_subjects",
+    "oral_exam_detail",
+    "presentation_detail",
+    "essay_detail",
+    "written_exam_detail",
+    "selection_method_detail",
+    "application_start",
+    "application_end",
+    "web_registration_period",
+    "first_stage_result_date",
+    "second_stage_start",
+    "second_stage_end",
+    "final_result_date",
+    "source_status",
+    "detail_completeness",
+    "verification_grade",
+    "verified_on",
+    "source_url",
+    "schedule_url",
+    "guideline_url",
+    "notes",
+    "information_year",
+    "publication_status",
+    "fallback_previous_year",
+    "current_year_release_expected",
+    "previous_year_source_url",
+    "fallback_note"
+  ],
+  "coverage_columns": [
+    "institution_type",
+    "university",
+    "undergraduate_scope",
+    "research_status",
+    "master_rows",
+    "current_year_status",
+    "fallback_status",
+    "checked_on",
+    "official_source_url",
+    "notes"
+  ],
+  "research_requirements_columns": [
+    "admission_id",
+    "university",
+    "faculty_school",
+    "department",
+    "selection_name",
+    "requirement_code",
+    "program_or_competition",
+    "required_level",
+    "requirement_detail",
+    "alternative_allowed",
+    "evidence_required",
+    "source_url",
+    "verified_on"
+  ],
+  "sources": {
+    "national_population": "Japan Association of National Universities membership list, 2026-04-01",
+    "public_population": "MEXT public university list, 2026-04"
+  },
+  "artifact_status": {
+    "canonical_csv_json": "working",
+    "schema_status": "formal",
+    "derived_from": "v5.82 working / v5.81 freeze",
+    "note": "5.83: adult_selection_flagを追加し5特殊選抜フラグを正式化。既存Freezeは上書きしない。"
+  },
+  "dataset_state": "WORKING",
+  "unfreeze": {
+    "date": "2026-09-22",
+    "reason": "手動取得した2027年度公式募集要項を用いて、Freeze後に判明した選抜区分・募集単位の欠落/粒度を更新するため。",
+    "source_freeze": "freeze_20260920_v1",
+    "batch": 3,
+    "processed_files": [
+      "2027_asat_bosyuuyoukou_jp.pdf",
+      "2027_tg2_bosyuuyoukou.pdf",
+      "2027_tg1_bosyuuyoukou_jp.pdf",
+      "2027_J12_bosyuuyoukou.pdf",
+      "2027_agg_bosyuuyoukou.pdf",
+      "2027_ako_bosyuuyoukou.pdf",
+      "2027_azn_kt_bosyuuyoukou.pdf",
+      "2027_sis_bosyuuyoukou.pdf",
+      "R09suisen.pdf",
+      "01_2027_kikoku_yoko.pdf",
+      "r9-guidelines-suisen.pdf",
+      "r9-guidelines-sougou.pdf",
+      "【公開版】令和9 (2027) 年度特別選抜Ⅰ（学校推薦型選抜）学生募集要項.pdf",
+      "kokusai_admissionR09.pdf",
+      "R9tokubetsu_boshuyoko_yakugakukodaiin.pdf",
+      "R9tokubetsu_boshuyoko_joshi.pdf",
+      "R9tokubetsu_boshuyoko_chozen.pdf",
+      "R9tokubetsu_boshuyoko_kugs.pdf",
+      "R9_senbatu_sec.pdf",
+      "book.pdf",
+      "2026_ao3.pdf",
+      "r9AO2_Application-Guidelines.pdf"
+    ],
+    "all_manual_drive_files_processed": true
+  },
+  "scope_policy": {
+    "effective_date": "2026-09-22",
+    "include": [
+      "総合型選抜",
+      "学校推薦型選抜",
+      "大学独自の特別選抜・特色入試",
+      "科学オリンピック・研究型人材選抜",
+      "女子枠・高大接続・飛び入学",
+      "帰国生・外国学校出身者系",
+      "9月入学・10月入学の英語学位プログラム"
+    ],
+    "exclude": [
+      "社会人選抜",
+      "私費外国人留学生選抜",
+      "IB専用選抜",
+      "海外教育プログラム選抜"
+    ],
+    "interpretation": "IBを出願資格の一つとして認める一般選抜・帰国生等は除外しない。IB専用の募集枠のみ除外。一般枠の内数として社会人等を含む場合は一般枠を残す。9月/10月入学の英語学位プログラムは、外国人向けであっても収録する。"
+  },
+  "policy_cleanup": {
+    "source_version": "v5.74",
+    "removed_master_rows": 133,
+    "removed_research_requirements_rows": 0,
+    "removed_by_reason": {
+      "IB": 104,
+      "社会人": 23,
+      "私費外国人": 6,
+      "海外教育プログラム": 1
+    },
+    "added_english_degree_program_rows": {
+      "東京大学": 2,
+      "北海道大学": 3,
+      "名古屋大学": 10
+    },
+    "restored_false_positive_rows": [
+      "SHIMOCU-2027-REC-NAT-IB",
+      "SHIMOCU-2027-REC-REGA-IB",
+      "SHIMOCU-2027-REC-REGB-IB"
+    ],
+    "note": "下関市立大学3行はrecord_id末尾の-IBを誤ってIB専用枠と判定したため復元。選抜名・slot_type上は通常の全国/地域推薦。"
+  },
+  "coverage_audit": {
+    "date": "2026-09-22",
+    "candidate_universities_before_batch": 4,
+    "batch_universities": [
+      "九州大学",
+      "広島大学",
+      "筑波大学",
+      "東京都立大学"
+    ],
+    "candidate_universities_remaining_after_batch": 0,
+    "scope_policy_version": "v5.75",
+    "candidate_queue_status": "EXHAUSTED",
+    "notes": "新ポリシー下の網羅性監査候補4大学を全処理し、候補キューは0。九州大・筑波大・都立大は新規B、広島大は既存ふるさと枠1行が前年参考Bのため、詳細品質の再監査待ちは残る。"
+  },
+  "verification_grade_definitions": {
+    "A": "情報源を十分確認済み"
+  },
+  "special_selection_flag_policy": {
+    "fields": [
+      "international_baccalaureate_flag",
+      "private_foreign_student_flag",
+      "returnee_flag",
+      "regional_quota_flag",
+      "adult_selection_flag"
+    ],
+    "allowed_values": [
+      "Yes",
+      "No"
+    ],
+    "independent": true,
+    "multiple_yes_allowed": true,
+    "default_search_behavior": {
+      "enabled_by_default": false,
+      "ordinary_search_excludes_flagged_rows": true,
+      "opt_in_rule": "A flagged application unit is added to ordinary search results only when its corresponding option is enabled."
+    },
+    "regional_quota_distinct_from_regional_requirement": true,
+    "inference_rule": "公式の選抜名・募集枠・募集単位で確認する。単なる出願資格の年齢・職歴条件や地域条件から各フラグを推定しない。",
+    "definitions": {
+      "adult_selection_flag": "社会人入試・社会人選抜として設定された独立した募集単位。年齢・職歴等の条件だけでは推定しない。"
+    }
+  },
+  "previous_freeze": {
+    "freeze_id": "freeze_20260922_v1",
+    "date": "2026-09-22",
+    "source_version": "v5.81",
+    "master_rows": 4011,
+    "master_columns": 75,
+    "universities_in_master": 179,
+    "coverage_universities": 187,
+    "coverage_reaudited": 132,
+    "coverage_reaudit_pending": 47,
+    "coverage_out_of_scope": 8,
+    "research_requirements_rows": 281,
+    "record_id_duplicates": 0,
+    "research_requirements_orphan_foreign_keys": 0,
+    "coverage_master_rows_mismatches": 0,
+    "verification_grade_counts": {
+      "A": 3309,
+      "B": 702
+    },
+    "fallback_previous_year_counts": {
+      "No": 3987,
+      "Yes": 24
+    },
+    "information_year_counts": {
+      "2026": 24,
+      "2027": 3987
+    },
+    "pending_reaudit_universities": [
+      "小樽商科大学",
+      "北見工業大学",
+      "東北大学",
+      "山形大学",
+      "東京大学",
+      "東京科学大学",
+      "東京海洋大学",
+      "一橋大学",
+      "茨城大学",
+      "筑波大学",
+      "宇都宮大学",
+      "埼玉大学",
+      "千葉大学",
+      "新潟大学",
+      "富山大学",
+      "岐阜大学",
+      "大阪大学",
+      "岡山大学",
+      "広島大学",
+      "山口大学",
+      "徳島大学",
+      "九州大学",
+      "九州工業大学",
+      "熊本大学",
+      "大分大学",
+      "宮崎大学",
+      "鹿児島大学",
+      "琉球大学",
+      "山形県立米沢栄養大学",
+      "会津大学",
+      "東京都立大学",
+      "新潟県立看護大学",
+      "山梨県立大学",
+      "石川県立大学",
+      "岐阜県立看護大学",
+      "岐阜薬科大学",
+      "静岡県立大学",
+      "愛知県立大学",
+      "名古屋市立大学",
+      "三重県立看護大学",
+      "奈良県立医科大学",
+      "和歌山県立医科大学",
+      "岡山県立大学",
+      "山陽小野田市立山口東京理科大学",
+      "香川県立保健医療大学",
+      "福岡女子大学",
+      "北九州市立大学"
+    ],
+    "coverage_candidate_queue_status": "EXHAUSTED",
+    "coverage_candidate_universities_remaining": 0,
+    "canonical_files": [
+      "master",
+      "coverage",
+      "research_requirements",
+      "schema"
+    ],
+    "excel_in_canonical_set": false,
+    "change_scope": [
+      "fallback_previous_year: True/False/Yes/No → Yes/No",
+      "Excelを正本セットから除外",
+      "verification_grade A = 情報源を十分確認済み",
+      "dataset_stateをFROZENへ更新"
+    ],
+    "data_content_policy": "募集単位・出願条件・選考情報・Coverage判定はv5.81から変更なし。"
+  },
+  "schema_revision": {
+    "date": "2026-09-28",
+    "change": "Add adult_selection_flag as fifth independent default-off special-selection flag.",
+    "master_columns": 80
+  }
+}

@@ -29,13 +29,13 @@ from .prefecture_search import PREFECTURE_MAPPING_CONTRACT_VERSION, PREFECTURE_T
 SEARCH_CONTRACT_VERSION = "0.1"
 GPA_MODES = frozenset({"safe", "review", "all"})
 SUPPORTED_ACADEMIC_FIELD_MAPPING_VERSIONS = frozenset(
-    {"0.1", ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION}
+    {"0.1", "0.2", ACADEMIC_FIELD_MAPPING_CONTRACT_VERSION}
 )
 SUPPORTED_ACADEMIC_FIELD_V2_MAPPING_VERSIONS = frozenset(
-    {"0.2", ACADEMIC_FIELD_V2_MAPPING_VERSION}
+    {"0.2", "0.3", ACADEMIC_FIELD_V2_MAPPING_VERSION}
 )
 SUPPORTED_ENGLISH_REQUIREMENT_VERSIONS = frozenset(
-    {"0.1", ENGLISH_REQUIREMENT_CONTRACT_VERSION}
+    {"0.1", "0.2", ENGLISH_REQUIREMENT_CONTRACT_VERSION}
 )
 
 # SQL identifiers are fixed by this module. User values are always bound parameters.
@@ -330,8 +330,8 @@ def _validate_database_contract(connection: sqlite3.Connection) -> None:
         raise StructuredSearchError(
             "build_metadata must contain exactly one compatibility row."
         )
-    if rows[0]["database_schema_version"] != "0.1":
-        raise StructuredSearchError("SQLite database schema version is not 0.1.")
+    if rows[0]["database_schema_version"] not in ("0.1", "0.2", "0.3"):
+        raise StructuredSearchError("Unsupported SQLite database schema version.")
     if rows[0]["gpa_parser_contract_version"] != GPA_PARSER_CONTRACT_VERSION:
         raise StructuredSearchError("GPA parser contract version is incompatible.")
     if rows[0]["grade_requirement_mapping_contract_version"] not in (

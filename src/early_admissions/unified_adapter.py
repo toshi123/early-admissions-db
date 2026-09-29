@@ -11,6 +11,7 @@ from typing import Any, Iterable, Mapping, Sequence
 
 from .validator import (
     BOOL_MAP,
+    BOOLEAN_FIELDS,
     SOURCE_CONFIG,
     TABLE_CONFIG,
     TRISTATE_FIELDS,
@@ -186,7 +187,7 @@ class UnifiedAdapter:
                 continue
             if source_field in {"admission_year", "information_year"}:
                 output[source_field] = self._integer(raw, source_field)
-            elif source_field in {"stem_flag", "fallback_previous_year"}:
+            elif source_field in BOOLEAN_FIELDS:
                 output[source_field] = self._boolean(raw, source_field)
             elif source_field in TRISTATE_FIELDS:
                 output[source_field] = self._tri_state(raw, source_field)

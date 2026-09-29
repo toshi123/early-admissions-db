@@ -1,0 +1,124 @@
+name: PR read-only production validation
+
+on:
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      validation_ref:
+        description: Branch or commit SHA to validate (defaults to the selected ref)
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  read-only-production-validation:
+    name: Read-only production validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || inputs.validation_ref || github.sha }}
+          fetch-depth: 1
+
+      - name: Create isolated validation tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          validation_root="${RUNNER_TEMP}/early-admissions-pr-validation"
+          mkdir -p "$validation_root"
+          git archive HEAD | tar -x -C "$validation_root"
+          echo "VALIDATION_ROOT=$validation_root" >> "$GITHUB_ENV"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Install Python project
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m pip install -e .
+
+      - name: Canonical validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.validate --repo-root "$VALIDATION_ROOT" --no-write-reports
+
+      - name: Operations validation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          bash scripts/validate_operations
+
+      - name: Unified build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.build_unified --repo-root "$VALIDATION_ROOT"
+
+      - name: SQLite production build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.build_sqlite --repo-root "$VALIDATION_ROOT" --validation-profile production
+
+      - name: Site-data production build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.build_site_data --repo-root "$VALIDATION_ROOT" --validation-profile production
+
+      - name: Candidate-audit SQLite test fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.build_sqlite --repo-root "$VALIDATION_ROOT" --output-dir "$VALIDATION_ROOT/data/derived/sqlite/v0_2_candidate" --validation-profile candidate-audit
+
+      - name: Candidate-audit Site-data test fixture
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m early_admissions.build_site_data --repo-root "$VALIDATION_ROOT" --database "$VALIDATION_ROOT/data/derived/sqlite/v0_2_candidate/early_admissions_2027.sqlite" --sqlite-manifest "$VALIDATION_ROOT/data/derived/sqlite/v0_2_candidate/build_manifest.json" --output-dir "$VALIDATION_ROOT/data/derived/site/v0_3_candidate" --qa-report "$VALIDATION_ROOT/validation/reports/candidate-site-qa.md" --validation-profile candidate-audit
+
+      - name: Python tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd "$VALIDATION_ROOT"
+          python -m unittest discover -s tests -q
+
+      - name: Install Site dependencies
+        run: npm --prefix "$VALIDATION_ROOT/site" ci
+
+      - name: Site tests
+        run: npm --prefix "$VALIDATION_ROOT/site" test -- --reporter=dot
+
+      - name: Site production build
+        run: npm --prefix "$VALIDATION_ROOT/site" run build
