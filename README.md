@@ -173,5 +173,12 @@ Each command that needs data synchronizes the current projection into ignored
 `site/public/site-data/`; the deployable but ignored build is `site/dist/`.
 Implementation and local QA details are in
 `docs/site_implementation_v0_1.md` and
-`validation/reports/site_frontend_qa_v0_1.md`. The current v0.1 is local-only;
-it has not been saved or deployed to ChatGPT Sites.
+`validation/reports/site_frontend_qa_v0_1.md`. The public Site is hosted at
+`https://ea.ussapao.chatgpt.site`.
+
+## Read-only MCP access
+
+The MCP extension shares the public Site-data and `site/src/search.ts` search
+semantics with the Web UI. See `docs/mcp.md` for its four tools, local
+Streamable HTTP setup, validation, deployment, and ChatGPT connection steps.
+It does not expose canonical or operational files and cannot update records.

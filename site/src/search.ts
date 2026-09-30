@@ -16,7 +16,7 @@ export function emptyRequest(): SearchRequest {
     academic_field_v2_branches: [],
     stem_flag: null, gpa_tenths: null, gpa_mode: "all",
     grade_requirement_status: null, overall_gpa_tenths: null,
-    applicant_gpa_tenths: null, deadline_on_or_after: null,
+    applicant_gpa_tenths: null, deadline_on_or_after: null, free_text: null,
     selection_families: ["recommendation", "comprehensive"], special_filters: [], page: 1,
   }) as unknown as SearchRequest;
 }
@@ -77,6 +77,12 @@ export function gpaStatus(row: SearchRow, value: number | null): GpaDerivedStatu
 }
 
 function matches(row: SearchRow, request: SearchRequest): boolean {
+  if (request.free_text?.trim()) {
+    const searchable = row.search_text ?? [row.university, row.faculty_school, row.department,
+      row.selection_category, row.selection_name, row.academic_field, row.gpa_requirement,
+      row.english_requirement].filter(Boolean).join(" ");
+    if (!searchable.toLocaleLowerCase("ja-JP").includes(request.free_text.trim().toLocaleLowerCase("ja-JP"))) return false;
+  }
   // Frozen v0.3 oracle requests predate the public UI selection controls.
   if (request.special_filters && !specialSelectionMatch(row, request.special_filters)) return false;
   if (request.selection_families && request.special_filters && !request.special_filters.length &&
@@ -130,6 +136,7 @@ const sortFields: Array<keyof SearchRow> = [
 ];
 
 export function searchRows(rows: SearchRow[], request: SearchRequest): SearchResult {
+  if (request.free_text != null && (typeof request.free_text !== "string" || request.free_text.length > 80)) throw new Error("補助検索語が不正です");
   if (request.selection_families && request.special_filters && !request.selection_families.length && !request.special_filters.length) throw new Error("少なくとも1つ選抜方式を選択してください");
   if (request.deadline_on_or_after != null && !validIsoDate(request.deadline_on_or_after)) throw new Error("出願締切日の指定が不正です");
   if (request.applicant_gpa_tenths != null && (request.applicant_gpa_tenths < 0 || request.applicant_gpa_tenths > 50)) throw new Error("あなたの評定平均が範囲外です");

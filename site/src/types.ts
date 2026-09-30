@@ -123,6 +123,7 @@ export interface SearchRow {
   special_flags?: SpecialSelectionFlags;
   deadline_filter_status?: "match" | "unknown";
   applicant_grade_status?: "match" | "unknown";
+  search_text?: string;
 }
 
 export interface SpecialSelectionFlags {
@@ -248,6 +249,7 @@ export interface SearchRequest {
   overall_gpa_tenths: number | null;
   applicant_gpa_tenths: number | null;
   deadline_on_or_after: string | null;
+  free_text: string | null;
   selection_families: Array<"recommendation" | "comprehensive">;
   special_filters: SpecialFilter[];
   page: number;

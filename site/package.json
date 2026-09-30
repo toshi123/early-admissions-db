@@ -7,17 +7,26 @@
     "capture-guide": "node scripts/capture-guide-screenshots.mjs",
     "dev": "node scripts/sync-site-data.mjs && vite --host 127.0.0.1",
     "build": "tsc -b && vite build && node scripts/copy-production-assets.mjs",
+    "typecheck:mcp": "tsc --project tsconfig.mcp.json",
+    "build:mcp": "npm run typecheck:mcp && npm run build && node scripts/build-mcp-artifacts.mjs",
+    "build:ea": "npm run typecheck:mcp && node scripts/build-ea-artifacts.mjs",
+    "deploy:ea": "wrangler deploy --config wrangler.jsonc",
+    "dev:mcp": "node mcp/dev-server.mjs",
     "test": "node scripts/sync-site-data.mjs && python3 scripts/export-search-oracle.py && vitest run",
     "test:watch": "vitest"
   },
   "devDependencies": {
     "@types/node": "22.15.30",
+    "esbuild": "0.25.12",
     "jsdom": "26.1.0",
     "typescript": "5.8.3",
     "vite": "6.4.3",
-    "vitest": "5.0.1"
+    "vitest": "5.0.1",
+    "wrangler": "4.129.1"
   },
   "dependencies": {
-    "@protobi/exceljs": "4.4.0-protobi.10"
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@protobi/exceljs": "4.4.0-protobi.10",
+    "zod": "3.25.76"
   }
 }

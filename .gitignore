@@ -12,6 +12,8 @@ data/canonical/unified/*.csv
 site/node_modules/
 site/.next/
 site/dist/
+site/dist-ea/
+site/dist-mcp/
 site/public/site-data/
 site/public/third-party-notices.txt
 site/coverage/
