@@ -1,6 +1,7 @@
 {
   "archive": "frozen-client-v0.1.tar.gz",
-  "sha256": "0a45b135d745e524ed0d156a5547e4c5e0ad91d566c7bb4c7097be0721db0a1c",
+  "sha256": "45b81d3865c234ea23bf2776b2c121bedeff577ec7e2b53fc9512b6d007307d6",
   "site_data_build_id": "865009a49ad663caf924",
-  "confirmed_rows": 6699
+  "confirmed_rows": 6699,
+  "asset_count": 295
 }

@@ -1,7 +1,7 @@
 import { build } from "esbuild";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, rm } from "node:fs/promises";
+import { mkdir, readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -16,6 +16,21 @@ const client = path.join(output, "client");
 await rm(output, { recursive: true, force: true });
 await mkdir(client, { recursive: true });
 execFileSync("tar", ["-xzf", archive, "-C", client], { stdio: "inherit" });
+
+let assetCount = 0;
+async function verifyAssetTree(directory) {
+  for (const entry of await readdir(directory, { withFileTypes: true })) {
+    if (entry.name === "_redirects" || entry.name === ".DS_Store" || entry.name.startsWith("._")) {
+      throw new Error(`Forbidden MCP Worker asset: ${path.join(directory, entry.name)}`);
+    }
+    const item = path.join(directory, entry.name);
+    if (entry.isDirectory()) await verifyAssetTree(item);
+    else if (entry.isFile()) assetCount += 1;
+    else throw new Error(`Unsupported MCP Worker asset type: ${item}`);
+  }
+}
+await verifyAssetTree(client);
+if (assetCount !== frozen.asset_count) throw new Error("Frozen MCP client asset count mismatch");
 
 const data = path.join(client, "site-data");
 const manifest = JSON.parse(await readFile(path.join(data, "build_manifest.json"), "utf8"));
@@ -60,4 +75,4 @@ await build({
   legalComments: "none", logLevel: "warning",
 });
 console.log(JSON.stringify({ worker: "ea", build_id: manifest.build_id,
-  confirmed_rows: frozen.confirmed_rows, receipts: manifest.outputs.artifacts.length }));
+  confirmed_rows: frozen.confirmed_rows, receipts: manifest.outputs.artifacts.length, assets: assetCount }));
